@@ -37,9 +37,7 @@ pub enum Platform {
     Lynx,
     AndroidUnknown,
     AppleHeadset,
-    WindowsPc,
     LinuxPc,
-    Macos,
     Unknown,
 }
 
@@ -106,9 +104,7 @@ impl Display for Platform {
             Platform::Lynx => "Lynx Headset",
             Platform::AndroidUnknown => "Android (unknown)",
             Platform::AppleHeadset => "Apple Headset",
-            Platform::WindowsPc => "Windows PC",
             Platform::LinuxPc => "Linux PC",
-            Platform::Macos => "macOS",
             Platform::Unknown => "Unknown",
         };
         write!(f, "{name}")
@@ -160,24 +156,14 @@ pub fn platform() -> Platform {
     {
         Platform::AppleHeadset
     }
-    #[cfg(windows)]
-    {
-        Platform::WindowsPc
-    }
     #[cfg(target_os = "linux")]
     {
         Platform::LinuxPc
     }
-    #[cfg(target_os = "macos")]
-    {
-        Platform::Macos
-    }
     #[cfg(not(any(
         target_os = "android",
         target_os = "ios",
-        windows,
         target_os = "linux",
-        target_os = "macos"
     )))]
     {
         Platform::Unknown
