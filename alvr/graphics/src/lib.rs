@@ -189,7 +189,6 @@ pub fn create_gl_swapchain(
 pub struct GraphicsContext {
     _instance: Instance,
 
-    #[cfg_attr(windows, expect(dead_code))]
     adapter: Adapter,
 
     device: Device,
@@ -199,7 +198,6 @@ pub struct GraphicsContext {
     pub egl_context: egl::Context,
     pub gl_context: gl::Context,
 
-    #[cfg_attr(windows, expect(dead_code))]
     dummy_surface: egl::Surface,
 
     create_image: CreateImageFn,
@@ -209,7 +207,6 @@ pub struct GraphicsContext {
 }
 
 impl GraphicsContext {
-    #[cfg(not(windows))]
     pub fn new_gl() -> Self {
         use std::mem;
         use wgpu::{
@@ -332,13 +329,7 @@ impl GraphicsContext {
         }
     }
 
-    #[cfg(windows)]
-    pub fn new_gl() -> Self {
-        unimplemented!()
-    }
-
     pub fn make_current(&self) {
-        #[cfg(not(windows))]
         unsafe {
             self.adapter.as_hal::<api::Gles, _, _>(|raw_adapter| {
                 let egl_instance = raw_adapter
@@ -402,7 +393,6 @@ impl GraphicsContext {
     }
 }
 
-#[cfg(not(windows))]
 impl Default for GraphicsContext {
     fn default() -> Self {
         Self::new_gl()
