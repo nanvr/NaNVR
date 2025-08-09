@@ -245,6 +245,7 @@ bool Hmd::IsDisplayRealDisplay() {
 //     return true;
 // #endif
 // todo: might be needed for linux direct mode
+    return true;
 }
 
 void Hmd::GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight) {
