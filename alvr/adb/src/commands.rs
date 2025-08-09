@@ -11,30 +11,19 @@ use std::{
 };
 use zip::ZipArchive;
 
-#[cfg(windows)]
-use std::os::windows::process::CommandExt;
-
 // https://developer.android.com/tools/releases/platform-tools#revisions
 // NOTE: At the time of writing this comment, the revisions section above
 // shows the latest version as 35.0.2, but the latest that can be downloaded
 // by specifying a version is 35.0.0
 const PLATFORM_TOOLS_VERSION: &str = "-latest"; // E.g. "_r35.0.0"
 
-#[cfg(target_os = "linux")]
 const PLATFORM_TOOLS_OS: &str = "linux";
-#[cfg(target_os = "macos")]
-const PLATFORM_TOOLS_OS: &str = "darwin";
-#[cfg(windows)]
-const PLATFORM_TOOLS_OS: &str = "windows";
 
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(5);
 
 fn get_command(adb_path: &str, args: &[&str]) -> Command {
     let mut command = Command::new(adb_path);
     command.args(args);
-
-    #[cfg(windows)]
-    command.creation_flags(0x08000000); // CREATE_NO_WINDOW
 
     command
 }
