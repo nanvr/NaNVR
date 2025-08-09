@@ -2,10 +2,10 @@
 
 # ALVR - Air Light VR
 
-[![badge-discord][]][link-discord] [![badge-matrix][]][link-matrix] [![badge-opencollective][]][link-opencollective]
+<!-- [![badge-discord][]][link-discord] [![badge-matrix][]][link-matrix] [![badge-opencollective][]][link-opencollective] -->
 
 Stream VR games from your PC to your headset via Wi-Fi.
-This is a fork of [ALVR](https://github.com/polygraphene/ALVR).
+This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
 
 ### Direct download to the latest version:
 ### [Linux Launcher](https://github.com/alvr-org/ALVR/releases/latest/download/alvr_launcher_linux.tar.gz)
@@ -29,10 +29,7 @@ This is a fork of [ALVR](https://github.com/polygraphene/ALVR).
 
 |     PC OS      |                                    Support                                    |
 | :------------: | :---------------------------------------------------------------------------: |
-| Windows 10/11  | :heavy_check_mark: ([store link](https://store.steampowered.com/app/3312710)) |
-| Windows XP/7/8 |                                      :x:                                      |
 |     Linux      |                             :heavy_check_mark:***                             |
-|     macOS      |                                      :x:                                      |
 
 \*** : Please check the wiki for compatibility info
 
@@ -60,9 +57,7 @@ Follow the installation guide [here](https://github.com/alvr-org/ALVR/wiki/Insta
 -   Please check the [Troubleshooting](https://github.com/alvr-org/ALVR/wiki/Troubleshooting) page, and also [Linux Troubleshooting](https://github.com/alvr-org/ALVR/wiki/Linux-Troubleshooting) if applicable.
 -   Configuration recommendations and information may be found [here](https://github.com/alvr-org/ALVR/wiki/Information-and-Recommendations)
 
-## Uninstall
-
-Open `ALVR Dashboard.exe`, go to `Installation` tab then press `Remove firewall rules`. Close ALVR window and delete the ALVR folder.
+## Uninstall (TODO)
 
 ## Build from source
 
@@ -76,7 +71,7 @@ ALVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL o
 
 ALVR apps do not directly collect any kind of data.
 
-## Donate
+<!-- ## Donate
 
 If you want to support this project you can make a donation to our [Open Source Collective account](https://opencollective.com/alvr).
 
@@ -85,4 +80,4 @@ If you want to support this project you can make a donation to our [Open Source 
 [badge-matrix]: https://img.shields.io/static/v1?label=chat&message=%23alvr&style=for-the-badge&logo=matrix&color=blueviolet "Join us on Matrix"
 [link-matrix]: https://matrix.to/#/#alvr:ckie.dev?via=ckie.dev
 [badge-opencollective]: https://img.shields.io/opencollective/all/alvr?style=for-the-badge&logo=opencollective&color=79a3e6 "Donate"
-[link-opencollective]: https://opencollective.com/alvr
+[link-opencollective]: https://opencollective.com/alvr -->

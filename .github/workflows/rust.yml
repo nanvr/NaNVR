@@ -11,24 +11,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  check-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy
-      - uses: Swatinem/rust-cache@v2
-
-      - name: Prepare deps
-        env:
-          RUST_BACKTRACE: 1
-        run: cargo xtask prepare-deps --platform windows
-
-      - run: cargo xtask clippy --ci
-
   check-linux:
     runs-on: ubuntu-latest
     steps:
@@ -51,22 +33,6 @@ jobs:
         run:  cargo xtask prepare-deps --platform linux --no-nvidia
 
       - run: cargo xtask clippy --ci
-
-  check-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy
-      - uses: Swatinem/rust-cache@v2
-
-      # This step currently does nothing on macos, but might in the future
-      # - run: cargo xtask prepare-deps --platform macos
-
-      - run: cargo clippy
 
   build-android:
     runs-on: ubuntu-latest

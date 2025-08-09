@@ -43,7 +43,6 @@ SUBCOMMANDS:
     clean                   Removes all build artifacts and dependencies
     bump                    Bump streamer and client package versions
     clippy                  Show warnings for selected clippy lints
-    kill-oculus             Kill all Oculus processes
 
 FLAGS:
     --help                  Print this text
@@ -163,17 +162,6 @@ fn clippy() {
     cmd!(sh, "cargo clippy -- {flags...}").run().unwrap();
 }
 
-// Avoid Oculus link popups when debugging the client
-pub fn kill_oculus_processes() {
-    let sh = Shell::new().unwrap();
-    cmd!(
-        sh,
-        "powershell Start-Process taskkill -ArgumentList \"/F /IM OVR* /T\" -Verb runas"
-    )
-    .run()
-    .unwrap();
-}
-
 fn main() {
     let begin_time = Instant::now();
 
@@ -288,7 +276,6 @@ fn main() {
                     }
                 }
                 "check-msrv" => version::check_msrv(),
-                "kill-oculus" => kill_oculus_processes(),
                 _ => print_help_and_exit("Unrecognized subcommand."),
             }
         } else {

@@ -33,25 +33,6 @@ jobs:
 
       - run: cargo clippy
 
-  check-msrv-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-
-      # Fix actions rust install and msrv both being stupid
-      - run: rustup update
-
-      - name: Prepare deps
-        env:
-          RUST_BACKTRACE: 1
-        run: cargo xtask prepare-deps --platform windows
-
-      - run: cargo xtask check-msrv
-
   check-msrv-linux:
     runs-on: ubuntu-latest
     steps:

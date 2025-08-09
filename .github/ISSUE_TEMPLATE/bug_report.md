@@ -6,6 +6,7 @@ labels: ''
 assignees: ''
 
 ---
+<!--TODO: update links-->
 
 <!-- Note: If the bug affects multiple games, please open an issue for each game with the name of the game in the title. -->
 
@@ -16,13 +17,12 @@ assignees: ''
 <!-- If this is a regression, please do some bisection testing in the nightly releases history to find the first release that manifests the problem. -->
 
 ## General Troubleshooting
-- [ ] I carefully followed the instructions in the [README](https://github.com/alvr-org/ALVR/blob/master/README.md) and successfully completed the setup wizard
-- [ ] I read the [ALVR GitHub Wiki](https://github.com/alvr-org/ALVR/wiki)
+- [ ] I carefully followed the instructions in the [README]() and successfully completed the setup wizard
+- [ ] I read the [ALVR GitHub Wiki]()
 
 ## Environment
 
 ### Hardware
-**Note**: for Linux, an upload to the [`hw-probe`](https://linux-hardware.org/) database is preferred: `hw-probe -all -upload`
 
 **CPU**:
 
@@ -40,11 +40,11 @@ assignees: ''
 **SteamVR Version**:
 
 **Install Type**:
-- [ ] Packaged (`exe`, `deb`, `rpm`, etc)
-- [ ] Portable (`zip`)
+- [ ] Packaged (`aur`, launcher, etc)
+- [ ] Portable (`tar.gz`)
 - [ ] Source
 
-**OS Name and Version** (`winver` on Windows or `grep PRETTY_NAME /etc/os-release` on most Linux distributions):
+**Linux distribution** (`grep PRETTY_NAME /etc/os-release` on most Linux distributions):
 
 <!-- Feature Requests
 The quickest way to get a new feature is to file a pull request; these will be considered, but may be closed if they're something we're not actively planning to work on. -->
