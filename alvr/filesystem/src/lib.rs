@@ -73,11 +73,7 @@ pub fn installer_path() -> PathBuf {
 }
 
 pub fn dashboard_fname() -> &'static str {
-    if cfg!(windows) {
-        "ALVR Dashboard.exe"
-    } else {
-        "alvr_dashboard"
-    }
+    "alvr_dashboard"
 }
 
 // Layout of the ALVR installation. All paths are absolute
@@ -156,21 +152,6 @@ impl Layout {
                     .map(|p| p.to_owned()),
             }
         }
-        #[cfg(not(target_os = "linux"))]
-        Self {
-            executables_dir: root.to_owned(),
-            libraries_dir: root.to_owned(),
-            static_resources_dir: root.to_owned(),
-            config_dir: root.to_owned(),
-            log_dir: root.to_owned(),
-            openvr_driver_root_dir: root.to_owned(),
-            vrcompositor_wrapper_dir: root.to_owned(),
-            firewall_script_dir: root.to_owned(),
-            firewalld_config_dir: root.to_owned(),
-            ufw_config_dir: root.to_owned(),
-            vulkan_layer_manifest_dir: root.to_owned(),
-            launcher_root: root.parent().and_then(|p| p.parent()).map(|p| p.to_owned()),
-        }
     }
 
     pub fn dashboard_exe(&self) -> PathBuf {
@@ -208,19 +189,11 @@ impl Layout {
     }
 
     pub fn connect_script(&self) -> PathBuf {
-        self.config_dir.join(if cfg!(windows) {
-            "on_connect.bat"
-        } else {
-            "on_connect.sh"
-        })
+        self.config_dir.join("on_connect.sh")
     }
 
     pub fn disconnect_script(&self) -> PathBuf {
-        self.config_dir.join(if cfg!(windows) {
-            "on_disconnect.bat"
-        } else {
-            "on_disconnect.sh"
-        })
+        self.config_dir.join("on_disconnect.sh")
     }
 
     pub fn crash_log(&self) -> PathBuf {
@@ -228,17 +201,7 @@ impl Layout {
     }
 
     pub fn openvr_driver_lib_dir(&self) -> PathBuf {
-        let platform = if cfg!(windows) {
-            "win64"
-        } else if cfg!(target_os = "linux") {
-            "linux64"
-        } else if cfg!(target_os = "macos") {
-            "macos"
-        } else {
-            unimplemented!()
-        };
-
-        self.openvr_driver_root_dir.join("bin").join(platform)
+        self.openvr_driver_root_dir.join("bin").join("linux64")
     }
 
     // path to the shared library to be loaded by openVR
