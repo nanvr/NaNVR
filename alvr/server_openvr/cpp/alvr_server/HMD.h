@@ -4,18 +4,12 @@
 #include "TrackedDevice.h"
 #include "openvr_driver_wrap.h"
 #include <memory>
-#ifdef _WIN32
-#include "platform/win32/OvrDirectModeComponent.h"
-#endif
 
 class Controller;
 class Controller;
 class ViveTrackerProxy;
 
 class CEncoder;
-#ifdef _WIN32
-class CD3DRender;
-#endif
 class PoseHistory;
 
 class Hmd : public TrackedDevice, vr::IVRDisplayComponent {
@@ -45,19 +39,9 @@ private:
 
     std::wstring m_adapterName;
 
-#ifdef _WIN32
-    std::shared_ptr<CD3DRender> m_D3DRender;
-#endif
-
-#ifdef _WIN32
-    std::shared_ptr<OvrDirectModeComponent> m_directModeComponent;
-#endif
-
     std::shared_ptr<ViveTrackerProxy> m_viveTrackerProxy;
 
-#ifndef _WIN32
     bool m_refreshRateSet = false;
-#endif
 
     // TrackedDevice
     virtual bool activate() final;

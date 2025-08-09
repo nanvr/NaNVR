@@ -1,11 +1,4 @@
-#ifdef _WIN32
-#include "platform/win32/CEncoder.h"
-#include <windows.h>
-#elif __APPLE__
-#include "platform/macos/CEncoder.h"
-#else
-#include "platform/linux/CEncoder.h"
-#endif
+
 #include "Controller.h"
 #include "FakeViveTracker.h"
 #include "HMD.h"
@@ -17,13 +10,13 @@
 #include "bindings.h"
 #include "driverlog.h"
 #include "openvr_driver_wrap.h"
+#include "platform/linux/CEncoder.h"
 #include <algorithm>
 #include <cmath>
 #include <cstring>
 #include <map>
 #include <optional>
 
-#ifdef __linux__
 #include "include/openvr_math.h"
 std::unique_ptr<vr::HmdMatrix34_t> GetInvZeroPose();
 
@@ -36,46 +29,11 @@ std::unique_ptr<vr::HmdMatrix34_t> GetRawZeroPose() {
 }
 
 bool IsOpenvrClientReady();
-#endif
+
 void _SetChaperoneArea(float areaWidth, float areaHeight);
 
 vr::EVREventType VendorEvent_ALVRDriverResync
     = (vr::EVREventType)(vr::VREvent_VendorSpecific_Reserved_Start + ((vr::EVREventType)0xC0));
-
-static void load_debug_privilege(void) {
-#ifdef _WIN32
-    const DWORD flags = TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY;
-    TOKEN_PRIVILEGES tp;
-    HANDLE token;
-    LUID val;
-
-    if (!OpenProcessToken(GetCurrentProcess(), flags, &token)) {
-        return;
-    }
-
-    if (!!LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &val)) {
-        tp.PrivilegeCount = 1;
-        tp.Privileges[0].Luid = val;
-        tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-        AdjustTokenPrivileges(token, false, &tp, sizeof(tp), NULL, NULL);
-    }
-
-    if (!!LookupPrivilegeValue(NULL, SE_INC_BASE_PRIORITY_NAME, &val)) {
-        tp.PrivilegeCount = 1;
-        tp.Privileges[0].Luid = val;
-        tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-        if (!AdjustTokenPrivileges(token, false, &tp, sizeof(tp), NULL, NULL)) {
-            Warn("[GPU PRIO FIX] Could not set privilege to increase GPU priority\n");
-        }
-    }
-
-    Debug("[GPU PRIO FIX] Succeeded to set some sort of priority.\n");
-
-    CloseHandle(token);
-#endif
-}
 
 class DriverProvider : public vr::IServerTrackedDeviceProvider {
 public:
@@ -231,7 +189,6 @@ void CppInit(bool earlyHmdInitialization) {
 
     Settings::Instance().Load();
 
-    load_debug_privilege();
 }
 
 void* CppOpenvrEntryPoint(const char* interface_name, int* return_code) {
@@ -318,44 +275,50 @@ bool InitializeStreaming() {
 
             auto leftElbowTracker = std::make_unique<FakeViveTracker>(BODY_LEFT_ELBOW_ID);
             if (leftElbowTracker->register_device(true)) {
-                g_driver_provider.tracked_devices.insert({ BODY_LEFT_ELBOW_ID,
-                                                           leftElbowTracker.get() });
+                g_driver_provider.tracked_devices.insert(
+                    { BODY_LEFT_ELBOW_ID, leftElbowTracker.get() }
+                );
                 g_driver_provider.generic_trackers.push_back(std::move(leftElbowTracker));
             }
 
             auto rightElbowTracker = std::make_unique<FakeViveTracker>(BODY_RIGHT_ELBOW_ID);
             if (rightElbowTracker->register_device(true)) {
-                g_driver_provider.tracked_devices.insert({ BODY_RIGHT_ELBOW_ID,
-                                                           rightElbowTracker.get() });
+                g_driver_provider.tracked_devices.insert(
+                    { BODY_RIGHT_ELBOW_ID, rightElbowTracker.get() }
+                );
                 g_driver_provider.generic_trackers.push_back(std::move(rightElbowTracker));
             }
 
             if (Settings::Instance().m_bodyTrackingHasLegs) {
                 auto leftKneeTracker = std::make_unique<FakeViveTracker>(BODY_LEFT_KNEE_ID);
                 if (leftKneeTracker->register_device(true)) {
-                    g_driver_provider.tracked_devices.insert({ BODY_LEFT_KNEE_ID,
-                                                               leftKneeTracker.get() });
+                    g_driver_provider.tracked_devices.insert(
+                        { BODY_LEFT_KNEE_ID, leftKneeTracker.get() }
+                    );
                     g_driver_provider.generic_trackers.push_back(std::move(leftKneeTracker));
                 }
 
                 auto leftFootTracker = std::make_unique<FakeViveTracker>(BODY_LEFT_FOOT_ID);
                 if (leftFootTracker->register_device(true)) {
-                    g_driver_provider.tracked_devices.insert({ BODY_LEFT_FOOT_ID,
-                                                               leftFootTracker.get() });
+                    g_driver_provider.tracked_devices.insert(
+                        { BODY_LEFT_FOOT_ID, leftFootTracker.get() }
+                    );
                     g_driver_provider.generic_trackers.push_back(std::move(leftFootTracker));
                 }
 
                 auto rightKneeTracker = std::make_unique<FakeViveTracker>(BODY_RIGHT_KNEE_ID);
                 if (rightKneeTracker->register_device(true)) {
-                    g_driver_provider.tracked_devices.insert({ BODY_RIGHT_KNEE_ID,
-                                                               rightKneeTracker.get() });
+                    g_driver_provider.tracked_devices.insert(
+                        { BODY_RIGHT_KNEE_ID, rightKneeTracker.get() }
+                    );
                     g_driver_provider.generic_trackers.push_back(std::move(rightKneeTracker));
                 }
 
                 auto rightFootTracker = std::make_unique<FakeViveTracker>(BODY_RIGHT_FOOT_ID);
                 if (rightFootTracker->register_device(true)) {
-                    g_driver_provider.tracked_devices.insert({ BODY_RIGHT_FOOT_ID,
-                                                               rightFootTracker.get() });
+                    g_driver_provider.tracked_devices.insert(
+                        { BODY_RIGHT_FOOT_ID, rightFootTracker.get() }
+                    );
                     g_driver_provider.generic_trackers.push_back(std::move(rightFootTracker));
                 }
             }

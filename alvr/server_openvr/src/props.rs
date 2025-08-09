@@ -299,13 +299,8 @@ pub extern "C" fn set_device_openvr_props(instance_ptr: *mut c_void, device_id: 
         // return a constant that's not 0 (invalid) or 1 (reserved for Oculus)
         set_prop(CurrentUniverseIdUint64, "2");
 
-        if cfg!(windows) {
-            // avoid "not fullscreen" warnings from vrmonitor
-            set_prop(IsOnDesktopBool, "false");
-
-            // We let SteamVR handle VSyncs. We just wait in PostPresent().
-            set_prop(DriverDirectModeSendsVsyncEventsBool, "false");
-        }
+        // We let SteamVR handle VSyncs. We just wait in PostPresent().
+        // set_prop(DriverDirectModeSendsVsyncEventsBool, "false"); // todo: enable on linux direct mode?
         set_prop(DeviceProvidesBatteryStatusBool, "true");
         set_prop(ContainsProximitySensorBool, "true");
 

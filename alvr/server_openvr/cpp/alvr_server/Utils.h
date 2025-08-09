@@ -1,25 +1,9 @@
 #pragma once
 
 #include <chrono>
-#ifdef _WIN32
-#pragma warning(disable : 4005)
-#include <WinSock2.h>
-#pragma warning(default : 4005)
-#include <WS2tcpip.h>
-#include <WinInet.h>
-#include <Windows.h>
-#include <d3d11.h>
-#include <delayimp.h>
-#include <stdint.h>
-#include <string>
-#include <vector>
-#define _USE_MATH_DEFINES
-#include <VersionHelpers.h>
-#else
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <string.h>
-#endif
 
 #include <math.h>
 
@@ -34,32 +18,6 @@ inline uint64_t GetTimestampUs() {
     auto duration = std::chrono::system_clock::now().time_since_epoch();
     return std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
 }
-
-#ifdef _WIN32
-inline std::wstring GetErrorStr(HRESULT hr) {
-    wchar_t* s = NULL;
-    std::wstring ret;
-    FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        hr,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPWSTR)&s,
-        0,
-        NULL
-    );
-    ret = s;
-    LocalFree(s);
-
-    if (ret.size() >= 1 && ret[ret.size() - 1] == L'\n') {
-        ret.erase(ret.size() - 1, 1);
-    }
-    if (ret.size() >= 1 && ret[ret.size() - 1] == L'\r') {
-        ret.erase(ret.size() - 1, 1);
-    }
-    return ret;
-}
-#endif
 
 inline vr::HmdQuaternion_t HmdQuaternion_Init(double w, double x, double y, double z) {
     vr::HmdQuaternion_t quat;
@@ -205,38 +163,3 @@ inline vr::HmdVector3d_t AngularVelocityBetweenQuats(
              (q1.w * q2.y + q1.x * q2.z - q1.y * q2.w - q1.z * q2.x) * r,
              (q1.w * q2.z - q1.x * q2.y + q1.y * q2.x - q1.z * q2.w) * r };
 }
-
-#ifdef _WIN32
-typedef void(WINAPI* RtlGetVersion_FUNC)(OSVERSIONINFOEXW*);
-
-inline std::wstring GetWindowsOSVersion() {
-    HMODULE hModule;
-    OSVERSIONINFOEXW ver;
-
-    hModule = LoadLibraryW(L"ntdll.dll");
-    if (hModule == NULL) {
-        return L"Unknown";
-    }
-    RtlGetVersion_FUNC RtlGetVersion = (RtlGetVersion_FUNC)GetProcAddress(hModule, "RtlGetVersion");
-    if (RtlGetVersion == NULL) {
-        FreeLibrary(hModule);
-        return L"Unknown";
-    }
-    memset(&ver, 0, sizeof(ver));
-    ver.dwOSVersionInfoSize = sizeof(ver);
-    RtlGetVersion(&ver);
-
-    FreeLibrary(hModule);
-
-    wchar_t buf[1000];
-    _snwprintf_s(
-        buf,
-        sizeof(buf) / sizeof(buf[0]),
-        L"MajorVersion=%d MinorVersion=%d Build=%d",
-        ver.dwMajorVersion,
-        ver.dwMinorVersion,
-        ver.dwBuildNumber
-    );
-    return buf;
-}
-#endif

@@ -8,14 +8,7 @@
 #include "Utils.h"
 #include "ViveTrackerProxy.h"
 #include "bindings.h"
-
-#ifdef _WIN32
-#include "platform/win32/CEncoder.h"
-#elif __APPLE__
-#include "platform/macos/CEncoder.h"
-#else
 #include "platform/linux/CEncoder.h"
-#endif
 
 Hmd::Hmd()
     : TrackedDevice(
@@ -56,13 +49,6 @@ Hmd::~Hmd() {
         m_encoder->Stop();
         m_encoder.reset();
     }
-
-#ifdef _WIN32
-    if (m_D3DRender) {
-        m_D3DRender->Shutdown();
-        m_D3DRender.reset();
-    }
-#endif
 }
 
 bool Hmd::activate() {
@@ -80,67 +66,35 @@ bool Hmd::activate() {
 
     vr::VRDriverInput()->CreateBooleanComponent(this->prop_container, "/proximity", &m_proximity);
 
-#ifdef _WIN32
-    float originalIPD
-        = vr::VRSettings()->GetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float);
-    vr::VRSettings()->SetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float, 0.063);
-#endif
-
+    // #ifdef _WIN32
+    //     float originalIPD
+    //         = vr::VRSettings()->GetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float);
+    //     vr::VRSettings()->SetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float,
+    //     0.063);
+    // #endif
+    // todo: might be needed for direct mode
     HmdMatrix_SetIdentity(&m_eyeToHeadLeft);
     HmdMatrix_SetIdentity(&m_eyeToHeadRight);
 
-// Disable async reprojection on Linux. Windows interface uses IVRDriverDirectModeComponent
-// which never applies reprojection
-// Also Disable async reprojection on vulkan
-#ifndef _WIN32
-    vr::VRSettings()->SetBool(
-        vr::k_pch_SteamVR_Section,
-        vr::k_pch_SteamVR_EnableLinuxVulkanAsync_Bool,
-        Settings::Instance().m_enableLinuxVulkanAsyncCompute
-    );
-    vr::VRSettings()->SetBool(
-        vr::k_pch_SteamVR_Section,
-        vr::k_pch_SteamVR_DisableAsyncReprojection_Bool,
-        !Settings::Instance().m_enableLinuxAsyncReprojection
-    );
-#endif
+    // Disable async reprojection on Linux. Windows interface uses IVRDriverDirectModeComponent
+    // which never applies reprojection
+    // Also Disable async reprojection on vulkan
+    // #ifndef _WIN32
+    //     vr::VRSettings()->SetBool(
+    //         vr::k_pch_SteamVR_Section,
+    //         vr::k_pch_SteamVR_EnableLinuxVulkanAsync_Bool,
+    //         Settings::Instance().m_enableLinuxVulkanAsyncCompute
+    //     );
+    //     vr::VRSettings()->SetBool(
+    //         vr::k_pch_SteamVR_Section,
+    //         vr::k_pch_SteamVR_DisableAsyncReprojection_Bool,
+    //         !Settings::Instance().m_enableLinuxAsyncReprojection
+    //     );
+    // #endif
+    // todo: might be needed for linux direct mode
 
     if (!m_baseComponentsInitialized) {
         m_baseComponentsInitialized = true;
-
-        if (this->device_class == vr::TrackedDeviceClass_HMD) {
-#ifdef _WIN32
-            m_D3DRender = std::make_shared<CD3DRender>();
-
-            // Use the same adapter as vrcompositor uses. If another adapter is used, vrcompositor
-            // says "failed to open shared texture" and then crashes. It seems vrcompositor selects
-            // always(?) first adapter. vrcompositor may use Intel iGPU when user sets it as primary
-            // adapter. I don't know what happens on laptop which support optimus.
-            // Prop_GraphicsAdapterLuid_Uint64 is only for redirect display and is ignored on direct
-            // mode driver. So we can't specify an adapter for vrcompositor. m_nAdapterIndex is set
-            // 0 on the dashboard.
-            if (!m_D3DRender->Initialize(Settings::Instance().m_nAdapterIndex)) {
-                Error(
-                    "Could not create graphics device for adapter %d.  Requires a minimum of two "
-                    "graphics cards.\n",
-                    Settings::Instance().m_nAdapterIndex
-                );
-                return false;
-            }
-
-            int32_t nDisplayAdapterIndex;
-            if (!m_D3DRender->GetAdapterInfo(&nDisplayAdapterIndex, m_adapterName)) {
-                Error("Failed to get primary adapter info!\n");
-                return false;
-            }
-
-            Info("Using %ls as primary graphics adapter.\n", m_adapterName.c_str());
-            Info("OSVer: %ls\n", GetWindowsOSVersion().c_str());
-
-            m_directModeComponent
-                = std::make_shared<OvrDirectModeComponent>(m_D3DRender, m_poseHistory);
-#endif
-        }
 
         DriverReadyIdle(this->device_class == vr::TrackedDeviceClass_HMD);
     }
@@ -166,11 +120,12 @@ void* Hmd::get_component(const char* component_name_and_version) {
         return (vr::IVRDisplayComponent*)this;
     }
 
-#ifdef _WIN32
-    if (name_and_vers == vr::IVRDriverDirectModeComponent_Version) {
-        return m_directModeComponent.get();
-    }
-#endif
+    // #ifdef _WIN32
+    //     if (name_and_vers == vr::IVRDriverDirectModeComponent_Version) {
+    //         return m_directModeComponent.get();
+    //     }
+    // #endif
+    // todo: might be needed for direct mode
 
     return nullptr;
 }
@@ -207,7 +162,6 @@ void Hmd::OnPoseUpdated(uint64_t targetTimestampNs, FfiDeviceMotion motion) {
     if (m_viveTrackerProxy)
         m_viveTrackerProxy->update();
 
-#if !defined(_WIN32) && !defined(__APPLE__)
     // This has to be set after initialization is done, because something in vrcompositor is
     // setting it to 90Hz in the meantime
     if (!m_refreshRateSet && m_encoder && m_encoder->IsConnected()) {
@@ -218,7 +172,6 @@ void Hmd::OnPoseUpdated(uint64_t targetTimestampNs, FfiDeviceMotion motion) {
             static_cast<float>(Settings::Instance().m_refreshRate)
         );
     }
-#endif
 }
 
 void Hmd::StartStreaming() {
@@ -232,29 +185,9 @@ void Hmd::StartStreaming() {
 
     // Spin up a separate thread to handle the overlapped encoding/transmit step.
     if (this->device_class == vr::TrackedDeviceClass_HMD) {
-#ifdef _WIN32
-        m_encoder = std::make_shared<CEncoder>();
-        try {
-            m_encoder->Initialize(m_D3DRender);
-        } catch (Exception e) {
-            Error(
-                "Your GPU does not meet the requirements for video encoding. %s %s\n%s %s\n",
-                "If you get this error after changing some settings, you can revert them by",
-                "deleting the file \"session.json\" in the installation folder.",
-                "Failed to initialize CEncoder:",
-                e.what()
-            );
-        }
-        m_encoder->Start();
 
-        m_directModeComponent->SetEncoder(m_encoder);
-
-#elif __APPLE__
-        m_encoder = std::make_shared<CEncoder>();
-#else
         m_encoder = std::make_shared<CEncoder>(m_poseHistory);
         m_encoder->Start();
-#endif
         m_encoder->OnStreamStart();
     }
 
@@ -284,12 +217,6 @@ void Hmd::SetViewParams(const FfiViewParams params[2]) {
     auto right_proj = fov_to_tangents(params[1].fov);
     vr::VRServerDriverHost()->SetDisplayProjectionRaw(object_id, left_proj, right_proj);
 
-#ifdef _WIN32
-    if (m_encoder) {
-        m_encoder->SetViewParams(left_proj, left_transform, right_proj, right_transform);
-    }
-#endif
-
     // todo: check if this is still needed
     vr::VRServerDriverHost()->VendorSpecificEvent(
         object_id, vr::VREvent_LensDistortionChanged, {}, 0
@@ -312,11 +239,12 @@ void Hmd::GetWindowBounds(int32_t* pnX, int32_t* pnY, uint32_t* pnWidth, uint32_
 }
 
 bool Hmd::IsDisplayRealDisplay() {
-#ifdef _WIN32
-    return false;
-#else
-    return true;
-#endif
+// #ifdef _WIN32
+//     return false;
+// #else
+//     return true;
+// #endif
+// todo: might be needed for linux direct mode
 }
 
 void Hmd::GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight) {
