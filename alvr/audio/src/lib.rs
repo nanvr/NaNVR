@@ -1,11 +1,4 @@
-#[cfg(windows)]
-mod windows;
-
-#[cfg(target_os = "linux")]
 pub mod linux;
-
-#[cfg(windows)]
-pub use crate::windows::*;
 
 use alvr_common::{
     ConnectionError, ToAny,
@@ -316,11 +309,6 @@ pub fn record_audio_blocking(
         None,
     )?;
 
-    #[cfg(windows)]
-    if mute && device.supports_output() {
-        crate::windows::set_mute_windows_device(device, true).ok();
-    }
-
     let mut res = stream.play().to_any();
 
     if res.is_ok() {
@@ -331,11 +319,6 @@ pub fn record_audio_blocking(
         if let AudioRecordState::Err(e) = &mut *state.lock() {
             res = Err(e.take().unwrap());
         }
-    }
-
-    #[cfg(windows)]
-    if mute && device.supports_output() {
-        set_mute_windows_device(device, false).ok();
     }
 
     res
