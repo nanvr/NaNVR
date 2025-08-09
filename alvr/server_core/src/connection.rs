@@ -696,37 +696,7 @@ fn connection_pipeline(
         initial_settings.video.preferred_codec
     };
 
-    #[cfg(not(target_os = "windows"))]
     let game_audio_sample_rate = 44100;
-
-    #[cfg(target_os = "windows")]
-    let game_audio_sample_rate =
-        if let Switch::Enabled(game_audio_config) = &initial_settings.audio.game_audio {
-            let game_audio_device =
-                alvr_audio::new_output(game_audio_config.device.as_ref()).to_con()?;
-
-            if let Switch::Enabled(microphone_config) = &initial_settings.audio.microphone
-                && matches!(
-                    microphone_config.devices,
-                    alvr_session::MicrophoneDevicesConfig::VAC
-                        | alvr_session::MicrophoneDevicesConfig::VBCable
-                )
-            {
-                let (sink, _) =
-                    alvr_audio::new_virtual_microphone_pair(microphone_config.devices.clone())
-                        .to_con()?;
-
-                // VoiceMeeter and Custom devices may have arbitrary internal routing.
-                // Therefore, we cannot detect the loopback issue without knowing the routing.
-                if alvr_audio::is_same_device(&game_audio_device, &sink) {
-                    con_bail!("Game audio and microphone cannot point to the same device!");
-                }
-            }
-
-            alvr_audio::input_sample_rate(&game_audio_device).to_con()?
-        } else {
-            0
-        };
 
     let wired = client_ip.is_loopback();
 
@@ -857,118 +827,7 @@ fn connection_pipeline(
         }
     });
 
-    #[cfg_attr(target_os = "linux", allow(unused_variables))]
-    let game_audio_thread = if let Switch::Enabled(config) =
-        initial_settings.audio.game_audio.clone()
-    {
-        #[cfg(windows)]
-        let ctx = Arc::clone(&ctx);
-
-        let client_hostname = client_hostname.clone();
-        thread::spawn(move || {
-            #[cfg(not(target_os = "linux"))]
-            while is_streaming(&client_hostname) {
-                {
-                    let device = match alvr_audio::new_output(config.device.as_ref()) {
-                        Ok(data) => data,
-                        Err(e) => {
-                            warn!("New audio device failed: {e:?}");
-                            thread::sleep(RETRY_CONNECT_MIN_INTERVAL);
-                            continue;
-                        }
-                    };
-
-                    #[cfg(windows)]
-                    if let Ok(id) = alvr_audio::get_windows_device_id(&device) {
-                        let prop = alvr_session::OpenvrProperty {
-                            key: alvr_session::OpenvrPropKey::AudioDefaultPlaybackDeviceIdString,
-                            value: id,
-                        };
-                        ctx.events_sender
-                            .send(ServerCoreEvent::SetOpenvrProperty {
-                                device_id: *alvr_common::HEAD_ID,
-                                prop,
-                            })
-                            .ok();
-                    } else {
-                        continue;
-                    };
-
-                    if let Err(e) = alvr_audio::record_audio_blocking(
-                        Arc::new({
-                            let client_hostname = client_hostname.clone();
-                            move || is_streaming(&client_hostname)
-                        }),
-                        game_audio_sender.clone(),
-                        &device,
-                        2,
-                        config.mute_when_streaming,
-                    ) {
-                        error!("Audio record error: {e:?}");
-                    }
-
-                    #[cfg(windows)]
-                    if let Ok(id) = alvr_audio::new_output(None)
-                        .and_then(|d| alvr_audio::get_windows_device_id(&d))
-                    {
-                        let prop = alvr_session::OpenvrProperty {
-                            key: alvr_session::OpenvrPropKey::AudioDefaultPlaybackDeviceIdString,
-                            value: id,
-                        };
-                        ctx.events_sender
-                            .send(ServerCoreEvent::SetOpenvrProperty {
-                                device_id: *alvr_common::HEAD_ID,
-                                prop,
-                            })
-                            .ok();
-                    }
-                }
-            }
-        })
-    } else {
-        thread::spawn(|| ())
-    };
-
-    #[cfg(not(target_os = "linux"))]
-    let microphone_thread = if let Switch::Enabled(config) =
-        initial_settings.audio.microphone.clone()
-    {
-        #[allow(unused_variables)]
-        let (sink, source) = alvr_audio::new_virtual_microphone_pair(config.devices).to_con()?;
-
-        #[cfg(windows)]
-        if let Ok(id) = alvr_audio::get_windows_device_id(&source) {
-            ctx.events_sender
-                .send(ServerCoreEvent::SetOpenvrProperty {
-                    device_id: *alvr_common::HEAD_ID,
-                    prop: alvr_session::OpenvrProperty {
-                        key: alvr_session::OpenvrPropKey::AudioDefaultRecordingDeviceIdString,
-                        value: id,
-                    },
-                })
-                .ok();
-        }
-
-        let client_hostname = client_hostname.clone();
-        thread::spawn(move || {
-            alvr_common::show_err(alvr_audio::play_audio_loop(
-                {
-                    let client_hostname = client_hostname.clone();
-                    move || is_streaming(&client_hostname)
-                },
-                &sink,
-                1,
-                streaming_caps.microphone_sample_rate,
-                config.buffering,
-                &mut microphone_receiver,
-            ));
-        })
-    } else {
-        thread::spawn(|| ())
-    };
-
-    #[cfg(target_os = "linux")]
-    let microphone_thread = {
+    let game_audio_microphone_thread = {
         use alvr_audio::linux::{self, AudioInfo};
         let mic = if let Switch::Enabled(config) = initial_settings.audio.microphone.clone() {
             Some((
@@ -1393,8 +1252,7 @@ fn connection_pipeline(
     // Ensure shutdown of threads
     dbg_connection!("connection_pipeline: Shutdown threads");
     video_send_thread.join().ok();
-    game_audio_thread.join().ok();
-    microphone_thread.join().ok();
+    game_audio_microphone_thread.join().ok();
     tracking_receive_thread.join().ok();
     statistics_thread.join().ok();
     real_time_update_thread.join().ok();
