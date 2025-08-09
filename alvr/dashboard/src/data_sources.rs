@@ -39,24 +39,21 @@ pub fn clean_session() {
 
     session_manager.clean_client_list();
 
-    #[cfg(target_os = "linux")]
-    {
-        let has_nvidia = wgpu::Instance::new(&wgpu::InstanceDescriptor {
-            backends: wgpu::Backends::VULKAN,
-            ..Default::default()
-        })
-        .enumerate_adapters(wgpu::Backends::VULKAN)
-        .iter()
-        .any(|adapter| adapter.get_info().vendor == 0x10de);
+    let has_nvidia = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+        backends: wgpu::Backends::VULKAN,
+        ..Default::default()
+    })
+    .enumerate_adapters(wgpu::Backends::VULKAN)
+    .iter()
+    .any(|adapter| adapter.get_info().vendor == 0x10de);
 
-        if has_nvidia {
-            session_manager
-                .session_mut()
-                .session_settings
-                .extra
-                .patches
-                .linux_async_reprojection = false;
-        }
+    if has_nvidia {
+        session_manager
+            .session_mut()
+            .session_settings
+            .extra
+            .patches
+            .linux_async_reprojection = false;
     }
 
     if session_manager.session().server_version != *ALVR_VERSION {

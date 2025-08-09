@@ -1,6 +1,3 @@
-// hide console window on Windows in release
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
 mod dashboard;
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -8,7 +5,6 @@ mod data_sources;
 #[cfg(target_arch = "wasm32")]
 mod data_sources_wasm;
 #[cfg(not(target_arch = "wasm32"))]
-#[cfg(target_os = "linux")]
 mod linux_checks;
 #[cfg(not(target_arch = "wasm32"))]
 mod logging_backend;
@@ -56,8 +52,6 @@ fn main() {
             proc.kill();
         }
     }
-
-    #[cfg(target_os = "linux")]
     linux_checks::audio_check();
 
     data_sources::clean_session();

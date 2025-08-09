@@ -1,7 +1,4 @@
-#[cfg(target_os = "linux")]
 mod linux_steamvr;
-#[cfg(windows)]
-mod windows_steamvr;
 
 use crate::data_sources;
 use alvr_adb::commands as adb;
@@ -41,10 +38,7 @@ pub fn maybe_kill_steamvr() {
     for process in system.processes_by_name(OsStr::new(&afs::exec_fname("vrmonitor"))) {
         debug!("Killing vrmonitor");
 
-        #[cfg(target_os = "linux")]
         linux_steamvr::terminate_process(process);
-        #[cfg(windows)]
-        windows_steamvr::kill_process(process.pid().as_u32());
 
         thread::sleep(Duration::from_secs(1));
     }
@@ -55,10 +49,7 @@ pub fn maybe_kill_steamvr() {
     for process in system.processes_by_name(OsStr::new(&afs::exec_fname("vrserver"))) {
         debug!("Killing vrserver");
 
-        #[cfg(target_os = "linux")]
         linux_steamvr::terminate_process(process);
-        #[cfg(windows)]
-        windows_steamvr::kill_process(process.pid().as_u32());
 
         thread::sleep(Duration::from_secs(1));
     }
@@ -123,7 +114,6 @@ impl Launcher {
             adb::kill_server(&path).ok();
         }
 
-        #[cfg(target_os = "linux")]
         linux_steamvr::linux_hardware_checks();
 
         let alvr_driver_dir = crate::get_filesystem_layout().openvr_driver_root_dir;
@@ -144,22 +134,15 @@ impl Launcher {
             warn!("Failed to unblock ALVR driver: {:?}", err);
         }
 
-        #[cfg(target_os = "linux")]
-        {
-            let vrcompositor_wrap_result = linux_steamvr::maybe_wrap_vrcompositor_launcher();
-            alvr_common::show_err(linux_steamvr::maybe_wrap_vrcompositor_launcher());
-            if vrcompositor_wrap_result.is_err() {
-                return;
-            }
+        let vrcompositor_wrap_result = linux_steamvr::maybe_wrap_vrcompositor_launcher();
+        alvr_common::show_err(linux_steamvr::maybe_wrap_vrcompositor_launcher());
+        if vrcompositor_wrap_result.is_err() {
+            return;
         }
 
         if !is_steamvr_running() {
             debug!("SteamVR is dead. Launching...");
 
-            #[cfg(windows)]
-            windows_steamvr::start_steamvr();
-
-            #[cfg(target_os = "linux")]
             linux_steamvr::start_steamvr();
         }
     }

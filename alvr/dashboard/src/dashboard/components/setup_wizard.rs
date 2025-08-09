@@ -112,22 +112,9 @@ Make sure you have at least one output audio device.",
             Page::SoftwareRequirements => page_content(
                 ui,
                 "Software requirements",
-                if cfg!(windows) {
-                    r"To stream the headset microphone on Windows you need to install Virtual Audio Cable, VB-Cable, Voicemeeter"
-                } else if cfg!(target_os = "linux") {
-                    r"You need the PipeWire (0.3.49+ version) audio system to be able to stream audio and use microphone."
-                } else {
-                    r"Unsupported OS"
-                },
+                r"You need the PipeWire (0.3.49+ version) audio system to be able to stream audio and use microphone.",
                 #[allow(unused_variables)]
-                |ui| {
-                    #[cfg(windows)]
-                    if ui.button("Download Virtual Audio Cable (Lite)").clicked() {
-                        ui.ctx().open_url(eframe::egui::OpenUrl::same_tab(
-                            "https://software.muzychenko.net/freeware/vac470lite.zip",
-                        ));
-                    }
-                },
+                |ui| {},
             ),
             Page::Firewall => page_content(
                 ui,

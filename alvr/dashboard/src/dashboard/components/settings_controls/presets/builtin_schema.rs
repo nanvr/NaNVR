@@ -231,7 +231,6 @@ shutterring and high encode/decode latency!"
     })
 }
 
-#[cfg(target_os = "linux")]
 pub fn game_audio_schema() -> PresetSchemaNode {
     PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
         name: "Headset speaker".into(),
@@ -262,7 +261,6 @@ pub fn game_audio_schema() -> PresetSchemaNode {
     })
 }
 
-#[cfg(target_os = "linux")]
 pub fn microphone_schema() -> PresetSchemaNode {
     PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
         name: "Headset microphone".into(),
@@ -293,89 +291,6 @@ pub fn microphone_schema() -> PresetSchemaNode {
     })
 }
 
-#[cfg(not(target_os = "linux"))]
-pub fn game_audio_schema() -> PresetSchemaNode {
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
-        name: "Headset speaker".into(),
-        strings: [(
-            "notice".into(),
-            "You can change the default audio device from the system taskbar tray (bottom right)"
-                .into(),
-        )]
-        .into_iter()
-        .collect(),
-        flags: HashSet::new(),
-        options: vec![
-            HigherOrderChoiceOption {
-                display_name: "Disabled".into(),
-                modifiers: vec![bool_modifier(
-                    "session_settings.audio.game_audio.enabled",
-                    false,
-                )],
-                content: None,
-            },
-            HigherOrderChoiceOption {
-                display_name: "System Default".to_owned(),
-                modifiers: vec![
-                    bool_modifier("session_settings.audio.game_audio.enabled", true),
-                    bool_modifier(
-                        "session_settings.audio.game_audio.content.device.set",
-                        false,
-                    ),
-                ],
-                content: None,
-            },
-        ]
-        .into_iter()
-        .collect(),
-        default_option_display_name: "System Default".into(),
-        gui: ChoiceControlType::ButtonGroup,
-    })
-}
-
-#[cfg(not(target_os = "linux"))]
-pub fn microphone_schema() -> PresetSchemaNode {
-    let mut microhone_options = vec![HigherOrderChoiceOption {
-        display_name: "Disabled".to_owned(),
-        modifiers: vec![bool_modifier(
-            "session_settings.audio.microphone.enabled",
-            false,
-        )],
-        content: None,
-    }];
-
-    if cfg!(windows) {
-        for (key, display_name) in [
-            ("Automatic", "Automatic"),
-            ("VAC", "Virtual Audio Cable"),
-            ("VBCable", "VB Cable"),
-            ("VoiceMeeter", "VoiceMeeter"),
-            ("VoiceMeeterAux", "VoiceMeeter Aux"),
-            ("VoiceMeeterVaio3", "VoiceMeeter VAIO3"),
-        ] {
-            microhone_options.push(HigherOrderChoiceOption {
-                display_name: display_name.into(),
-                modifiers: vec![
-                    bool_modifier("session_settings.audio.microphone.enabled", true),
-                    string_modifier(
-                        "session_settings.audio.microphone.content.devices.variant",
-                        key,
-                    ),
-                ],
-                content: None,
-            })
-        }
-    }
-
-    PresetSchemaNode::HigherOrderChoice(HigherOrderChoiceSchema {
-        name: "Headset microphone".into(),
-        strings: HashMap::new(),
-        flags: HashSet::new(),
-        options: microhone_options.into_iter().collect(),
-        default_option_display_name: "Disabled".into(),
-        gui: ChoiceControlType::Dropdown,
-    })
-}
 
 pub fn hand_tracking_interaction_schema() -> PresetSchemaNode {
     const HELP: &str = r"Disabled: hands cannot emulate buttons. Useful for using Joy-Cons or other non-native controllers.
