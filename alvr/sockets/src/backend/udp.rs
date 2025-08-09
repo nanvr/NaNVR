@@ -58,9 +58,6 @@ impl SocketReader for Socket {
     }
 
     fn peek(&self, buffer: &mut [u8]) -> ConResult<usize> {
-        #[cfg(windows)]
-        const FLAGS: c_int = 0x02 | 0x8000; // MSG_PEEK | MSG_PARTIAL
-        #[cfg(not(windows))]
         const FLAGS: c_int = 0x02 | 0x20; // MSG_PEEK | MSG_TRUNC
 
         let buffer = MaybeUninitSlice::new(unsafe {
