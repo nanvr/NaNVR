@@ -43,7 +43,6 @@ void Settings::Load() {
         m_renderHeight = config.get("eye_resolution_height").get<int64_t>();
         m_recommendedTargetWidth = config.get("target_eye_resolution_width").get<int64_t>() * 2;
         m_recommendedTargetHeight = config.get("target_eye_resolution_height").get<int64_t>();
-        m_nAdapterIndex = (int32_t)config.get("adapter_index").get<int64_t>();
         m_captureFrameDir = config.get("capture_frame_dir").get<std::string>();
 
         m_enableFoveatedEncoding = config.get("enable_foveated_encoding").get<bool>();
@@ -63,7 +62,6 @@ void Settings::Load() {
 
         m_codec = (int32_t)config.get("codec").get<int64_t>();
         m_h264Profile = (int32_t)config.get("h264_profile").get<int64_t>();
-        m_rateControlMode = (uint32_t)config.get("rate_control_mode").get<int64_t>();
         m_fillerData = config.get("filler_data").get<bool>();
         m_entropyCoding = (uint32_t)config.get("entropy_coding").get<int64_t>();
         m_use10bitEncoder = config.get("use_10bit_encoder").get<bool>();
@@ -71,12 +69,7 @@ void Settings::Load() {
         m_enableHdr = config.get("enable_hdr").get<bool>();
         m_forceHdrSrgbCorrection = config.get("force_hdr_srgb_correction").get<bool>();
         m_clampHdrExtendedRange = config.get("clamp_hdr_extended_range").get<bool>();
-        m_enableAmfPreAnalysis = config.get("enable_amf_pre_analysis").get<bool>();
         m_enableVbaq = config.get("enable_vbaq").get<bool>();
-        m_enableAmfHmqb = config.get("enable_amf_hmqb").get<bool>();
-        m_useAmfPreproc = config.get("use_amf_preproc").get<bool>();
-        m_amfPreProcSigma = (uint32_t)config.get("amf_preproc_sigma").get<int64_t>();
-        m_amfPreProcTor = (uint32_t)config.get("amf_preproc_tor").get<int64_t>();
         m_encoderQualityPreset = (uint32_t)config.get("encoder_quality_preset").get<int64_t>();
         m_amdBitrateCorruptionFix = (bool)config.get("amd_bitrate_corruption_fix").get<bool>();
         m_nvencQualityPreset = (uint32_t)config.get("nvenc_quality_preset").get<int64_t>();

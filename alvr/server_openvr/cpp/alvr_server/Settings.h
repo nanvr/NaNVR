@@ -21,7 +21,6 @@ public:
     uint32_t m_renderHeight;
     int32_t m_recommendedTargetWidth;
     int32_t m_recommendedTargetHeight;
-    int32_t m_nAdapterIndex;
     std::string m_captureFrameDir;
 
     bool m_enableFoveatedEncoding;
@@ -46,12 +45,7 @@ public:
     bool m_enableHdr;
     bool m_forceHdrSrgbCorrection;
     bool m_clampHdrExtendedRange;
-    bool m_enableAmfPreAnalysis;
     bool m_enableVbaq;
-    bool m_enableAmfHmqb;
-    bool m_useAmfPreproc;
-    uint32_t m_amfPreProcSigma;
-    uint32_t m_amfPreProcTor;
     uint32_t m_encoderQualityPreset;
     bool m_amdBitrateCorruptionFix;
     uint32_t m_nvencQualityPreset;
