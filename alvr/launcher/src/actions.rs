@@ -2,7 +2,7 @@ use crate::{
     InstallationInfo, Progress, ReleaseChannelsInfo, ReleaseInfo, UiMessage, WorkerMessage,
 };
 use alvr_common::{ToAny, anyhow::Result, semver::Version};
-use anyhow::{Context, bail};
+use anyhow::Context;
 use flate2::read::GzDecoder;
 use futures_util::StreamExt;
 use std::{
@@ -51,12 +51,12 @@ pub fn worker(
                     UiMessage::Quit => return,
                     UiMessage::InstallServer {
                         release_info,
-                        session_version,
+                        // session_version,
                     } => {
                         install_server(
                             &worker_message_sender,
                             release_info,
-                            session_version,
+                            // session_version,
                             &req_client,
                         )
                         .await
@@ -242,7 +242,7 @@ async fn download(
 async fn install_server(
     worker_message_sender: &Sender<WorkerMessage>,
     release_info: ReleaseInfo,
-    session_version: Option<String>,
+    // session_version: Option<String>,
     req_client: &reqwest::Client,
 ) -> Result<()> {
     worker_message_sender.send(WorkerMessage::ProgressUpdate(Progress {
@@ -250,11 +250,7 @@ async fn install_server(
         progress: 0.0,
     }))?;
 
-    let file_name = if cfg!(windows) {
-        "alvr_streamer_windows.zip"
-    } else {
-        "alvr_streamer_linux.tar.gz"
-    };
+    let file_name = "alvr_streamer_linux.tar.gz";
 
     let url = release_info
         .assets
@@ -274,36 +270,34 @@ async fn install_server(
     fs::create_dir_all(&installation_dir)?;
 
     let mut buffer = Cursor::new(buffer);
-    if cfg!(windows) {
-        zip::ZipArchive::new(&mut buffer)?.extract(&installation_dir)?;
-    } else {
-        tar::Archive::new(&mut GzDecoder::new(&mut buffer)).unpack(&installation_dir)?;
-    }
 
-    if let Some(session_version) = session_version {
-        // This code is tailored for Windows and is only hit on Windows
-        assert!(cfg!(windows));
+    tar::Archive::new(&mut GzDecoder::new(&mut buffer)).unpack(&installation_dir)?;
 
-        for inst in get_installations() {
-            if inst.version == session_version {
-                let source = alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
-                    &installations_dir().join(session_version),
-                )
-                .unwrap()
-                .session();
+    // todo: adapt to linux
+    // if let Some(session_version) = session_version {
+    //     // This code is tailored for Windows and is only hit on Windows
+    //     assert!(cfg!(windows));
 
-                let destination = alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
-                    &installation_dir,
-                )
-                .unwrap()
-                .session();
+    //     for inst in get_installations() {
+    //         if inst.version == session_version {
+    //             let source = alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
+    //                 &installations_dir().join(session_version),
+    //             )
+    //             .unwrap()
+    //             .session();
 
-                fs::copy(source, destination)?;
+    //             let destination = alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
+    //                 &installation_dir,
+    //             )
+    //             .unwrap()
+    //             .session();
 
-                break;
-            }
-        }
-    }
+    //             fs::copy(source, destination)?;
+
+    //             break;
+    //         }
+    //     }
+    // }
 
     Ok(())
 }
@@ -336,21 +330,22 @@ pub fn get_installations() -> Vec<InstallationInfo> {
                         }
                     })
                     .map(|entry| {
-                        let has_session_json = if cfg!(windows) {
-                            alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
-                                &entry.path(),
-                            )
-                            .map(|layout| layout.session().exists())
-                            .unwrap_or(false)
-                        } else {
-                            // On linux, the launcher does not need to manage the session files
-                            false
-                        };
+                        // todo: adapt to linux
+                        // let has_session_json = if cfg!(windows) {
+                        //     alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
+                        //         &entry.path(),
+                        //     )
+                        //     .map(|layout| layout.session().exists())
+                        //     .unwrap_or(false)
+                        // } else {
+                        // On linux, the launcher does not need to manage the session files
+                        //  false;
+                        // };
 
                         InstallationInfo {
                             version: entry.file_name().to_string_lossy().into(),
                             is_apk_downloaded: entry.path().join(APK_NAME).exists(),
-                            has_session_json,
+                            // has_session_json,
                         }
                     })
             })
@@ -365,13 +360,7 @@ pub fn get_installations() -> Vec<InstallationInfo> {
 pub fn launch_dashboard(version: &str) -> Result<()> {
     let installation_dir = installations_dir().join(version);
 
-    let dashboard_path = if cfg!(windows) {
-        installation_dir.join("ALVR Dashboard.exe")
-    } else if cfg!(target_os = "linux") {
-        installation_dir.join("alvr_streamer_linux/bin/alvr_dashboard")
-    } else {
-        bail!("Unsupported platform")
-    };
+    let dashboard_path = installation_dir.join("alvr_streamer_linux/bin/alvr_dashboard");
 
     Command::new(dashboard_path).spawn()?;
 

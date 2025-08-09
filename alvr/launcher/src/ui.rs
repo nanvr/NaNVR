@@ -74,7 +74,7 @@ impl Launcher {
         &self,
         ctx: &Context,
         mut version: Version,
-        mut session_version: Option<String>,
+        session_version: Option<String>,
     ) -> PopupType {
         let response = alvr_gui_common::modal(
             ctx,
@@ -103,12 +103,12 @@ impl Launcher {
                             })
                             .collect(),
                     };
-                    let installations_with_session: Vec<_> = self
-                        .installations
-                        .iter()
-                        .filter(|installation| installation.has_session_json)
-                        .map(|installation| installation.version.clone())
-                        .collect();
+                    // let installations_with_session: Vec<_> = self
+                    //     .installations
+                    //     .iter()
+                    //     .filter(|installation| installation.has_session_json)
+                    //     .map(|installation| installation.version.clone())
+                    //     .collect();
 
                     Grid::new("add-version-grid").num_columns(2).show(ui, |ui| {
                         ui.label("Channel");
@@ -155,24 +155,25 @@ impl Launcher {
                         });
                         ui.end_row();
 
-                        if cfg!(windows) {
-                            ui.label("Copy session from:");
-                            ui.with_layout(Layout::right_to_left(Align::Min), |ui| {
-                                ComboBox::from_id_salt("session")
-                                    .selected_text(session_version.clone().unwrap_or("None".into()))
-                                    .show_ui(ui, |ui| {
-                                        ui.selectable_value(&mut session_version, None, "None");
-                                        for ver_str in installations_with_session {
-                                            ui.selectable_value(
-                                                &mut session_version,
-                                                Some(ver_str.clone()),
-                                                ver_str,
-                                            );
-                                        }
-                                    })
-                            });
-                            ui.end_row();
-                        }
+                        // todo: adapt to linux
+                        // if cfg!(windows) {
+                        //     ui.label("Copy session from:");
+                        //     ui.with_layout(Layout::right_to_left(Align::Min), |ui| {
+                        //         ComboBox::from_id_salt("session")
+                        //             .selected_text(session_version.clone().unwrap_or("None".into()))
+                        //             .show_ui(ui, |ui| {
+                        //                 ui.selectable_value(&mut session_version, None, "None");
+                        //                 for ver_str in installations_with_session {
+                        //                     ui.selectable_value(
+                        //                         &mut session_version,
+                        //                         Some(ver_str.clone()),
+                        //                         ver_str,
+                        //                     );
+                        //                 }
+                        //             })
+                        //     });
+                        //     ui.end_row();
+                        // }
                     });
                 })
             },
@@ -207,7 +208,7 @@ impl Launcher {
                 self.ui_message_sender
                     .send(UiMessage::InstallServer {
                         release_info,
-                        session_version,
+                        // session_version,
                     })
                     .ok();
 
