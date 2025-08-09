@@ -75,7 +75,7 @@ pub fn init_logging(session_log_path: Option<PathBuf>, crash_log_path: Option<Pa
                 .open(path)
                 .unwrap(),
         )
-    } else if cfg!(target_os = "linux") {
+    } else {
         // this sink is required to make sure all log gets processed and forwarded to the websocket
         log_dispatch.chain(
             fs::OpenOptions::new()
@@ -83,8 +83,6 @@ pub fn init_logging(session_log_path: Option<PathBuf>, crash_log_path: Option<Pa
                 .open("/dev/null")
                 .unwrap(),
         )
-    } else {
-        log_dispatch.chain(std::io::stdout())
     };
 
     log_dispatch = if let Some(path) = crash_log_path {
@@ -93,15 +91,13 @@ pub fn init_logging(session_log_path: Option<PathBuf>, crash_log_path: Option<Pa
                 .level(LevelFilter::Error)
                 .chain(fern::log_file(path).unwrap()),
         )
-    } else if cfg!(target_os = "linux") {
+    } else {
         log_dispatch.chain(
             fs::OpenOptions::new()
                 .write(true)
                 .open("/dev/null")
                 .unwrap(),
         )
-    } else {
-        log_dispatch.chain(std::io::stderr())
     };
 
     log_dispatch.apply().unwrap();

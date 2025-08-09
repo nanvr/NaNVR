@@ -106,51 +106,46 @@ pub struct Layout {
 
 impl Layout {
     pub fn new(root: &Path) -> Self {
-        #[cfg(target_os = "linux")]
-        {
-            let or_path =
-                |opt: Option<&'static str>, path| opt.map_or(root.join(path), PathBuf::from);
+        let or_path = |opt: Option<&'static str>, path| opt.map_or(root.join(path), PathBuf::from);
 
-            // Get paths from environment or use FHS compliant paths
-            let executables_dir = or_path(option_env!("ALVR_EXECUTABLES_DIR"), "bin");
-            let libraries_dir = or_path(option_env!("ALVR_LIBRARIES_DIR"), "lib64");
-            let static_resources_dir =
-                or_path(option_env!("ALVR_STATIC_RESOURCES_DIR"), "share/alvr");
-            let openvr_driver_root_dir =
-                or_path(option_env!("ALVR_OPENVR_DRIVER_ROOT_DIR"), "lib64/alvr");
-            let vrcompositor_wrapper_dir =
-                or_path(option_env!("ALVR_VRCOMPOSITOR_WRAPPER_DIR"), "libexec/alvr");
-            let firewall_script_dir = or_path(option_env!("FIREWALL_SCRIPT_DIR"), "libexec/alvr");
-            let firewalld_config_dir = or_path(option_env!("FIREWALLD_CONFIG_DIR"), "libexec/alvr");
-            let ufw_config_dir = or_path(option_env!("UFW_CONFIG_DIR"), "libexec/alvr");
-            let vulkan_layer_manifest_dir = or_path(
-                option_env!("ALVR_VULKAN_LAYER_MANIFEST_DIR"),
-                "share/vulkan/explicit_layer.d",
-            );
+        // Get paths from environment or use FHS compliant paths
+        let executables_dir = or_path(option_env!("ALVR_EXECUTABLES_DIR"), "bin");
+        let libraries_dir = or_path(option_env!("ALVR_LIBRARIES_DIR"), "lib64");
+        let static_resources_dir = or_path(option_env!("ALVR_STATIC_RESOURCES_DIR"), "share/alvr");
+        let openvr_driver_root_dir =
+            or_path(option_env!("ALVR_OPENVR_DRIVER_ROOT_DIR"), "lib64/alvr");
+        let vrcompositor_wrapper_dir =
+            or_path(option_env!("ALVR_VRCOMPOSITOR_WRAPPER_DIR"), "libexec/alvr");
+        let firewall_script_dir = or_path(option_env!("FIREWALL_SCRIPT_DIR"), "libexec/alvr");
+        let firewalld_config_dir = or_path(option_env!("FIREWALLD_CONFIG_DIR"), "libexec/alvr");
+        let ufw_config_dir = or_path(option_env!("UFW_CONFIG_DIR"), "libexec/alvr");
+        let vulkan_layer_manifest_dir = or_path(
+            option_env!("ALVR_VULKAN_LAYER_MANIFEST_DIR"),
+            "share/vulkan/explicit_layer.d",
+        );
 
-            let config_dir = option_env!("ALVR_CONFIG_DIR")
-                .map_or_else(|| dirs::config_dir().unwrap().join("alvr"), PathBuf::from);
-            let log_dir = option_env!("ALVR_LOG_DIR")
-                .map_or_else(|| dirs::home_dir().unwrap(), PathBuf::from);
+        let config_dir = option_env!("ALVR_CONFIG_DIR")
+            .map_or_else(|| dirs::config_dir().unwrap().join("alvr"), PathBuf::from);
+        let log_dir =
+            option_env!("ALVR_LOG_DIR").map_or_else(|| dirs::home_dir().unwrap(), PathBuf::from);
 
-            Self {
-                executables_dir,
-                libraries_dir,
-                static_resources_dir,
-                config_dir,
-                log_dir,
-                openvr_driver_root_dir,
-                vrcompositor_wrapper_dir,
-                firewall_script_dir,
-                firewalld_config_dir,
-                ufw_config_dir,
-                vulkan_layer_manifest_dir,
-                launcher_root: root
-                    .parent()
-                    .and_then(|p| p.parent())
-                    .and_then(|p| p.parent())
-                    .map(|p| p.to_owned()),
-            }
+        Self {
+            executables_dir,
+            libraries_dir,
+            static_resources_dir,
+            config_dir,
+            log_dir,
+            openvr_driver_root_dir,
+            vrcompositor_wrapper_dir,
+            firewall_script_dir,
+            firewalld_config_dir,
+            ufw_config_dir,
+            vulkan_layer_manifest_dir,
+            launcher_root: root
+                .parent()
+                .and_then(|p| p.parent())
+                .and_then(|p| p.parent())
+                .map(|p| p.to_owned()),
         }
     }
 
@@ -181,11 +176,7 @@ impl Layout {
     }
 
     pub fn session_log(&self) -> PathBuf {
-        if cfg!(target_os = "linux") {
-            self.log_dir.join("alvr_session_log.txt")
-        } else {
-            self.log_dir.join("session_log.txt")
-        }
+        self.log_dir.join("alvr_session_log.txt")
     }
 
     pub fn connect_script(&self) -> PathBuf {
@@ -258,12 +249,8 @@ fn layout_from_env() -> Option<Layout> {
 // The path argument is used only if ALVR is built as portable
 pub fn filesystem_layout_from_dashboard_exe(path: &Path) -> Option<Layout> {
     layout_from_env().or_else(|| {
-        let root = if cfg!(target_os = "linux") {
-            // FHS path is expected
-            path.parent()?.parent()?.to_owned()
-        } else {
-            path.parent()?.to_owned()
-        };
+        // FHS path is expected
+        let root = path.parent()?.parent()?.to_owned();
 
         Some(Layout::new(&root))
     })
@@ -272,12 +259,8 @@ pub fn filesystem_layout_from_dashboard_exe(path: &Path) -> Option<Layout> {
 // The dir argument is used only if ALVR is built as portable
 pub fn filesystem_layout_from_openvr_driver_root_dir(dir: &Path) -> Option<Layout> {
     layout_from_env().or_else(|| {
-        let root = if cfg!(target_os = "linux") {
-            // FHS path is expected
-            dir.parent()?.parent()?.to_owned()
-        } else {
-            dir.to_owned()
-        };
+        // FHS path is expected
+        let root = dir.parent()?.parent()?.to_owned();
 
         Some(Layout::new(&root))
     })

@@ -23,7 +23,6 @@ fn main() {
         .filter_entry(|entry| {
             entry.file_name() != "tools"
                 && entry.file_name() != "platform"
-                && entry.file_name() != "amf"
         });
 
     let platform_iter = walkdir::WalkDir::new(platform_subpath).into_iter();

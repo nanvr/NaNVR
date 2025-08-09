@@ -68,7 +68,6 @@ impl<T> HandleTryAgain<T> for io::Result<T> {
             // Ignore ERROR_IO_PENDING on Windows (code 997)
             if e.kind() == io::ErrorKind::TimedOut
                 || e.kind() == io::ErrorKind::WouldBlock
-                || (cfg!(windows) && e.raw_os_error() == Some(997))
             {
                 ConnectionError::TryAgain(e.into())
             } else {

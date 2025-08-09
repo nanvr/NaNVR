@@ -161,37 +161,6 @@ Temporal: Helps improve overall encoding quality, very small trade-off in speed.
 
 #[derive(SettingsSchema, Serialize, Deserialize, Clone, PartialEq)]
 #[schema(collapsible)]
-pub struct AmfConfig {
-    #[schema(
-        strings(
-            display_name = "Enable High-Motion Quality Boost",
-            help = r#"Enables high motion quality boost mode.
-Allows the encoder to perform pre-analysis the motion of the video and use the information for better encoding"#
-        ),
-        flag = "steamvr-restart"
-    )]
-    pub enable_hmqb: bool,
-    #[schema(flag = "steamvr-restart")]
-    pub use_preproc: bool,
-    #[schema(gui(slider(min = 0, max = 10)))]
-    #[schema(flag = "steamvr-restart")]
-    pub preproc_sigma: u32,
-    #[schema(gui(slider(min = 0, max = 10)))]
-    #[schema(flag = "steamvr-restart")]
-    pub preproc_tor: u32,
-    #[schema(
-        strings(
-            display_name = "Enable Pre-analysis",
-            help = r#"Enables pre-analysis during encoding. This will likely result in reduced performance, but may increase quality.
-Does not work with the "Reduce color banding" option, requires enabling "Use preproc""#
-        ),
-        flag = "steamvr-restart"
-    )]
-    pub enable_pre_analysis: bool,
-}
-
-#[derive(SettingsSchema, Serialize, Deserialize, Clone, PartialEq)]
-#[schema(collapsible)]
 pub struct SoftwareEncodingConfig {
     #[schema(strings(
         display_name = "Force software encoding",
@@ -236,7 +205,7 @@ pub struct EncoderConfig {
     #[schema(flag = "steamvr-restart")]
     #[schema(strings(
         display_name = "Quality preset",
-        help = "Controls overall quality preset of the encoder. Works only on Windows AMD AMF, Linux VAAPI (AMD/Intel)."
+        help = "Controls overall quality preset of the encoder. Works only on VAAPI (AMD/Intel)."
     ))]
     pub quality_preset: EncoderQualityPreset,
 
@@ -1764,7 +1733,7 @@ pub fn session_settings_default() -> SettingsDefault {
                 },
             },
             microphone: SwitchDefault {
-                enabled: cfg!(target_os = "linux"),
+                enabled: true,
                 content: MicrophoneConfigDefault {
                     gui_collapsed: true,
                     buffering: AudioBufferingConfigDefault {
@@ -2054,11 +2023,7 @@ pub fn session_settings_default() -> SettingsDefault {
                     enabled: false,
                     content: RollingVideoFilesConfigDefault { duration_s: 5 },
                 },
-                capture_frame_dir: if !cfg!(target_os = "linux") {
-                    "/tmp".into()
-                } else {
-                    "".into()
-                },
+                capture_frame_dir: "/tmp".into(),
             },
             patches: PatchesDefault {
                 linux_async_compute: false,

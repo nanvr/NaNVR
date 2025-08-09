@@ -577,8 +577,6 @@ impl Drop for ServerCoreContext {
         }
 
         // Dropping the webserver runtime is bugged on linux and will prevent StemVR shutdown
-        if !cfg!(target_os = "linux") {
-            self.webserver_runtime.take();
-        }
+        // self.webserver_runtime.take();
     }
 }

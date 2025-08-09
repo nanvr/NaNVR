@@ -1,4 +1,3 @@
-#![cfg(target_os = "linux")]
 #![allow(
     dead_code,
     non_camel_case_types,

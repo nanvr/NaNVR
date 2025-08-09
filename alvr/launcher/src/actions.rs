@@ -303,16 +303,8 @@ async fn install_server(
 }
 
 pub fn data_dir() -> PathBuf {
-    if cfg!(target_os = "linux") {
-        PathBuf::from(env::var("HOME").expect("Failed to determine home directory"))
-            .join(".local/share/ALVR-Launcher")
-    } else {
-        env::current_exe()
-            .expect("Unable to determine executable directory")
-            .parent()
-            .unwrap()
-            .to_owned()
-    }
+    PathBuf::from(env::var("HOME").expect("Failed to determine home directory"))
+        .join(".local/share/ALVR-Launcher")
 }
 
 pub fn get_installations() -> Vec<InstallationInfo> {

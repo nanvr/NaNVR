@@ -6,7 +6,7 @@ use alvr_common::{
     info,
     parking_lot::Mutex,
 };
-use alvr_session::{AudioBufferingConfig, CustomAudioDeviceConfig, MicrophoneDevicesConfig};
+use alvr_session::{AudioBufferingConfig, CustomAudioDeviceConfig};
 use alvr_sockets::{StreamReceiver, StreamSender};
 use cpal::{
     BufferSize, Host, Sample, SampleFormat, StreamConfig,
@@ -68,58 +68,6 @@ pub fn new_input(config: Option<CustomAudioDeviceConfig>) -> Result<Device> {
     };
 
     Ok(device)
-}
-
-// returns (sink, source)
-pub fn new_virtual_microphone_pair(config: MicrophoneDevicesConfig) -> Result<(Device, Device)> {
-    // No-op on Windows (this is windows specific code)
-    let host = cpal::default_host();
-
-    let (sink_name, source_name) = match config {
-        MicrophoneDevicesConfig::Automatic => {
-            // NOTE: This will iterate over all devices for every option it tries, if the audio
-            // code is slow, change that first
-            return [
-                MicrophoneDevicesConfig::VAC,
-                MicrophoneDevicesConfig::VBCable,
-                MicrophoneDevicesConfig::VoiceMeeter,
-                MicrophoneDevicesConfig::VoiceMeeterAux,
-                MicrophoneDevicesConfig::VoiceMeeterVaio3,
-            ]
-            .into_iter()
-            .find_map(|cable_type| new_virtual_microphone_pair(cable_type).ok())
-            .context("No microphones found");
-        }
-
-        MicrophoneDevicesConfig::VAC => ("Line 1", "Line 1"),
-        MicrophoneDevicesConfig::VBCable => ("CABLE Input", "CABLE Output"),
-        MicrophoneDevicesConfig::VoiceMeeter => ("VoiceMeeter Input", "VoiceMeeter Output"),
-        MicrophoneDevicesConfig::VoiceMeeterAux => {
-            ("VoiceMeeter Aux Input", "VoiceMeeter Aux Output")
-        }
-        MicrophoneDevicesConfig::VoiceMeeterVaio3 => {
-            ("VoiceMeeter VAIO3 Input", "VoiceMeeter VAIO3 Output")
-        }
-
-        MicrophoneDevicesConfig::Custom { sink, source } => {
-            return Ok((
-                device_from_custom_config(&host, &sink, true)?,
-                device_from_custom_config(&host, &source, false)?,
-            ));
-        }
-    };
-
-    let sink = host
-            .output_devices()?
-            .find(|d| d.name().unwrap_or_default().contains(sink_name))
-            .context("Virtual Audio Cable, VB-CABLE or VoiceMeeter not found. Please install or reinstall one")?;
-
-    let source = host
-        .input_devices()?
-        .find(|d| d.name().unwrap_or_default().contains(source_name))
-        .context("Matching output microphone not found. Did you rename it?")?;
-
-    Ok((sink, source))
 }
 
 pub fn input_sample_rate(dev: &Device) -> Result<u32> {

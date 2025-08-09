@@ -14,7 +14,7 @@ pub enum ReleaseFlavor {
     PicoStore,
 }
 
-pub fn include_licenses(root_path: &Path, gpl: bool) {
+pub fn include_licenses(root_path: &Path) {
     let sh = Shell::new().unwrap();
 
     // Add licenses
@@ -64,7 +64,7 @@ pub fn package_streamer(
         false,
     );
 
-    include_licenses(&afs::streamer_build_dir(), gpl);
+    include_licenses(&afs::streamer_build_dir());
 
     command::targz(&sh, &afs::streamer_build_dir()).unwrap();
 }
@@ -82,7 +82,7 @@ pub fn package_launcher() {
         },
     );
 
-    include_licenses(&afs::launcher_build_dir(), false);
+    include_licenses(&afs::launcher_build_dir());
 
     command::targz(&sh, &afs::launcher_build_dir()).unwrap();
 }

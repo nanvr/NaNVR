@@ -1,4 +1,3 @@
-#[cfg(target_os = "linux")]
 fn main() {
     use std::{env, path::PathBuf};
     use xshell::{Shell, cmd};
@@ -13,6 +12,3 @@ fn main() {
     );
     cmd!(sh, "bash -c {command}").run().unwrap();
 }
-
-#[cfg(not(target_os = "linux"))]
-fn main() {}

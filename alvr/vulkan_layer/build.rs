@@ -1,4 +1,3 @@
-#[cfg(target_os = "linux")]
 fn main() {
     use std::{env, path::PathBuf};
 
@@ -56,6 +55,3 @@ fn main() {
         println!("cargo:rerun-if-changed={}", path.to_string_lossy());
     }
 }
-
-#[cfg(not(target_os = "linux"))]
-fn main() {}

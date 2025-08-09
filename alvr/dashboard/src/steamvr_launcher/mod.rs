@@ -56,10 +56,6 @@ pub fn maybe_kill_steamvr() {
 }
 
 fn unblock_alvr_driver() -> Result<()> {
-    if !cfg!(target_os = "linux") {
-        return Ok(());
-    }
-
     let path = alvr_server_io::steamvr_settings_file_path()?;
     let text = fs::read_to_string(&path).with_context(|| format!("Failed to read {path:?}"))?;
     let new_text = unblock_alvr_driver_within_vrsettings(text.as_str())
