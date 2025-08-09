@@ -11,13 +11,9 @@ use std::{
 };
 
 fn openvr_source_file_path() -> Result<PathBuf> {
-    let path = if cfg!(windows) {
-        dirs::cache_dir()
-    } else {
-        dirs::config_dir()
-    }
-    .to_any()?
-    .join("openvr/openvrpaths.vrpath");
+    let path = dirs::config_dir()
+        .to_any()?
+        .join("openvr/openvrpaths.vrpath");
 
     if path.exists() {
         Ok(path)
@@ -27,15 +23,9 @@ fn openvr_source_file_path() -> Result<PathBuf> {
 }
 
 pub fn steamvr_settings_file_path() -> Result<PathBuf> {
-    let path = if cfg!(windows) {
-        // N.B. if ever implementing this: given Steam can be installed on another
-        // drive, etc., this should probably start by looking at Windows registry keys.
-        bail!("Not implemented for Windows.") // Original motive for implementation had little reason for Windows.
-    } else {
-        dirs::data_dir()
-    }
-    .to_any()?
-    .join("Steam/config/steamvr.vrsettings");
+    let path = dirs::data_dir()
+        .to_any()?
+        .join("Steam/config/steamvr.vrsettings");
 
     if path.exists() {
         Ok(path)
