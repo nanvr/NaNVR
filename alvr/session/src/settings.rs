@@ -248,13 +248,6 @@ pub struct EncoderConfig {
         flag = "steamvr-restart"
     )]
     pub enable_vbaq: bool,
-
-    #[cfg_attr(not(target_os = "windows"), schema(flag = "hidden"))]
-    #[schema(strings(help = r#"CBR: Constant BitRate mode. This is recommended.
-VBR: Variable BitRate mode. Not commended because it may throw off the adaptive bitrate algorithm. This is only supported on Windows and only with AMD/Nvidia GPUs"#))]
-    #[schema(flag = "steamvr-restart")]
-    pub rate_control_mode: RateControlMode,
-
     #[schema(strings(
         display_name = "h264: Profile",
         help = "Whenever possible, attempts to use this profile. May increase compatibility with varying mobile devices. Only has an effect for h264. Doesn't affect NVENC on Windows."
@@ -294,11 +287,6 @@ CABAC produces better compression but it's significantly slower and may lead to 
     #[schema(strings(display_name = "NVENC"))]
     #[schema(flag = "steamvr-restart")]
     pub nvenc: NvencConfig,
-
-    #[cfg_attr(not(target_os = "windows"), schema(flag = "hidden"))]
-    #[schema(strings(display_name = "AMF"))]
-    #[schema(flag = "steamvr-restart")]
-    pub amf: AmfConfig,
 
     #[schema(strings(display_name = "Software (CPU) encoding"))]
     pub software: SoftwareEncodingConfig,
@@ -725,9 +713,8 @@ If you want to reduce the amount of pixelation on the edges, increase the center
     #[schema(gui(slider(min = 0.50, max = 0.99, step = 0.01)))]
     pub buffering_history_weight: f32,
 
-    #[cfg_attr(not(target_os = "windows"), schema(flag = "hidden"))]
     #[schema(strings(
-        help = r"This works only on Windows. It shouldn't be disabled except in certain circumstances when you know the VR game will not meet the target framerate."
+        help = r"It shouldn't be enabled except in certain circumstances when you know the VR game will not meet the target framerate."
     ))]
     #[schema(flag = "real-time")]
     pub enforce_server_frame_pacing: bool,
@@ -758,13 +745,6 @@ If you want to reduce the amount of pixelation on the edges, increase the center
     #[schema(gui(slider(min = 60.0, max = 120.0)), suffix = "Hz")]
     #[schema(flag = "steamvr-restart")]
     pub preferred_fps: f32,
-
-    #[cfg_attr(not(target_os = "windows"), schema(flag = "hidden"))]
-    #[schema(strings(
-        help = "You probably don't want to change this. Allows for changing adapter for ALVR compositor."
-    ))]
-    #[schema(flag = "steamvr-restart")]
-    pub adapter_index: u32,
 
     pub clientside_foveation: Switch<ClientsideFoveationConfig>,
 
@@ -803,13 +783,6 @@ pub struct AudioBufferingConfig {
 #[derive(SettingsSchema, Serialize, Deserialize, Clone)]
 #[schema(collapsible)]
 pub struct GameAudioConfig {
-    #[cfg_attr(target_os = "linux", schema(flag = "hidden"))]
-    pub device: Option<CustomAudioDeviceConfig>,
-
-    #[cfg_attr(target_os = "linux", schema(flag = "hidden"))]
-    #[schema(strings(display_name = "Mute desktop audio when streaming"))]
-    pub mute_when_streaming: bool,
-
     pub buffering: AudioBufferingConfig,
 }
 
@@ -839,9 +812,6 @@ pub enum MicrophoneDevicesConfig {
 #[derive(SettingsSchema, Serialize, Deserialize, Clone)]
 #[schema(collapsible)]
 pub struct MicrophoneConfig {
-    #[cfg_attr(target_os = "linux", schema(flag = "hidden"))]
-    pub devices: MicrophoneDevicesConfig,
-
     pub buffering: AudioBufferingConfig,
 }
 
@@ -850,14 +820,7 @@ pub struct AudioConfig {
     #[schema(strings(display_name = "Headset speaker"))]
     pub game_audio: Switch<GameAudioConfig>,
 
-    #[cfg_attr(
-        windows,
-        schema(strings(
-            display_name = "Headset microphone",
-            notice = r"To be able to use the microphone on Windows, you need to install Virtual Audio Cable"
-        ))
-    )]
-    #[cfg_attr(not(windows), schema(strings(display_name = "Headset microphone")))]
+    #[schema(strings(display_name = "Headset microphone"))]
     pub microphone: Switch<MicrophoneConfig>,
 }
 
@@ -1294,7 +1257,6 @@ pub enum SocketProtocol {
 
 #[derive(SettingsSchema, Serialize, Deserialize, Clone)]
 pub struct DiscoveryConfig {
-    #[cfg_attr(target_os = "linux", schema(flag = "hidden"))]
     #[schema(strings(
         help = "Allow untrusted clients to connect without confirmation. This is not recommended for security reasons."
     ))]
@@ -1328,32 +1290,14 @@ TCP: Slower than UDP, but more stable. Pick this if you experience video or audi
     ))]
     pub wired_client_autolaunch: bool,
 
-    #[cfg_attr(
-        windows,
-        schema(strings(
-            help = "If on_connect.bat exists alongside session.json, it will be run on headset connect. Env var ACTION will be set to `connect`."
-        ))
-    )]
-    #[cfg_attr(
-        not(windows),
-        schema(strings(
-            help = "If on_connect.sh exists alongside session.json, it will be run on headset connect. Env var ACTION will be set to `connect`."
-        ))
-    )]
+    #[schema(strings(
+        help = "If on_connect.sh exists alongside session.json, it will be run on headset connect. Env var ACTION will be set to `connect`."
+    ))]
     pub enable_on_connect_script: bool,
 
-    #[cfg_attr(
-        windows,
-        schema(strings(
-            help = "If on_disconnect.bat exists alongside session.json, it will be run on headset disconnect. Env var ACTION will be set to `disconnect`."
-        ))
-    )]
-    #[cfg_attr(
-        not(windows),
-        schema(strings(
-            help = "If on_disconnect.sh exists alongside session.json, it will be run on headset disconnect. Env var ACTION will be set to `disconnect`."
-        ))
-    )]
+    #[schema(strings(
+        help = "If on_disconnect.sh exists alongside session.json, it will be run on headset disconnect. Env var ACTION will be set to `disconnect`."
+    ))]
     #[schema(flag = "real-time")]
     pub enable_on_disconnect_script: bool,
 
@@ -1516,7 +1460,6 @@ pub struct ExtraConfig {
     pub steamvr_launcher: SteamvrLauncher,
     pub capture: CaptureConfig,
     pub logging: LoggingConfig,
-    #[cfg_attr(not(target_os = "linux"), schema(flag = "hidden"))]
     pub patches: Patches,
 
     #[schema(
@@ -1549,11 +1492,6 @@ pub fn session_settings_default() -> SettingsDefault {
                 content: 1072,
             },
         },
-    };
-    let default_custom_audio_device = CustomAudioDeviceConfigDefault {
-        NameSubstring: "".into(),
-        Index: 0,
-        variant: CustomAudioDeviceConfigDefaultVariant::NameSubstring,
     };
     let default_custom_openvr_props = VectorDefault {
         gui_collapsed: true,
@@ -1623,7 +1561,6 @@ pub fn session_settings_default() -> SettingsDefault {
                     upscale_factor: 1.5,
                 },
             },
-            adapter_index: 0,
             transcoding_view_resolution: view_resolution.clone(),
             emulated_headset_view_resolution: view_resolution,
             preferred_fps: 72.,
@@ -1681,9 +1618,6 @@ pub fn session_settings_default() -> SettingsDefault {
             },
             encoder_config: EncoderConfigDefault {
                 gui_collapsed: true,
-                rate_control_mode: RateControlModeDefault {
-                    variant: RateControlModeDefaultVariant::Cbr,
-                },
                 filler_data: false,
                 h264_profile: H264ProfileDefault {
                     variant: H264ProfileDefaultVariant::High,
@@ -1741,14 +1675,6 @@ pub fn session_settings_default() -> SettingsDefault {
                     variant: EncoderQualityPresetDefaultVariant::Speed,
                 },
                 enable_vbaq: false,
-                amf: AmfConfigDefault {
-                    gui_collapsed: true,
-                    enable_pre_analysis: false,
-                    enable_hmqb: false,
-                    use_preproc: false,
-                    preproc_sigma: 4,
-                    preproc_tor: 7,
-                },
                 software: SoftwareEncodingConfigDefault {
                     gui_collapsed: true,
                     force_software_encoding: false,
@@ -1830,11 +1756,6 @@ pub fn session_settings_default() -> SettingsDefault {
                 enabled: true,
                 content: GameAudioConfigDefault {
                     gui_collapsed: true,
-                    device: OptionalDefault {
-                        set: false,
-                        content: default_custom_audio_device.clone(),
-                    },
-                    mute_when_streaming: true,
                     buffering: AudioBufferingConfigDefault {
                         gui_collapsed: true,
                         average_buffering_ms: 50,
@@ -1846,13 +1767,6 @@ pub fn session_settings_default() -> SettingsDefault {
                 enabled: cfg!(target_os = "linux"),
                 content: MicrophoneConfigDefault {
                     gui_collapsed: true,
-                    devices: MicrophoneDevicesConfigDefault {
-                        Custom: MicrophoneDevicesConfigCustomDefault {
-                            source: default_custom_audio_device.clone(),
-                            sink: default_custom_audio_device,
-                        },
-                        variant: MicrophoneDevicesConfigDefaultVariant::Automatic,
-                    },
                     buffering: AudioBufferingConfigDefault {
                         gui_collapsed: true,
                         average_buffering_ms: 50,

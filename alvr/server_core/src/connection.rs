@@ -150,27 +150,19 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
     };
 
     let nvenc_overrides = settings.video.encoder_config.nvenc;
-    let amf_controls = settings.video.encoder_config.amf;
     let hdr_controls = settings.video.encoder_config.hdr;
 
     OpenvrConfig {
         tracking_ref_only: settings.headset.tracking_ref_only,
         enable_vive_tracker_proxy: settings.headset.enable_vive_tracker_proxy,
         minimum_idr_interval_ms: settings.connection.minimum_idr_interval_ms,
-        adapter_index: settings.video.adapter_index,
         codec: settings.video.preferred_codec as _,
         h264_profile: settings.video.encoder_config.h264_profile as u32,
-        rate_control_mode: settings.video.encoder_config.rate_control_mode as u32,
         filler_data: settings.video.encoder_config.filler_data,
         entropy_coding: settings.video.encoder_config.entropy_coding as u32,
         force_hdr_srgb_correction: hdr_controls.force_hdr_srgb_correction,
         clamp_hdr_extended_range: hdr_controls.clamp_hdr_extended_range,
-        enable_amf_pre_analysis: amf_controls.enable_pre_analysis,
         enable_vbaq: settings.video.encoder_config.enable_vbaq,
-        enable_amf_hmqb: amf_controls.enable_hmqb,
-        use_amf_preproc: amf_controls.use_preproc,
-        amf_preproc_sigma: amf_controls.preproc_sigma,
-        amf_preproc_tor: amf_controls.preproc_tor,
         nvenc_quality_preset: nvenc_overrides.quality_preset as u32,
         encoder_quality_preset: settings.video.encoder_config.quality_preset as u32,
         force_sw_encoding: settings
