@@ -186,57 +186,54 @@ fn build_ffmpeg(enable_nvenc: bool) {
            Nvidia docs:
            https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/#commonly-faced-issues-and-tips-to-resolve-them
         */
-        #[cfg(target_os = "linux")]
+        let nvenc_headers_path = nvenc_headers_path();
+        let header_build_dir = nvenc_headers_path.join("build");
+        sh.remove_path(&header_build_dir).ok();
         {
-            let nvenc_headers_path = nvenc_headers_path();
-            let header_build_dir = nvenc_headers_path.join("build");
-            sh.remove_path(&header_build_dir).ok();
-            {
-                let make_header_cmd =
-                    format!("make install PREFIX='{}'", header_build_dir.display());
-                let _header_push_guard = sh.push_dir(nvenc_headers_path);
-                cmd!(sh, "bash -c {make_header_cmd}").run().unwrap();
-            }
-
-            let cuda = pkg_config::Config::new().probe("cuda").unwrap();
-            let include_flags = cuda
-                .include_paths
-                .iter()
-                .map(|path| format!("-I{}", path.to_string_lossy()))
-                .reduce(|a, b| format!("{a} {b}"))
-                .expect("pkg-config cuda entry to have include-paths");
-            let link_flags = cuda
-                .link_paths
-                .iter()
-                .map(|path| format!("-L{}", path.to_string_lossy()))
-                .reduce(|a, b| format!("{a} {b}"))
-                .expect("pkg-config cuda entry to have link-paths");
-
-            let nvenc_flags = &[
-                "--enable-encoder=h264_nvenc",
-                "--enable-encoder=hevc_nvenc",
-                "--enable-encoder=av1_nvenc",
-                "--enable-nonfree",
-                "--enable-cuda-nvcc",
-                "--enable-libnpp",
-                "--nvccflags=\"-gencode arch=compute_52,code=sm_52 -O2\"",
-                &format!("--extra-cflags=\"{include_flags}\""),
-                &format!("--extra-ldflags=\"{link_flags}\""),
-            ];
-
-            let env_vars = format!(
-                "PKG_CONFIG_PATH='{}'",
-                header_build_dir.join("lib/pkgconfig").display()
-            );
-            let flags_combined = flags.join(" ");
-            let nvenc_flags_combined = nvenc_flags.join(" ");
-
-            let command = format!(
-                "{env_vars} ./configure {install_prefix} {flags_combined} {nvenc_flags_combined}"
-            );
-
-            cmd!(sh, "bash -c {command}").run().unwrap();
+            let make_header_cmd =
+                format!("make install PREFIX='{}'", header_build_dir.display());
+            let _header_push_guard = sh.push_dir(nvenc_headers_path);
+            cmd!(sh, "bash -c {make_header_cmd}").run().unwrap();
         }
+
+        let cuda = pkg_config::Config::new().probe("cuda").unwrap();
+        let include_flags = cuda
+            .include_paths
+            .iter()
+            .map(|path| format!("-I{}", path.to_string_lossy()))
+            .reduce(|a, b| format!("{a} {b}"))
+            .expect("pkg-config cuda entry to have include-paths");
+        let link_flags = cuda
+            .link_paths
+            .iter()
+            .map(|path| format!("-L{}", path.to_string_lossy()))
+            .reduce(|a, b| format!("{a} {b}"))
+            .expect("pkg-config cuda entry to have link-paths");
+
+        let nvenc_flags = &[
+            "--enable-encoder=h264_nvenc",
+            "--enable-encoder=hevc_nvenc",
+            "--enable-encoder=av1_nvenc",
+            "--enable-nonfree",
+            "--enable-cuda-nvcc",
+            "--enable-libnpp",
+            "--nvccflags=\"-gencode arch=compute_52,code=sm_52 -O2\"",
+            &format!("--extra-cflags=\"{include_flags}\""),
+            &format!("--extra-ldflags=\"{link_flags}\""),
+        ];
+
+        let env_vars = format!(
+            "PKG_CONFIG_PATH='{}'",
+            header_build_dir.join("lib/pkgconfig").display()
+        );
+        let flags_combined = flags.join(" ");
+        let nvenc_flags_combined = nvenc_flags.join(" ");
+
+        let command = format!(
+            "{env_vars} ./configure {install_prefix} {flags_combined} {nvenc_flags_combined}"
+        );
+
+        cmd!(sh, "bash -c {command}").run().unwrap();
     } else {
         cmd!(sh, "./configure {install_prefix} {flags...}")
             .run()
