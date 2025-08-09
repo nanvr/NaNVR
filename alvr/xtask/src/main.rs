@@ -66,16 +66,14 @@ FLAGS:
                             Note that 'xtask' and 'cargo about' dependencies are downloaded and built during build of alvr
 
 ARGS:
-    --platform <NAME>       Can be one of: windows, linux, macos, android. Can be omitted
+    --platform <NAME>       Can be one of: linux, android. Can be omitted
     --version <VERSION>     Specify version to set with the bump-versions subcommand
     --root <PATH>           Installation root. By default no root is set and paths are calculated using
                             relative paths, which requires conforming to FHS on Linux
 ";
 
 enum BuildPlatform {
-    Windows,
     Linux,
-    Macos,
     Android,
 }
 
@@ -207,9 +205,7 @@ fn main() {
 
         let platform: Option<String> = args.opt_value_from_str("--platform").unwrap();
         let platform = platform.as_deref().map(|platform| match platform {
-            "windows" => BuildPlatform::Windows,
             "linux" => BuildPlatform::Linux,
-            "macos" => BuildPlatform::Macos,
             "android" => BuildPlatform::Android,
             _ => print_help_and_exit("Unrecognized platform"),
         });
@@ -231,25 +227,23 @@ fn main() {
                     if let Some(platform) = platform {
                         if matches!(platform, BuildPlatform::Android) {
                             dependencies::android::build_deps(
-                                for_ci,
                                 all_targets,
                                 OpenXRLoadersSelection::All,
                             );
                         } else {
-                            dependencies::prepare_server_deps(Some(platform), for_ci, !no_nvidia);
+                            dependencies::prepare_server_deps(Some(platform), !no_nvidia);
                         }
                     } else {
-                        dependencies::prepare_server_deps(platform, for_ci, !no_nvidia);
+                        dependencies::prepare_server_deps(platform, !no_nvidia);
 
                         dependencies::android::build_deps(
-                            for_ci,
                             all_targets,
                             OpenXRLoadersSelection::All,
                         );
                     }
                 }
                 "download-server-deps" => {
-                    dependencies::download_server_deps(platform, for_ci, !no_nvidia)
+                    dependencies::download_server_deps(platform, !no_nvidia)
                 }
                 "build-server-deps" => dependencies::build_server_deps(platform, !no_nvidia),
                 "build-streamer" => {
@@ -277,10 +271,10 @@ fn main() {
                     run_launcher();
                 }
                 "package-streamer" => {
-                    packaging::package_streamer(platform, for_ci, !no_nvidia, gpl, root)
+                    packaging::package_streamer(platform, !no_nvidia, gpl, root)
                 }
                 "package-launcher" => packaging::package_launcher(),
-                "package-client" => packaging::package_client_openxr(package_flavor, for_ci),
+                "package-client" => packaging::package_client_openxr(package_flavor),
                 "package-client-lib" => packaging::package_client_lib(link_stdcpp, all_targets),
                 "format" => format::format(),
                 "check-format" => format::check_format(),

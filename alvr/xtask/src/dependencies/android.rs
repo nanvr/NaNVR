@@ -1,21 +1,16 @@
 use crate::{
     command,
-    dependencies::{OpenXRLoadersSelection, windows::choco_install},
+    dependencies::{OpenXRLoadersSelection},
 };
 use alvr_filesystem as afs;
 use std::fs;
 use xshell::{Shell, cmd};
 
 pub fn build_deps(
-    skip_admin_priv: bool,
     all_targets: bool,
     openxr_loaders_selection: OpenXRLoadersSelection,
 ) {
     let sh = Shell::new().unwrap();
-
-    if cfg!(windows) && !skip_admin_priv {
-        choco_install(&sh, &["unzip", "llvm"]).unwrap();
-    }
 
     cmd!(sh, "rustup target add aarch64-linux-android")
         .run()

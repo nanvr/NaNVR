@@ -24,8 +24,8 @@ fn files_to_format_paths() -> Vec<PathBuf> {
                     | "NvCodecUtils.h"
                     | "NvEncoder.cpp"
                     | "NvEncoder.h"
-                    | "NvEncoderD3D11.cpp"
-                    | "NvEncoderD3D11.h"
+                    | "NvEncoderD3D11.cpp" // todo: windows-only?
+                    | "NvEncoderD3D11.h" // todo: windows-only?
                     | "nvEncodeAPI.h"
             );
 

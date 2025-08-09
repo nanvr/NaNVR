@@ -8,7 +8,7 @@ Stream VR games from your PC to your headset via Wi-Fi.
 This is a fork of [ALVR](https://github.com/polygraphene/ALVR).
 
 ### Direct download to the latest version:
-### [Windows Launcher](https://github.com/alvr-org/ALVR/releases/latest/download/alvr_launcher_windows.zip) | [Linux Launcher](https://github.com/alvr-org/ALVR/releases/latest/download/alvr_launcher_linux.tar.gz)
+### [Linux Launcher](https://github.com/alvr-org/ALVR/releases/latest/download/alvr_launcher_linux.tar.gz)
 
 ## Compatibility
 
@@ -70,7 +70,7 @@ You can follow the guide [here](https://github.com/alvr-org/ALVR/wiki/Building-F
 
 ## License
 
-ALVR is licensed under the [MIT License](LICENSE).
+ALVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL only due to ffmpeg, x264 usage)
 
 ## Privacy policy
 

@@ -74,11 +74,7 @@ pub fn clippy_ci() {
                 .unwrap();
 
             // may break when xtask gets cross-compiled, but that should not happen esp in ci
-            let file_name = if cfg!(windows) {
-                &span.file_name.replace('\\', "/")
-            } else {
-                &span.file_name
-            };
+            let file_name = &span.file_name;
 
             // https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions
             println!(

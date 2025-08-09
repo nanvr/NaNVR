@@ -30,13 +30,6 @@ pub fn include_licenses(root_path: &Path, gpl: bool) {
         licenses_dir.join("Valve.txt"),
     )
     .unwrap();
-    if gpl {
-        sh.copy_file(
-            afs::deps_dir().join("windows/ffmpeg/LICENSE.txt"),
-            licenses_dir.join("FFmpeg.txt"),
-        )
-        .ok();
-    }
 
     // Gather licenses with cargo about
     cmd!(sh, "cargo install cargo-about --version 0.6.4")
@@ -52,14 +45,13 @@ pub fn include_licenses(root_path: &Path, gpl: bool) {
 
 pub fn package_streamer(
     platform: Option<BuildPlatform>,
-    skip_admin_priv: bool,
     enable_nvenc: bool,
     gpl: bool,
     root: Option<String>,
 ) {
     let sh = Shell::new().unwrap();
 
-    dependencies::prepare_server_deps(platform, skip_admin_priv, enable_nvenc);
+    dependencies::prepare_server_deps(platform, enable_nvenc);
 
     build::build_streamer(
         Profile::Distribution,
@@ -74,11 +66,7 @@ pub fn package_streamer(
 
     include_licenses(&afs::streamer_build_dir(), gpl);
 
-    if cfg!(windows) {
-        command::zip(&sh, &afs::streamer_build_dir()).unwrap();
-    } else {
-        command::targz(&sh, &afs::streamer_build_dir()).unwrap();
-    }
+    command::targz(&sh, &afs::streamer_build_dir()).unwrap();
 }
 
 pub fn package_launcher() {
@@ -96,13 +84,7 @@ pub fn package_launcher() {
 
     include_licenses(&afs::launcher_build_dir(), false);
 
-    if cfg!(windows) {
-        command::zip(&sh, &afs::launcher_build_dir()).unwrap();
-
-        // todo: installer
-    } else {
-        command::targz(&sh, &afs::launcher_build_dir()).unwrap();
-    }
+    command::targz(&sh, &afs::launcher_build_dir()).unwrap();
 }
 
 pub fn replace_client_openxr_manifest(from_pattern: &str, to: &str) {
@@ -114,7 +96,7 @@ pub fn replace_client_openxr_manifest(from_pattern: &str, to: &str) {
     fs::write(manifest_path, manifest_string).unwrap();
 }
 
-pub fn package_client_openxr(flavor: ReleaseFlavor, skip_admin_priv: bool) {
+pub fn package_client_openxr(flavor: ReleaseFlavor) {
     fs::remove_dir_all(afs::deps_dir().join("android_openxr")).ok();
 
     let openxr_selection = match flavor {
@@ -123,7 +105,7 @@ pub fn package_client_openxr(flavor: ReleaseFlavor, skip_admin_priv: bool) {
         ReleaseFlavor::PicoStore => OpenXRLoadersSelection::OnlyPico,
     };
 
-    dependencies::android::build_deps(skip_admin_priv, false, openxr_selection);
+    dependencies::android::build_deps(false, openxr_selection);
 
     if !matches!(flavor, ReleaseFlavor::GitHub) {
         replace_client_openxr_manifest(
