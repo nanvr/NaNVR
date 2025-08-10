@@ -1,5 +1,5 @@
 use sound::Device;
-use alvr_common::{
+use shared::{
     anyhow::{Result, bail},
     parking_lot::Mutex,
 };

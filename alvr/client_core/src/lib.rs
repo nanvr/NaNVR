@@ -17,7 +17,7 @@ mod audio;
 
 pub mod video_decoder;
 
-use alvr_common::{
+use shared::{
     ConnectionState, LifecycleState, ViewParams, dbg_client_core, error,
     glam::{UVec2, Vec2},
     parking_lot::{Mutex, RwLock},
@@ -84,7 +84,7 @@ impl ClientCoreContext {
         dbg_client_core!("Create");
 
         // Make sure to reset config in case of version compat mismatch.
-        if Config::load().protocol_id != alvr_common::protocol_id() {
+        if Config::load().protocol_id != shared::protocol_id() {
             // NB: Config::default() sets the current protocol ID
             Config::default().store();
         }
@@ -137,7 +137,7 @@ impl ClientCoreContext {
 
         // We want to shutdown streaming when pausing.
         if *connection_state_lock != ConnectionState::Disconnected {
-            alvr_common::wait_rwlock(
+            shared::wait_rwlock(
                 &self.connection_context.disconnected_notif,
                 &mut connection_state_lock,
             );

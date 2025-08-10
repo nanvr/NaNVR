@@ -1,4 +1,4 @@
-use alvr_common::{error, info};
+use shared::{error, info};
 use app_dirs2::{AppDataType, AppInfo};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
@@ -34,7 +34,7 @@ impl Default for Config {
                 rng.random_range(0..10),
                 rng.random_range(0..10),
             ),
-            protocol_id: alvr_common::protocol_id(),
+            protocol_id: shared::protocol_id(),
         }
     }
 }

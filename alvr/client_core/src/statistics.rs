@@ -1,4 +1,4 @@
-use alvr_common::SlidingWindowAverage;
+use shared::SlidingWindowAverage;
 use alvr_packets::ClientStatistics;
 use std::{
     collections::VecDeque,

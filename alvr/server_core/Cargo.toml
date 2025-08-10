@@ -15,7 +15,7 @@ trace-performance = ["profiling/profile-with-tracy"]
 [dependencies]
 adb.workspace = true
 sound.workspace = true
-alvr_common.workspace = true
+shared.workspace = true
 alvr_events.workspace = true
 alvr_filesystem.workspace = true
 alvr_packets.workspace = true

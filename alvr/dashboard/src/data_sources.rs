@@ -1,4 +1,4 @@
-use alvr_common::{
+use shared::{
     ALVR_VERSION, RelaxedAtomic, debug, error, info,
     parking_lot::Mutex,
     semver::{Version, VersionReq},
@@ -408,7 +408,7 @@ impl DataSources {
                         // We need exact match because we don't do session extrapolation at the
                         // dashboard level. In the future we may relax the contraint and consider
                         // protocol compatibility check for dashboard.
-                        let matches = version == *alvr_common::ALVR_VERSION;
+                        let matches = version == *shared::ALVR_VERSION;
 
                         if !matches {
                             error!(

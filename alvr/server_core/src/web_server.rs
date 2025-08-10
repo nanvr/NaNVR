@@ -2,7 +2,7 @@ use crate::{
     ConnectionContext, FILESYSTEM_LAYOUT, SESSION_MANAGER, ServerCoreEvent,
     logging_backend::LOGGING_EVENTS_SENDER,
 };
-use alvr_common::{
+use shared::{
     ConnectionState,
     anyhow::{self, Result},
     error, info, log,
@@ -331,7 +331,7 @@ async fn http_api(
                 .await?
                 .iter()
                 .map(|b| ButtonEntry {
-                    path_id: alvr_common::hash_string(&b.path),
+                    path_id: shared::hash_string(&b.path),
                     value: b.value,
                 })
                 .collect();
@@ -354,7 +354,7 @@ async fn http_api(
                 .header(header::CONTENT_TYPE, "application/json")
                 .body(latency.to_string().into())?
         }
-        "/api/version" => Response::builder().body(alvr_common::ALVR_VERSION.to_string().into())?,
+        "/api/version" => Response::builder().body(shared::ALVR_VERSION.to_string().into())?,
         "/api/ping" => reply(StatusCode::OK)?,
         _ => reply(StatusCode::NOT_FOUND)?,
     };
@@ -385,7 +385,7 @@ pub async fn web_server(connection_context: Arc<ConnectionContext>) -> Result<()
                 async move {
                     let res = http_api(&connection_context, request).await;
                     if let Err(e) = &res {
-                        alvr_common::show_e(e);
+                        shared::show_e(e);
                     }
 
                     res

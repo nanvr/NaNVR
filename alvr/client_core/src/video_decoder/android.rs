@@ -1,5 +1,5 @@
 use super::VideoDecoderConfig;
-use alvr_common::{
+use shared::{
     RelaxedAtomic, ToAny,
     anyhow::{Context, Result, anyhow, bail},
     error, info,

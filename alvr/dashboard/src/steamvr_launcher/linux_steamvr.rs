@@ -2,8 +2,8 @@ use std::fs;
 use std::path::Path;
 use std::process::Command;
 
-use alvr_common::anyhow::bail;
-use alvr_common::{debug, error, info, warn};
+use shared::anyhow::bail;
+use shared::{debug, error, info, warn};
 use sysinfo::Process;
 
 pub fn start_steamvr() {
@@ -17,7 +17,7 @@ pub fn terminate_process(process: &Process) {
     process.kill_with(sysinfo::Signal::Term);
 }
 
-pub fn maybe_wrap_vrcompositor_launcher() -> alvr_common::anyhow::Result<()> {
+pub fn maybe_wrap_vrcompositor_launcher() -> shared::anyhow::Result<()> {
     let steamvr_bin_dir = alvr_server_io::steamvr_root_dir()?
         .join("bin")
         .join("linux64");
@@ -244,7 +244,7 @@ fn linux_encoder_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
                         }
                     }
                     Err(e) => {
-                        alvr_common::show_e(format!("Can't initialize NVML engine, error: {e}."))
+                        shared::show_e(format!("Can't initialize NVML engine, error: {e}."))
                     }
                 }
             }
@@ -273,7 +273,7 @@ fn linux_encoder_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
                         false,
                     );
                 } else {
-                    alvr_common::show_e(
+                    shared::show_e(
                         "Couldn't find VA-API runtime on system, \
                         you unlikely to have hardware encoding. \
                         Please install VA-API runtime for your distribution \
@@ -283,7 +283,7 @@ fn linux_encoder_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
                     );
                 }
             }
-            _ => alvr_common::show_e(
+            _ => shared::show_e(
                 "Couldn't determine gpu for hardware encoding. \
             You will likely fallback to software encoding.",
             ),
@@ -302,7 +302,7 @@ fn probe_nvenc_encoder_profile(
         }
         Err(e) => {
             if matches!(e, nvml_wrapper::error::NvmlError::NotSupported) {
-                alvr_common::show_e(format!(
+                shared::show_e(format!(
                     "Your NVIDIA gpu doesn't support {profile_name}. Please make sure CUDA is installed properly. Error: {e}"
                 ))
             } else {

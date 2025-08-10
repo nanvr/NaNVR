@@ -2,7 +2,7 @@ mod backend;
 mod control_socket;
 mod stream_socket;
 
-use alvr_common::{anyhow::Result, info};
+use shared::{anyhow::Result, info};
 use alvr_session::{DscpTos, SocketBufferSize};
 use socket2::Socket;
 use std::{

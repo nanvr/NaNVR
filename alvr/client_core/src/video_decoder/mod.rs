@@ -1,7 +1,7 @@
 #[cfg(target_os = "android")]
 mod android;
 
-use alvr_common::anyhow::Result;
+use shared::anyhow::Result;
 use alvr_session::{CodecType, MediacodecProperty};
 use std::time::Duration;
 
@@ -26,7 +26,7 @@ impl VideoDecoderSink {
     pub fn push_nal(&mut self, timestamp: Duration, nal: &[u8]) -> bool {
         #[cfg(target_os = "android")]
         {
-            alvr_common::show_err(self.inner.push_frame_nal(timestamp, nal)).unwrap_or(false)
+            shared::show_err(self.inner.push_frame_nal(timestamp, nal)).unwrap_or(false)
         }
         #[cfg(not(target_os = "android"))]
         false

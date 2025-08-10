@@ -1,4 +1,4 @@
-use alvr_common::{
+use shared::{
     DebugGroupsConfig, LogSeverity,
     log::{Level, Record},
     parking_lot::Mutex,
@@ -53,7 +53,7 @@ pub fn init_logging() {
 
         let message = format!("{}", record.args());
 
-        if !alvr_common::filter_debug_groups(&message, &data.debug_groups_config) {
+        if !shared::filter_debug_groups(&message, &data.debug_groups_config) {
             return false;
         }
 
@@ -102,7 +102,7 @@ pub fn init_logging() {
                         Ok(())
                     }
                 })
-                .with_max_level(alvr_common::log::LevelFilter::Info),
+                .with_max_level(shared::log::LevelFilter::Info),
         );
     }
     #[cfg(not(target_os = "android"))]
@@ -120,5 +120,5 @@ pub fn init_logging() {
             .ok();
     }
 
-    alvr_common::set_panic_hook();
+    shared::set_panic_hook();
 }

@@ -1,4 +1,4 @@
-use alvr_common::ALVR_VERSION;
+use shared::ALVR_VERSION;
 use alvr_gui_common::theme;
 use eframe::egui::{self, Frame, RichText, ScrollArea, Ui};
 

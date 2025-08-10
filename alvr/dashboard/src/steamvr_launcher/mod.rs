@@ -2,7 +2,7 @@ mod linux_steamvr;
 
 use crate::data_sources;
 use adb::commands as adb;
-use alvr_common::{
+use shared::{
     anyhow::{Context, Result},
     debug,
     glam::bool,
@@ -131,7 +131,7 @@ impl Launcher {
         }
 
         let vrcompositor_wrap_result = linux_steamvr::maybe_wrap_vrcompositor_launcher();
-        alvr_common::show_err(linux_steamvr::maybe_wrap_vrcompositor_launcher());
+        shared::show_err(linux_steamvr::maybe_wrap_vrcompositor_launcher());
         if vrcompositor_wrap_result.is_err() {
             return;
         }

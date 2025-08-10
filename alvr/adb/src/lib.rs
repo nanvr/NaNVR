@@ -1,8 +1,8 @@
 pub mod commands;
 mod parse;
 
-use alvr_common::anyhow::Result;
-use alvr_common::{dbg_connection, error};
+use shared::anyhow::Result;
+use shared::{dbg_connection, error};
 use alvr_system_info::{
     ClientFlavor, PACKAGE_NAME_GITHUB_DEV, PACKAGE_NAME_GITHUB_STABLE, PACKAGE_NAME_STORE,
 };
@@ -102,21 +102,21 @@ pub fn get_process_name(
 ) -> Option<String> {
     let fallbacks = match flavor {
         ClientFlavor::Store => {
-            if alvr_common::is_stable() {
+            if shared::is_stable() {
                 vec![PACKAGE_NAME_STORE, PACKAGE_NAME_GITHUB_STABLE]
             } else {
                 vec![PACKAGE_NAME_GITHUB_DEV]
             }
         }
         ClientFlavor::Github => {
-            if alvr_common::is_stable() {
+            if shared::is_stable() {
                 vec![PACKAGE_NAME_GITHUB_STABLE, PACKAGE_NAME_STORE]
             } else {
                 vec![PACKAGE_NAME_GITHUB_DEV]
             }
         }
         ClientFlavor::Custom(name) => {
-            if alvr_common::is_stable() {
+            if shared::is_stable() {
                 vec![name, PACKAGE_NAME_STORE, PACKAGE_NAME_GITHUB_STABLE]
             } else {
                 vec![name, PACKAGE_NAME_GITHUB_DEV]

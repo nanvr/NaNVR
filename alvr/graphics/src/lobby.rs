@@ -1,5 +1,5 @@
 use super::{GraphicsContext, MAX_PUSH_CONSTANTS_SIZE, SDR_FORMAT};
-use alvr_common::{
+use shared::{
     BodySkeleton, DeviceMotion, Pose, ViewParams,
     glam::{IVec2, Mat4, Quat, UVec2, Vec3},
 };

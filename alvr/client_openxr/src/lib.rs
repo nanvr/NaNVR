@@ -8,7 +8,7 @@ mod stream;
 
 use crate::stream::ParsedStreamConfig;
 use client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
-use alvr_common::{
+use shared::{
     Fov, HAND_LEFT_ID, Pose, error,
     glam::{Quat, UVec2, Vec3},
     info,
@@ -156,7 +156,7 @@ pub fn entry_point() {
     xr_entry.initialize_android_loader().unwrap();
 
     let available_extensions = xr_entry.enumerate_extensions().unwrap();
-    alvr_common::info!("OpenXR available extensions: {available_extensions:#?}");
+    shared::info!("OpenXR available extensions: {available_extensions:#?}");
 
     // todo: switch to vulkan
     assert!(available_extensions.khr_opengl_es_enable);
@@ -204,7 +204,7 @@ pub fn entry_point() {
         .collect();
 
     let available_layers = xr_entry.enumerate_layers().unwrap();
-    alvr_common::info!("OpenXR available layers: {available_layers:#?}");
+    shared::info!("OpenXR available layers: {available_layers:#?}");
 
     let xr_instance = xr_entry
         .create_instance(

@@ -4,7 +4,7 @@
 use crate::{
     SESSION_MANAGER, ServerCoreContext, ServerCoreEvent, logging_backend, tracking::HandType,
 };
-use alvr_common::{
+use shared::{
     AlvrCodecType, AlvrPose, AlvrViewParams, log,
     parking_lot::{Mutex, RwLock},
 };
@@ -115,12 +115,12 @@ pub extern "C" fn alvr_get_time_ns() -> u64 {
 // device/input/output identifiers obtained using this function
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn alvr_path_to_id(path_string: *const c_char) -> u64 {
-    alvr_common::hash_string(unsafe { CStr::from_ptr(path_string) }.to_str().unwrap())
+    shared::hash_string(unsafe { CStr::from_ptr(path_string) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn alvr_error(string_ptr: *const c_char) {
-    alvr_common::show_e(unsafe { CStr::from_ptr(string_ptr) }.to_string_lossy());
+    shared::show_e(unsafe { CStr::from_ptr(string_ptr) }.to_string_lossy());
 }
 
 pub unsafe fn log(level: log::Level, string_ptr: *const c_char) {
@@ -143,7 +143,7 @@ pub unsafe extern "C" fn alvr_info(string_ptr: *const c_char) {
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn alvr_dbg_server_impl(string_ptr: *const c_char) {
-    alvr_common::dbg_server_impl!(
+    shared::dbg_server_impl!(
         "{}",
         unsafe { CStr::from_ptr(string_ptr) }.to_string_lossy()
     );
@@ -151,7 +151,7 @@ pub unsafe extern "C" fn alvr_dbg_server_impl(string_ptr: *const c_char) {
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn alvr_dbg_encoder(string_ptr: *const c_char) {
-    alvr_common::dbg_encoder!(
+    shared::dbg_encoder!(
         "{}",
         unsafe { CStr::from_ptr(string_ptr) }.to_string_lossy()
     );
@@ -270,8 +270,8 @@ pub unsafe extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent, timeout_ns: 
             },
             ServerCoreEvent::LocalViewParams(config) => unsafe {
                 *out_event = AlvrEvent::LocalViewParams([
-                    alvr_common::to_capi_view_params(&config[0]),
-                    alvr_common::to_capi_view_params(&config[1]),
+                    shared::to_capi_view_params(&config[0]),
+                    shared::to_capi_view_params(&config[1]),
                 ])
             },
             ServerCoreEvent::Tracking { poll_timestamp } => unsafe {
@@ -314,7 +314,7 @@ pub unsafe extern "C" fn alvr_get_device_motion(
     {
         unsafe {
             *out_motion = AlvrDeviceMotion {
-                pose: alvr_common::to_capi_pose(&motion.pose),
+                pose: shared::to_capi_pose(&motion.pose),
                 linear_velocity: motion.linear_velocity.to_array(),
                 angular_velocity: motion.angular_velocity.to_array(),
             };
@@ -344,7 +344,7 @@ pub unsafe extern "C" fn alvr_get_hand_skeleton(
         )
     {
         for (i, joint_pose) in skeleton.iter().enumerate() {
-            unsafe { *out_skeleton.add(i) = alvr_common::to_capi_pose(joint_pose) };
+            unsafe { *out_skeleton.add(i) = shared::to_capi_pose(joint_pose) };
         }
 
         true
@@ -433,8 +433,8 @@ pub unsafe extern "C" fn alvr_send_video_nal(
 
         let global_view_params = unsafe {
             [
-                alvr_common::from_capi_view_params(&(*global_view_params)),
-                alvr_common::from_capi_view_params(&(*global_view_params.add(1))),
+                shared::from_capi_view_params(&(*global_view_params)),
+                shared::from_capi_view_params(&(*global_view_params.add(1))),
             ]
         };
 

@@ -6,7 +6,7 @@ use client_core::{
     ClientCoreContext,
     video_decoder::{self, VideoDecoderConfig, VideoDecoderSource},
 };
-use alvr_common::{
+use shared::{
     HAND_LEFT_ID, HAND_RIGHT_ID, HEAD_ID, Pose, RelaxedAtomic, ViewParams,
     anyhow::Result,
     error,

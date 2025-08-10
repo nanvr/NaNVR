@@ -5,7 +5,7 @@ mod stream;
 pub use lobby::*;
 pub use stream::*;
 
-use alvr_common::{
+use shared::{
     Fov,
     glam::{Mat4, UVec2, Vec4},
 };
@@ -37,7 +37,7 @@ type ImageTargetTexture2DFn = unsafe extern "C" fn(egl::Enum, egl::EGLImage);
 pub fn check_error(gl: &gl::Context, message_context: &str) {
     let err = unsafe { gl.get_error() };
     if err != glow::NO_ERROR {
-        alvr_common::error!("gl error {message_context} -> {err}");
+        shared::error!("gl error {message_context} -> {err}");
         std::process::abort();
     }
 }

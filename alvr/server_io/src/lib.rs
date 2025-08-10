@@ -6,7 +6,7 @@ pub use firewall::*;
 pub use openvr_drivers::*;
 pub use openvrpaths::*;
 
-use alvr_common::{
+use shared::{
     ConnectionState,
     anyhow::{Result, bail},
     error, info,

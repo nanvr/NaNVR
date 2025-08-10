@@ -10,7 +10,7 @@ license.workspace = true
 crate-type = ["cdylib"]
 
 [dependencies]
-alvr_common.workspace = true
+shared.workspace = true
 alvr_filesystem.workspace = true
 
 [build-dependencies]

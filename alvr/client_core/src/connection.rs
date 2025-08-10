@@ -7,7 +7,7 @@ use crate::{
     statistics::StatisticsManager,
     storage::Config,
 };
-use alvr_common::{
+use shared::{
     ALVR_VERSION, AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState,
     ViewParams, dbg_connection, debug, error, info,
     parking_lot::{Condvar, Mutex, RwLock},
@@ -164,7 +164,7 @@ fn connection_pipeline(
     dbg_connection!("connection_pipeline: Send stream capabilities");
     proto_control_socket
         .send(&ClientConnectionResult::ConnectionAccepted {
-            client_protocol_id: alvr_common::protocol_id_u64(),
+            client_protocol_id: shared::protocol_id_u64(),
             display_name: alvr_system_info::platform().to_string(),
             server_ip,
             streaming_capabilities: Some(
@@ -343,7 +343,7 @@ fn connection_pipeline(
             let ctx = Arc::clone(&ctx);
             move || {
                 while is_streaming(&ctx) {
-                    alvr_common::show_err(audio::play_audio_loop(
+                    shared::show_err(audio::play_audio_loop(
                         || is_streaming(&ctx),
                         &device,
                         2,
@@ -450,7 +450,7 @@ fn connection_pipeline(
                     if let Some(sender) = &mut *ctx.control_sender.lock() {
                         sender
                             .send(&ClientControlPacket::Battery(crate::BatteryInfo {
-                                device_id: *alvr_common::HEAD_ID,
+                                device_id: *shared::HEAD_ID,
                                 gauge_value,
                                 is_plugged,
                             }))

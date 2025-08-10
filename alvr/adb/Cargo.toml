@@ -7,7 +7,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-alvr_common.workspace = true
+shared.workspace = true
 alvr_filesystem.workspace = true
 alvr_system_info.workspace = true
 

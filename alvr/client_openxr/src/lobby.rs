@@ -2,7 +2,7 @@ use crate::{
     graphics::{self, ProjectionLayerAlphaConfig, ProjectionLayerBuilder},
     interaction::{self, InteractionContext},
 };
-use alvr_common::{Pose, ViewParams, glam::UVec2, parking_lot::RwLock};
+use shared::{Pose, ViewParams, glam::UVec2, parking_lot::RwLock};
 use alvr_graphics::{GraphicsContext, LobbyRenderer, LobbyViewParams, SDR_FORMAT_GL};
 use alvr_system_info::Platform;
 use openxr as xr;

@@ -1,5 +1,5 @@
 use crate::data_sources::PolledEvent;
-use alvr_common::{LogEntry, LogSeverity, log::LevelFilter, parking_lot::Mutex};
+use shared::{LogEntry, LogSeverity, log::LevelFilter, parking_lot::Mutex};
 use alvr_events::{Event, EventType};
 use std::{
     io::Write,

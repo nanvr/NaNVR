@@ -1,4 +1,4 @@
-use alvr_common::{
+use shared::{
     ToAny,
     anyhow::{Result, bail},
     warn,
@@ -34,7 +34,7 @@ impl WelcomeSocket {
                         let client_protocol = info
                             .get_property_val_str(alvr_sockets::MDNS_PROTOCOL_KEY)
                             .to_any()?;
-                        let server_protocol = alvr_common::protocol_id();
+                        let server_protocol = shared::protocol_id();
                         let client_is_dev = client_protocol.contains("-dev");
                         let server_is_dev = server_protocol.contains("-dev");
 

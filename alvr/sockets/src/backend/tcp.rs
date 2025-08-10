@@ -1,7 +1,7 @@
 use crate::LOCAL_IP;
 
 use super::{SocketReader, SocketWriter};
-use alvr_common::{ConResult, HandleTryAgain, ToCon, anyhow::Result, con_bail};
+use shared::{ConResult, HandleTryAgain, ToCon, anyhow::Result, con_bail};
 use alvr_session::{DscpTos, SocketBufferSize};
 use std::{
     io::Read,
@@ -60,7 +60,7 @@ pub fn connect_to_client(
 ) -> ConResult<(TcpStream, TcpStream)> {
     let split_timeout = timeout / client_ips.len() as u32;
 
-    let mut res = alvr_common::try_again();
+    let mut res = shared::try_again();
     for ip in client_ips {
         res = TcpStream::connect_timeout(&SocketAddr::new(*ip, port), split_timeout)
             .handle_try_again();

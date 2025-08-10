@@ -1,7 +1,7 @@
 use crate::{
     InstallationInfo, Progress, ReleaseChannelsInfo, ReleaseInfo, UiMessage, WorkerMessage,
 };
-use alvr_common::{ToAny, anyhow::Result, semver::Version};
+use shared::{ToAny, anyhow::Result, semver::Version};
 use anyhow::Context;
 use flate2::read::GzDecoder;
 use futures_util::StreamExt;

@@ -1,4 +1,4 @@
-use alvr_common::glam::UVec2;
+use shared::glam::UVec2;
 use alvr_graphics::GraphicsContext;
 use alvr_session::ClientsidePostProcessingConfig;
 use openxr as xr;

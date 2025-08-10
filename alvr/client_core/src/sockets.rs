@@ -1,4 +1,4 @@
-use alvr_common::anyhow::{Result, bail};
+use shared::anyhow::{Result, bail};
 use mdns_sd::{ServiceDaemon, ServiceInfo};
 
 pub struct AnnouncerSocket {
@@ -30,7 +30,7 @@ impl AnnouncerSocket {
             5353,
             &[(
                 alvr_sockets::MDNS_PROTOCOL_KEY,
-                alvr_common::protocol_id().as_str(),
+                shared::protocol_id().as_str(),
             )][..],
         )?)?;
 

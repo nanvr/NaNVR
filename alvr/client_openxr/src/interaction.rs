@@ -6,7 +6,7 @@ use crate::{
         FacialTrackerHTC, MotionTrackerBD, MultimodalMeta,
     },
 };
-use alvr_common::{
+use shared::{
     glam::{Quat, Vec3},
     *,
 };
@@ -210,7 +210,7 @@ impl InteractionContext {
             p if p.is_yvr() => YVR_CONTROLLER_PROFILE_PATH,
             _ => QUEST_CONTROLLER_PROFILE_PATH,
         };
-        let controllers_profile_id = alvr_common::hash_string(controllers_profile_path);
+        let controllers_profile_id = shared::hash_string(controllers_profile_path);
 
         // Create actions:
 

@@ -1,6 +1,6 @@
 use super::{GraphicsContext, ck};
 use crate::GL_TEXTURE_EXTERNAL_OES;
-use alvr_common::glam::{IVec2, UVec2};
+use shared::glam::{IVec2, UVec2};
 use glow::{self as gl, HasContext};
 use std::{ffi::c_void, rc::Rc};
 

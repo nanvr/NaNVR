@@ -1,7 +1,7 @@
 pub mod tcp;
 pub mod udp;
 
-use alvr_common::{ConResult, anyhow::Result};
+use shared::{ConResult, anyhow::Result};
 
 pub trait SocketWriter: Send {
     fn send(&mut self, buffer: &[u8]) -> Result<()>;

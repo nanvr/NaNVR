@@ -12,7 +12,7 @@ use crate::{
     hand_gestures::{self, HAND_GESTURE_BUTTON_SET, HandGestureManager},
     input_mapping::ButtonMappingManager,
 };
-use alvr_common::{
+use shared::{
     BODY_CHEST_ID, BODY_HIPS_ID, BODY_LEFT_ELBOW_ID, BODY_LEFT_FOOT_ID, BODY_LEFT_KNEE_ID,
     BODY_RIGHT_ELBOW_ID, BODY_RIGHT_FOOT_ID, BODY_RIGHT_KNEE_ID, ConnectionError,
     DEVICE_ID_TO_PATH, DeviceMotion, HAND_LEFT_ID, HAND_RIGHT_ID, HEAD_ID, Pose, ViewParams,

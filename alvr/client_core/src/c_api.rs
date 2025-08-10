@@ -4,7 +4,7 @@ use crate::{
     ClientCapabilities, ClientCoreContext, ClientCoreEvent, storage,
     video_decoder::{self, VideoDecoderConfig, VideoDecoderSource},
 };
-use alvr_common::{
+use shared::{
     AlvrCodecType, AlvrFov, AlvrPose, AlvrQuat, AlvrViewParams, DeviceMotion, Pose, ViewParams,
     anyhow::Result,
     debug, error,
@@ -120,7 +120,7 @@ pub extern "C" fn alvr_initialize_logging() {
 
 #[unsafe(no_mangle)]
 pub extern "C" fn alvr_path_string_to_id(path: *const c_char) -> u64 {
-    alvr_common::hash_string(unsafe { CStr::from_ptr(path) }.to_str().unwrap())
+    shared::hash_string(unsafe { CStr::from_ptr(path) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
@@ -137,13 +137,13 @@ pub extern "C" fn alvr_log(level: AlvrLogLevel, message: *const c_char) {
 #[unsafe(no_mangle)]
 #[cfg_attr(not(debug_assertions), expect(unused_variables))]
 pub extern "C" fn alvr_dbg_client_impl(message: *const c_char) {
-    alvr_common::dbg_client_impl!("{}", unsafe { CStr::from_ptr(message) }.to_str().unwrap())
+    shared::dbg_client_impl!("{}", unsafe { CStr::from_ptr(message) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
 #[cfg_attr(not(debug_assertions), expect(unused_variables))]
 pub extern "C" fn alvr_dbg_decoder(message: *const c_char) {
-    alvr_common::dbg_decoder!("{}", unsafe { CStr::from_ptr(message) }.to_str().unwrap())
+    shared::dbg_decoder!("{}", unsafe { CStr::from_ptr(message) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
@@ -408,8 +408,8 @@ pub extern "C" fn alvr_send_view_params(view_params: *const AlvrViewParams) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.send_view_params(unsafe {
             [
-                alvr_common::from_capi_view_params(&(*view_params)),
-                alvr_common::from_capi_view_params(&(*view_params.offset(1))),
+                shared::from_capi_view_params(&(*view_params)),
+                shared::from_capi_view_params(&(*view_params.offset(1))),
             ]
         });
     }
@@ -443,7 +443,7 @@ pub extern "C" fn alvr_send_tracking(
             (
                 motion.device_id,
                 DeviceMotion {
-                    pose: alvr_common::from_capi_pose(&motion.pose),
+                    pose: shared::from_capi_pose(&motion.pose),
                     linear_velocity: Vec3::from_slice(&motion.linear_velocity),
                     angular_velocity: Vec3::from_slice(&motion.angular_velocity),
                 },
@@ -463,7 +463,7 @@ pub extern "C" fn alvr_send_tracking(
 
                     for (pose, capi_pose) in array.iter_mut().zip(hand_skeleton.iter()) {
                         *pose = Pose {
-                            orientation: alvr_common::from_capi_quat(&capi_pose.orientation),
+                            orientation: shared::from_capi_quat(&capi_pose.orientation),
                             position: Vec3::from_slice(&capi_pose.position),
                         };
                     }
@@ -479,7 +479,7 @@ pub extern "C" fn alvr_send_tracking(
     };
 
     let eyes_combined = if !combined_eye_gaze.is_null() {
-        Some(alvr_common::from_capi_quat(unsafe { &*combined_eye_gaze }))
+        Some(shared::from_capi_quat(unsafe { &*combined_eye_gaze }))
     } else {
         None
     };
@@ -551,8 +551,8 @@ pub extern "C" fn alvr_report_compositor_start(
             context.report_compositor_start(Duration::from_nanos(target_timestamp_ns));
 
         unsafe {
-            *out_view_params = alvr_common::to_capi_view_params(&view_params[0]);
-            *out_view_params.offset(1) = alvr_common::to_capi_view_params(&view_params[1]);
+            *out_view_params = shared::to_capi_view_params(&view_params[0]);
+            *out_view_params.offset(1) = shared::to_capi_view_params(&view_params[1]);
         }
     }
 }
@@ -718,11 +718,11 @@ pub extern "C" fn alvr_render_lobby_opengl(
         [
             LobbyViewParams {
                 swapchain_index: (*view_inputs).swapchain_index,
-                view_params: alvr_common::from_capi_view_params(&(*view_inputs).view_params),
+                view_params: shared::from_capi_view_params(&(*view_inputs).view_params),
             },
             LobbyViewParams {
                 swapchain_index: (*view_inputs.offset(1)).swapchain_index,
-                view_params: alvr_common::from_capi_view_params(
+                view_params: shared::from_capi_view_params(
                     &(*view_inputs.offset(1)).view_params,
                 ),
             },
@@ -760,32 +760,32 @@ pub extern "C" fn alvr_render_stream_opengl(
                         swapchain_index: left_params.swapchain_index,
                         input_view_params: ViewParams {
                             pose: Pose::IDENTITY,
-                            fov: alvr_common::from_capi_fov(&left_params.fov),
+                            fov: shared::from_capi_fov(&left_params.fov),
                         },
                         output_view_params: ViewParams {
                             pose: Pose {
-                                orientation: alvr_common::from_capi_quat(
+                                orientation: shared::from_capi_quat(
                                     &left_params.reprojection_rotation,
                                 ),
                                 position: Vec3::ZERO,
                             },
-                            fov: alvr_common::from_capi_fov(&left_params.fov),
+                            fov: shared::from_capi_fov(&left_params.fov),
                         },
                     },
                     StreamViewParams {
                         swapchain_index: right_params.swapchain_index,
                         input_view_params: ViewParams {
                             pose: Pose::IDENTITY,
-                            fov: alvr_common::from_capi_fov(&right_params.fov),
+                            fov: shared::from_capi_fov(&right_params.fov),
                         },
                         output_view_params: ViewParams {
                             pose: Pose {
-                                orientation: alvr_common::from_capi_quat(
+                                orientation: shared::from_capi_quat(
                                     &right_params.reprojection_rotation,
                                 ),
                                 position: Vec3::ZERO,
                             },
-                            fov: alvr_common::from_capi_fov(&right_params.fov),
+                            fov: shared::from_capi_fov(&right_params.fov),
                         },
                     },
                 ],
@@ -932,8 +932,8 @@ pub extern "C" fn alvr_get_frame(
 
 #[unsafe(no_mangle)]
 pub extern "C" fn alvr_rotation_delta(source: AlvrQuat, destination: AlvrQuat) -> AlvrQuat {
-    alvr_common::to_capi_quat(
-        &(alvr_common::from_capi_quat(&source).inverse()
-            * alvr_common::from_capi_quat(&destination)),
+    shared::to_capi_quat(
+        &(shared::from_capi_quat(&source).inverse()
+            * shared::from_capi_quat(&destination)),
     )
 }

@@ -2,7 +2,7 @@
 #[cfg(target_os = "linux")]
 pub mod linux;
 
-use alvr_common::{
+use shared::{
     ConnectionError, ToAny,
     anyhow::{self, Context, Result, bail},
     info,

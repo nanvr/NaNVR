@@ -1,4 +1,4 @@
-use alvr_common::SlidingWindowAverage;
+use shared::SlidingWindowAverage;
 use alvr_events::BitrateDirectives;
 use alvr_session::{
     BitrateAdaptiveFramerateConfig, BitrateConfig, BitrateMode, settings_schema::Switch,

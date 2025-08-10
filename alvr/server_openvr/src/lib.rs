@@ -14,7 +14,7 @@ mod bindings {
 }
 use bindings::*;
 
-use alvr_common::{
+use shared::{
     BUTTON_INFO, HAND_LEFT_ID, HAND_RIGHT_ID, HAND_TRACKER_LEFT_ID, HAND_TRACKER_RIGHT_ID, HEAD_ID,
     Pose, ViewParams, error,
     parking_lot::{Mutex, RwLock},

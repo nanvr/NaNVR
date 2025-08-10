@@ -7,6 +7,6 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-alvr_common.workspace = true
+shared.workspace = true
 
 egui = "0.31"

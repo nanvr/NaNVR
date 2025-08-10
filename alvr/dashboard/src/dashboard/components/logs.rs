@@ -1,4 +1,4 @@
-use alvr_common::LogSeverity;
+use shared::LogSeverity;
 use alvr_events::{Event, EventType};
 use alvr_gui_common::theme::log_colors;
 use alvr_session::{RawEventsConfig, Settings};

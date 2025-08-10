@@ -1,4 +1,4 @@
-use alvr_common::{
+use shared::{
     ALVR_VERSION, DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
     LogSeverityDefaultVariant,
 };
@@ -1938,7 +1938,7 @@ pub fn session_settings_default() -> SettingsDefault {
             },
             wired_client_type: ClientFlavorDefault {
                 Custom: "alvr.client".to_owned(),
-                variant: if alvr_common::is_stable() {
+                variant: if shared::is_stable() {
                     ClientFlavorDefaultVariant::Store
                 } else {
                     ClientFlavorDefaultVariant::Github
@@ -2030,9 +2030,9 @@ pub fn session_settings_default() -> SettingsDefault {
                 linux_async_reprojection: false,
             },
             velocities_multiplier: 1.0,
-            open_setup_wizard: alvr_common::is_stable() || alvr_common::is_nightly(),
+            open_setup_wizard: shared::is_stable() || shared::is_nightly(),
             new_version_popup: SwitchDefault {
-                enabled: alvr_common::is_stable(),
+                enabled: shared::is_stable(),
                 content: NewVersionPopupConfigDefault {
                     hide_while_version: ALVR_VERSION.to_string(),
                 },

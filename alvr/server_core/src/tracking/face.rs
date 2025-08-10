@@ -1,4 +1,4 @@
-use alvr_common::{anyhow::Result, glam::EulerRot};
+use shared::{anyhow::Result, glam::EulerRot};
 use alvr_packets::{FaceData, FaceExpressions};
 use alvr_session::FaceTrackingSinkConfig;
 use rosc::{OscMessage, OscPacket, OscType};

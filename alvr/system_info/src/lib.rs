@@ -4,7 +4,7 @@ pub mod android;
 #[cfg(target_os = "android")]
 pub use android::*;
 
-use alvr_common::settings_schema::SettingsSchema;
+use shared::settings_schema::SettingsSchema;
 use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
 
@@ -119,7 +119,7 @@ pub fn platform() -> Platform {
         let device = android::device_name();
         let product = android::product_name();
 
-        alvr_common::info!(
+        shared::info!(
             "manufacturer: {manufacturer}, model: {model}, device: {device}, product: {product}"
         );
 

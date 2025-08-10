@@ -114,10 +114,10 @@ dependencies = [
 name = "adb"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_filesystem",
  "alvr_system_info",
  "anyhow",
+ "shared",
  "ureq",
  "zip",
 ]
@@ -196,7 +196,6 @@ dependencies = [
 name = "alvr_client_openxr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_graphics",
  "alvr_packets",
  "alvr_session",
@@ -207,22 +206,7 @@ dependencies = [
  "libc",
  "ndk-context",
  "openxr",
-]
-
-[[package]]
-name = "alvr_common"
-version = "21.0.0-dev10"
-dependencies = [
- "anyhow",
- "backtrace",
- "glam",
- "log",
- "parking_lot",
- "paste",
- "rfd",
- "semver",
- "serde",
- "settings-schema",
+ "shared",
 ]
 
 [[package]]
@@ -230,7 +214,6 @@ name = "alvr_dashboard"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_common",
  "alvr_events",
  "alvr_filesystem",
  "alvr_gui_common",
@@ -248,6 +231,7 @@ dependencies = [
  "serde",
  "serde_json",
  "settings-schema",
+ "shared",
  "sound",
  "statrs",
  "sysinfo",
@@ -260,11 +244,11 @@ dependencies = [
 name = "alvr_events"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_packets",
  "alvr_session",
  "serde",
  "serde_json",
+ "shared",
 ]
 
 [[package]]
@@ -278,12 +262,12 @@ dependencies = [
 name = "alvr_graphics"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_session",
  "glow",
  "glyph_brush_layout",
  "khronos-egl",
  "pollster 0.4.0",
+ "shared",
  "wgpu",
  "wgpu-core",
 ]
@@ -292,8 +276,8 @@ dependencies = [
 name = "alvr_gui_common"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "egui",
+ "shared",
 ]
 
 [[package]]
@@ -301,7 +285,6 @@ name = "alvr_launcher"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_common",
  "alvr_filesystem",
  "alvr_gui_common",
  "alvr_system_info",
@@ -313,6 +296,7 @@ dependencies = [
  "open",
  "reqwest 0.12.12",
  "serde_json",
+ "shared",
  "tar",
  "tokio",
  "zip",
@@ -322,10 +306,10 @@ dependencies = [
 name = "alvr_packets"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_session",
  "serde",
  "serde_json",
+ "shared",
 ]
 
 [[package]]
@@ -333,7 +317,6 @@ name = "alvr_server_core"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_common",
  "alvr_events",
  "alvr_filesystem",
  "alvr_packets",
@@ -354,6 +337,7 @@ dependencies = [
  "rosc",
  "serde",
  "serde_json",
+ "shared",
  "sound",
  "sysinfo",
  "tokio",
@@ -365,7 +349,6 @@ dependencies = [
 name = "alvr_server_io"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_events",
  "alvr_filesystem",
  "alvr_packets",
@@ -374,13 +357,13 @@ dependencies = [
  "encoding_rs_io",
  "runas",
  "serde_json",
+ "shared",
 ]
 
 [[package]]
 name = "alvr_server_openvr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_filesystem",
  "alvr_packets",
  "alvr_server_core",
@@ -390,6 +373,7 @@ dependencies = [
  "cc",
  "pkg-config",
  "serde_json",
+ "shared",
  "sysinfo",
  "walkdir",
 ]
@@ -398,7 +382,6 @@ dependencies = [
 name = "alvr_session"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_filesystem",
  "alvr_system_info",
  "bytemuck",
@@ -406,18 +389,19 @@ dependencies = [
  "serde",
  "serde_json",
  "settings-schema",
+ "shared",
 ]
 
 [[package]]
 name = "alvr_sockets"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_session",
  "bincode",
  "profiling",
  "serde",
  "serde_json",
+ "shared",
  "socket2",
 ]
 
@@ -425,7 +409,6 @@ dependencies = [
 name = "alvr_system_info"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "jni",
  "local-ip-address",
  "ndk",
@@ -433,15 +416,16 @@ dependencies = [
  "ndk-sys 0.6.0+11769913",
  "serde",
  "settings-schema",
+ "shared",
 ]
 
 [[package]]
 name = "alvr_vrcompositor_wrapper"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_filesystem",
  "exec",
+ "shared",
  "xshell",
 ]
 
@@ -449,11 +433,11 @@ dependencies = [
 name = "alvr_vulkan_layer"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_filesystem",
  "bindgen 0.71.1",
  "cc",
  "pkg-config",
+ "shared",
  "walkdir",
 ]
 
@@ -1249,7 +1233,6 @@ dependencies = [
 name = "client_core"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_graphics",
  "alvr_packets",
  "alvr_session",
@@ -1264,6 +1247,7 @@ dependencies = [
  "rand 0.9.0",
  "serde",
  "serde_json",
+ "shared",
  "sound",
 ]
 
@@ -1271,13 +1255,13 @@ dependencies = [
 name = "client_tester"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_packets",
  "alvr_session",
  "client_core",
  "eframe",
  "env_logger",
  "rand 0.9.0",
+ "shared",
 ]
 
 [[package]]
@@ -5070,6 +5054,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "shared"
+version = "21.0.0-dev10"
+dependencies = [
+ "anyhow",
+ "backtrace",
+ "glam",
+ "log",
+ "parking_lot",
+ "paste",
+ "rfd",
+ "semver",
+ "serde",
+ "settings-schema",
+]
+
+[[package]]
 name = "shlex"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5186,7 +5186,6 @@ dependencies = [
 name = "sound"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_common",
  "alvr_session",
  "alvr_sockets",
  "cpal",
@@ -5194,6 +5193,7 @@ dependencies = [
  "pipewire",
  "rodio",
  "serde",
+ "shared",
 ]
 
 [[package]]

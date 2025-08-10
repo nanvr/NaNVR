@@ -3,7 +3,7 @@ mod settings;
 pub use settings::*;
 pub use settings_schema;
 
-use alvr_common::{
+use shared::{
     ALVR_VERSION, ConnectionState, ToAny,
     anyhow::{Result, bail},
     semver::Version,

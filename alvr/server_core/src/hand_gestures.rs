@@ -1,5 +1,5 @@
 use crate::input_mapping::ButtonMappingManager;
-use alvr_common::{
+use shared::{
     glam::{Vec2, Vec3},
     *,
 };

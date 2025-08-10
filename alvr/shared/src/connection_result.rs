@@ -27,7 +27,7 @@ pub fn try_again<T>() -> ConResult<T> {
 #[macro_export]
 macro_rules! con_bail {
     ($($args:tt)+) => {
-        return Err(alvr_common::ConnectionError::Other(alvr_common::anyhow::anyhow!($($args)+)))
+        return Err(shared::ConnectionError::Other(shared::anyhow::anyhow!($($args)+)))
     };
 }
 

@@ -8,7 +8,7 @@ use crate::{
     tracking::{self, TrackingManager},
 };
 use adb::{WiredConnection, WiredConnectionStatus};
-use alvr_common::{
+use shared::{
     AnyhowToCon, BUTTON_INFO, CONTROLLER_PROFILE_INFO, ConResult, ConnectionError, ConnectionState,
     LifecycleState, QUEST_CONTROLLER_PROFILE_PATH, con_bail, dbg_connection, debug, error,
     glam::{UVec2, Vec2},
@@ -430,14 +430,14 @@ pub fn handshake_loop(ctx: Arc<ConnectionContext>, lifecycle_state: Arc<RwLock<L
         }
     }
 
-    alvr_common::dbg_connection!("handshake_loop: Joining connection threads");
+    shared::dbg_connection!("handshake_loop: Joining connection threads");
 
     // At this point, LIFECYCLE_STATE == ShuttingDown, so all threads are already terminating
     for thread in ctx.connection_threads.lock().drain(..) {
         thread.join().ok();
     }
 
-    alvr_common::dbg_connection!("handshake_loop: End");
+    shared::dbg_connection!("handshake_loop: End");
 }
 
 fn try_connect(
@@ -540,10 +540,10 @@ fn connection_pipeline(
             ClientListAction::SetDisplayName(display_name),
         );
 
-        if client_protocol_id != alvr_common::protocol_id_u64() {
+        if client_protocol_id != shared::protocol_id_u64() {
             warn!(
                 "Trusted client is incompatible! Expected protocol ID: {}, found: {}",
-                alvr_common::protocol_id_u64(),
+                shared::protocol_id_u64(),
                 client_protocol_id,
             );
 
@@ -979,7 +979,7 @@ fn connection_pipeline(
             } else {
                 ButtonMappingManager::new_automatic(
                     &CONTROLLER_PROFILE_INFO
-                        .get(&alvr_common::hash_string(QUEST_CONTROLLER_PROFILE_PATH))
+                        .get(&shared::hash_string(QUEST_CONTROLLER_PROFILE_PATH))
                         .unwrap()
                         .button_set,
                     &config.emulation_mode,
@@ -1203,7 +1203,7 @@ fn connection_pipeline(
         .ok();
 
     dbg_connection!("connection_pipeline: handshake finished; unlocking streams");
-    alvr_common::wait_rwlock(&disconnect_notif, &mut session_manager_lock);
+    shared::wait_rwlock(&disconnect_notif, &mut session_manager_lock);
     dbg_connection!("connection_pipeline: Begin connection shutdown");
 
     // This requests shutdown from threads

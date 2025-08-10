@@ -7,7 +7,7 @@ use crate::{
     DataSources,
     dashboard::components::{CloseAction, NewVersionPopup, StatisticsTab},
 };
-use alvr_common::parking_lot::{Condvar, Mutex};
+use shared::parking_lot::{Condvar, Mutex};
 use alvr_events::EventType;
 use alvr_gui_common::theme;
 use alvr_packets::{PathValuePair, ServerRequest};

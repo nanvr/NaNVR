@@ -1,5 +1,5 @@
 use super::{GraphicsContext, MAX_PUSH_CONSTANTS_SIZE, staging::StagingRenderer};
-use alvr_common::{
+use shared::{
     ViewParams,
     glam::{self, Mat4, UVec2, Vec3, Vec4},
 };

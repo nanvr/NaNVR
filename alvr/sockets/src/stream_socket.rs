@@ -17,7 +17,7 @@
 // cannot be removed. This is because we need to make sure at least shards are written whole.
 
 use crate::backend::{SocketReader, SocketWriter, tcp, udp};
-use alvr_common::{
+use shared::{
     AnyhowToCon, ConResult, HandleTryAgain, ToCon, anyhow::Result, debug, parking_lot::Mutex,
 };
 use alvr_session::{DscpTos, SocketBufferSize, SocketProtocol};
@@ -232,7 +232,7 @@ impl<H: DeserializeOwned + Serialize> StreamReceiver<H> {
                 Ordering::Less => {
                     // Old packet, discard
                     self.used_buffer_queue.send(packet.buffer).to_con()?;
-                    return alvr_common::try_again();
+                    return shared::try_again();
                 }
             }
         }
@@ -444,7 +444,7 @@ impl StreamSocket {
             let mut bytes = [0; SHARD_PREFIX_SIZE];
             let count = self.receive_socket.peek(&mut bytes)?;
             if count < SHARD_PREFIX_SIZE {
-                return alvr_common::try_again();
+                return shared::try_again();
             }
 
             let shard_length = u32::from_le_bytes(bytes[0..4].try_into().unwrap()) as usize;
@@ -473,7 +473,7 @@ impl StreamSocket {
                 "Received packet from stream {} before subscribing!",
                 shard_recv_state_mut.stream_id
             );
-            return alvr_common::try_again();
+            return shared::try_again();
         };
 
         let in_progress_packet = if shard_recv_state_mut.should_discard {

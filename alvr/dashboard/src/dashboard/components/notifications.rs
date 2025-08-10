@@ -1,4 +1,4 @@
-use alvr_common::{LogEntry, LogSeverity};
+use shared::{LogEntry, LogSeverity};
 use alvr_gui_common::theme::{self, log_colors};
 use alvr_session::Settings;
 use eframe::{

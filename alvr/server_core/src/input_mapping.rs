@@ -1,4 +1,4 @@
-use alvr_common::*;
+use shared::*;
 use alvr_packets::{ButtonEntry, ButtonValue};
 use alvr_session::{
     AutomaticButtonMappingConfig, BinaryToScalarStates, ButtonBindingTarget, ButtonMappingType,
@@ -36,7 +36,7 @@ pub fn registered_button_set(
         ControllersEmulationMode::ViveTracker => HashSet::new(),
         ControllersEmulationMode::Custom { button_set, .. } => button_set
             .iter()
-            .map(|b| alvr_common::hash_string(b))
+            .map(|b| shared::hash_string(b))
             .collect(),
     }
 }
@@ -553,16 +553,16 @@ impl ButtonMappingManager {
             .iter()
             .map(|(key, value)| {
                 (
-                    alvr_common::hash_string(key),
+                    shared::hash_string(key),
                     value
                         .iter()
                         .map(|b| BindingTarget {
-                            destination: alvr_common::hash_string(&b.destination),
+                            destination: shared::hash_string(&b.destination),
                             mapping_type: b.mapping_type.clone(),
                             binary_conditions: b
                                 .binary_conditions
                                 .iter()
-                                .map(|c| alvr_common::hash_string(c))
+                                .map(|c| shared::hash_string(c))
                                 .collect(),
                         })
                         .collect(),

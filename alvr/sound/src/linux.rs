@@ -1,4 +1,4 @@
-use alvr_common::{ConnectionError, anyhow::Result, debug, error, parking_lot::Mutex};
+use shared::{ConnectionError, anyhow::Result, debug, error, parking_lot::Mutex};
 use alvr_session::AudioBufferingConfig;
 use alvr_sockets::{StreamReceiver, StreamSender};
 

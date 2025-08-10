@@ -1,4 +1,4 @@
-use alvr_common::{DeviceMotion, LogEntry, LogSeverity, Pose, info};
+use shared::{DeviceMotion, LogEntry, LogSeverity, Pose, info};
 use alvr_packets::{ButtonValue, FaceData};
 use alvr_session::SessionConfig;
 use serde::{Deserialize, Serialize};

@@ -1,4 +1,4 @@
-use alvr_common::warn;
+use shared::warn;
 use jni::{JNIEnv, JavaVM, objects::JObject, sys::jobject};
 use std::net::{IpAddr, Ipv4Addr};
 

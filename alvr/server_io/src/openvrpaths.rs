@@ -1,4 +1,4 @@
-use alvr_common::{
+use shared::{
     ToAny,
     anyhow::{Result, bail},
 };

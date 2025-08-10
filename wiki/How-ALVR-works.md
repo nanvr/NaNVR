@@ -100,7 +100,7 @@ ALVR logging system is based on the crate [log](https://crates.io/crates/log). `
 
 ALVR defines some structures, macros and functions to ease error management. The base type used for error management is `StrResult<T>` that is an alias for `Result<T, String>`. Read more about Rust's Result type [here](https://doc.rust-lang.org/std/result/).
 
-There are many ways of logging in ALVR, each one for different use-cases. To make use of them you should add `use alvr_common::prelude::*` at the top of the Rust source file.
+There are many ways of logging in ALVR, each one for different use-cases. To make use of them you should add `use shared::prelude::*` at the top of the Rust source file.
 
 * `error!()`, `warn!()`, `info!()`, `debug!()` (reexported macros from the `log` crate). Log is processed depending on the logging backend.
 * `show_e()` and `show_w()` are used to log a string message, additionally showing a popup.

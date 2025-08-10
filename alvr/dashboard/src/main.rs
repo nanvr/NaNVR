@@ -25,8 +25,8 @@ fn get_filesystem_layout() -> afs::Layout {
 
 #[cfg(not(target_arch = "wasm32"))]
 fn main() {
-    use alvr_common::ALVR_VERSION;
-    use alvr_common::info;
+    use shared::ALVR_VERSION;
+    use shared::info;
     use alvr_filesystem as afs;
     use eframe::{
         NativeOptions,

@@ -1,4 +1,4 @@
-use alvr_common::{
+use shared::{
     BodySkeleton, ConnectionState, DeviceMotion, LogEntry, LogSeverity, Pose, ViewParams,
     anyhow::Result,
     glam::{Quat, UVec2, Vec2},

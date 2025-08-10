@@ -1,5 +1,5 @@
 use crate::SESSION_MANAGER;
-use alvr_common::{LogEntry, LogSeverity, log::LevelFilter};
+use shared::{LogEntry, LogSeverity, log::LevelFilter};
 use alvr_events::{Event, EventType};
 use chrono::Local;
 use fern::Dispatch;
@@ -26,7 +26,7 @@ pub fn init_logging(session_log_path: Option<PathBuf>, crash_log_path: Option<Pa
             move |meta| {
                 !meta.target().starts_with("mdns_sd")
                     && (meta.level() <= LevelFilter::Info
-                        || alvr_common::filter_debug_groups(meta.target(), &debug_groups_config))
+                        || shared::filter_debug_groups(meta.target(), &debug_groups_config))
             }
         })
         .format(move |out, message, record| {
@@ -34,7 +34,7 @@ pub fn init_logging(session_log_path: Option<PathBuf>, crash_log_path: Option<Pa
             let event_type = if maybe_event.starts_with('{') && maybe_event.ends_with('}') {
                 serde_json::from_str(&maybe_event).unwrap()
             } else if record.level() == LevelFilter::Debug
-                && alvr_common::is_enabled_debug_group(record.target(), &debug_groups_config)
+                && shared::is_enabled_debug_group(record.target(), &debug_groups_config)
             {
                 EventType::DebugGroup {
                     group: record.target().to_string(),
@@ -102,5 +102,5 @@ pub fn init_logging(session_log_path: Option<PathBuf>, crash_log_path: Option<Pa
 
     log_dispatch.apply().unwrap();
 
-    alvr_common::set_panic_hook();
+    shared::set_panic_hook();
 }

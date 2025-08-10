@@ -15,7 +15,7 @@ pub use logging_backend::init_logging;
 pub use tracking::HandType;
 
 use crate::connection::VideoPacket;
-use alvr_common::{
+use shared::{
     ConnectionState, DEVICE_ID_TO_PATH, DeviceMotion, LifecycleState, Pose, RelaxedAtomic,
     ViewParams, dbg_server_core, error,
     glam::Vec2,
@@ -219,7 +219,7 @@ impl ServerCoreContext {
         let webserver_runtime = Runtime::new().unwrap();
         webserver_runtime.spawn({
             let connection_context = Arc::clone(&connection_context);
-            async move { alvr_common::show_err(web_server::web_server(connection_context).await) }
+            async move { shared::show_err(web_server::web_server(connection_context).await) }
         });
 
         (

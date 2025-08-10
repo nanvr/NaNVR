@@ -1,7 +1,7 @@
 use crate::backend::{SocketReader, SocketWriter, tcp};
 
 use super::CONTROL_PORT;
-use alvr_common::{ConResult, HandleTryAgain, ToCon, anyhow::Result};
+use shared::{ConResult, HandleTryAgain, ToCon, anyhow::Result};
 use alvr_session::SocketBufferSize;
 use bincode::config;
 use serde::{Serialize, de::DeserializeOwned};
@@ -49,7 +49,7 @@ fn framed_recv<R: DeserializeOwned>(
             if count == FRAMED_PREFIX_LENGTH {
                 break;
             } else if Instant::now() > deadline {
-                return alvr_common::try_again();
+                return shared::try_again();
             }
         }
 
@@ -67,7 +67,7 @@ fn framed_recv<R: DeserializeOwned>(
         if *recv_cursor_ref == buffer.len() {
             break;
         } else if Instant::now() > deadline {
-            return alvr_common::try_again();
+            return shared::try_again();
         }
     }
 
