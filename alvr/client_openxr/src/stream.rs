@@ -2,7 +2,7 @@ use crate::{
     graphics::{self, ProjectionLayerAlphaConfig, ProjectionLayerBuilder},
     interaction::{self, InteractionContext, InteractionSourcesConfig},
 };
-use alvr_client_core::{
+use client_core::{
     ClientCoreContext,
     video_decoder::{self, VideoDecoderConfig, VideoDecoderSource},
 };

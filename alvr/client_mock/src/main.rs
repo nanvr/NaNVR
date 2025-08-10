@@ -1,4 +1,4 @@
-use alvr_client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
+use client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
 use alvr_common::{
     DeviceMotion, HEAD_ID, Pose, RelaxedAtomic, ViewParams,
     glam::{Quat, UVec2, Vec3},

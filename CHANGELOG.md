@@ -223,7 +223,7 @@
 * Encoder improvements (by @nowrep #1562 #1565 #1568, @deiteris #1403 #1422 #1400 #1402, @zarik5 #1564)
 * Remove Forward Error Correction (by @zarik5: #1384, #1389; @deiteris: #1386, #1387, #1390)
 * Unified code for NAL parsing (by @deiteris #1403, #1422, #1400, #1402)
-* Some tweaks for alvr_client_core compatibility (by @ShootingKing-AM #1580 #1578 #1586 #1624 #1621)
+* Some tweaks for client_core compatibility (by @ShootingKing-AM #1580 #1578 #1586 #1624 #1621)
 * Fix server build with clang (by @nowrep)
 
 ### v19.1.1 (2023-03-03)

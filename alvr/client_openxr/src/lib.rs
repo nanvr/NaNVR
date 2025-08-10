@@ -7,7 +7,7 @@ mod passthrough;
 mod stream;
 
 use crate::stream::ParsedStreamConfig;
-use alvr_client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
+use client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
 use alvr_common::{
     Fov, HAND_LEFT_ID, Pose, error,
     glam::{Quat, UVec2, Vec3},
@@ -133,7 +133,7 @@ fn create_session(
 }
 
 pub fn entry_point() {
-    alvr_client_core::init_logging();
+    client_core::init_logging();
 
     let platform = alvr_system_info::platform();
 

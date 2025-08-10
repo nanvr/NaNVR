@@ -72,7 +72,7 @@ ALVR code is hosted in a monorepo. This is an overview of the git tree:
 * `alvr/`: Each subfolder is a Rust crate ("crate" means a code library or executable).
   * `audio/`: Utility crate hosting audio related code shared by client and driver.
   * `client_core/`: Platform agnostic code for the client. It is used as a Rust library for `alvr_client_openxr` and can also compiled to a C ABI shared library with a .h header for integration with other projects.
-  * `client_mock/`: Client mock implemented as a thin wrapper around `alvr_client_core`.
+  * `client_mock/`: Client mock implemented as a thin wrapper around `client_core`.
   * `client_openxr/`: Client implementation using OpenXR, compiled to a APK binary.
   * `common/`: Some common code shared by other crates. It contains code for versioning, logging, struct primitives, and OpenXR paths.
   * `dashboard/`: The dashboard application.

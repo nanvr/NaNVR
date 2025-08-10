@@ -126,5 +126,5 @@ pub fn package_client_lib(link_stdcpp: bool, all_targets: bool) {
 
     build::build_android_client_core_lib(Profile::Distribution, link_stdcpp, all_targets);
 
-    command::zip(&sh, &afs::build_dir().join("alvr_client_core")).unwrap();
+    command::zip(&sh, &afs::build_dir().join("client_core")).unwrap();
 }
