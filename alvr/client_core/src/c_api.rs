@@ -18,7 +18,7 @@ use client_graphics::{
     StreamViewParams,
 };
 use net_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
-use alvr_session::{
+use configuration::{
     CodecType, FoveatedEncodingConfig, MediacodecPropType, MediacodecProperty, UpscalingConfig,
 };
 use std::{

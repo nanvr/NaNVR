@@ -26,7 +26,7 @@ use shared::{
 use net_packets::{
     BatteryInfo, ButtonEntry, ClientControlPacket, RealTimeConfig, StreamConfig, TrackingData,
 };
-use alvr_session::CodecType;
+use configuration::CodecType;
 use connection::{ConnectionContext, DecoderCallback};
 use std::{
     collections::{HashSet, VecDeque},

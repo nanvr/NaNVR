@@ -1,5 +1,5 @@
 use net_packets::Haptics;
-use alvr_session::HapticsConfig;
+use configuration::HapticsConfig;
 use std::time::Duration;
 
 pub fn map_haptics(config: &HapticsConfig, haptics: Haptics) -> Haptics {

@@ -15,7 +15,7 @@ pub mod up_down;
 pub mod vector;
 
 use net_packets::{PathSegment, PathValuePair};
-use alvr_session::settings_schema::SchemaNode;
+use configuration::settings_schema::SchemaNode;
 use eframe::egui::Ui;
 use serde_json as json;
 use std::collections::HashMap;

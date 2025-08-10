@@ -24,7 +24,7 @@ use shared::{
 use filepaths as afs;
 use net_packets::{ButtonValue, Haptics};
 use alvr_server_core::{HandType, ServerCoreContext, ServerCoreEvent};
-use alvr_session::{CodecType, ControllersConfig};
+use configuration::{CodecType, ControllersConfig};
 use std::{
     collections::VecDeque,
     ffi::{CString, OsStr, c_char, c_void},

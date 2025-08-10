@@ -9,7 +9,7 @@ use shared::{
     parking_lot::{Mutex, RwLock},
 };
 use net_packets::{ButtonEntry, ButtonValue, Haptics};
-use alvr_session::CodecType;
+use configuration::CodecType;
 use std::{
     collections::{HashMap, VecDeque},
     ffi::{CStr, CString, c_char},

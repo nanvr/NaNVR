@@ -1,6 +1,6 @@
 use shared::*;
 use net_packets::{ButtonEntry, ButtonValue};
-use alvr_session::{
+use configuration::{
     AutomaticButtonMappingConfig, BinaryToScalarStates, ButtonBindingTarget, ButtonMappingType,
     ControllersEmulationMode, HysteresisThreshold, Range,
 };

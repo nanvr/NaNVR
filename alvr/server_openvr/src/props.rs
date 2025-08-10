@@ -13,7 +13,7 @@ use shared::{
     HAND_RIGHT_ID, HAND_TRACKER_LEFT_ID, HAND_TRACKER_RIGHT_ID, HEAD_ID, debug,
     settings_schema::Switch, warn,
 };
-use alvr_session::{
+use configuration::{
     ControllersEmulationMode, HeadsetEmulationMode, OpenvrPropKey, OpenvrPropType, OpenvrProperty,
 };
 use std::{
@@ -23,7 +23,7 @@ use std::{
 
 pub fn set_openvr_prop(instance_ptr: Option<*mut c_void>, device_id: u64, prop: OpenvrProperty) {
     let key = prop.key as u32;
-    let ty = alvr_session::openvr_prop_key_to_type(prop.key);
+    let ty = configuration::openvr_prop_key_to_type(prop.key);
     let value = prop.value;
 
     let device_name = DEVICE_ID_TO_PATH.get(&device_id).unwrap_or(&"Unknown");

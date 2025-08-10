@@ -7,7 +7,7 @@ use gui_shared::{
     },
 };
 use net_packets::PathValuePair;
-use alvr_session::settings_schema::{SchemaEntry, SchemaNode};
+use configuration::settings_schema::{SchemaEntry, SchemaNode};
 use eframe::egui::Ui;
 use serde_json as json;
 

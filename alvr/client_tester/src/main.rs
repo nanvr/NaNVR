@@ -5,7 +5,7 @@ use shared::{
     parking_lot::RwLock,
 };
 use net_packets::{FaceData, TrackingData};
-use alvr_session::CodecType;
+use configuration::CodecType;
 use eframe::{
     Frame, NativeOptions,
     egui::{CentralPanel, Context, RichText, Slider, ViewportBuilder},

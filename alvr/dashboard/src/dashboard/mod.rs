@@ -11,7 +11,7 @@ use shared::parking_lot::{Condvar, Mutex};
 use events::EventType;
 use gui_shared::theme;
 use net_packets::{PathValuePair, ServerRequest};
-use alvr_session::SessionConfig;
+use configuration::SessionConfig;
 use eframe::egui::{self, Align, CentralPanel, Frame, Layout, Margin, RichText, SidePanel, Stroke};
 use std::{collections::BTreeMap, sync::Arc};
 

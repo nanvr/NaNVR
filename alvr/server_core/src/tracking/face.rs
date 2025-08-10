@@ -1,6 +1,6 @@
 use shared::{anyhow::Result, glam::EulerRot};
 use net_packets::{FaceData, FaceExpressions};
-use alvr_session::FaceTrackingSinkConfig;
+use configuration::FaceTrackingSinkConfig;
 use rosc::{OscMessage, OscPacket, OscType};
 use std::{f32::consts::PI, net::UdpSocket};
 

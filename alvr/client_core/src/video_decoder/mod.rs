@@ -2,7 +2,7 @@
 mod android;
 
 use shared::anyhow::Result;
-use alvr_session::{CodecType, MediacodecProperty};
+use configuration::{CodecType, MediacodecProperty};
 use std::time::Duration;
 
 #[derive(Clone, Default, PartialEq)]

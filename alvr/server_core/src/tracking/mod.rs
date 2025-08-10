@@ -21,7 +21,7 @@ use shared::{
 };
 use events::{EventType, TrackingEvent};
 use net_packets::TrackingData;
-use alvr_session::{
+use configuration::{
     BodyTrackingConfig, HeadsetConfig, PositionRecenteringMode, RotationRecenteringMode, Settings,
     VMCConfig, settings_schema::Switch,
 };

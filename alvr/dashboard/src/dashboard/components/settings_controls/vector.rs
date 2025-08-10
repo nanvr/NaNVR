@@ -4,7 +4,7 @@ use crate::dashboard::components::{
     up_down::{self, UpDownResult},
 };
 use net_packets::PathValuePair;
-use alvr_session::settings_schema::SchemaNode;
+use configuration::settings_schema::SchemaNode;
 use eframe::{
     egui::{Layout, Ui},
     emath::Align,

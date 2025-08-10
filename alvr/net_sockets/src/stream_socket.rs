@@ -20,7 +20,7 @@ use crate::backend::{SocketReader, SocketWriter, tcp, udp};
 use shared::{
     AnyhowToCon, ConResult, HandleTryAgain, ToCon, anyhow::Result, debug, parking_lot::Mutex,
 };
-use alvr_session::{DscpTos, SocketBufferSize, SocketProtocol};
+use configuration::{DscpTos, SocketBufferSize, SocketProtocol};
 use bincode::config;
 use serde::{Serialize, de::DeserializeOwned};
 use std::{

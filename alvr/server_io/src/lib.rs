@@ -13,7 +13,7 @@ use shared::{
 };
 use events::EventType;
 use net_packets::{ClientListAction, PathSegment, PathValuePair};
-use alvr_session::{ClientConnectionConfig, SessionConfig, Settings};
+use configuration::{ClientConnectionConfig, SessionConfig, Settings};
 use serde_json as json;
 use std::{
     collections::{HashMap, hash_map::Entry},

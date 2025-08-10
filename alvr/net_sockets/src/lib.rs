@@ -3,7 +3,7 @@ mod control_socket;
 mod stream_socket;
 
 use shared::{anyhow::Result, info};
-use alvr_session::{DscpTos, SocketBufferSize};
+use configuration::{DscpTos, SocketBufferSize};
 use socket2::Socket;
 use std::{
     net::{IpAddr, Ipv4Addr},

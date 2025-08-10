@@ -11,7 +11,7 @@ use shared::{
     *,
 };
 use net_packets::{ButtonEntry, ButtonValue, FaceData, FaceExpressions, StreamConfig};
-use alvr_session::{BodyTrackingBDConfig, BodyTrackingSourcesConfig, FaceTrackingSourcesConfig};
+use configuration::{BodyTrackingBDConfig, BodyTrackingSourcesConfig, FaceTrackingSourcesConfig};
 use openxr as xr;
 use std::{
     collections::{HashMap, HashSet},

@@ -6,7 +6,7 @@ use shared::{
     parking_lot::{Condvar, Mutex},
     warn,
 };
-use alvr_session::{CodecType, MediacodecPropType};
+use configuration::{CodecType, MediacodecPropType};
 use ndk::{
     hardware_buffer::HardwareBufferUsage,
     media::{

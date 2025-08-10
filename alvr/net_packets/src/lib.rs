@@ -4,7 +4,7 @@ use shared::{
     glam::{Quat, UVec2, Vec2},
     semver::Version,
 };
-use alvr_session::{
+use configuration::{
     ClientsidePostProcessingConfig, CodecType, PassthroughMode, SessionConfig, Settings,
 };
 use serde::{Deserialize, Serialize};

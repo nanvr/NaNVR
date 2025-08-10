@@ -18,7 +18,7 @@ use net_packets::{
     STATISTICS, ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO,
     VideoPacketHeader, VideoStreamingCapabilities, VideoStreamingCapabilitiesExt,
 };
-use alvr_session::{SocketProtocol, settings_schema::Switch};
+use configuration::{SocketProtocol, settings_schema::Switch};
 use net_sockets::{
     ControlSocketSender, KEEPALIVE_INTERVAL, KEEPALIVE_TIMEOUT, PeerType, ProtoControlSocket,
     StreamSender, StreamSocketBuilder,

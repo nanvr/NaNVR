@@ -18,7 +18,7 @@ sound.workspace = true
 shared.workspace = true
 client_graphics.workspace = true
 net_packets.workspace = true
-alvr_session.workspace = true
+configuration.workspace = true
 net_sockets.workspace = true
 alvr_system_info.workspace = true
 

@@ -4,7 +4,7 @@ use super::{
 };
 use crate::dashboard::ServerRequest;
 use gui_shared::{DisplayString, theme};
-use alvr_session::{SessionSettings, Settings};
+use configuration::{SessionSettings, Settings};
 use eframe::egui::{self, Align, Frame, Grid, Layout, RichText, ScrollArea, Ui};
 #[cfg(target_arch = "wasm32")]
 use instant::Instant;
@@ -44,7 +44,7 @@ impl SettingsTab {
             path: vec!["session_settings".into()],
             indentation_level: 0,
         };
-        let schema = Settings::schema(alvr_session::session_settings_default());
+        let schema = Settings::schema(configuration::session_settings_default());
 
         // Top level node must be a section
         let SchemaNode::Section { entries, .. } = schema else {

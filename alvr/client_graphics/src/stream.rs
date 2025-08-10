@@ -3,7 +3,7 @@ use shared::{
     ViewParams,
     glam::{self, Mat4, UVec2, Vec3, Vec4},
 };
-use alvr_session::{FoveatedEncodingConfig, PassthroughMode, UpscalingConfig};
+use configuration::{FoveatedEncodingConfig, PassthroughMode, UpscalingConfig};
 use std::{collections::HashMap, ffi::c_void, iter, mem, rc::Rc};
 use wgpu::{
     BindGroup, BindGroupDescriptor, BindGroupEntry, BindGroupLayoutDescriptor,

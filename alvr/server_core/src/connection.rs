@@ -23,7 +23,7 @@ use net_packets::{
     HAPTICS, NegotiatedStreamingConfig, NegotiatedStreamingConfigExt, RealTimeConfig, STATISTICS,
     ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO, VideoPacketHeader,
 };
-use alvr_session::{
+use configuration::{
     BodyTrackingSinkConfig, CodecType, ControllersEmulationMode, FrameSize, H264Profile,
     OpenvrConfig, SessionConfig, SocketProtocol,
 };

@@ -4,7 +4,7 @@ use shared::{
     *,
 };
 use net_packets::{ButtonEntry, ButtonValue};
-use alvr_session::HandTrackingInteractionConfig;
+use configuration::HandTrackingInteractionConfig;
 use std::{
     collections::{HashMap, HashSet},
     hash::Hash,

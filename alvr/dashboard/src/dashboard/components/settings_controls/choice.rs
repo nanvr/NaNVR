@@ -1,7 +1,7 @@
 use super::{NestingInfo, SettingControl, reset};
 use gui_shared::DisplayString;
 use net_packets::PathValuePair;
-use alvr_session::settings_schema::{ChoiceControlType, SchemaEntry, SchemaNode};
+use configuration::settings_schema::{ChoiceControlType, SchemaEntry, SchemaNode};
 use eframe::{
     egui::{ComboBox, Layout, Ui},
     emath::Align,

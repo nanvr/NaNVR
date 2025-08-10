@@ -1,6 +1,6 @@
 use shared::glam::UVec2;
 use client_graphics::GraphicsContext;
-use alvr_session::ClientsidePostProcessingConfig;
+use configuration::ClientsidePostProcessingConfig;
 use openxr as xr;
 use std::ptr;
 

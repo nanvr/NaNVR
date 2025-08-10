@@ -4,7 +4,7 @@ use shared::{
     BODY_RIGHT_ELBOW_ID, BODY_RIGHT_FOOT_ID, BODY_RIGHT_KNEE_ID, DeviceMotion, HAND_LEFT_ID,
     HAND_RIGHT_ID, HEAD_ID, Pose, anyhow::Result, glam::Quat,
 };
-use alvr_session::VMCConfig;
+use configuration::VMCConfig;
 use rosc::{OscMessage, OscPacket, OscType};
 use std::{collections::HashMap, net::UdpSocket, sync::LazyLock};
 

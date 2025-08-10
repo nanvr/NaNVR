@@ -211,7 +211,7 @@ extern "C" drmModeConnectorPtr drmModeGetConnector(int fd, uint32_t connectorId)
 
     auto con = real_drmModeGetConnector(fd, connectorId);
     if (con) {
-        auto sessionFile = std::ifstream(getenv("ALVR_SESSION_JSON"));
+        auto sessionFile = std::ifstream(getenv("ALVR_CONFIGURATION_JSON"));
         auto json = std::string(std::istreambuf_iterator<char>(sessionFile), std::istreambuf_iterator<char>());
         picojson::value v;
         picojson::parse(v, json);

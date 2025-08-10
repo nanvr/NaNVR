@@ -78,7 +78,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       - name: Run tests
-        run: cargo test -p alvr_session
+        run: cargo test -p configuration
 
   check-format:
     runs-on: ubuntu-latest

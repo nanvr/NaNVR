@@ -15,7 +15,7 @@ use shared::{
 };
 use client_graphics::{GraphicsContext, StreamRenderer, StreamViewParams};
 use net_packets::{RealTimeConfig, StreamConfig, TrackingData};
-use alvr_session::{
+use configuration::{
     ClientsideFoveationConfig, ClientsideFoveationMode, ClientsidePostProcessingConfig, CodecType,
     FoveatedEncodingConfig, MediacodecProperty, PassthroughMode, UpscalingConfig,
 };

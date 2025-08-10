@@ -1,6 +1,6 @@
 use shared::SlidingWindowAverage;
 use events::BitrateDirectives;
-use alvr_session::{
+use configuration::{
     BitrateAdaptiveFramerateConfig, BitrateConfig, BitrateMode, settings_schema::Switch,
 };
 use std::{

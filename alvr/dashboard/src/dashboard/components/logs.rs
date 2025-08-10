@@ -1,7 +1,7 @@
 use shared::LogSeverity;
 use events::{Event, EventType};
 use gui_shared::theme::log_colors;
-use alvr_session::{RawEventsConfig, Settings};
+use configuration::{RawEventsConfig, Settings};
 use eframe::{
     egui::{Grid, OpenUrl, OutputCommand, RichText, ScrollArea, Ui},
     epaint::Color32,

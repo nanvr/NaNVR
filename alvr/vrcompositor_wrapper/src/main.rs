@@ -31,7 +31,7 @@ fn main() {
         unsafe {
             std::env::set_var("LD_PRELOAD", drm_lease_shim_path);
             std::env::set_var(
-                "ALVR_SESSION_JSON",
+                "ALVR_CONFIGURATION_JSON",
                 filepaths::filesystem_layout_invalid()
                     .session()
                     .to_string_lossy()

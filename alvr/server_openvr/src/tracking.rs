@@ -6,7 +6,7 @@ use shared::{
     glam::{EulerRot, Quat, Vec3},
     settings_schema::Switch,
 };
-use alvr_session::HeadsetConfig;
+use configuration::HeadsetConfig;
 use std::{
     f32::consts::{FRAC_PI_2, PI},
     sync::LazyLock,

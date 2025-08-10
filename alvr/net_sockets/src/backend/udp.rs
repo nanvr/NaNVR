@@ -2,7 +2,7 @@ use crate::LOCAL_IP;
 
 use super::{SocketReader, SocketWriter};
 use shared::{ConResult, HandleTryAgain, anyhow::Result};
-use alvr_session::{DscpTos, SocketBufferSize};
+use configuration::{DscpTos, SocketBufferSize};
 use socket2::{MaybeUninitSlice, Socket};
 use std::{
     ffi::c_int,

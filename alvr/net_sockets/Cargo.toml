@@ -11,7 +11,7 @@ trace-performance = ["profiling/profile-with-tracy"]
 
 [dependencies]
 shared.workspace = true
-alvr_session.workspace = true
+configuration.workspace = true
 
 bincode = { version = "2", features = ["serde"] }
 profiling = { version = "1", optional = true }

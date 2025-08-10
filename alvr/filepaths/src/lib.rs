@@ -176,7 +176,7 @@ impl Layout {
     }
 
     pub fn session_log(&self) -> PathBuf {
-        self.log_dir.join("alvr_session_log.txt")
+        self.log_dir.join("configuration_log.txt")
     }
 
     pub fn connect_script(&self) -> PathBuf {

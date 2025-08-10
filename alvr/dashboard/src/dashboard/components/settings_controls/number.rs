@@ -1,7 +1,7 @@
 use super::{NestingInfo, reset};
 use crate::dashboard::components::f64_eq;
 use net_packets::PathValuePair;
-use alvr_session::settings_schema::{NumberType, NumericGuiType};
+use configuration::settings_schema::{NumberType, NumericGuiType};
 use eframe::{
     egui::{DragValue, Layout, Slider, Ui},
     emath::Align,

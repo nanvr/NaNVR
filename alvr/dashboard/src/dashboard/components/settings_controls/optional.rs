@@ -1,6 +1,6 @@
 use super::{NestingInfo, SettingControl, reset};
 use net_packets::PathValuePair;
-use alvr_session::settings_schema::SchemaNode;
+use configuration::settings_schema::SchemaNode;
 use eframe::{
     egui::{Layout, Ui},
     emath::Align,

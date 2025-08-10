@@ -4,7 +4,7 @@ use shared::{
     GENERIC_TRACKER_1_ID, GENERIC_TRACKER_2_ID, GENERIC_TRACKER_3_ID, HEAD_ID, anyhow::Result,
     glam::Vec3,
 };
-use alvr_session::BodyTrackingSinkConfig;
+use configuration::BodyTrackingSinkConfig;
 use rosc::{OscMessage, OscPacket, OscType};
 use std::{collections::HashMap, net::UdpSocket, sync::LazyLock};
 

@@ -21,7 +21,7 @@ gui_shared = { path = "alvr/gui_shared" }
 net_packets = { path = "alvr/net_packets" }
 alvr_server_core = { path = "alvr/server_core"}
 alvr_server_io = { path = "alvr/server_io" }
-alvr_session = { path = "alvr/session" }
+configuration = { path = "alvr/configuration" }
 net_sockets = { path = "alvr/net_sockets" }
 alvr_system_info = { path = "alvr/system_info" }
 

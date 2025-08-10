@@ -2,7 +2,7 @@ use crate::backend::{SocketReader, SocketWriter, tcp};
 
 use super::CONTROL_PORT;
 use shared::{ConResult, HandleTryAgain, ToCon, anyhow::Result};
-use alvr_session::SocketBufferSize;
+use configuration::SocketBufferSize;
 use bincode::config;
 use serde::{Serialize, de::DeserializeOwned};
 use std::{

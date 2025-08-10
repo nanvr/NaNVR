@@ -198,10 +198,10 @@ version = "21.0.0-dev10"
 dependencies = [
  "adb",
  "alvr_server_io",
- "alvr_session",
  "ash",
  "bytes",
  "chrono",
+ "configuration",
  "events",
  "fern",
  "filepaths",
@@ -229,7 +229,7 @@ dependencies = [
 name = "alvr_server_io"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
+ "configuration",
  "dirs",
  "encoding_rs_io",
  "events",
@@ -246,9 +246,9 @@ version = "21.0.0-dev10"
 dependencies = [
  "alvr_server_core",
  "alvr_server_io",
- "alvr_session",
  "bindgen 0.71.1",
  "cc",
+ "configuration",
  "filepaths",
  "net_packets",
  "pkg-config",
@@ -256,20 +256,6 @@ dependencies = [
  "shared",
  "sysinfo",
  "walkdir",
-]
-
-[[package]]
-name = "alvr_session"
-version = "21.0.0-dev10"
-dependencies = [
- "alvr_system_info",
- "bytemuck",
- "filepaths",
- "regex",
- "serde",
- "serde_json",
- "settings-schema",
- "shared",
 ]
 
 [[package]]
@@ -1100,11 +1086,11 @@ dependencies = [
 name = "client_core"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
  "alvr_system_info",
  "android_logger",
  "app_dirs2",
  "client_graphics",
+ "configuration",
  "env_logger",
  "mdns-sd",
  "ndk",
@@ -1122,7 +1108,7 @@ dependencies = [
 name = "client_graphics"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
+ "configuration",
  "glow",
  "glyph_brush_layout",
  "khronos-egl",
@@ -1136,11 +1122,11 @@ dependencies = [
 name = "client_openxr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
  "alvr_system_info",
  "android-activity",
  "client_core",
  "client_graphics",
+ "configuration",
  "jni",
  "libc",
  "ndk-context",
@@ -1153,8 +1139,8 @@ dependencies = [
 name = "client_tester"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
  "client_core",
+ "configuration",
  "eframe",
  "env_logger",
  "net_packets",
@@ -1204,6 +1190,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ca0197aee26d1ae37445ee532fefce43251d24cc7c166799f4d46817f1d3973"
 dependencies = [
  "crossbeam-utils",
+]
+
+[[package]]
+name = "configuration"
+version = "21.0.0-dev10"
+dependencies = [
+ "alvr_system_info",
+ "bytemuck",
+ "filepaths",
+ "regex",
+ "serde",
+ "serde_json",
+ "settings-schema",
+ "shared",
 ]
 
 [[package]]
@@ -1476,8 +1476,8 @@ version = "21.0.0-dev10"
 dependencies = [
  "adb",
  "alvr_server_io",
- "alvr_session",
  "chrono",
+ "configuration",
  "cros-libva",
  "eframe",
  "env_logger",
@@ -1923,7 +1923,7 @@ dependencies = [
 name = "events"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
+ "configuration",
  "net_packets",
  "serde",
  "serde_json",
@@ -3470,7 +3470,7 @@ dependencies = [
 name = "net_packets"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
+ "configuration",
  "serde",
  "serde_json",
  "shared",
@@ -3480,8 +3480,8 @@ dependencies = [
 name = "net_sockets"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
  "bincode",
+ "configuration",
  "profiling",
  "serde",
  "serde_json",
@@ -5186,7 +5186,7 @@ dependencies = [
 name = "sound"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_session",
+ "configuration",
  "cpal",
  "libspa-sys",
  "net_sockets",
