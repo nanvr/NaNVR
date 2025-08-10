@@ -1,29 +1,29 @@
 [workspace]
 resolver = "2"
-members = ["alvr/*"]
+members = ["nanvr/*"]
 
 [workspace.package]
 version = "21.0.0-dev10"
 edition = "2024"
 rust-version = "1.88"
-authors = ["alvr-org"] # todo: changeme
+authors = ["nanvr"]
 license = "MIT"
 
 [workspace.dependencies]
-adb = { path = "alvr/adb" }
-sound = { path = "alvr/sound" }
-client_core = { path = "alvr/client_core" }
-shared = { path = "alvr/shared" }
-events = { path = "alvr/events" }
-filepaths = { path = "alvr/filepaths" }
-client_graphics = { path = "alvr/client_graphics" }
-gui_shared = { path = "alvr/gui_shared" }
-net_packets = { path = "alvr/net_packets" }
-server_core = { path = "alvr/server_core"}
-server_io = { path = "alvr/server_io" }
-configuration = { path = "alvr/configuration" }
-net_sockets = { path = "alvr/net_sockets" }
-system_info = { path = "alvr/system_info" }
+adb = { path = "nanvr/adb" }
+sound = { path = "nanvr/sound" }
+client_core = { path = "nanvr/client_core" }
+shared = { path = "nanvr/shared" }
+events = { path = "nanvr/events" }
+filepaths = { path = "nanvr/filepaths" }
+client_graphics = { path = "nanvr/client_graphics" }
+gui_shared = { path = "nanvr/gui_shared" }
+net_packets = { path = "nanvr/net_packets" }
+server_core = { path = "nanvr/server_core"}
+server_io = { path = "nanvr/server_io" }
+configuration = { path = "nanvr/configuration" }
+net_sockets = { path = "nanvr/net_sockets" }
+system_info = { path = "nanvr/system_info" }
 
 [profile.release]
 debug = "limited"
