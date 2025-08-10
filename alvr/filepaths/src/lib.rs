@@ -81,7 +81,7 @@ pub fn dashboard_fname() -> &'static str {
 pub struct Layout {
     // directory containing the dashboard executable
     pub executables_dir: PathBuf,
-    // (linux only) directory where libalvr_vulkan_layer.so is saved
+    // (linux only) directory where libvulkan_layer.so is saved
     pub libraries_dir: PathBuf,
     // parent directory of resources like the dashboard and presets folders
     pub static_resources_dir: PathBuf,
@@ -215,7 +215,7 @@ impl Layout {
     }
 
     pub fn vulkan_layer(&self) -> PathBuf {
-        self.libraries_dir.join(dynlib_fname("alvr_vulkan_layer"))
+        self.libraries_dir.join(dynlib_fname("vulkan_layer"))
     }
 
     pub fn firewall_script(&self) -> PathBuf {

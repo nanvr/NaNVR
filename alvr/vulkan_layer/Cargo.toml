@@ -1,5 +1,5 @@
 [package]
-name = "alvr_vulkan_layer"
+name = "vulkan_layer"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

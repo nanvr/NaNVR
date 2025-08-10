@@ -187,7 +187,7 @@ pub fn build_streamer(
     cmd!(sh, "cargo build {common_flags_ref...}").run().unwrap();
     sh.create_dir(&build_layout.libraries_dir).unwrap();
     sh.copy_file(
-        artifacts_dir.join(afs::dynlib_fname("alvr_vulkan_layer")),
+        artifacts_dir.join(afs::dynlib_fname("vulkan_layer")),
         build_layout.vulkan_layer(),
     )
     .unwrap();

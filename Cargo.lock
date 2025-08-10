@@ -259,18 +259,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_vulkan_layer"
-version = "21.0.0-dev10"
-dependencies = [
- "bindgen 0.71.1",
- "cc",
- "filepaths",
- "pkg-config",
- "shared",
- "walkdir",
-]
-
-[[package]]
 name = "alvr_xtask"
 version = "21.0.0-dev10"
 dependencies = [
@@ -6132,6 +6120,18 @@ dependencies = [
  "filepaths",
  "shared",
  "xshell",
+]
+
+[[package]]
+name = "vulkan_layer"
+version = "21.0.0-dev10"
+dependencies = [
+ "bindgen 0.71.1",
+ "cc",
+ "filepaths",
+ "pkg-config",
+ "shared",
+ "walkdir",
 ]
 
 [[package]]

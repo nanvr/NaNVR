@@ -3,7 +3,7 @@
 	"layer" : {
 		"name": "VK_LAYER_ALVR_capture",
 		"type": "GLOBAL",
-		"library_path": "../../../lib64/libalvr_vulkan_layer.so",
+		"library_path": "../../../lib64/libvulkan_layer.so",
 		"api_version": "1.0.68",
 		"implementation_version": "1",
 		"description": "ALVR display intercept layer",
