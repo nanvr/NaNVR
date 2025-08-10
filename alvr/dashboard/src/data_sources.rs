@@ -4,7 +4,7 @@ use shared::{
     semver::{Version, VersionReq},
     warn,
 };
-use alvr_events::{Event, EventType};
+use events::{Event, EventType};
 use alvr_packets::ServerRequest;
 use alvr_server_io::ServerSessionManager;
 use eframe::egui;

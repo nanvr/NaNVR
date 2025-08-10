@@ -1,5 +1,5 @@
 use shared::LogSeverity;
-use alvr_events::{Event, EventType};
+use events::{Event, EventType};
 use alvr_gui_common::theme::log_colors;
 use alvr_session::{RawEventsConfig, Settings};
 use eframe::{

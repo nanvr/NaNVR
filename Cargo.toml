@@ -14,7 +14,7 @@ adb = { path = "alvr/adb" }
 sound = { path = "alvr/sound" }
 client_core = { path = "alvr/client_core" }
 shared = { path = "alvr/shared" }
-alvr_events = { path = "alvr/events" }
+events = { path = "alvr/events" }
 alvr_filesystem = { path = "alvr/filesystem" }
 alvr_graphics = { path = "alvr/graphics" }
 alvr_gui_common = { path = "alvr/gui_common" }

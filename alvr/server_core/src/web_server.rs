@@ -7,7 +7,7 @@ use shared::{
     anyhow::{self, Result},
     error, info, log,
 };
-use alvr_events::{ButtonEvent, EventType};
+use events::{ButtonEvent, EventType};
 use alvr_packets::{ButtonEntry, ClientListAction, ServerRequest};
 use bytes::Buf;
 use futures::SinkExt;
@@ -192,7 +192,7 @@ async fn http_api(
                         log::log!(level, "{}", event.content);
                     }
                     ServerRequest::GetSession => {
-                        alvr_events::send_event(EventType::Session(Box::new(
+                        events::send_event(EventType::Session(Box::new(
                             crate::SESSION_MANAGER.read().session().clone(),
                         )));
                     }
@@ -263,19 +263,19 @@ async fn http_api(
                         .ok();
 
                         if let Ok(list) = alvr_server_io::get_registered_drivers() {
-                            alvr_events::send_event(EventType::DriversList(list));
+                            events::send_event(EventType::DriversList(list));
                         }
                     }
                     ServerRequest::UnregisterDriver(path) => {
                         alvr_server_io::driver_registration(&[path], false).ok();
 
                         if let Ok(list) = alvr_server_io::get_registered_drivers() {
-                            alvr_events::send_event(EventType::DriversList(list));
+                            events::send_event(EventType::DriversList(list));
                         }
                     }
                     ServerRequest::GetDriverList => {
                         if let Ok(list) = alvr_server_io::get_registered_drivers() {
-                            alvr_events::send_event(EventType::DriversList(list));
+                            events::send_event(EventType::DriversList(list));
                         }
                     }
                     ServerRequest::RestartSteamvr => {

@@ -193,17 +193,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_events"
-version = "21.0.0-dev10"
-dependencies = [
- "alvr_packets",
- "alvr_session",
- "serde",
- "serde_json",
- "shared",
-]
-
-[[package]]
 name = "alvr_filesystem"
 version = "21.0.0-dev10"
 dependencies = [
@@ -269,7 +258,6 @@ name = "alvr_server_core"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_events",
  "alvr_filesystem",
  "alvr_packets",
  "alvr_server_io",
@@ -278,6 +266,7 @@ dependencies = [
  "ash",
  "bytes",
  "chrono",
+ "events",
  "fern",
  "flume",
  "futures",
@@ -301,12 +290,12 @@ dependencies = [
 name = "alvr_server_io"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_events",
  "alvr_filesystem",
  "alvr_packets",
  "alvr_session",
  "dirs",
  "encoding_rs_io",
+ "events",
  "runas",
  "serde_json",
  "shared",
@@ -1546,7 +1535,6 @@ name = "dashboard"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_events",
  "alvr_filesystem",
  "alvr_gui_common",
  "alvr_packets",
@@ -1557,6 +1545,7 @@ dependencies = [
  "cros-libva",
  "eframe",
  "env_logger",
+ "events",
  "ico",
  "nvml-wrapper",
  "rand 0.9.0",
@@ -1988,6 +1977,17 @@ checksum = "3c3e4e0dd3673c1139bf041f3008816d9cf2946bbfac2945c09e523b8d7b05b2"
 dependencies = [
  "event-listener",
  "pin-project-lite",
+]
+
+[[package]]
+name = "events"
+version = "21.0.0-dev10"
+dependencies = [
+ "alvr_packets",
+ "alvr_session",
+ "serde",
+ "serde_json",
+ "shared",
 ]
 
 [[package]]

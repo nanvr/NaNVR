@@ -19,7 +19,7 @@ use shared::{
     glam::{EulerRot, Quat, Vec3},
     parking_lot::Mutex,
 };
-use alvr_events::{EventType, TrackingEvent};
+use events::{EventType, TrackingEvent};
 use alvr_packets::TrackingData;
 use alvr_session::{
     BodyTrackingConfig, HeadsetConfig, PositionRecenteringMode, RotationRecenteringMode, Settings,
@@ -414,7 +414,7 @@ pub fn tracking_loop(
                     })
                     .collect::<Vec<(String, DeviceMotion)>>();
 
-                alvr_events::send_event(EventType::Tracking(Box::new(TrackingEvent {
+                events::send_event(EventType::Tracking(Box::new(TrackingEvent {
                     device_motions,
                     hand_skeletons: tracking.hand_skeletons,
                     face: tracking.face,

@@ -1,6 +1,6 @@
 use crate::data_sources::PolledEvent;
 use shared::{LogEntry, LogSeverity, log::LevelFilter, parking_lot::Mutex};
-use alvr_events::{Event, EventType};
+use events::{Event, EventType};
 use std::{
     io::Write,
     sync::{Arc, mpsc},
@@ -10,7 +10,7 @@ pub fn init_logging(event_sender: mpsc::Sender<PolledEvent>) {
     let event_sender = Arc::new(Mutex::new(event_sender));
 
     env_logger::Builder::new()
-        .filter(Some("alvr_events"), LevelFilter::Off)
+        .filter(Some("events"), LevelFilter::Off)
         .filter(Some("naga"), LevelFilter::Off)
         .filter(Some("ureq"), LevelFilter::Off)
         .filter(Some("wgpu_core"), LevelFilter::Off)

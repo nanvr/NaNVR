@@ -11,7 +11,7 @@ use shared::{
     anyhow::{Result, bail},
     error, info,
 };
-use alvr_events::EventType;
+use events::EventType;
 use alvr_packets::{ClientListAction, PathSegment, PathValuePair};
 use alvr_session::{ClientConnectionConfig, SessionConfig, Settings};
 use serde_json as json;
@@ -56,7 +56,7 @@ impl Drop for SessionLock<'_> {
         }
 
         *self.settings = self.session_desc.to_settings();
-        alvr_events::send_event(EventType::Session(Box::new(self.session_desc.clone())));
+        events::send_event(EventType::Session(Box::new(self.session_desc.clone())));
     }
 }
 
@@ -187,7 +187,7 @@ impl ServerSessionManager {
             save_session(&self.session_config, session_path)?;
         }
 
-        alvr_events::send_event(EventType::Session(Box::new(self.session_config.clone())));
+        events::send_event(EventType::Session(Box::new(self.session_config.clone())));
 
         Ok(())
     }
@@ -274,7 +274,7 @@ impl ServerSessionManager {
             if let Some(session_path) = &self.session_path {
                 save_session(&self.session_config, session_path).ok();
             }
-            alvr_events::send_event(EventType::Session(Box::new(self.session_config.clone())));
+            events::send_event(EventType::Session(Box::new(self.session_config.clone())));
         }
     }
 

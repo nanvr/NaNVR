@@ -23,7 +23,7 @@ use shared::{
     settings_schema::Switch,
     warn,
 };
-use alvr_events::{EventType, HapticsEvent};
+use events::{EventType, HapticsEvent};
 use alvr_filesystem as afs;
 use alvr_packets::{
     BatteryInfo, ButtonEntry, ClientListAction, DecoderInitializationConfig, Haptics,
@@ -143,7 +143,7 @@ pub fn notify_restart_driver() {
         .next()
         .is_some()
     {
-        alvr_events::send_event(EventType::ServerRequestsSelfRestart);
+        events::send_event(EventType::ServerRequestsSelfRestart);
     } else {
         error!("Cannot restart SteamVR. No dashboard process found on local device.");
     }
@@ -316,7 +316,7 @@ impl ServerCoreContext {
             let session_manager_lock = SESSION_MANAGER.read();
 
             if session_manager_lock.settings().extra.logging.log_haptics {
-                alvr_events::send_event(EventType::Haptics(HapticsEvent {
+                events::send_event(EventType::Haptics(HapticsEvent {
                     path: DEVICE_ID_TO_PATH.get(&haptics.device_id).map_or_else(
                         || format!("Unknown (ID: {:#16x})", haptics.device_id),
                         |p| (*p).to_owned(),

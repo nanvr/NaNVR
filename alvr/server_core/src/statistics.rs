@@ -1,5 +1,5 @@
 use shared::{HEAD_ID, SlidingWindowAverage};
-use alvr_events::{BitrateDirectives, EventType, GraphStatistics, StatisticsSummary};
+use events::{BitrateDirectives, EventType, GraphStatistics, StatisticsSummary};
 use alvr_packets::ClientStatistics;
 use std::{
     collections::{HashMap, VecDeque},
@@ -223,7 +223,7 @@ impl StatisticsManager {
 
                 let interval_secs = FULL_REPORT_INTERVAL.as_secs_f32();
 
-                alvr_events::send_event(EventType::StatisticsSummary(StatisticsSummary {
+                events::send_event(EventType::StatisticsSummary(StatisticsSummary {
                     video_packets_total: self.video_packets_total,
                     video_packets_per_sec: (self.video_packets_partial_sum as f32 / interval_secs)
                         as _,
@@ -264,7 +264,7 @@ impl StatisticsManager {
 
             // todo: use target timestamp in nanoseconds. the dashboard needs to use the first
             // timestamp as the graph time origin.
-            alvr_events::send_event(EventType::GraphStatistics(GraphStatistics {
+            events::send_event(EventType::GraphStatistics(GraphStatistics {
                 total_pipeline_latency_s: client_stats.total_pipeline_latency.as_secs_f32(),
                 game_time_s: game_time_latency.as_secs_f32(),
                 server_compositor_s: server_compositor_latency.as_secs_f32(),

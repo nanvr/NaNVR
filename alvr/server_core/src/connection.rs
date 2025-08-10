@@ -17,7 +17,7 @@ use shared::{
     settings_schema::Switch,
     warn,
 };
-use alvr_events::{AdbEvent, ButtonEvent, EventType};
+use events::{AdbEvent, ButtonEvent, EventType};
 use alvr_packets::{
     AUDIO, ClientConnectionResult, ClientControlPacket, ClientListAction, ClientStatistics,
     HAPTICS, NegotiatedStreamingConfig, NegotiatedStreamingConfigExt, RealTimeConfig, STATISTICS,
@@ -260,7 +260,7 @@ pub fn handshake_loop(ctx: Arc<ConnectionContext>, lifecycle_state: Arc<RwLock<L
                     FILESYSTEM_LAYOUT.get().unwrap(),
                     |downloaded, maybe_total| {
                         if let Some(total) = maybe_total {
-                            alvr_events::send_event(EventType::Adb(AdbEvent {
+                            events::send_event(EventType::Adb(AdbEvent {
                                 download_progress: downloaded as f32 / total as f32,
                             }));
                         };
@@ -1073,7 +1073,7 @@ fn connection_pipeline(
                                 .logging
                                 .log_button_presses
                             {
-                                alvr_events::send_event(EventType::Buttons(
+                                events::send_event(EventType::Buttons(
                                     entries
                                         .iter()
                                         .map(|e| ButtonEvent {

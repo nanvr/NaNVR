@@ -1,6 +1,6 @@
 use crate::SESSION_MANAGER;
 use shared::{LogEntry, LogSeverity, log::LevelFilter};
-use alvr_events::{Event, EventType};
+use events::{Event, EventType};
 use chrono::Local;
 use fern::Dispatch;
 use std::{fs, path::PathBuf, sync::LazyLock};
