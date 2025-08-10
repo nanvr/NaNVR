@@ -23,13 +23,13 @@ impl AnnouncerSocket {
         }
 
         self.daemon.register(ServiceInfo::new(
-            alvr_sockets::MDNS_SERVICE_TYPE,
+            net_sockets::MDNS_SERVICE_TYPE,
             &format!("alvr{}", rand::random::<u16>()),
             &self.hostname,
             local_ip,
             5353,
             &[(
-                alvr_sockets::MDNS_PROTOCOL_KEY,
+                net_sockets::MDNS_PROTOCOL_KEY,
                 shared::protocol_id().as_str(),
             )][..],
         )?)?;

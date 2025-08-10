@@ -9,7 +9,7 @@ use shared::{
     parking_lot::Mutex,
 };
 use alvr_session::{AudioBufferingConfig, CustomAudioDeviceConfig};
-use alvr_sockets::{StreamReceiver, StreamSender};
+use net_sockets::{StreamReceiver, StreamSender};
 use cpal::{
     BufferSize, Host, Sample, SampleFormat, StreamConfig,
     traits::{DeviceTrait, HostTrait, StreamTrait},

@@ -1,5 +1,5 @@
 [package]
-name = "alvr_sockets"
+name = "net_sockets"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

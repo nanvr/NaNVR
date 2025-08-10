@@ -21,7 +21,7 @@ filepaths.workspace = true
 net_packets.workspace = true
 alvr_server_io.workspace = true
 alvr_session.workspace = true
-alvr_sockets.workspace = true
+net_sockets.workspace = true
 
 ash = "0.38"
 bytes = "1"

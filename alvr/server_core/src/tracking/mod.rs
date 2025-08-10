@@ -25,7 +25,7 @@ use alvr_session::{
     BodyTrackingConfig, HeadsetConfig, PositionRecenteringMode, RotationRecenteringMode, Settings,
     VMCConfig, settings_schema::Switch,
 };
-use alvr_sockets::StreamReceiver;
+use net_sockets::StreamReceiver;
 use std::{
     cmp::Ordering,
     collections::{HashMap, VecDeque},

@@ -199,7 +199,6 @@ dependencies = [
  "adb",
  "alvr_server_io",
  "alvr_session",
- "alvr_sockets",
  "ash",
  "bytes",
  "chrono",
@@ -212,6 +211,7 @@ dependencies = [
  "hyper 0.14.32",
  "mdns-sd",
  "net_packets",
+ "net_sockets",
  "profiling",
  "reqwest 0.11.27",
  "rosc",
@@ -270,19 +270,6 @@ dependencies = [
  "serde_json",
  "settings-schema",
  "shared",
-]
-
-[[package]]
-name = "alvr_sockets"
-version = "21.0.0-dev10"
-dependencies = [
- "alvr_session",
- "bincode",
- "profiling",
- "serde",
- "serde_json",
- "shared",
- "socket2",
 ]
 
 [[package]]
@@ -1114,7 +1101,6 @@ name = "client_core"
 version = "21.0.0-dev10"
 dependencies = [
  "alvr_session",
- "alvr_sockets",
  "alvr_system_info",
  "android_logger",
  "app_dirs2",
@@ -1124,6 +1110,7 @@ dependencies = [
  "ndk",
  "ndk-context",
  "net_packets",
+ "net_sockets",
  "rand 0.9.0",
  "serde",
  "serde_json",
@@ -1490,7 +1477,6 @@ dependencies = [
  "adb",
  "alvr_server_io",
  "alvr_session",
- "alvr_sockets",
  "chrono",
  "cros-libva",
  "eframe",
@@ -1500,6 +1486,7 @@ dependencies = [
  "gui_shared",
  "ico",
  "net_packets",
+ "net_sockets",
  "nvml-wrapper",
  "rand 0.9.0",
  "serde",
@@ -3490,6 +3477,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "net_sockets"
+version = "21.0.0-dev10"
+dependencies = [
+ "alvr_session",
+ "bincode",
+ "profiling",
+ "serde",
+ "serde_json",
+ "shared",
+ "socket2",
+]
+
+[[package]]
 name = "nix"
 version = "0.27.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5187,9 +5187,9 @@ name = "sound"
 version = "21.0.0-dev10"
 dependencies = [
  "alvr_session",
- "alvr_sockets",
  "cpal",
  "libspa-sys",
+ "net_sockets",
  "pipewire",
  "rodio",
  "serde",

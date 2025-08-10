@@ -31,7 +31,7 @@ use net_packets::{
 };
 use alvr_server_io::ServerSessionManager;
 use alvr_session::{CodecType, OpenvrProperty, Settings};
-use alvr_sockets::StreamSender;
+use net_sockets::StreamSender;
 use bitrate::{BitrateManager, DynamicEncoderParams};
 use statistics::StatisticsManager;
 use std::{

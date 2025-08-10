@@ -19,7 +19,7 @@ use net_packets::{
     VideoPacketHeader, VideoStreamingCapabilities, VideoStreamingCapabilitiesExt,
 };
 use alvr_session::{SocketProtocol, settings_schema::Switch};
-use alvr_sockets::{
+use net_sockets::{
     ControlSocketSender, KEEPALIVE_INTERVAL, KEEPALIVE_TIMEOUT, PeerType, ProtoControlSocket,
     StreamSender, StreamSocketBuilder,
 };
@@ -133,7 +133,7 @@ fn connection_pipeline(
         let config = Config::load();
         let announcer_socket = AnnouncerSocket::new(&config.hostname).to_con()?;
         let listener_socket =
-            alvr_sockets::get_server_listener(HANDSHAKE_ACTION_TIMEOUT).to_con()?;
+            net_sockets::get_server_listener(HANDSHAKE_ACTION_TIMEOUT).to_con()?;
 
         loop {
             if *lifecycle_state.write() != LifecycleState::Resumed {

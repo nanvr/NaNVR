@@ -4,7 +4,7 @@ use shared::{
     parking_lot::Mutex,
 };
 use alvr_session::AudioBufferingConfig;
-use alvr_sockets::{StreamReceiver, StreamSender};
+use net_sockets::{StreamReceiver, StreamSender};
 use ndk::audio::{
     AudioCallbackResult, AudioDirection, AudioError, AudioFormat, AudioPerformanceMode,
     AudioSharingMode, AudioStreamBuilder,

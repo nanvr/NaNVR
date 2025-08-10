@@ -165,7 +165,7 @@ fn string_to_c_str(buffer: *mut c_char, value: &str) -> u64 {
 
 #[unsafe(no_mangle)]
 pub extern "C" fn alvr_mdns_service(service_buffer: *mut c_char) -> u64 {
-    string_to_c_str(service_buffer, alvr_sockets::MDNS_SERVICE_TYPE)
+    string_to_c_str(service_buffer, net_sockets::MDNS_SERVICE_TYPE)
 }
 
 /// To make sure the value is correct, call after alvr_initialize()

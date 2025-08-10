@@ -3,7 +3,7 @@ use shared::ConnectionState;
 use gui_shared::theme::{self, log_colors};
 use net_packets::ClientListAction;
 use alvr_session::{ClientConnectionConfig, SessionConfig};
-use alvr_sockets::WIRED_CLIENT_HOSTNAME;
+use net_sockets::WIRED_CLIENT_HOSTNAME;
 use eframe::{
     egui::{self, Frame, Grid, Layout, ProgressBar, RichText, TextEdit, Ui, Window},
     emath::{Align, Align2},

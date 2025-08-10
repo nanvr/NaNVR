@@ -13,7 +13,7 @@ pub struct WelcomeSocket {
 
 impl WelcomeSocket {
     pub fn new() -> Result<Self> {
-        let mdns_receiver = ServiceDaemon::new()?.browse(alvr_sockets::MDNS_SERVICE_TYPE)?;
+        let mdns_receiver = ServiceDaemon::new()?.browse(net_sockets::MDNS_SERVICE_TYPE)?;
 
         Ok(Self { mdns_receiver })
     }
@@ -27,12 +27,12 @@ impl WelcomeSocket {
                 Ok(event) => {
                     if let ServiceEvent::ServiceResolved(info) = event {
                         let hostname = info
-                            .get_property_val_str(alvr_sockets::MDNS_DEVICE_ID_KEY)
+                            .get_property_val_str(net_sockets::MDNS_DEVICE_ID_KEY)
                             .unwrap_or_else(|| info.get_hostname());
                         let address = *info.get_addresses().iter().next().to_any()?;
 
                         let client_protocol = info
-                            .get_property_val_str(alvr_sockets::MDNS_PROTOCOL_KEY)
+                            .get_property_val_str(net_sockets::MDNS_PROTOCOL_KEY)
                             .to_any()?;
                         let server_protocol = shared::protocol_id();
                         let client_is_dev = client_protocol.contains("-dev");

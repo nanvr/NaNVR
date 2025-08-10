@@ -27,7 +27,7 @@ use alvr_session::{
     BodyTrackingSinkConfig, CodecType, ControllersEmulationMode, FrameSize, H264Profile,
     OpenvrConfig, SessionConfig, SocketProtocol,
 };
-use alvr_sockets::{
+use net_sockets::{
     CONTROL_PORT, KEEPALIVE_INTERVAL, KEEPALIVE_TIMEOUT, PeerType, ProtoControlSocket,
     StreamSocketBuilder, WIRED_CLIENT_HOSTNAME,
 };
@@ -777,8 +777,8 @@ fn connection_pipeline(
     )?;
 
     let mut video_sender = stream_socket.request_stream(VIDEO);
-    let game_audio_sender: alvr_sockets::StreamSender<()> = stream_socket.request_stream(AUDIO);
-    let mut microphone_receiver: alvr_sockets::StreamReceiver<()> =
+    let game_audio_sender: net_sockets::StreamSender<()> = stream_socket.request_stream(AUDIO);
+    let mut microphone_receiver: net_sockets::StreamReceiver<()> =
         stream_socket.subscribe_to_stream(AUDIO, MAX_UNREAD_PACKETS);
     let tracking_receiver =
         stream_socket.subscribe_to_stream::<TrackingData>(TRACKING, MAX_UNREAD_PACKETS);
