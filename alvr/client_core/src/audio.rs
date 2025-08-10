@@ -1,4 +1,4 @@
-use alvr_audio::Device;
+use sound::Device;
 use alvr_common::{
     anyhow::{Result, bail},
     parking_lot::Mutex,
@@ -32,7 +32,7 @@ pub fn record_audio_blocking(
         "This code only supports mono microphone input"
     );
 
-    let sample_rate = alvr_audio::input_sample_rate(device)?;
+    let sample_rate = sound::input_sample_rate(device)?;
 
     let error = Arc::new(Mutex::new(None::<AudioError>));
 
@@ -130,7 +130,7 @@ pub fn play_audio_loop(
             Box::new(move |_, data_ptr, frames_count| {
                 assert!(frames_count == batch_frames_count as i32);
 
-                let samples = alvr_audio::get_next_frame_batch(
+                let samples = sound::get_next_frame_batch(
                     &mut *sample_buffer.lock(),
                     2,
                     batch_frames_count as _,
@@ -162,7 +162,7 @@ pub fn play_audio_loop(
 
     stream.request_start()?;
 
-    alvr_audio::receive_samples_loop(
+    sound::receive_samples_loop(
         || is_running() && error.lock().is_none(),
         receiver,
         sample_buffer,

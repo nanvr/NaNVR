@@ -11,7 +11,7 @@ license = "MIT"
 
 [workspace.dependencies]
 adb = { path = "alvr/adb" }
-alvr_audio = { path = "alvr/audio" }
+sound = { path = "alvr/sound" }
 alvr_client_core = { path = "alvr/client_core" }
 alvr_common = { path = "alvr/common" }
 alvr_events = { path = "alvr/events" }

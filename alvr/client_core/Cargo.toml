@@ -14,7 +14,7 @@ link-stdcpp-shared = []
 default = ["link-stdcpp-shared"]
 
 [dependencies]
-alvr_audio.workspace = true
+sound.workspace = true
 alvr_common.workspace = true
 alvr_graphics.workspace = true
 alvr_packets.workspace = true

@@ -1,5 +1,5 @@
 [package]
-name = "alvr_audio"
+name = "sound"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

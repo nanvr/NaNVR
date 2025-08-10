@@ -820,7 +820,7 @@ fn connection_pipeline(
     });
 
     let game_audio_microphone_thread = {
-        use alvr_audio::linux::{self, AudioInfo};
+        use sound::linux::{self, AudioInfo};
         let mic = if let Switch::Enabled(config) = initial_settings.audio.microphone.clone() {
             Some((
                 AudioInfo {

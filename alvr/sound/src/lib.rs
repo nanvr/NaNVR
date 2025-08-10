@@ -1,3 +1,5 @@
+
+#[cfg(target_os = "linux")]
 pub mod linux;
 
 use alvr_common::{
