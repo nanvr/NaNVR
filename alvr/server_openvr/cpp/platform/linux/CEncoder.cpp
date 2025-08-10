@@ -16,7 +16,7 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-#include "ALVR-common/packet_types.h"
+#include "common/packet_types.h"
 #include "EncodePipeline.h"
 #include "FrameRender.h"
 #include "alvr_server/Logger.h"

@@ -1,5 +1,5 @@
 #include "EncodePipelineVAAPI.h"
-#include "ALVR-common/packet_types.h"
+#include "common/packet_types.h"
 #include "alvr_server/Logger.h"
 #include "alvr_server/Settings.h"
 #include "ffmpeg_helper.h"

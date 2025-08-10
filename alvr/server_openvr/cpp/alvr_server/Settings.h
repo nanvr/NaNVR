@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ALVR-common/packet_types.h"
+#include "common/packet_types.h"
 #include <string>
 
 class Settings {

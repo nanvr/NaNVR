@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ALVR-common/exception.h"
+#include "common/exception.h"
 
 Exception MakeException(const char* format, ...);
 

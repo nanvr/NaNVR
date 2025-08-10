@@ -1,4 +1,4 @@
-#include "ALVR-common/packet_types.h"
+#include "common/packet_types.h"
 #include "Logger.h"
 #include "bindings.h"
 #include <memory>
