@@ -1,7 +1,7 @@
 mod linux_steamvr;
 
 use crate::data_sources;
-use alvr_adb::commands as adb;
+use adb::commands as adb;
 use alvr_common::{
     anyhow::{Context, Result},
     debug,

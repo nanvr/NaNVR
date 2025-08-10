@@ -7,7 +7,7 @@ use crate::{
     statistics::StatisticsManager,
     tracking::{self, TrackingManager},
 };
-use alvr_adb::{WiredConnection, WiredConnectionStatus};
+use adb::{WiredConnection, WiredConnectionStatus};
 use alvr_common::{
     AnyhowToCon, BUTTON_INFO, CONTROLLER_PROFILE_INFO, ConResult, ConnectionError, ConnectionState,
     LifecycleState, QUEST_CONTROLLER_PROFILE_PATH, con_bail, dbg_connection, debug, error,

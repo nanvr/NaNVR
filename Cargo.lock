@@ -111,6 +111,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "adb"
+version = "21.0.0-dev10"
+dependencies = [
+ "alvr_common",
+ "alvr_filesystem",
+ "alvr_system_info",
+ "anyhow",
+ "ureq",
+ "zip",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -178,18 +190,6 @@ checksum = "db8fee663d06c4e303404ef5f40488a53e062f89ba8bfed81f42325aafad1527"
 dependencies = [
  "libc",
  "pkg-config",
-]
-
-[[package]]
-name = "alvr_adb"
-version = "21.0.0-dev10"
-dependencies = [
- "alvr_common",
- "alvr_filesystem",
- "alvr_system_info",
- "anyhow",
- "ureq",
- "zip",
 ]
 
 [[package]]
@@ -278,7 +278,7 @@ dependencies = [
 name = "alvr_dashboard"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_adb",
+ "adb",
  "alvr_audio",
  "alvr_common",
  "alvr_events",
@@ -349,7 +349,7 @@ dependencies = [
 name = "alvr_launcher"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_adb",
+ "adb",
  "alvr_common",
  "alvr_filesystem",
  "alvr_gui_common",
@@ -381,7 +381,7 @@ dependencies = [
 name = "alvr_server_core"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_adb",
+ "adb",
  "alvr_audio",
  "alvr_common",
  "alvr_events",
