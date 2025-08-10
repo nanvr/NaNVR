@@ -17,7 +17,7 @@ impl AnnouncerSocket {
     }
 
     pub fn announce(&self) -> Result<()> {
-        let local_ip = alvr_system_info::local_ip();
+        let local_ip = system_info::local_ip();
         if local_ip.is_unspecified() {
             bail!("IP is unspecified");
         }

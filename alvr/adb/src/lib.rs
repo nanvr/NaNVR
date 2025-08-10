@@ -3,7 +3,7 @@ mod parse;
 
 use shared::anyhow::Result;
 use shared::{dbg_connection, error};
-use alvr_system_info::{
+use system_info::{
     ClientFlavor, PACKAGE_NAME_GITHUB_DEV, PACKAGE_NAME_GITHUB_STABLE, PACKAGE_NAME_STORE,
 };
 use std::collections::HashSet;

@@ -19,7 +19,7 @@ use configuration::{
     ClientsideFoveationConfig, ClientsideFoveationMode, ClientsidePostProcessingConfig, CodecType,
     FoveatedEncodingConfig, MediacodecProperty, PassthroughMode, UpscalingConfig,
 };
-use alvr_system_info::Platform;
+use system_info::Platform;
 use openxr as xr;
 use std::{
     ptr,
@@ -519,7 +519,7 @@ fn stream_input_loop(
     refresh_rate: f32,
     running: Arc<RelaxedAtomic>,
 ) {
-    let platform = alvr_system_info::platform();
+    let platform = system_info::platform();
 
     let mut last_controller_poses = [Pose::IDENTITY; 2];
     let mut last_palm_poses = [Pose::IDENTITY; 2];

@@ -16,7 +16,7 @@ use shared::{
 };
 use client_graphics::GraphicsContext;
 use configuration::{BodyTrackingBDConfig, BodyTrackingSourcesConfig};
-use alvr_system_info::Platform;
+use system_info::Platform;
 use extra_extensions::{
     BD_BODY_TRACKING_EXTENSION_NAME, BD_MOTION_TRACKING_EXTENSION_NAME,
     META_BODY_TRACKING_FIDELITY_EXTENSION_NAME, META_BODY_TRACKING_FULL_BODY_EXTENSION_NAME,
@@ -135,7 +135,7 @@ fn create_session(
 pub fn entry_point() {
     client_core::init_logging();
 
-    let platform = alvr_system_info::platform();
+    let platform = system_info::platform();
 
     let loader_suffix = match platform {
         Platform::Quest1 => "_quest1",

@@ -92,8 +92,8 @@ impl ClientCoreContext {
         #[cfg(target_os = "android")]
         {
             dbg_client_core!("Getting permissions");
-            alvr_system_info::try_get_permission(alvr_system_info::MICROPHONE_PERMISSION);
-            alvr_system_info::set_wifi_lock(true);
+            system_info::try_get_permission(system_info::MICROPHONE_PERMISSION);
+            system_info::set_wifi_lock(true);
         }
 
         let lifecycle_state = Arc::new(RwLock::new(LifecycleState::Idle));
@@ -307,6 +307,6 @@ impl Drop for ClientCoreContext {
         }
 
         #[cfg(target_os = "android")]
-        alvr_system_info::set_wifi_lock(false);
+        system_info::set_wifi_lock(false);
     }
 }

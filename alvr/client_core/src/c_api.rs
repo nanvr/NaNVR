@@ -183,7 +183,7 @@ pub extern "C" fn alvr_protocol_id(protocol_buffer: *mut c_char) -> u64 {
 #[cfg(target_os = "android")]
 #[unsafe(no_mangle)]
 pub extern "C" fn alvr_try_get_permission(permission: *const c_char) {
-    alvr_system_info::try_get_permission(unsafe { CStr::from_ptr(permission) }.to_str().unwrap());
+    system_info::try_get_permission(unsafe { CStr::from_ptr(permission) }.to_str().unwrap());
 }
 
 /// NB: for android, `context` must be thread safe.

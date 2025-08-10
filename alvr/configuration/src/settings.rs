@@ -2,7 +2,7 @@ use shared::{
     ALVR_VERSION, DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
     LogSeverityDefaultVariant,
 };
-use alvr_system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
+use system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
 use bytemuck::{Pod, Zeroable};
 use serde::{Deserialize, Serialize};
 use settings_schema::{

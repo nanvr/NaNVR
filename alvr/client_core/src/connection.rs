@@ -74,7 +74,7 @@ fn set_hud_message(event_queue: &Mutex<VecDeque<ClientCoreEvent>>, message: &str
         "ALVR v{}\nhostname: {}\nIP: {}\n\n{message}",
         *ALVR_VERSION,
         Config::load().hostname,
-        alvr_system_info::local_ip(),
+        system_info::local_ip(),
     );
 
     event_queue
@@ -165,7 +165,7 @@ fn connection_pipeline(
     proto_control_socket
         .send(&ClientConnectionResult::ConnectionAccepted {
             client_protocol_id: shared::protocol_id_u64(),
-            display_name: alvr_system_info::platform().to_string(),
+            display_name: system_info::platform().to_string(),
             server_ip,
             streaming_capabilities: Some(
                 VideoStreamingCapabilities {
@@ -446,7 +446,7 @@ fn connection_pipeline(
 
                 #[cfg(target_os = "android")]
                 if Instant::now() > battery_deadline {
-                    let (gauge_value, is_plugged) = alvr_system_info::get_battery_status();
+                    let (gauge_value, is_plugged) = system_info::get_battery_status();
                     if let Some(sender) = &mut *ctx.control_sender.lock() {
                         sender
                             .send(&ClientControlPacket::Battery(crate::BatteryInfo {

@@ -114,10 +114,10 @@ dependencies = [
 name = "adb"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_system_info",
  "anyhow",
  "filepaths",
  "shared",
+ "system_info",
  "ureq",
  "zip",
 ]
@@ -256,20 +256,6 @@ dependencies = [
  "shared",
  "sysinfo",
  "walkdir",
-]
-
-[[package]]
-name = "alvr_system_info"
-version = "21.0.0-dev10"
-dependencies = [
- "jni",
- "local-ip-address",
- "ndk",
- "ndk-context",
- "ndk-sys 0.6.0+11769913",
- "serde",
- "settings-schema",
- "shared",
 ]
 
 [[package]]
@@ -1086,7 +1072,6 @@ dependencies = [
 name = "client_core"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_system_info",
  "android_logger",
  "app_dirs2",
  "client_graphics",
@@ -1102,6 +1087,7 @@ dependencies = [
  "serde_json",
  "shared",
  "sound",
+ "system_info",
 ]
 
 [[package]]
@@ -1122,7 +1108,6 @@ dependencies = [
 name = "client_openxr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_system_info",
  "android-activity",
  "client_core",
  "client_graphics",
@@ -1133,6 +1118,7 @@ dependencies = [
  "net_packets",
  "openxr",
  "shared",
+ "system_info",
 ]
 
 [[package]]
@@ -1196,7 +1182,6 @@ dependencies = [
 name = "configuration"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_system_info",
  "bytemuck",
  "filepaths",
  "regex",
@@ -1204,6 +1189,7 @@ dependencies = [
  "serde_json",
  "settings-schema",
  "shared",
+ "system_info",
 ]
 
 [[package]]
@@ -3048,7 +3034,6 @@ name = "launcher"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_system_info",
  "anyhow",
  "eframe",
  "filepaths",
@@ -3060,6 +3045,7 @@ dependencies = [
  "reqwest 0.12.12",
  "serde_json",
  "shared",
+ "system_info",
  "tar",
  "tokio",
  "zip",
@@ -5519,6 +5505,20 @@ dependencies = [
  "pkg-config",
  "toml",
  "version-compare",
+]
+
+[[package]]
+name = "system_info"
+version = "21.0.0-dev10"
+dependencies = [
+ "jni",
+ "local-ip-address",
+ "ndk",
+ "ndk-context",
+ "ndk-sys 0.6.0+11769913",
+ "serde",
+ "settings-schema",
+ "shared",
 ]
 
 [[package]]

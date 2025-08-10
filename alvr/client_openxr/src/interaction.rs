@@ -374,13 +374,13 @@ impl InteractionContext {
             if extra_extensions::supports_eye_gaze_interaction(&xr_session, xr_system) {
                 if matches!(platform, Platform::QuestPro) {
                     #[cfg(target_os = "android")]
-                    alvr_system_info::try_get_permission("com.oculus.permission.EYE_TRACKING");
+                    system_info::try_get_permission("com.oculus.permission.EYE_TRACKING");
                 } else if matches!(
                     platform,
                     Platform::PicoNeo3 | Platform::Pico4Pro | Platform::Pico4Enterprise
                 ) {
                     #[cfg(target_os = "android")]
-                    alvr_system_info::try_get_permission("com.picovr.permission.EYE_TRACKING");
+                    system_info::try_get_permission("com.picovr.permission.EYE_TRACKING");
                 }
 
                 let action = action_set
@@ -505,8 +505,8 @@ impl InteractionContext {
             {
                 #[cfg(target_os = "android")]
                 {
-                    alvr_system_info::try_get_permission("android.permission.RECORD_AUDIO");
-                    alvr_system_info::try_get_permission("com.oculus.permission.FACE_TRACKING")
+                    system_info::try_get_permission("android.permission.RECORD_AUDIO");
+                    system_info::try_get_permission("com.oculus.permission.FACE_TRACKING")
                 }
             }
 
@@ -518,8 +518,8 @@ impl InteractionContext {
             {
                 #[cfg(target_os = "android")]
                 {
-                    alvr_system_info::try_get_permission("android.permission.RECORD_AUDIO");
-                    alvr_system_info::try_get_permission("com.picovr.permission.FACE_TRACKING")
+                    system_info::try_get_permission("android.permission.RECORD_AUDIO");
+                    system_info::try_get_permission("com.picovr.permission.FACE_TRACKING")
                 }
             }
         }
@@ -529,7 +529,7 @@ impl InteractionContext {
             && self.platform != Platform::Quest1
         {
             #[cfg(target_os = "android")]
-            alvr_system_info::try_get_permission("com.oculus.permission.BODY_TRACKING")
+            system_info::try_get_permission("com.oculus.permission.BODY_TRACKING")
         }
 
         // Note: We cannot enable multimodal if fb body tracking is active. It would result in a

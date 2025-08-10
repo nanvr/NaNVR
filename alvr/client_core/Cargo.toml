@@ -20,7 +20,7 @@ client_graphics.workspace = true
 net_packets.workspace = true
 configuration.workspace = true
 net_sockets.workspace = true
-alvr_system_info.workspace = true
+system_info.workspace = true
 
 app_dirs2 = "2"
 mdns-sd = "0.13"

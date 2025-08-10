@@ -4,7 +4,7 @@ use crate::{
 };
 use shared::{Pose, ViewParams, glam::UVec2, parking_lot::RwLock};
 use client_graphics::{GraphicsContext, LobbyRenderer, LobbyViewParams, SDR_FORMAT_GL};
-use alvr_system_info::Platform;
+use system_info::Platform;
 use openxr as xr;
 use std::{rc::Rc, sync::Arc, time::Duration};
 

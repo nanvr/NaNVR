@@ -1,4 +1,4 @@
-use alvr_system_info::Platform;
+use system_info::Platform;
 use openxr::{self as xr, raw, sys};
 use std::ptr;
 

@@ -9,7 +9,7 @@ license.workspace = true
 [dependencies]
 shared.workspace = true
 filepaths.workspace = true
-alvr_system_info.workspace = true
+system_info.workspace = true
 
 anyhow = "1"
 ureq = "3"
