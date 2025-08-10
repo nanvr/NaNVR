@@ -1,6 +1,6 @@
 use std::{path::PathBuf, process::Command};
 
-use alvr_gui_common::ModalButton;
+use gui_shared::ModalButton;
 use alvr_packets::{PathValuePair, ServerRequest};
 use eframe::egui::{self, Context, OpenUrl, Ui};
 
@@ -37,7 +37,7 @@ impl NewVersionPopup {
         let no_remind_button =
             ModalButton::Custom("Don't remind me again for this version".to_string());
 
-        let result = alvr_gui_common::modal(
+        let result = gui_shared::modal(
             context,
             "New ALVR version available",
             Some(|ui: &mut Ui| {

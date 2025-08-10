@@ -1,5 +1,5 @@
 use shared::ALVR_VERSION;
-use alvr_gui_common::theme;
+use gui_shared::theme;
 use eframe::egui::{self, Frame, RichText, ScrollArea, Ui};
 
 pub fn about_tab_ui(ui: &mut Ui) {

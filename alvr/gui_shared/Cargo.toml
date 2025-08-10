@@ -1,5 +1,5 @@
 [package]
-name = "alvr_gui_common"
+name = "gui_shared"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

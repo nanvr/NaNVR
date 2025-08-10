@@ -1,5 +1,5 @@
 use super::{INDENTATION_STEP, NestingInfo, SettingControl, collapsible, notice};
-use alvr_gui_common::{
+use gui_shared::{
     DisplayString,
     theme::{
         OK_GREEN,
@@ -117,7 +117,7 @@ impl Control {
                     if let Some(string) = &entry.help
                         && ui.colored_label(INFO_LIGHT, "❓").hovered()
                     {
-                        alvr_gui_common::tooltip(
+                        gui_shared::tooltip(
                             ui,
                             &format!("{}_help_tooltip", entry.id.display),
                             string,
@@ -125,7 +125,7 @@ impl Control {
                     }
                     if entry.steamvr_restart_flag && ui.colored_label(WARNING_LIGHT, "⚠").hovered()
                     {
-                        alvr_gui_common::tooltip(
+                        gui_shared::tooltip(
                             ui,
                             "steamvr_restart_tooltip",
                             &format!(
@@ -137,7 +137,7 @@ impl Control {
 
                     // The emoji is blue but it will be green in the UI
                     if entry.real_time_flag && ui.colored_label(OK_GREEN, "🔵").hovered() {
-                        alvr_gui_common::tooltip(
+                        gui_shared::tooltip(
                             ui,
                             "real_time_tooltip",
                             "This setting can be changed in real-time during streaming!",

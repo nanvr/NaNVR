@@ -14,7 +14,7 @@ filepaths.workspace = true
 alvr_packets.workspace = true
 alvr_session.workspace = true
 alvr_sockets.workspace = true
-alvr_gui_common.workspace = true
+gui_shared.workspace = true
 sound.workspace = true
 
 chrono = "0.4"

@@ -1,4 +1,4 @@
-use alvr_gui_common::theme;
+use gui_shared::theme;
 use alvr_packets::{FirewallRulesAction, ServerRequest};
 use eframe::{
     egui::{Frame, Grid, Layout, RichText, Ui},

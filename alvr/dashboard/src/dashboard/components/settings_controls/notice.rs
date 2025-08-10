@@ -1,4 +1,4 @@
-use alvr_gui_common::theme::log_colors;
+use gui_shared::theme::log_colors;
 use eframe::{
     egui::{Frame, Label, RichText, Ui},
     epaint::Color32,

@@ -1,6 +1,6 @@
 use crate::dashboard::{ServerRequest, theme::graph_colors};
 use events::{GraphStatistics, StatisticsSummary};
-use alvr_gui_common::theme;
+use gui_shared::theme;
 use eframe::{
     egui::{
         Align2, Color32, CornerRadius, FontId, Frame, Grid, Id, Painter, Rect, RichText,

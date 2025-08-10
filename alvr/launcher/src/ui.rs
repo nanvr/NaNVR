@@ -1,5 +1,5 @@
 use crate::{InstallationInfo, Progress, ReleaseChannelsInfo, UiMessage, WorkerMessage, actions};
-use alvr_gui_common::ModalButton;
+use gui_shared::ModalButton;
 use eframe::{
     egui::{
         self, Button, CentralPanel, ComboBox, Context, Frame, Grid, Layout, ProgressBar, RichText,
@@ -58,7 +58,7 @@ impl Launcher {
         worker_message_receiver: Receiver<WorkerMessage>,
         ui_message_sender: Sender<UiMessage>,
     ) -> Self {
-        alvr_gui_common::theme::set_theme(&cc.egui_ctx);
+        gui_shared::theme::set_theme(&cc.egui_ctx);
 
         Self {
             worker_message_receiver,
@@ -76,7 +76,7 @@ impl Launcher {
         mut version: Version,
         session_version: Option<String>,
     ) -> PopupType {
-        let response = alvr_gui_common::modal(
+        let response = gui_shared::modal(
             ctx,
             "Add version",
             {
@@ -223,7 +223,7 @@ impl Launcher {
 
     fn edit_popup(&self, ctx: &Context, version: String) -> PopupType {
         let mut delete_version = false;
-        let response = alvr_gui_common::modal(
+        let response = gui_shared::modal(
             ctx,
             "Edit version",
             Some(|ui: &mut Ui| {
@@ -245,7 +245,7 @@ impl Launcher {
     }
 
     fn delete_popup(&mut self, ctx: &Context, version: String) -> PopupType {
-        let response = alvr_gui_common::modal(
+        let response = gui_shared::modal(
             ctx,
             "Are you sure?",
             Some({
@@ -309,7 +309,7 @@ impl eframe::App for Launcher {
                         let path = actions::installations_dir().join(&installation.version);
 
                         Frame::group(ui.style())
-                            .fill(alvr_gui_common::theme::SECTION_BG)
+                            .fill(gui_shared::theme::SECTION_BG)
                             .inner_margin(egui::vec2(10.0, 5.0))
                             .show(ui, |ui| {
                                 Grid::new(&installation.version)

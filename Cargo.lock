@@ -193,25 +193,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_gui_common"
-version = "21.0.0-dev10"
-dependencies = [
- "egui",
- "shared",
-]
-
-[[package]]
 name = "alvr_launcher"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_gui_common",
  "alvr_system_info",
  "anyhow",
  "eframe",
  "filepaths",
  "flate2",
  "futures-util",
+ "gui_shared",
  "ico",
  "open",
  "reqwest 0.12.12",
@@ -1528,7 +1520,6 @@ name = "dashboard"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_gui_common",
  "alvr_packets",
  "alvr_server_io",
  "alvr_session",
@@ -1539,6 +1530,7 @@ dependencies = [
  "env_logger",
  "events",
  "filepaths",
+ "gui_shared",
  "ico",
  "nvml-wrapper",
  "rand 0.9.0",
@@ -2457,6 +2449,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fdf242682df893b86f33a73828fb09ca4b2d3bb6cc95249707fc684d27484b91"
 dependencies = [
  "bitflags 2.8.0",
+]
+
+[[package]]
+name = "gui_shared"
+version = "21.0.0-dev10"
+dependencies = [
+ "egui",
+ "shared",
 ]
 
 [[package]]

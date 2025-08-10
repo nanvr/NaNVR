@@ -17,7 +17,7 @@ shared = { path = "alvr/shared" }
 events = { path = "alvr/events" }
 filepaths = { path = "alvr/filepaths" }
 client_graphics = { path = "alvr/client_graphics" }
-alvr_gui_common = { path = "alvr/gui_common" }
+gui_shared = { path = "alvr/gui_shared" }
 alvr_packets = { path = "alvr/packets" }
 alvr_server_core = { path = "alvr/server_core"}
 alvr_server_io = { path = "alvr/server_io" }

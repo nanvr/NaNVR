@@ -1,6 +1,6 @@
 use crate::dashboard::ServerRequest;
 use shared::ConnectionState;
-use alvr_gui_common::theme::{self, log_colors};
+use gui_shared::theme::{self, log_colors};
 use alvr_packets::ClientListAction;
 use alvr_session::{ClientConnectionConfig, SessionConfig};
 use alvr_sockets::WIRED_CLIENT_HOSTNAME;
@@ -203,7 +203,7 @@ fn wired_client_section(
                     ui.heading("Wired Connection");
                     ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                         let mut wired = maybe_client.is_some();
-                        if alvr_gui_common::switch(ui, &mut wired).changed() {
+                        if gui_shared::switch(ui, &mut wired).changed() {
                             if wired {
                                 request = Some(ServerRequest::UpdateClientList {
                                     hostname: WIRED_CLIENT_HOSTNAME.to_owned(),

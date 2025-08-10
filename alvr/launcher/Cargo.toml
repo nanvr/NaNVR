@@ -10,7 +10,7 @@ license.workspace = true
 adb.workspace = true
 shared.workspace = true
 filepaths.workspace = true
-alvr_gui_common.workspace = true
+gui_shared.workspace = true
 alvr_system_info.workspace = true
 
 anyhow = "1"

@@ -45,7 +45,7 @@ impl Control {
         }
 
         ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
-            if alvr_gui_common::switch(ui, enabled_mut).clicked() {
+            if gui_shared::switch(ui, enabled_mut).clicked() {
                 request = get_request(&self.nesting_info, *enabled_mut);
             }
 

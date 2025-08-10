@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use super::schema::{HigherOrderChoiceSchema, PresetModifierOperation};
 use crate::dashboard::components::{self, INDENTATION_STEP, NestingInfo, SettingControl, notice};
-use alvr_gui_common::theme::{
+use gui_shared::theme::{
     OK_GREEN,
     log_colors::{INFO_LIGHT, WARNING_LIGHT},
 };
@@ -148,10 +148,10 @@ impl Control {
             if let Some(string) = &self.help
                 && ui.colored_label(INFO_LIGHT, "❓").hovered()
             {
-                alvr_gui_common::tooltip(ui, &format!("{}_help_tooltip", self.name), string);
+                gui_shared::tooltip(ui, &format!("{}_help_tooltip", self.name), string);
             }
             if self.steamvr_restart_flag && ui.colored_label(WARNING_LIGHT, "⚠").hovered() {
-                alvr_gui_common::tooltip(
+                gui_shared::tooltip(
                     ui,
                     "steamvr_restart_tooltip",
                     &format!(
@@ -163,7 +163,7 @@ impl Control {
 
             // The emoji is blue but it will be green in the UI
             if self.real_time_flag && ui.colored_label(OK_GREEN, "🔵").hovered() {
-                alvr_gui_common::tooltip(
+                gui_shared::tooltip(
                     ui,
                     "real_time_tooltip",
                     "This setting can be changed in real-time during streaming!",

@@ -9,7 +9,7 @@ use crate::{
 };
 use shared::parking_lot::{Condvar, Mutex};
 use events::EventType;
-use alvr_gui_common::theme;
+use gui_shared::theme;
 use alvr_packets::{PathValuePair, ServerRequest};
 use alvr_session::SessionConfig;
 use eframe::egui::{self, Align, CentralPanel, Frame, Layout, Margin, RichText, SidePanel, Stroke};
@@ -49,7 +49,7 @@ pub struct Dashboard {
 
 impl Dashboard {
     pub fn new(creation_context: &eframe::CreationContext<'_>, data_sources: DataSources) -> Self {
-        alvr_gui_common::theme::set_theme(&creation_context.egui_ctx);
+        gui_shared::theme::set_theme(&creation_context.egui_ctx);
 
         data_sources.request(ServerRequest::GetSession);
 
