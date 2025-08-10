@@ -259,19 +259,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_xtask"
-version = "21.0.0-dev10"
-dependencies = [
- "filepaths",
- "pico-args",
- "pkg-config",
- "serde",
- "serde_json",
- "walkdir",
- "xshell",
-]
-
-[[package]]
 name = "android-activity"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7167,6 +7154,19 @@ name = "xshell-macros"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32ac00cd3f8ec9c1d33fb3e7958a82df6989c42d747bd326c822b1d625283547"
+
+[[package]]
+name = "xtask"
+version = "21.0.0-dev10"
+dependencies = [
+ "filepaths",
+ "pico-args",
+ "pkg-config",
+ "serde",
+ "serde_json",
+ "walkdir",
+ "xshell",
+]
 
 [[package]]
 name = "yansi-term"
