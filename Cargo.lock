@@ -193,24 +193,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_server_openvr"
-version = "21.0.0-dev10"
-dependencies = [
- "bindgen 0.71.1",
- "cc",
- "configuration",
- "filepaths",
- "net_packets",
- "pkg-config",
- "serde_json",
- "server_core",
- "server_io",
- "shared",
- "sysinfo",
- "walkdir",
-]
-
-[[package]]
 name = "android-activity"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4961,6 +4943,24 @@ dependencies = [
  "runas",
  "serde_json",
  "shared",
+]
+
+[[package]]
+name = "server_openvr"
+version = "21.0.0-dev10"
+dependencies = [
+ "bindgen 0.71.1",
+ "cc",
+ "configuration",
+ "filepaths",
+ "net_packets",
+ "pkg-config",
+ "serde_json",
+ "server_core",
+ "server_io",
+ "shared",
+ "sysinfo",
+ "walkdir",
 ]
 
 [[package]]
