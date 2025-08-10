@@ -56,7 +56,7 @@ pub fn maybe_kill_steamvr() {
 }
 
 fn unblock_alvr_driver() -> Result<()> {
-    let path = alvr_server_io::steamvr_settings_file_path()?;
+    let path = server_io::steamvr_settings_file_path()?;
     let text = fs::read_to_string(&path).with_context(|| format!("Failed to read {path:?}"))?;
     let new_text = unblock_alvr_driver_within_vrsettings(text.as_str())
         .with_context(|| "Failed to rewrite .vrsettings.")?;
@@ -115,16 +115,16 @@ impl Launcher {
         let alvr_driver_dir = crate::get_filesystem_layout().openvr_driver_root_dir;
 
         // Make sure to unregister any other ALVR driver because it would cause a socket conflict
-        let other_alvr_dirs = alvr_server_io::get_registered_drivers()
+        let other_alvr_dirs = server_io::get_registered_drivers()
             .unwrap_or_default()
             .into_iter()
             .filter(|path| {
                 path.to_string_lossy().to_lowercase().contains("alvr") && *path != alvr_driver_dir
             })
             .collect::<Vec<_>>();
-        alvr_server_io::driver_registration(&other_alvr_dirs, false).ok();
+        server_io::driver_registration(&other_alvr_dirs, false).ok();
 
-        alvr_server_io::driver_registration(&[alvr_driver_dir], true).ok();
+        server_io::driver_registration(&[alvr_driver_dir], true).ok();
 
         if let Err(err) = unblock_alvr_driver() {
             warn!("Failed to unblock ALVR driver: {:?}", err);

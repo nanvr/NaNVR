@@ -453,7 +453,7 @@ pub unsafe extern "C" fn HmdDriverFactory(
     interface_name: *const c_char,
     return_code: *mut i32,
 ) -> *mut c_void {
-    let Ok(driver_dir) = alvr_server_io::get_driver_dir_from_registered() else {
+    let Ok(driver_dir) = server_io::get_driver_dir_from_registered() else {
         return ptr::null_mut();
     };
     let Some(filesystem_layout) =

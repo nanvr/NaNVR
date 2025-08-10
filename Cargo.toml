@@ -20,7 +20,7 @@ client_graphics = { path = "alvr/client_graphics" }
 gui_shared = { path = "alvr/gui_shared" }
 net_packets = { path = "alvr/net_packets" }
 server_core = { path = "alvr/server_core"}
-alvr_server_io = { path = "alvr/server_io" }
+server_io = { path = "alvr/server_io" }
 configuration = { path = "alvr/configuration" }
 net_sockets = { path = "alvr/net_sockets" }
 system_info = { path = "alvr/system_info" }

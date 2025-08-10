@@ -1,6 +1,7 @@
 use net_packets::FirewallRulesAction;
 use std::{path::PathBuf, process::Command};
 
+// todo: might need to be moved somewhere else
 // Errors:
 // 1: firewall rule is already set
 // 126: pkexec request dismissed

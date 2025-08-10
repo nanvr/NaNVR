@@ -6,7 +6,7 @@ use shared::{
 };
 use events::{Event, EventType};
 use net_packets::ServerRequest;
-use alvr_server_io::ServerSessionManager;
+use server_io::ServerSessionManager;
 use eframe::egui;
 use std::{
     io::ErrorKind,
@@ -243,7 +243,7 @@ impl DataSources {
                                     report_session_local(&context, &events_sender, session_manager);
                                 }
                                 ServerRequest::FirewallRules(action) => {
-                                    if alvr_server_io::firewall_rules(action, &filesystem_layout)
+                                    if server_io::firewall_rules(action, &filesystem_layout)
                                         .is_ok()
                                     {
                                         info!("Setting firewall rules succeeded!");
@@ -255,10 +255,10 @@ impl DataSources {
                                     let alvr_driver_dir =
                                         filesystem_layout.openvr_driver_root_dir.clone();
 
-                                    alvr_server_io::driver_registration(&[alvr_driver_dir], true)
+                                    server_io::driver_registration(&[alvr_driver_dir], true)
                                         .ok();
 
-                                    if let Ok(list) = alvr_server_io::get_registered_drivers() {
+                                    if let Ok(list) = server_io::get_registered_drivers() {
                                         report_event_local(
                                             &context,
                                             &events_sender,
@@ -267,9 +267,9 @@ impl DataSources {
                                     }
                                 }
                                 ServerRequest::UnregisterDriver(path) => {
-                                    alvr_server_io::driver_registration(&[path], false).ok();
+                                    server_io::driver_registration(&[path], false).ok();
 
-                                    if let Ok(list) = alvr_server_io::get_registered_drivers() {
+                                    if let Ok(list) = server_io::get_registered_drivers() {
                                         report_event_local(
                                             &context,
                                             &events_sender,
@@ -278,7 +278,7 @@ impl DataSources {
                                     }
                                 }
                                 ServerRequest::GetDriverList => {
-                                    if let Ok(list) = alvr_server_io::get_registered_drivers() {
+                                    if let Ok(list) = server_io::get_registered_drivers() {
                                         report_event_local(
                                             &context,
                                             &events_sender,

@@ -244,7 +244,7 @@ async fn http_api(
                     }
                     ServerRequest::FirewallRules(action) => {
                         if let Err(e) =
-                            alvr_server_io::firewall_rules(action, FILESYSTEM_LAYOUT.get().unwrap())
+                            server_io::firewall_rules(action, FILESYSTEM_LAYOUT.get().unwrap())
                         {
                             error!("Setting firewall rules failed! code: {e}");
                         } else {
@@ -252,7 +252,7 @@ async fn http_api(
                         }
                     }
                     ServerRequest::RegisterAlvrDriver => {
-                        alvr_server_io::driver_registration(
+                        server_io::driver_registration(
                             &[FILESYSTEM_LAYOUT
                                 .get()
                                 .unwrap()
@@ -262,19 +262,19 @@ async fn http_api(
                         )
                         .ok();
 
-                        if let Ok(list) = alvr_server_io::get_registered_drivers() {
+                        if let Ok(list) = server_io::get_registered_drivers() {
                             events::send_event(EventType::DriversList(list));
                         }
                     }
                     ServerRequest::UnregisterDriver(path) => {
-                        alvr_server_io::driver_registration(&[path], false).ok();
+                        server_io::driver_registration(&[path], false).ok();
 
-                        if let Ok(list) = alvr_server_io::get_registered_drivers() {
+                        if let Ok(list) = server_io::get_registered_drivers() {
                             events::send_event(EventType::DriversList(list));
                         }
                     }
                     ServerRequest::GetDriverList => {
-                        if let Ok(list) = alvr_server_io::get_registered_drivers() {
+                        if let Ok(list) = server_io::get_registered_drivers() {
                             events::send_event(EventType::DriversList(list));
                         }
                     }

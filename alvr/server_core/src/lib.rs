@@ -29,7 +29,7 @@ use net_packets::{
     BatteryInfo, ButtonEntry, ClientListAction, DecoderInitializationConfig, Haptics,
     VideoPacketHeader,
 };
-use alvr_server_io::ServerSessionManager;
+use server_io::ServerSessionManager;
 use configuration::{CodecType, OpenvrProperty, Settings};
 use net_sockets::StreamSender;
 use bitrate::{BitrateManager, DynamicEncoderParams};

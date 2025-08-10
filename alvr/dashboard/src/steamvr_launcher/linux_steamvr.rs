@@ -18,7 +18,7 @@ pub fn terminate_process(process: &Process) {
 }
 
 pub fn maybe_wrap_vrcompositor_launcher() -> shared::anyhow::Result<()> {
-    let steamvr_bin_dir = alvr_server_io::steamvr_root_dir()?
+    let steamvr_bin_dir = server_io::steamvr_root_dir()?
         .join("bin")
         .join("linux64");
     let steamvr_vrserver_path = steamvr_bin_dir.join("vrserver");
@@ -149,7 +149,7 @@ fn linux_gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
     });
     debug!("have_intel_dgpu: {}", have_intel_dgpu);
 
-    let steamvr_root_dir = match alvr_server_io::steamvr_root_dir() {
+    let steamvr_root_dir = match server_io::steamvr_root_dir() {
         Ok(dir) => dir,
         Err(e) => {
             error!(

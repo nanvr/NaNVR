@@ -19,7 +19,7 @@ shared.workspace = true
 events.workspace = true
 filepaths.workspace = true
 net_packets.workspace = true
-alvr_server_io.workspace = true
+server_io.workspace = true
 configuration.workspace = true
 net_sockets.workspace = true
 
