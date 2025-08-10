@@ -1,21 +1,21 @@
 <p align="center"> <img width="500" src="resources/ALVR-Grey.svg"/> </p>
 
-# ALVR - Air Light VR
+# NaNVR
 
 <!-- [![badge-discord][]][link-discord] [![badge-matrix][]][link-matrix] [![badge-opencollective][]][link-opencollective] -->
 
 Stream VR games from your PC to your headset via Wi-Fi.
-This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
+This is a fork of [ALVR](https://github.com/nanvr/NANVR).
 
 ### Direct download to the latest version:
-### [Linux Launcher](https://github.com/alvr-org/ALVR/releases/latest/download/alvr_launcher_linux.tar.gz)
+### [Linux Launcher](https://github.com/nanvr/NANVR/releases/latest/download/alvr_launcher_linux.tar.gz)
 
 ## Compatibility
 
 |          VR Headset          |                                        Support                                         |
 | :--------------------------: | :------------------------------------------------------------------------------------: |
-|       Apple Vision Pro       |    :heavy_check_mark: ([store link](https://apps.apple.com/app/alvr/id6479728026))     |
-|      Quest 1/2/3/3S/Pro      | :heavy_check_mark: ([store link](https://www.meta.com/experiences/7674846229245715) *) |
+|       Apple Vision Pro       |    :heavy_check_mark:     |
+|      Quest 1/2/3/3S/Pro      | :heavy_check_mark: |
 |     Pico Neo 3/4/4 Ultra     |                                   :heavy_check_mark:                                   |
 |    Play For Dream YVR 1/2/MR |                                   :heavy_check_mark:                                   |
 | Vive Focus 3/Vision/XR Elite |                                   :heavy_check_mark:                                   |
@@ -46,30 +46,30 @@ This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
 
 -   802.11ac 5Ghz wireless or ethernet wired connection
     -   It is recommended to use 802.11ac 5Ghz for the headset and ethernet for PC
-    -   You need to connect both the PC and the headset to same router (or use a routed connection as described [here](https://github.com/alvr-org/ALVR/wiki/ALVR-v14-and-Above))
+    -   You need to connect both the PC and the headset to same router (or use a routed connection as described [here](https://github.com/nanvr/NANVR/wiki/ALVR-v14-and-Above))
 
 ## Install
 
-Follow the installation guide [here](https://github.com/alvr-org/ALVR/wiki/Installation-guide).
+Follow the installation guide [here](https://github.com/nanvr/NANVR/wiki/Installation-guide).
 
 ## Troubleshooting
 
--   Please check the [Troubleshooting](https://github.com/alvr-org/ALVR/wiki/Troubleshooting) page, and also [Linux Troubleshooting](https://github.com/alvr-org/ALVR/wiki/Linux-Troubleshooting) if applicable.
--   Configuration recommendations and information may be found [here](https://github.com/alvr-org/ALVR/wiki/Information-and-Recommendations)
+-   Please check the [Troubleshooting](https://github.com/nanvr/NANVR/wiki/Troubleshooting) page, and also [Linux Troubleshooting](https://github.com/nanvr/NANVR/wiki/Linux-Troubleshooting) if applicable.
+-   Configuration recommendations and information may be found [here](https://github.com/nanvr/NANVR/wiki/Information-and-Recommendations)
 
 ## Uninstall (TODO)
 
 ## Build from source
 
-You can follow the guide [here](https://github.com/alvr-org/ALVR/wiki/Building-From-Source).
+You can follow the guide [here](https://github.com/nanvr/NANVR/wiki/Building-From-Source).
 
 ## License
 
-ALVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL only due to ffmpeg, x264 usage)
+NaNVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL only due to ffmpeg, x264 usage)
 
 ## Privacy policy
 
-ALVR apps do not directly collect any kind of data.
+NaNVR apps do not directly collect any kind of data.
 
 <!-- ## Donate
 
