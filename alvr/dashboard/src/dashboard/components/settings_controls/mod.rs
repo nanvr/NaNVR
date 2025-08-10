@@ -14,7 +14,7 @@ pub mod text;
 pub mod up_down;
 pub mod vector;
 
-use alvr_packets::{PathSegment, PathValuePair};
+use net_packets::{PathSegment, PathValuePair};
 use alvr_session::settings_schema::SchemaNode;
 use eframe::egui::Ui;
 use serde_json as json;

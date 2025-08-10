@@ -17,7 +17,7 @@ use client_graphics::{
     GraphicsContext, LobbyRenderer, LobbyViewParams, SDR_FORMAT_GL, StreamRenderer,
     StreamViewParams,
 };
-use alvr_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
+use net_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
 use alvr_session::{
     CodecType, FoveatedEncodingConfig, MediacodecPropType, MediacodecProperty, UpscalingConfig,
 };

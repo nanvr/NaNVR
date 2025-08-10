@@ -6,7 +6,7 @@ use gui_shared::{
         log_colors::{INFO_LIGHT, WARNING_LIGHT},
     },
 };
-use alvr_packets::PathValuePair;
+use net_packets::PathValuePair;
 use alvr_session::settings_schema::{SchemaEntry, SchemaNode};
 use eframe::egui::Ui;
 use serde_json as json;

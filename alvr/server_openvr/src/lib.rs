@@ -22,7 +22,7 @@ use shared::{
     warn,
 };
 use filepaths as afs;
-use alvr_packets::{ButtonValue, Haptics};
+use net_packets::{ButtonValue, Haptics};
 use alvr_server_core::{HandType, ServerCoreContext, ServerCoreEvent};
 use alvr_session::{CodecType, ControllersConfig};
 use std::{

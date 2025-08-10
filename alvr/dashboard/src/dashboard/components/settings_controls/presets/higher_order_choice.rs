@@ -6,7 +6,7 @@ use gui_shared::theme::{
     OK_GREEN,
     log_colors::{INFO_LIGHT, WARNING_LIGHT},
 };
-use alvr_packets::{PathSegment, PathValuePair};
+use net_packets::{PathSegment, PathValuePair};
 use eframe::egui::Ui;
 use serde_json as json;
 use settings_schema::{SchemaEntry, SchemaNode};
@@ -41,7 +41,7 @@ impl Control {
                         .iter()
                         .map(|modifier| match &modifier.operation {
                             PresetModifierOperation::Assign(value) => PathValuePair {
-                                path: alvr_packets::parse_path(&modifier.target_path),
+                                path: net_packets::parse_path(&modifier.target_path),
                                 value: value.clone(),
                             },
                         })

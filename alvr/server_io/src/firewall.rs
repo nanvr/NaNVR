@@ -1,4 +1,4 @@
-use alvr_packets::FirewallRulesAction;
+use net_packets::FirewallRulesAction;
 use std::{path::PathBuf, process::Command};
 
 // Errors:

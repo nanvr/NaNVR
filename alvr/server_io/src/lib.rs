@@ -12,7 +12,7 @@ use shared::{
     error, info,
 };
 use events::EventType;
-use alvr_packets::{ClientListAction, PathSegment, PathValuePair};
+use net_packets::{ClientListAction, PathSegment, PathValuePair};
 use alvr_session::{ClientConnectionConfig, SessionConfig, Settings};
 use serde_json as json;
 use std::{

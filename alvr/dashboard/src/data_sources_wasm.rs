@@ -1,5 +1,5 @@
 use events::Event;
-use alvr_packets::ServerRequest;
+use net_packets::ServerRequest;
 use eframe::{egui, web_sys};
 use ewebsock::{WsEvent, WsMessage, WsReceiver};
 use gloo_net::http::Request;

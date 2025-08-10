@@ -20,7 +20,7 @@ use shared::{
     parking_lot::Mutex,
 };
 use events::{EventType, TrackingEvent};
-use alvr_packets::TrackingData;
+use net_packets::TrackingData;
 use alvr_session::{
     BodyTrackingConfig, HeadsetConfig, PositionRecenteringMode, RotationRecenteringMode, Settings,
     VMCConfig, settings_schema::Switch,

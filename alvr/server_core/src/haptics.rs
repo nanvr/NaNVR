@@ -1,4 +1,4 @@
-use alvr_packets::Haptics;
+use net_packets::Haptics;
 use alvr_session::HapticsConfig;
 use std::time::Duration;
 

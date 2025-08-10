@@ -13,7 +13,7 @@ use shared::{
     parking_lot::{Condvar, Mutex, RwLock},
     wait_rwlock, warn,
 };
-use alvr_packets::{
+use net_packets::{
     AUDIO, ClientConnectionResult, ClientControlPacket, ClientStatistics, HAPTICS, Haptics,
     STATISTICS, ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO,
     VideoPacketHeader, VideoStreamingCapabilities, VideoStreamingCapabilitiesExt,

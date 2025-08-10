@@ -8,7 +8,7 @@ use shared::{
     AlvrCodecType, AlvrPose, AlvrViewParams, log,
     parking_lot::{Mutex, RwLock},
 };
-use alvr_packets::{ButtonEntry, ButtonValue, Haptics};
+use net_packets::{ButtonEntry, ButtonValue, Haptics};
 use alvr_session::CodecType;
 use std::{
     collections::{HashMap, VecDeque},

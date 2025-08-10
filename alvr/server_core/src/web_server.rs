@@ -8,7 +8,7 @@ use shared::{
     error, info, log,
 };
 use events::{ButtonEvent, EventType};
-use alvr_packets::{ButtonEntry, ClientListAction, ServerRequest};
+use net_packets::{ButtonEntry, ClientListAction, ServerRequest};
 use bytes::Buf;
 use futures::SinkExt;
 use headers::{

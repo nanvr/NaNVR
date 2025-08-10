@@ -23,7 +23,7 @@ use shared::{
     parking_lot::{Mutex, RwLock},
     warn,
 };
-use alvr_packets::{
+use net_packets::{
     BatteryInfo, ButtonEntry, ClientControlPacket, RealTimeConfig, StreamConfig, TrackingData,
 };
 use alvr_session::CodecType;

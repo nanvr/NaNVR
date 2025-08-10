@@ -4,7 +4,7 @@ use shared::{
     glam::{Quat, UVec2, Vec3},
     parking_lot::RwLock,
 };
-use alvr_packets::{FaceData, TrackingData};
+use net_packets::{FaceData, TrackingData};
 use alvr_session::CodecType;
 use eframe::{
     Frame, NativeOptions,

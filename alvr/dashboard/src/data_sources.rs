@@ -5,7 +5,7 @@ use shared::{
     warn,
 };
 use events::{Event, EventType};
-use alvr_packets::ServerRequest;
+use net_packets::ServerRequest;
 use alvr_server_io::ServerSessionManager;
 use eframe::egui;
 use std::{

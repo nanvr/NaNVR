@@ -18,7 +18,7 @@ use shared::{
     warn,
 };
 use events::{AdbEvent, ButtonEvent, EventType};
-use alvr_packets::{
+use net_packets::{
     AUDIO, ClientConnectionResult, ClientControlPacket, ClientListAction, ClientStatistics,
     HAPTICS, NegotiatedStreamingConfig, NegotiatedStreamingConfigExt, RealTimeConfig, STATISTICS,
     ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO, VideoPacketHeader,

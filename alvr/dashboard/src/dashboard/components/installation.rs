@@ -1,5 +1,5 @@
 use gui_shared::theme;
-use alvr_packets::{FirewallRulesAction, ServerRequest};
+use net_packets::{FirewallRulesAction, ServerRequest};
 use eframe::{
     egui::{Frame, Grid, Layout, RichText, Ui},
     emath::Align,

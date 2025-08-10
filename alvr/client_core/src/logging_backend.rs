@@ -3,7 +3,7 @@ use shared::{
     log::{Level, Record},
     parking_lot::Mutex,
 };
-use alvr_packets::ClientControlPacket;
+use net_packets::ClientControlPacket;
 use std::{
     sync::{LazyLock, mpsc},
     time::{Duration, Instant},

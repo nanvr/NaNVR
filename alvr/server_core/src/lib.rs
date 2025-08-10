@@ -25,7 +25,7 @@ use shared::{
 };
 use events::{EventType, HapticsEvent};
 use filepaths as afs;
-use alvr_packets::{
+use net_packets::{
     BatteryInfo, ButtonEntry, ClientListAction, DecoderInitializationConfig, Haptics,
     VideoPacketHeader,
 };

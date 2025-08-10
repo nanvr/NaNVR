@@ -1,7 +1,7 @@
 use crate::dashboard::ServerRequest;
 use shared::ConnectionState;
 use gui_shared::theme::{self, log_colors};
-use alvr_packets::ClientListAction;
+use net_packets::ClientListAction;
 use alvr_session::{ClientConnectionConfig, SessionConfig};
 use alvr_sockets::WIRED_CLIENT_HOSTNAME;
 use eframe::{

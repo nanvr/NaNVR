@@ -1,5 +1,5 @@
 use super::NestingInfo;
-use alvr_packets::PathValuePair;
+use net_packets::PathValuePair;
 use eframe::egui::Ui;
 use serde_json as json;
 

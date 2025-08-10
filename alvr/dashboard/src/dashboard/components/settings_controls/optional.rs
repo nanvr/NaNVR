@@ -1,5 +1,5 @@
 use super::{NestingInfo, SettingControl, reset};
-use alvr_packets::PathValuePair;
+use net_packets::PathValuePair;
 use alvr_session::settings_schema::SchemaNode;
 use eframe::{
     egui::{Layout, Ui},

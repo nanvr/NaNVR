@@ -3,7 +3,7 @@ use shared::{
     glam::{Vec2, Vec3},
     *,
 };
-use alvr_packets::{ButtonEntry, ButtonValue};
+use net_packets::{ButtonEntry, ButtonValue};
 use alvr_session::HandTrackingInteractionConfig;
 use std::{
     collections::{HashMap, HashSet},

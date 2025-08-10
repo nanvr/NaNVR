@@ -10,7 +10,7 @@ use shared::{
     glam::{Quat, Vec3},
     *,
 };
-use alvr_packets::{ButtonEntry, ButtonValue, FaceData, FaceExpressions, StreamConfig};
+use net_packets::{ButtonEntry, ButtonValue, FaceData, FaceExpressions, StreamConfig};
 use alvr_session::{BodyTrackingBDConfig, BodyTrackingSourcesConfig, FaceTrackingSourcesConfig};
 use openxr as xr;
 use std::{

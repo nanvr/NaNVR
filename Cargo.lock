@@ -193,21 +193,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_packets"
-version = "21.0.0-dev10"
-dependencies = [
- "alvr_session",
- "serde",
- "serde_json",
- "shared",
-]
-
-[[package]]
 name = "alvr_server_core"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_packets",
  "alvr_server_io",
  "alvr_session",
  "alvr_sockets",
@@ -222,6 +211,7 @@ dependencies = [
  "headers",
  "hyper 0.14.32",
  "mdns-sd",
+ "net_packets",
  "profiling",
  "reqwest 0.11.27",
  "rosc",
@@ -239,12 +229,12 @@ dependencies = [
 name = "alvr_server_io"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_packets",
  "alvr_session",
  "dirs",
  "encoding_rs_io",
  "events",
  "filepaths",
+ "net_packets",
  "runas",
  "serde_json",
  "shared",
@@ -254,13 +244,13 @@ dependencies = [
 name = "alvr_server_openvr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_packets",
  "alvr_server_core",
  "alvr_server_io",
  "alvr_session",
  "bindgen 0.71.1",
  "cc",
  "filepaths",
+ "net_packets",
  "pkg-config",
  "serde_json",
  "shared",
@@ -1123,7 +1113,6 @@ dependencies = [
 name = "client_core"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_packets",
  "alvr_session",
  "alvr_sockets",
  "alvr_system_info",
@@ -1134,6 +1123,7 @@ dependencies = [
  "mdns-sd",
  "ndk",
  "ndk-context",
+ "net_packets",
  "rand 0.9.0",
  "serde",
  "serde_json",
@@ -1159,7 +1149,6 @@ dependencies = [
 name = "client_openxr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_packets",
  "alvr_session",
  "alvr_system_info",
  "android-activity",
@@ -1168,6 +1157,7 @@ dependencies = [
  "jni",
  "libc",
  "ndk-context",
+ "net_packets",
  "openxr",
  "shared",
 ]
@@ -1176,11 +1166,11 @@ dependencies = [
 name = "client_tester"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_packets",
  "alvr_session",
  "client_core",
  "eframe",
  "env_logger",
+ "net_packets",
  "rand 0.9.0",
  "shared",
 ]
@@ -1498,7 +1488,6 @@ name = "dashboard"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_packets",
  "alvr_server_io",
  "alvr_session",
  "alvr_sockets",
@@ -1510,6 +1499,7 @@ dependencies = [
  "filepaths",
  "gui_shared",
  "ico",
+ "net_packets",
  "nvml-wrapper",
  "rand 0.9.0",
  "serde",
@@ -1946,8 +1936,8 @@ dependencies = [
 name = "events"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_packets",
  "alvr_session",
+ "net_packets",
  "serde",
  "serde_json",
  "shared",
@@ -3487,6 +3477,16 @@ dependencies = [
  "quote",
  "serde",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "net_packets"
+version = "21.0.0-dev10"
+dependencies = [
+ "alvr_session",
+ "serde",
+ "serde_json",
+ "shared",
 ]
 
 [[package]]

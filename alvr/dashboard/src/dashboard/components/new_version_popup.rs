@@ -1,7 +1,7 @@
 use std::{path::PathBuf, process::Command};
 
 use gui_shared::ModalButton;
-use alvr_packets::{PathValuePair, ServerRequest};
+use net_packets::{PathValuePair, ServerRequest};
 use eframe::egui::{self, Context, OpenUrl, Ui};
 
 pub enum CloseAction {
@@ -88,7 +88,7 @@ impl NewVersionPopup {
             if button == no_remind_button {
                 Some(CloseAction::CloseWithRequest(ServerRequest::SetValues(
                     vec![PathValuePair {
-                        path: alvr_packets::parse_path(
+                        path: net_packets::parse_path(
                             "session_settings.extra.new_version_popup.content.hide_while_version",
                         ),
                         value: serde_json::Value::String(self.version.clone()),

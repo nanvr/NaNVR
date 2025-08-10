@@ -1,5 +1,5 @@
 use super::{NestingInfo, SettingControl, collapsible};
-use alvr_packets::PathValuePair;
+use net_packets::PathValuePair;
 use alvr_session::settings_schema::SchemaNode;
 use eframe::egui::Ui;
 use serde_json as json;

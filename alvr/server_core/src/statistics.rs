@@ -1,6 +1,6 @@
 use shared::{HEAD_ID, SlidingWindowAverage};
 use events::{BitrateDirectives, EventType, GraphStatistics, StatisticsSummary};
-use alvr_packets::ClientStatistics;
+use net_packets::ClientStatistics;
 use std::{
     collections::{HashMap, VecDeque},
     time::{Duration, Instant},

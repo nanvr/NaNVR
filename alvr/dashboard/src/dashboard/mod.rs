@@ -10,7 +10,7 @@ use crate::{
 use shared::parking_lot::{Condvar, Mutex};
 use events::EventType;
 use gui_shared::theme;
-use alvr_packets::{PathValuePair, ServerRequest};
+use net_packets::{PathValuePair, ServerRequest};
 use alvr_session::SessionConfig;
 use eframe::egui::{self, Align, CentralPanel, Frame, Layout, Margin, RichText, SidePanel, Stroke};
 use std::{collections::BTreeMap, sync::Arc};
@@ -189,7 +189,7 @@ impl eframe::App for Dashboard {
                         SetupWizardRequest::Close { finished } => {
                             if finished {
                                 requests.push(ServerRequest::SetValues(vec![PathValuePair {
-                                    path: alvr_packets::parse_path(
+                                    path: net_packets::parse_path(
                                         "session_settings.extra.open_setup_wizard",
                                     ),
                                     value: serde_json::Value::Bool(false),

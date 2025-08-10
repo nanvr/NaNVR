@@ -1,5 +1,5 @@
 use shared::{DeviceMotion, LogEntry, LogSeverity, Pose, info};
-use alvr_packets::{ButtonValue, FaceData};
+use net_packets::{ButtonValue, FaceData};
 use alvr_session::SessionConfig;
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, time::Duration};

@@ -3,7 +3,7 @@ use crate::dashboard::components::{
     collapsible,
     up_down::{self, UpDownResult},
 };
-use alvr_packets::PathValuePair;
+use net_packets::PathValuePair;
 use alvr_session::settings_schema::SchemaNode;
 use eframe::{
     egui::{Layout, TextEdit, Ui},

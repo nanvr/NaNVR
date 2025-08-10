@@ -14,7 +14,7 @@ use shared::{
     parking_lot::RwLock,
 };
 use client_graphics::{GraphicsContext, StreamRenderer, StreamViewParams};
-use alvr_packets::{RealTimeConfig, StreamConfig, TrackingData};
+use net_packets::{RealTimeConfig, StreamConfig, TrackingData};
 use alvr_session::{
     ClientsideFoveationConfig, ClientsideFoveationMode, ClientsidePostProcessingConfig, CodecType,
     FoveatedEncodingConfig, MediacodecProperty, PassthroughMode, UpscalingConfig,

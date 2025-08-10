@@ -13,7 +13,7 @@ crate-type = ["cdylib"]
 shared.workspace = true
 client_core.workspace = true
 client_graphics.workspace = true
-alvr_packets.workspace = true
+net_packets.workspace = true
 alvr_session.workspace = true
 alvr_system_info.workspace = true
 
