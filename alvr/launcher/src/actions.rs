@@ -352,7 +352,7 @@ pub fn get_installations() -> Vec<InstallationInfo> {
 pub fn launch_dashboard(version: &str) -> Result<()> {
     let installation_dir = installations_dir().join(version);
 
-    let dashboard_path = installation_dir.join("alvr_streamer_linux/bin/alvr_dashboard");
+    let dashboard_path = installation_dir.join("alvr_streamer_linux/bin/dashboard");
 
     Command::new(dashboard_path).spawn()?;
 

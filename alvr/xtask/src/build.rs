@@ -160,7 +160,7 @@ pub fn build_streamer(
         cmd!(sh, "cargo build {common_flags_ref...}").run().unwrap();
 
         sh.copy_file(
-            artifacts_dir.join(afs::exec_fname("alvr_dashboard")),
+            artifacts_dir.join(afs::exec_fname("dashboard")),
             build_layout.dashboard_exe(),
         )
         .unwrap();

@@ -59,7 +59,7 @@ There is also a portable version for the PC that requires more manual steps to m
 #### Linux
 
 * Download `alvr_streamer_linux.tar.gz` from the release [download page](https://github.com/alvr-org/ALVR/releases/latest), extract it.
-* Run `bin/alvr_dashboard`
+* Run `bin/dashboard`
 
 #### Nightly
 
@@ -74,7 +74,7 @@ Since nightly releases can be unstable, always use matching versions for PC and 
 * Install `rustup` and a rust toolchain, if you don't have it: <https://wiki.archlinux.org/title/Rust#Arch_Linux_package>.
 * Install [alvr](https://aur.archlinux.org/packages/alvr)<sup>AUR</sup> (stable, amdgpu), or [alvr-nvidia](https://aur.archlinux.org/packages/alvr-nvidia)<sup>AUR</sup> (stable, nvidia), or [alvr-git](https://aur.archlinux.org/packages/alvr-git)<sup>AUR</sup>(nightly, unstable)
 * Install SteamVR, **launch it once** then close it.
-* Run `alvr_dashboard` or ALVR from your DE's application launcher.
+* Run `dashboard` or ALVR from your DE's application launcher.
 
 ### Flatpak
 

@@ -73,7 +73,7 @@ pub fn installer_path() -> PathBuf {
 }
 
 pub fn dashboard_fname() -> &'static str {
-    "alvr_dashboard"
+    "dashboard"
 }
 
 // Layout of the ALVR installation. All paths are absolute
