@@ -53,7 +53,7 @@ pub fn build_server_lib(
 
     let artifacts_dir = afs::target_dir().join(profile.to_string());
 
-    let build_dir = afs::build_dir().join("alvr_server_core");
+    let build_dir = afs::build_dir().join("server_core");
     sh.create_dir(&build_dir).unwrap();
 
     if let Some(root) = root {
@@ -64,12 +64,12 @@ pub fn build_server_lib(
     cmd!(sh, "cargo build {flags_ref...}").run().unwrap();
 
     sh.copy_file(
-        artifacts_dir.join(afs::dynlib_fname("alvr_server_core")),
+        artifacts_dir.join(afs::dynlib_fname("server_core")),
         &build_dir,
     )
     .unwrap();
 
-    let out = build_dir.join("alvr_server_core.h");
+    let out = build_dir.join("server_core.h");
     cmd!(sh, "cbindgen --output {out}").run().unwrap();
 }
 
@@ -134,7 +134,7 @@ pub fn build_streamer(
         };
 
         let profiling_flag = if common_build_flags.profiling {
-            vec!["--features", "alvr_server_core/trace-performance"]
+            vec!["--features", "server_core/trace-performance"]
         } else {
             vec![]
         };

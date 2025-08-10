@@ -23,7 +23,7 @@ use shared::{
 };
 use filepaths as afs;
 use net_packets::{ButtonValue, Haptics};
-use alvr_server_core::{HandType, ServerCoreContext, ServerCoreEvent};
+use server_core::{HandType, ServerCoreContext, ServerCoreEvent};
 use configuration::{CodecType, ControllersConfig};
 use std::{
     collections::VecDeque,
@@ -83,7 +83,7 @@ fn event_loop(events_receiver: mpsc::Receiver<ServerCoreEvent>) {
                     SetLocalViewParams(ffi_params.as_ptr());
                 },
                 ServerCoreEvent::Tracking { poll_timestamp } => {
-                    let headset_config = &alvr_server_core::settings().headset;
+                    let headset_config = &server_core::settings().headset;
 
                     let controllers_config = headset_config.controllers.clone().into_option();
                     let track_body = headset_config.body_tracking.enabled();
@@ -309,7 +309,7 @@ pub unsafe extern "C" fn register_buttons(instance_ptr: *mut c_void, device_id: 
         device_id
     };
 
-    for button_id in alvr_server_core::registered_button_set() {
+    for button_id in server_core::registered_button_set() {
         if let Some(info) = BUTTON_INFO.get(&button_id) {
             if info.device_id == mapped_device_id {
                 unsafe { RegisterButton(instance_ptr, button_id) };
@@ -427,7 +427,7 @@ extern "C" fn wait_for_vsync() {
         .and_then(|ctx| ctx.duration_until_next_vsync());
 
     if let Some(duration) = sleep_duration {
-        if alvr_server_core::settings()
+        if server_core::settings()
             .video
             .enforce_server_frame_pacing
         {
@@ -478,11 +478,11 @@ pub unsafe extern "C" fn HmdDriverFactory(
 
     static ONCE: Once = Once::new();
     ONCE.call_once(move || {
-        alvr_server_core::initialize_environment(filesystem_layout.clone());
+        server_core::initialize_environment(filesystem_layout.clone());
 
-        let log_to_disk = alvr_server_core::settings().extra.logging.log_to_disk;
+        let log_to_disk = server_core::settings().extra.logging.log_to_disk;
 
-        alvr_server_core::init_logging(
+        server_core::init_logging(
             log_to_disk.then(|| filesystem_layout.session_log()),
             Some(filesystem_layout.crash_log()),
         );
@@ -504,13 +504,13 @@ pub unsafe extern "C" fn HmdDriverFactory(
         graphics::initialize_shaders();
 
         unsafe {
-            LogError = Some(alvr_server_core::alvr_error);
-            LogWarn = Some(alvr_server_core::alvr_warn);
-            LogInfo = Some(alvr_server_core::alvr_info);
-            LogDebug = Some(alvr_server_core::alvr_dbg_server_impl);
-            LogEncoder = Some(alvr_server_core::alvr_dbg_encoder);
-            LogPeriodically = Some(alvr_server_core::alvr_log_periodically);
-            PathStringToHash = Some(alvr_server_core::alvr_path_to_id);
+            LogError = Some(server_core::alvr_error);
+            LogWarn = Some(server_core::alvr_warn);
+            LogInfo = Some(server_core::alvr_info);
+            LogDebug = Some(server_core::alvr_dbg_server_impl);
+            LogEncoder = Some(server_core::alvr_dbg_encoder);
+            LogPeriodically = Some(server_core::alvr_log_periodically);
+            PathStringToHash = Some(server_core::alvr_path_to_id);
             GetSerialNumber = Some(props::get_serial_number);
             SetOpenvrProps = Some(props::set_device_openvr_props);
             RegisterButtons = Some(register_buttons);

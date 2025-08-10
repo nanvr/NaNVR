@@ -193,39 +193,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_server_core"
-version = "21.0.0-dev10"
-dependencies = [
- "adb",
- "alvr_server_io",
- "ash",
- "bytes",
- "chrono",
- "configuration",
- "events",
- "fern",
- "filepaths",
- "flume",
- "futures",
- "headers",
- "hyper 0.14.32",
- "mdns-sd",
- "net_packets",
- "net_sockets",
- "profiling",
- "reqwest 0.11.27",
- "rosc",
- "serde",
- "serde_json",
- "shared",
- "sound",
- "sysinfo",
- "tokio",
- "tokio-tungstenite",
- "tokio-util",
-]
-
-[[package]]
 name = "alvr_server_io"
 version = "21.0.0-dev10"
 dependencies = [
@@ -244,7 +211,6 @@ dependencies = [
 name = "alvr_server_openvr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_server_core",
  "alvr_server_io",
  "bindgen 0.71.1",
  "cc",
@@ -253,6 +219,7 @@ dependencies = [
  "net_packets",
  "pkg-config",
  "serde_json",
+ "server_core",
  "shared",
  "sysinfo",
  "walkdir",
@@ -4961,6 +4928,39 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "server_core"
+version = "21.0.0-dev10"
+dependencies = [
+ "adb",
+ "alvr_server_io",
+ "ash",
+ "bytes",
+ "chrono",
+ "configuration",
+ "events",
+ "fern",
+ "filepaths",
+ "flume",
+ "futures",
+ "headers",
+ "hyper 0.14.32",
+ "mdns-sd",
+ "net_packets",
+ "net_sockets",
+ "profiling",
+ "reqwest 0.11.27",
+ "rosc",
+ "serde",
+ "serde_json",
+ "shared",
+ "sound",
+ "sysinfo",
+ "tokio",
+ "tokio-tungstenite",
+ "tokio-util",
 ]
 
 [[package]]

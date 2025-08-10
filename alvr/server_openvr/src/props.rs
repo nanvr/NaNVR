@@ -116,7 +116,7 @@ pub fn set_openvr_prop(instance_ptr: Option<*mut c_void>, device_id: u64, prop: 
 }
 
 fn serial_number(device_id: u64) -> String {
-    let settings = alvr_server_core::settings();
+    let settings = server_core::settings();
 
     if device_id == *HEAD_ID {
         match &settings.headset.emulation_mode {
@@ -193,7 +193,7 @@ pub extern "C" fn set_device_openvr_props(instance_ptr: *mut c_void, device_id: 
     #[expect(clippy::enum_glob_use)]
     use OpenvrPropKey::*;
 
-    let settings = alvr_server_core::settings();
+    let settings = server_core::settings();
 
     let set_prop = |key, value: &str| {
         set_openvr_prop(

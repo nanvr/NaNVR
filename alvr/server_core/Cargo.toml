@@ -1,5 +1,5 @@
 [package]
-name = "alvr_server_core"
+name = "server_core"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
