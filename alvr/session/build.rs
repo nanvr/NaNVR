@@ -3,7 +3,7 @@ use std::{env, fmt::Write, fs, path::PathBuf};
 
 fn main() {
     let openvr_driver_header_string =
-        fs::read_to_string(alvr_filesystem::workspace_dir().join("openvr/headers/openvr_driver.h"))
+        fs::read_to_string(filepaths::workspace_dir().join("openvr/headers/openvr_driver.h"))
             .expect("Missing openvr header files, did you clone the submodule?\n");
 
     let property_finder = Regex::new(

@@ -9,7 +9,7 @@ use shared::{
     parking_lot::Mutex,
     warn,
 };
-use alvr_filesystem as afs;
+use filepaths as afs;
 use serde_json::{self, json};
 use std::{
     ffi::OsStr,

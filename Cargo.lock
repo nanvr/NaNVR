@@ -114,9 +114,9 @@ dependencies = [
 name = "adb"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_filesystem",
  "alvr_system_info",
  "anyhow",
+ "filepaths",
  "shared",
  "ureq",
  "zip",
@@ -193,13 +193,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_filesystem"
-version = "21.0.0-dev10"
-dependencies = [
- "dirs",
-]
-
-[[package]]
 name = "alvr_graphics"
 version = "21.0.0-dev10"
 dependencies = [
@@ -226,11 +219,11 @@ name = "alvr_launcher"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_filesystem",
  "alvr_gui_common",
  "alvr_system_info",
  "anyhow",
  "eframe",
+ "filepaths",
  "flate2",
  "futures-util",
  "ico",
@@ -258,7 +251,6 @@ name = "alvr_server_core"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_filesystem",
  "alvr_packets",
  "alvr_server_io",
  "alvr_session",
@@ -268,6 +260,7 @@ dependencies = [
  "chrono",
  "events",
  "fern",
+ "filepaths",
  "flume",
  "futures",
  "headers",
@@ -290,12 +283,12 @@ dependencies = [
 name = "alvr_server_io"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_filesystem",
  "alvr_packets",
  "alvr_session",
  "dirs",
  "encoding_rs_io",
  "events",
+ "filepaths",
  "runas",
  "serde_json",
  "shared",
@@ -305,13 +298,13 @@ dependencies = [
 name = "alvr_server_openvr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_filesystem",
  "alvr_packets",
  "alvr_server_core",
  "alvr_server_io",
  "alvr_session",
  "bindgen 0.71.1",
  "cc",
+ "filepaths",
  "pkg-config",
  "serde_json",
  "shared",
@@ -323,9 +316,9 @@ dependencies = [
 name = "alvr_session"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_filesystem",
  "alvr_system_info",
  "bytemuck",
+ "filepaths",
  "regex",
  "serde",
  "serde_json",
@@ -364,8 +357,8 @@ dependencies = [
 name = "alvr_vrcompositor_wrapper"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_filesystem",
  "exec",
+ "filepaths",
  "shared",
  "xshell",
 ]
@@ -374,9 +367,9 @@ dependencies = [
 name = "alvr_vulkan_layer"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_filesystem",
  "bindgen 0.71.1",
  "cc",
+ "filepaths",
  "pkg-config",
  "shared",
  "walkdir",
@@ -386,7 +379,7 @@ dependencies = [
 name = "alvr_xtask"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_filesystem",
+ "filepaths",
  "pico-args",
  "pkg-config",
  "serde",
@@ -1535,7 +1528,6 @@ name = "dashboard"
 version = "21.0.0-dev10"
 dependencies = [
  "adb",
- "alvr_filesystem",
  "alvr_gui_common",
  "alvr_packets",
  "alvr_server_io",
@@ -1546,6 +1538,7 @@ dependencies = [
  "eframe",
  "env_logger",
  "events",
+ "filepaths",
  "ico",
  "nvml-wrapper",
  "rand 0.9.0",
@@ -2028,6 +2021,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4316185f709b23713e41e3195f90edef7fb00c3ed4adc79769cf09cc762a3b29"
 dependencies = [
  "log",
+]
+
+[[package]]
+name = "filepaths"
+version = "21.0.0-dev10"
+dependencies = [
+ "dirs",
 ]
 
 [[package]]

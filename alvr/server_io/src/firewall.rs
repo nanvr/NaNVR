@@ -7,7 +7,7 @@ use std::{path::PathBuf, process::Command};
 // other: command failed
 pub fn firewall_rules(
     action: FirewallRulesAction,
-    filesystem_layout: &alvr_filesystem::Layout,
+    filesystem_layout: &filepaths::Layout,
 ) -> Result<(), i32> {
     let action = if matches!(action, FirewallRulesAction::Add) {
         "add"

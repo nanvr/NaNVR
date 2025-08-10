@@ -193,7 +193,7 @@ pub unsafe extern "C" fn alvr_initialize_environment(
         PathBuf::from_str(unsafe { CStr::from_ptr(config_dir) }.to_str().unwrap()).unwrap();
     let log_dir = PathBuf::from_str(unsafe { CStr::from_ptr(log_dir) }.to_str().unwrap()).unwrap();
 
-    crate::initialize_environment(alvr_filesystem::Layout {
+    crate::initialize_environment(filepaths::Layout {
         config_dir,
         log_dir,
         ..Default::default()

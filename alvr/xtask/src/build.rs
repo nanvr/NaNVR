@@ -1,5 +1,5 @@
 use crate::CommonBuildFlags;
-use alvr_filesystem::{self as afs, Layout};
+use filepaths::{self as afs, Layout};
 use std::{
     env,
     fmt::{self, Display, Formatter},

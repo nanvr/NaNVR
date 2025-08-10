@@ -4,7 +4,7 @@ use crate::{
     command,
     dependencies::{self, OpenXRLoadersSelection},
 };
-use alvr_filesystem as afs;
+use filepaths as afs;
 use std::{fs, path::Path};
 use xshell::{Shell, cmd};
 

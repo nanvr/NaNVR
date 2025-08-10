@@ -15,7 +15,7 @@ sound = { path = "alvr/sound" }
 client_core = { path = "alvr/client_core" }
 shared = { path = "alvr/shared" }
 events = { path = "alvr/events" }
-alvr_filesystem = { path = "alvr/filesystem" }
+filepaths = { path = "alvr/filepaths" }
 alvr_graphics = { path = "alvr/graphics" }
 alvr_gui_common = { path = "alvr/gui_common" }
 alvr_packets = { path = "alvr/packets" }

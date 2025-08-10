@@ -19,7 +19,7 @@ pub struct WiredConnection {
 
 impl WiredConnection {
     pub fn new(
-        layout: &alvr_filesystem::Layout,
+        layout: &filepaths::Layout,
         download_progress_callback: impl Fn(usize, Option<usize>),
     ) -> Result<Self> {
         let adb_path = commands::require_adb(layout, download_progress_callback)?;

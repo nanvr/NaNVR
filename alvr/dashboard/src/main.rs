@@ -16,7 +16,7 @@ use data_sources::DataSources;
 #[cfg(target_arch = "wasm32")]
 use data_sources_wasm::DataSources;
 
-use alvr_filesystem as afs;
+use filepaths as afs;
 use dashboard::Dashboard;
 
 fn get_filesystem_layout() -> afs::Layout {
@@ -27,7 +27,7 @@ fn get_filesystem_layout() -> afs::Layout {
 fn main() {
     use shared::ALVR_VERSION;
     use shared::info;
-    use alvr_filesystem as afs;
+    use filepaths as afs;
     use eframe::{
         NativeOptions,
         egui::{IconData, ViewportBuilder},

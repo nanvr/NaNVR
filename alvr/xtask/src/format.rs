@@ -1,4 +1,4 @@
-use alvr_filesystem as afs;
+use filepaths as afs;
 use std::fs;
 use std::mem;
 use std::path::PathBuf;

@@ -21,7 +21,7 @@ use shared::{
     settings_schema::Switch,
     warn,
 };
-use alvr_filesystem as afs;
+use filepaths as afs;
 use alvr_packets::{ButtonValue, Haptics};
 use alvr_server_core::{HandType, ServerCoreContext, ServerCoreEvent};
 use alvr_session::{CodecType, ControllersConfig};
@@ -457,7 +457,7 @@ pub unsafe extern "C" fn HmdDriverFactory(
         return ptr::null_mut();
     };
     let Some(filesystem_layout) =
-        alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(&driver_dir)
+        filepaths::filesystem_layout_from_openvr_driver_root_dir(&driver_dir)
     else {
         return ptr::null_mut();
     };

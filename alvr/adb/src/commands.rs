@@ -1,7 +1,7 @@
 // https://android.googlesource.com/platform/packages/modules/adb/+/refs/heads/main/docs/user/adb.1.md
 
 use crate::parse::{self, Device, ForwardedPorts};
-use alvr_filesystem as afs;
+use filepaths as afs;
 use anyhow::{Context, Result, anyhow};
 use std::{
     collections::HashSet,

@@ -1,12 +1,12 @@
 use std::{env, path::PathBuf};
 
 fn get_ffmpeg_path() -> PathBuf {
-    alvr_filesystem::deps_dir().join("linux/ffmpeg/alvr_build")
+    filepaths::deps_dir().join("linux/ffmpeg/alvr_build")
 }
 
 #[cfg(feature = "gpl")]
 fn get_linux_x264_path() -> PathBuf {
-    alvr_filesystem::deps_dir().join("linux/x264/alvr_build")
+    filepaths::deps_dir().join("linux/x264/alvr_build")
 }
 
 fn main() {
@@ -47,7 +47,7 @@ fn main() {
         .cpp(true)
         .std("c++17")
         .files(source_files_paths)
-        .include(alvr_filesystem::workspace_dir().join("openvr/headers"))
+        .include(filepaths::workspace_dir().join("openvr/headers"))
         .include("cpp");
 
     #[cfg(debug_assertions)]
@@ -142,7 +142,7 @@ fn main() {
 
     println!(
         "cargo:rustc-link-search=native={}",
-        alvr_filesystem::workspace_dir()
+        filepaths::workspace_dir()
             .join("openvr/lib/linux64")
             .to_string_lossy()
     );

@@ -14,7 +14,7 @@ gpl = [] # Enable for FFmpeg support on Windows. Always enabled on Linux
 
 [dependencies]
 shared.workspace = true
-alvr_filesystem.workspace = true
+filepaths.workspace = true
 alvr_packets.workspace = true
 alvr_server_core.workspace = true
 alvr_server_io.workspace = true
@@ -24,7 +24,7 @@ serde_json = "1"
 sysinfo = "0.33"
 
 [build-dependencies]
-alvr_filesystem = { path = "../filesystem" }
+filepaths.workspace = true
 bindgen = "0.71"
 cc = { version = "1", features = ["parallel"] }
 walkdir = "2"

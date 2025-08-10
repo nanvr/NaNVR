@@ -9,7 +9,7 @@ license.workspace = true
 [dependencies]
 adb.workspace = true
 shared.workspace = true
-alvr_filesystem.workspace = true
+filepaths.workspace = true
 alvr_gui_common.workspace = true
 alvr_system_info.workspace = true
 

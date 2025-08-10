@@ -11,7 +11,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 shared.workspace = true
-alvr_filesystem.workspace = true
+filepaths.workspace = true
 
 [build-dependencies]
 bindgen = "0.71"

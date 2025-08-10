@@ -161,7 +161,7 @@ fn install_and_launch_apk(
         file.write_all(&apk_buffer)?;
     }
 
-    let layout = alvr_filesystem::Layout::new(&root);
+    let layout = filepaths::Layout::new(&root);
     let adb_path = adb::commands::require_adb(&layout, |downloaded, total| {
         let progress = total.map_or(0.0, |t| downloaded as f32 / t as f32);
         worker_message_sender
@@ -280,13 +280,13 @@ async fn install_server(
 
     //     for inst in get_installations() {
     //         if inst.version == session_version {
-    //             let source = alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
+    //             let source = filepaths::filesystem_layout_from_openvr_driver_root_dir(
     //                 &installations_dir().join(session_version),
     //             )
     //             .unwrap()
     //             .session();
 
-    //             let destination = alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
+    //             let destination = filepaths::filesystem_layout_from_openvr_driver_root_dir(
     //                 &installation_dir,
     //             )
     //             .unwrap()
@@ -324,7 +324,7 @@ pub fn get_installations() -> Vec<InstallationInfo> {
                     .map(|entry| {
                         // todo: adapt to linux
                         // let has_session_json = if cfg!(windows) {
-                        //     alvr_filesystem::filesystem_layout_from_openvr_driver_root_dir(
+                        //     filepaths::filesystem_layout_from_openvr_driver_root_dir(
                         //         &entry.path(),
                         //     )
                         //     .map(|layout| layout.session().exists())

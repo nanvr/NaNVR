@@ -24,7 +24,7 @@ use bindings::*;
 pub unsafe extern "C" fn ALVR_Negotiate(nli: *mut VkNegotiateLayerInterface) -> VkResult {
     unsafe {
         g_sessionPath = CString::new(
-            alvr_filesystem::filesystem_layout_invalid()
+            filepaths::filesystem_layout_invalid()
                 .session()
                 .to_string_lossy()
                 .to_string(),
