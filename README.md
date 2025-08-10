@@ -8,7 +8,7 @@ Stream VR games from your PC to your headset via Wi-Fi.
 This is a fork of [ALVR](https://github.com/nanvr/NANVR).
 
 ### Direct download to the latest version:
-### [Linux Launcher](https://github.com/nanvr/NANVR/releases/latest/download/alvr_launcher_linux.tar.gz)
+### [Linux Launcher](https://github.com/nanvr/NANVR/releases/latest/download/launcher_linux.tar.gz)
 
 ## Compatibility
 

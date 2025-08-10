@@ -4,8 +4,8 @@ Launcher will allow you to manage old, current and new installations of ALVR str
 
 ### Installation
 
-* Download `alvr_launcher_windows.zip` (on Windows) or `alvr_launcher_linux.tar.gz` (on Linux) from the release [download page](https://github.com/alvr-org/ALVR/releases/latest) and extract into a path that contains only ASCII characters (english only) and has edit permissions without administrator or root rights.
-* Run `ALVR Launcher.exe` (on Windows) or `alvr_launcher_linux/ALVR Launcher` (on Linux)
+* Download `launcher_windows.zip` (on Windows) or `launcher_linux.tar.gz` (on Linux) from the release [download page](https://github.com/alvr-org/ALVR/releases/latest) and extract into a path that contains only ASCII characters (english only) and has edit permissions without administrator or root rights.
+* Run `ALVR Launcher.exe` (on Windows) or `launcher_linux/ALVR Launcher` (on Linux)
 * Press `Add version` button
 * For default installation keep channel and version as is and press `Install`
 * Wait until it finishes downloading, installing (depends on your connection)

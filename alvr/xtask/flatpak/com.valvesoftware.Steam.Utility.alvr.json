@@ -33,9 +33,9 @@
         "cd alvr/launcher",
         "cargo xtask prepare-deps --platform linux --no-nvidia",
         "cargo xtask build-launcher --release",
-        "mv '/run/build/alvr/build/alvr_launcher_linux/ALVR Launcher' /app/utils/alvr/bin/alvr_launcher",
+        "mv '/run/build/alvr/build/launcher_linux/ALVR Launcher' /app/utils/alvr/bin/launcher",
         " # get read-only errors from following lines - because this is an extension - so leave as comments until someone figures this out",
-        " # install -D dashboard.ico /app/share/icons/alvr_launcher.ico",
+        " # install -D dashboard.ico /app/share/icons/launcher.ico",
         " # install -D com.valvesoftware.Steam.Utility.alvr.desktop /app/share/applications/com.valvesoftware.Steam.Utility.alvr.desktop"
       ],
       "sources": [ { "type": "dir", "path": "../../../" } ]

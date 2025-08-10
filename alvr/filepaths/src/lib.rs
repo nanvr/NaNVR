@@ -61,7 +61,7 @@ pub fn launcher_fname() -> String {
 }
 
 pub fn launcher_build_dir() -> PathBuf {
-    build_dir().join(format!("alvr_launcher_{OS}"))
+    build_dir().join(format!("launcher_{OS}"))
 }
 
 pub fn launcher_build_exe_path() -> PathBuf {

@@ -108,8 +108,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.prepare_release.outputs.upload_url }}
-          asset_path: ./build/alvr_launcher_linux.tar.gz
-          asset_name: alvr_launcher_linux.tar.gz
+          asset_path: ./build/launcher_linux.tar.gz
+          asset_name: launcher_linux.tar.gz
           asset_content_type: application/gzip
 
   build_flatpak_bundle:

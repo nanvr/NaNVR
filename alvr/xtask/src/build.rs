@@ -251,14 +251,14 @@ pub fn build_launcher(profile: Profile, common_build_flags: CommonBuildFlags) {
 
     sh.create_dir(afs::launcher_build_dir()).unwrap();
 
-    cmd!(sh, "cargo build -p alvr_launcher {common_flags_ref...}")
+    cmd!(sh, "cargo build -p launcher {common_flags_ref...}")
         .run()
         .unwrap();
 
     sh.copy_file(
         afs::target_dir()
             .join(profile.to_string())
-            .join(afs::exec_fname("alvr_launcher")),
+            .join(afs::exec_fname("launcher")),
         afs::launcher_build_exe_path(),
     )
     .unwrap();
