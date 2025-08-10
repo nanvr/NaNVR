@@ -193,23 +193,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_client_openxr"
-version = "21.0.0-dev10"
-dependencies = [
- "alvr_graphics",
- "alvr_packets",
- "alvr_session",
- "alvr_system_info",
- "android-activity",
- "client_core",
- "jni",
- "libc",
- "ndk-context",
- "openxr",
- "shared",
-]
-
-[[package]]
 name = "alvr_dashboard"
 version = "21.0.0-dev10"
 dependencies = [
@@ -1249,6 +1232,23 @@ dependencies = [
  "serde_json",
  "shared",
  "sound",
+]
+
+[[package]]
+name = "client_openxr"
+version = "21.0.0-dev10"
+dependencies = [
+ "alvr_graphics",
+ "alvr_packets",
+ "alvr_session",
+ "alvr_system_info",
+ "android-activity",
+ "client_core",
+ "jni",
+ "libc",
+ "ndk-context",
+ "openxr",
+ "shared",
 ]
 
 [[package]]

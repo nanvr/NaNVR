@@ -380,7 +380,7 @@ pub fn build_android_client(profile: Profile) {
     sh.copy_file(
         afs::target_dir()
             .join(profile.to_string())
-            .join("apk/alvr_client_openxr.apk"),
+            .join("apk/client_openxr.apk"),
         build_dir.join(format!("{ARTIFACT_NAME}.apk")),
     )
     .unwrap();

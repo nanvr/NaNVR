@@ -1,5 +1,5 @@
 [package]
-name = "alvr_client_openxr"
+name = "client_openxr"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
