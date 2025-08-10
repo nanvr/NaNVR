@@ -112,7 +112,7 @@ dependencies = [
 
 [[package]]
 name = "adb"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "anyhow",
  "filepaths",
@@ -969,7 +969,7 @@ dependencies = [
 
 [[package]]
 name = "client_core"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "android_logger",
  "app_dirs2",
@@ -991,7 +991,7 @@ dependencies = [
 
 [[package]]
 name = "client_graphics"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "configuration",
  "glow",
@@ -1005,7 +1005,7 @@ dependencies = [
 
 [[package]]
 name = "client_openxr"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "android-activity",
  "client_core",
@@ -1022,7 +1022,7 @@ dependencies = [
 
 [[package]]
 name = "client_tester"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "client_core",
  "configuration",
@@ -1079,7 +1079,7 @@ dependencies = [
 
 [[package]]
 name = "configuration"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "bytemuck",
  "filepaths",
@@ -1357,7 +1357,7 @@ dependencies = [
 
 [[package]]
 name = "dashboard"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "adb",
  "chrono",
@@ -1806,7 +1806,7 @@ dependencies = [
 
 [[package]]
 name = "events"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "configuration",
  "net_packets",
@@ -1857,7 +1857,7 @@ dependencies = [
 
 [[package]]
 name = "filepaths"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "dirs",
 ]
@@ -2293,7 +2293,7 @@ dependencies = [
 
 [[package]]
 name = "gui_shared"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "egui",
  "shared",
@@ -2930,7 +2930,7 @@ checksum = "e2db585e1d738fc771bf08a151420d3ed193d9d895a36df7f6f8a9456b911ddc"
 
 [[package]]
 name = "launcher"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "adb",
  "anyhow",
@@ -3353,7 +3353,7 @@ dependencies = [
 
 [[package]]
 name = "net_packets"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "configuration",
  "serde",
@@ -3363,7 +3363,7 @@ dependencies = [
 
 [[package]]
 name = "net_sockets"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "bincode",
  "configuration",
@@ -4899,7 +4899,7 @@ dependencies = [
 
 [[package]]
 name = "server_core"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "adb",
  "ash",
@@ -4932,7 +4932,7 @@ dependencies = [
 
 [[package]]
 name = "server_io"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "configuration",
  "dirs",
@@ -4947,7 +4947,7 @@ dependencies = [
 
 [[package]]
 name = "server_openvr"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "bindgen 0.71.1",
  "cc",
@@ -5006,7 +5006,7 @@ dependencies = [
 
 [[package]]
 name = "shared"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "anyhow",
  "backtrace",
@@ -5135,7 +5135,7 @@ dependencies = [
 
 [[package]]
 name = "sound"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "configuration",
  "cpal",
@@ -5474,7 +5474,7 @@ dependencies = [
 
 [[package]]
 name = "system_info"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "jni",
  "local-ip-address",
@@ -6101,7 +6101,7 @@ checksum = "051eb1abcf10076295e815102942cc58f9d5e3b4560e46e53c21e8ff6f3af7b1"
 
 [[package]]
 name = "vrcompositor_wrapper"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "exec",
  "filepaths",
@@ -6111,7 +6111,7 @@ dependencies = [
 
 [[package]]
 name = "vulkan_layer"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "bindgen 0.71.1",
  "cc",
@@ -7157,7 +7157,7 @@ checksum = "32ac00cd3f8ec9c1d33fb3e7958a82df6989c42d747bd326c822b1d625283547"
 
 [[package]]
 name = "xtask"
-version = "21.0.0-dev10"
+version = "1.0.0-dev0"
 dependencies = [
  "filepaths",
  "pico-args",
