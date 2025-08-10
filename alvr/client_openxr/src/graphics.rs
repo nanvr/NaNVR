@@ -1,5 +1,5 @@
 use shared::glam::UVec2;
-use alvr_graphics::GraphicsContext;
+use client_graphics::GraphicsContext;
 use alvr_session::ClientsidePostProcessingConfig;
 use openxr as xr;
 use std::ptr;
@@ -26,7 +26,7 @@ pub fn swapchain_format(
     gfx_ctx.make_current();
 
     let formats = session.enumerate_swapchain_formats().unwrap();
-    alvr_graphics::choose_swapchain_format(&formats, enable_hdr)
+    client_graphics::choose_swapchain_format(&formats, enable_hdr)
 }
 
 #[allow(unused_variables)]

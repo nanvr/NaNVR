@@ -13,7 +13,7 @@ use shared::{
     glam::{UVec2, Vec2},
     parking_lot::RwLock,
 };
-use alvr_graphics::{GraphicsContext, StreamRenderer, StreamViewParams};
+use client_graphics::{GraphicsContext, StreamRenderer, StreamViewParams};
 use alvr_packets::{RealTimeConfig, StreamConfig, TrackingData};
 use alvr_session::{
     ClientsideFoveationConfig, ClientsideFoveationMode, ClientsidePostProcessingConfig, CodecType,
@@ -150,7 +150,7 @@ impl StreamContext {
             None
         };
 
-        let target_view_resolution = alvr_graphics::compute_target_view_resolution(
+        let target_view_resolution = client_graphics::compute_target_view_resolution(
             config.view_resolution,
             &config.upscaling,
         );

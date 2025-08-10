@@ -13,7 +13,7 @@ use shared::{
     parking_lot::Mutex,
     warn,
 };
-use alvr_graphics::{
+use client_graphics::{
     GraphicsContext, LobbyRenderer, LobbyViewParams, SDR_FORMAT_GL, StreamRenderer,
     StreamViewParams,
 };
@@ -697,7 +697,7 @@ pub extern "C" fn alvr_start_stream_opengl(config: AlvrStreamConfig) {
     STREAM_RENDERER.set(Some(StreamRenderer::new(
         GRAPHICS_CONTEXT.with_borrow(|c| c.as_ref().unwrap().clone()),
         view_resolution,
-        alvr_graphics::compute_target_view_resolution(view_resolution, &upscaling),
+        client_graphics::compute_target_view_resolution(view_resolution, &upscaling),
         swapchain_textures,
         SDR_FORMAT_GL,
         foveated_encoding,

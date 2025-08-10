@@ -1,5 +1,5 @@
 [package]
-name = "alvr_graphics"
+name = "client_graphics"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

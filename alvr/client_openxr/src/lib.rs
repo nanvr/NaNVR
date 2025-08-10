@@ -14,7 +14,7 @@ use shared::{
     info,
     parking_lot::RwLock,
 };
-use alvr_graphics::GraphicsContext;
+use client_graphics::GraphicsContext;
 use alvr_session::{BodyTrackingBDConfig, BodyTrackingSourcesConfig};
 use alvr_system_info::Platform;
 use extra_extensions::{

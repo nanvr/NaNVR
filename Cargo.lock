@@ -193,20 +193,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_graphics"
-version = "21.0.0-dev10"
-dependencies = [
- "alvr_session",
- "glow",
- "glyph_brush_layout",
- "khronos-egl",
- "pollster 0.4.0",
- "shared",
- "wgpu",
- "wgpu-core",
-]
-
-[[package]]
 name = "alvr_gui_common"
 version = "21.0.0-dev10"
 dependencies = [
@@ -1167,13 +1153,13 @@ dependencies = [
 name = "client_core"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_graphics",
  "alvr_packets",
  "alvr_session",
  "alvr_sockets",
  "alvr_system_info",
  "android_logger",
  "app_dirs2",
+ "client_graphics",
  "env_logger",
  "mdns-sd",
  "ndk",
@@ -1186,15 +1172,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "client_graphics"
+version = "21.0.0-dev10"
+dependencies = [
+ "alvr_session",
+ "glow",
+ "glyph_brush_layout",
+ "khronos-egl",
+ "pollster 0.4.0",
+ "shared",
+ "wgpu",
+ "wgpu-core",
+]
+
+[[package]]
 name = "client_openxr"
 version = "21.0.0-dev10"
 dependencies = [
- "alvr_graphics",
  "alvr_packets",
  "alvr_session",
  "alvr_system_info",
  "android-activity",
  "client_core",
+ "client_graphics",
  "jni",
  "libc",
  "ndk-context",
