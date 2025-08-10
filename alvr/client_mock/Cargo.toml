@@ -1,5 +1,5 @@
 [package]
-name = "alvr_client_mock"
+name = "client_tester"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
