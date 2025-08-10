@@ -1,5 +1,5 @@
 [package]
-name = "alvr_vrcompositor_wrapper"
+name = "vrcompositor_wrapper"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

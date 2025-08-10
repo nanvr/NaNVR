@@ -259,16 +259,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alvr_vrcompositor_wrapper"
-version = "21.0.0-dev10"
-dependencies = [
- "exec",
- "filepaths",
- "shared",
- "xshell",
-]
-
-[[package]]
 name = "alvr_vulkan_layer"
 version = "21.0.0-dev10"
 dependencies = [
@@ -6133,6 +6123,16 @@ name = "virtue"
 version = "0.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "051eb1abcf10076295e815102942cc58f9d5e3b4560e46e53c21e8ff6f3af7b1"
+
+[[package]]
+name = "vrcompositor_wrapper"
+version = "21.0.0-dev10"
+dependencies = [
+ "exec",
+ "filepaths",
+ "shared",
+ "xshell",
+]
 
 [[package]]
 name = "walkdir"
