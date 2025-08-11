@@ -349,7 +349,6 @@ impl DataSources {
                     while running.value() {
                         match ws.read() {
                             Ok(tungstenite::Message::Text(json_string)) => {
-                                debug!("Server event: {json_string}");
                                 if let Ok(event) = serde_json::from_str(&json_string) {
                                     events_sender
                                         .send(PolledEvent {
