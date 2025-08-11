@@ -3,7 +3,7 @@ name = "server_openvr"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
-authors = ["alvr-org", "Valve Corporation"]
+authors = ["nanvr", "Valve Corporation"]
 license = "MIT"
 
 [lib]
