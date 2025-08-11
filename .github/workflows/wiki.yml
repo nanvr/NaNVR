@@ -1,17 +1,18 @@
-name: Publish to GitHub Wiki
-
+name: Publish wiki
 on:
   push:
     branches: [master]
-  workflow_dispatch:
-
+    paths:
+      - wiki/**
+      - .github/workflows/wiki.yml
+concurrency:
+  group: publish-wiki
+  cancel-in-progress: true
+permissions:
+  contents: write
 jobs:
-  wiki:
+  publish-wiki:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Publish to wiki
-        uses: cmbrose/github-docs-to-wiki@v0.24
-        with:
-          githubToken: ${{ secrets.GH_PAT }}
-          rootDocsFolder: "wiki"
+      - uses: actions/checkout@v3
+      - uses: Andrew-Chen-Wang/github-wiki-action@v4
