@@ -18,7 +18,7 @@ assignees: ''
 
 ## General Troubleshooting
 - [ ] I carefully followed the instructions in the [README]() and successfully completed the setup wizard
-- [ ] I read the [ALVR GitHub Wiki]()
+- [ ] I read the [NaNVR GitHub Wiki]()
 
 ## Environment
 
@@ -33,14 +33,14 @@ assignees: ''
 **Audio**:
 
 ### Installation
-**ALVR Version**:
+**NaNVR Version**:
 
-**ALVR Settings File**:
+**NaNVR Settings File**:
 
 **SteamVR Version**:
 
 **Install Type**:
-- [ ] Packaged (`aur`, launcher, etc)
+- [ ] Packaged (launcher, etc)
 - [ ] Portable (`tar.gz`)
 - [ ] Source
 
