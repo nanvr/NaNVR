@@ -5,7 +5,7 @@ mod data_sources;
 #[cfg(target_arch = "wasm32")]
 mod data_sources_wasm;
 #[cfg(not(target_arch = "wasm32"))]
-mod linux_checks;
+mod startup_checks;
 #[cfg(not(target_arch = "wasm32"))]
 mod logging_backend;
 #[cfg(not(target_arch = "wasm32"))]
@@ -54,7 +54,8 @@ fn main() {
             proc.kill();
         }
     }
-    linux_checks::audio_check();
+    startup_checks::hardware_checks();
+    startup_checks::audio_check();
 
     data_sources::clean_session();
 

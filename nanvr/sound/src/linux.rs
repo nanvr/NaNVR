@@ -54,6 +54,8 @@ pub fn try_load_pipewire() -> Result<()> {
         }
         error!("Make sure PipeWire is installed on your system, running and it's version is at least 0.3.49.
         To retry, please restart SteamVR with ALVR.");
+    } else {
+        debug!("Pipewire loads OK")
     }
     Ok(())
 }
