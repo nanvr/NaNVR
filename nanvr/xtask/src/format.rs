@@ -8,6 +8,14 @@ use std::path::PathBuf;
 use walkdir::WalkDir;
 use xshell::{Shell, cmd};
 
+fn clang_format_name() -> String {
+    if cmd_exists("clang-format-20").is_ok() {
+        "clang-format-20".into()
+    } else {
+        "clang-format".into()
+    }
+}
+
 fn files_to_format_paths() -> Vec<PathBuf> {
     let cpp_dir = nanpaths::crate_dir("server_openvr").join("cpp");
 
@@ -41,7 +49,8 @@ pub fn format() {
     cmd!(sh, "cargo fmt --all").run().unwrap();
 
     for path in files_to_format_paths() {
-        cmd!(sh, "clang-format -i {path}").run().unwrap();
+        let clang_format_name = clang_format_name();
+        cmd!(sh, "{clang_format_name} -i {path}").run().unwrap();
     }
 
     mem::drop(dir);
@@ -57,11 +66,7 @@ pub fn check_format() {
 
     for path in files_to_format_paths() {
         let content = fs::read_to_string(&path).unwrap();
-        let clang_command = if cmd_exists("clang-format-20").is_ok() {
-            "clang-format-20"
-        } else {
-            "clang-format"
-        };
+        let clang_command = clang_format_name();
         let mut output = cmd!(sh, "{clang_command} {path}").read().unwrap();
 
         if !content.ends_with('\n') {
