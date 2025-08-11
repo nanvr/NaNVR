@@ -309,10 +309,13 @@ bool Controller::OnPoseUpdate(uint64_t targetTimestampNs, float predictionS, Ffi
             SKELETON_BONE_COUNT
         );
 
-        float rotThumb = (handSkeleton->jointRotations[2].z + handSkeleton->jointRotations[2].y
-                          + handSkeleton->jointRotations[3].z + handSkeleton->jointRotations[3].y
-                          + handSkeleton->jointRotations[4].z + handSkeleton->jointRotations[4].y)
-            * 0.67f;
+        // todo: was unused, is it used for anything?
+        // float rotThumb = (handSkeleton->jointRotations[2].z + handSkeleton->jointRotations[2].y
+        //                   + handSkeleton->jointRotations[3].z + handSkeleton->jointRotations[3].y
+        //                   + handSkeleton->jointRotations[4].z +
+        //                   handSkeleton->jointRotations[4].y)
+        //     * 0.67f;
+
         float rotIndex = (handSkeleton->jointRotations[7].z + handSkeleton->jointRotations[8].z
                           + handSkeleton->jointRotations[9].z)
             * 0.67f;
