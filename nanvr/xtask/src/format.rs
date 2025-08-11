@@ -55,6 +55,10 @@ pub fn check_format() {
         .expect("cargo fmt check failed");
 
     for path in files_to_format_paths() {
+        let out_format = cmd!(sh, "clang-format -style=WebKit -dump-config")
+            .read()
+            .unwrap();
+        eprintln!("\n{out_format}\n");
         let content = fs::read_to_string(&path).unwrap();
         let mut output = cmd!(sh, "clang-format {path}").read().unwrap();
 
@@ -63,20 +67,15 @@ pub fn check_format() {
         }
         output.push('\n');
 
-        let out_format = cmd!(sh, "clang-format -style=WebKit -dump-config")
-            .read()
-            .unwrap();
-        eprintln!("\n{out_format}\n");
-
-        // if content != output {
-        //     let diff_out = create_patch(&content, &output);
-        //     let formatter = PatchFormatter::new().with_color();
-        //     panic!(
-        //         "clang-format check failed for {}, diff: {}",
-        //         path.display(),
-        //         formatter.fmt_patch(&diff_out)
-        //     );
-        // }
+        if content != output {
+            let diff_out = create_patch(&content, &output);
+            let formatter = PatchFormatter::new().with_color();
+            panic!(
+                "clang-format check failed for {}, diff: {}",
+                path.display(),
+                formatter.fmt_patch(&diff_out)
+            );
+        }
     }
 
     mem::drop(dir);
