@@ -95,8 +95,8 @@ fn build_ffmpeg(enable_nvenc: bool) {
     let _env_vars = sh.push_env("LDSOFLAGS", config_vars);
 
     // Patches ffmpeg for workarounds and patches that have yet to be unstreamed
-    let ffmpeg_command = "for p in ../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
-    cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
+    // let ffmpeg_command = "for p in ../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
+    // cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
 
     if enable_nvenc {
         /*
