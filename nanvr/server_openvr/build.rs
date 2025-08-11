@@ -4,7 +4,6 @@ fn get_ffmpeg_path() -> PathBuf {
     filepaths::deps_dir().join("linux/ffmpeg/nanvr_build")
 }
 
-#[cfg(feature = "gpl")]
 fn get_linux_x264_path() -> PathBuf {
     filepaths::deps_dir().join("linux/x264/nanvr_build")
 }
@@ -55,48 +54,41 @@ fn main() {
     assert!(ffmpeg_path.join("include").exists());
     build.include(ffmpeg_path.join("include"));
 
-    #[cfg(feature = "gpl")]
-    {
-        let x264_path = get_linux_x264_path();
+    let x264_path = get_linux_x264_path();
 
-        assert!(x264_path.join("include").exists());
-        build.include(x264_path.join("include"));
-    }
+    assert!(x264_path.join("include").exists());
+    build.include(x264_path.join("include"));
 
-    #[cfg(feature = "gpl")]
     build.define("ALVR_GPL", None);
 
     build.compile("bindings");
 
-    #[cfg(feature = "gpl")]
-    {
-        let x264_path = get_linux_x264_path();
-        let x264_lib_path = x264_path.join("lib");
+    let x264_path = get_linux_x264_path();
+    let x264_lib_path = x264_path.join("lib");
 
-        println!(
-            "cargo:rustc-link-search=native={}",
-            x264_lib_path.to_string_lossy()
-        );
+    println!(
+        "cargo:rustc-link-search=native={}",
+        x264_lib_path.to_string_lossy()
+    );
 
-        let x264_pkg_path = x264_lib_path.join("pkgconfig");
-        assert!(x264_pkg_path.exists());
+    let x264_pkg_path = x264_lib_path.join("pkgconfig");
+    assert!(x264_pkg_path.exists());
 
-        let x264_pkg_path = x264_pkg_path.to_string_lossy().to_string();
-        unsafe {
-            env::set_var(
-                "PKG_CONFIG_PATH",
-                env::var("PKG_CONFIG_PATH").map_or(x264_pkg_path.clone(), |old| {
-                    format!("{x264_pkg_path}:{old}")
-                }),
-            )
-        };
-        println!("cargo:rustc-link-lib=static=x264");
+    let x264_pkg_path = x264_pkg_path.to_string_lossy().to_string();
+    unsafe {
+        env::set_var(
+            "PKG_CONFIG_PATH",
+            env::var("PKG_CONFIG_PATH").map_or(x264_pkg_path.clone(), |old| {
+                format!("{x264_pkg_path}:{old}")
+            }),
+        )
+    };
+    println!("cargo:rustc-link-lib=static=x264");
 
-        pkg_config::Config::new()
-            .statik(true)
-            .probe("x264")
-            .unwrap();
-    }
+    pkg_config::Config::new()
+        .statik(true)
+        .probe("x264")
+        .unwrap();
 
     // ffmpeg
     let ffmpeg_path = get_ffmpeg_path();
@@ -146,11 +138,6 @@ fn main() {
     println!("cargo:rustc-link-lib=openvr_api");
 
     pkg_config::Config::new().probe("vulkan").unwrap();
-
-    #[cfg(not(feature = "gpl"))]
-    {
-        pkg_config::Config::new().probe("x264").unwrap();
-    }
 
     // fail build if there are undefined symbols in final library
     println!("cargo:rustc-cdylib-link-arg=-Wl,--no-undefined");

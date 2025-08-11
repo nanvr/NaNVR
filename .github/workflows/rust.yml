@@ -30,7 +30,7 @@ jobs:
       - name: Prepare deps
         env:
           RUST_BACKTRACE: 1
-        run:  cargo xtask prepare-deps --platform linux --no-nvidia
+        run:  cargo xtask prepare-deps --platform linux
 
       - run: cargo xtask clippy --ci
 

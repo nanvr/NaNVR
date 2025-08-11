@@ -47,12 +47,10 @@ SUBCOMMANDS:
 FLAGS:
     --help                  Print this text
     --keep-config           Preserve the configuration file between rebuilds (session.json)
-    --no-nvidia             Disables nVidia support on Linux. For prepare-deps subcommand
+    --nvenc                 Enabled nvenc support on Linux.
     --release               Optimized build with less debug checks. For build subcommands
     --profiling             Enable Profiling
-    --gpl                   Bundle GPL libraries (FFmpeg, x264)
     --nightly               Append nightly tag to versions. For bump subcommand
-    --no-rebuild            Do not rebuild the streamer with run-streamer
     --ci                    Do some CI related tweaks. Depends on the other flags and subcommand
     --no-stdcpp             Disable linking to libc++_shared with build-client-lib
     --all-targets           For prepare-deps and build-client-lib subcommand, will build for all android supported ABI targets
@@ -71,7 +69,7 @@ ARGS:
                             relative paths, which requires conforming to FHS on Linux
 ";
 
-enum BuildPlatform {
+enum TargetBuildPlatform {
     Linux,
     Android,
 }
@@ -170,16 +168,14 @@ fn main() {
     if args.contains(["-h", "--help"]) {
         println!("{HELP_STR}");
     } else if let Ok(Some(subcommand)) = args.subcommand() {
-        let no_nvidia = args.contains("--no-nvidia");
+        let enable_nvenc = args.contains("--nvenc");
         let is_release = args.contains("--release");
         let profile = if is_release {
             Profile::Release
         } else {
             Profile::Debug
         };
-        let gpl = args.contains("--gpl");
-        let is_nightly = args.contains("--nightly");
-        let no_rebuild = args.contains("--no-rebuild");
+        let is_nightly: bool = args.contains("--nightly");
         let for_ci = args.contains("--ci");
         let keep_config = args.contains("--keep-config");
         let link_stdcpp = !args.contains("--no-stdcpp");
@@ -193,8 +189,8 @@ fn main() {
 
         let platform: Option<String> = args.opt_value_from_str("--platform").unwrap();
         let platform = platform.as_deref().map(|platform| match platform {
-            "linux" => BuildPlatform::Linux,
-            "android" => BuildPlatform::Android,
+            "linux" => TargetBuildPlatform::Linux,
+            "android" => TargetBuildPlatform::Android,
             _ => print_help_and_exit("Unrecognized platform"),
         });
 
@@ -213,24 +209,26 @@ fn main() {
             match subcommand.as_str() {
                 "prepare-deps" => {
                     if let Some(platform) = platform {
-                        if matches!(platform, BuildPlatform::Android) {
+                        if matches!(platform, TargetBuildPlatform::Android) {
                             dependencies::android::build_deps(
                                 all_targets,
                                 OpenXRLoadersSelection::All,
                             );
                         } else {
-                            dependencies::prepare_server_deps(Some(platform), !no_nvidia);
+                            dependencies::prepare_server_deps(Some(platform), enable_nvenc);
                         }
                     } else {
-                        dependencies::prepare_server_deps(platform, !no_nvidia);
+                        dependencies::prepare_server_deps(platform, enable_nvenc);
 
                         dependencies::android::build_deps(all_targets, OpenXRLoadersSelection::All);
                     }
                 }
-                "download-server-deps" => dependencies::download_server_deps(platform, !no_nvidia),
-                "build-server-deps" => dependencies::build_server_deps(platform, !no_nvidia),
+                "download-server-deps" => {
+                    dependencies::download_server_deps(platform, enable_nvenc)
+                }
+                "build-server-deps" => dependencies::build_server_deps(platform, enable_nvenc),
                 "build-streamer" => {
-                    build::build_streamer(profile, gpl, None, common_build_flags, keep_config)
+                    build::build_streamer(profile, None, common_build_flags, keep_config)
                 }
                 "build-launcher" => build::build_launcher(profile, common_build_flags),
                 "build-server-lib" => build::build_server_lib(profile, None, common_build_flags),
@@ -242,18 +240,15 @@ fn main() {
                     build::build_android_client_openxr_lib(profile, link_stdcpp)
                 }
                 "run-streamer" => {
-                    if !no_rebuild {
-                        build::build_streamer(profile, gpl, None, common_build_flags, keep_config);
-                    }
+                    build::build_streamer(profile, None, common_build_flags, keep_config);
+
                     run_streamer();
                 }
                 "run-launcher" => {
-                    if !no_rebuild {
-                        build::build_launcher(profile, common_build_flags);
-                    }
+                    build::build_launcher(profile, common_build_flags);
                     run_launcher();
                 }
-                "package-streamer" => packaging::package_streamer(platform, !no_nvidia, gpl, root),
+                "package-streamer" => packaging::package_streamer(platform, enable_nvenc, root),
                 "package-launcher" => packaging::package_launcher(),
                 "package-client" => packaging::package_client_openxr(package_flavor),
                 "package-client-lib" => packaging::package_client_lib(link_stdcpp, all_targets),

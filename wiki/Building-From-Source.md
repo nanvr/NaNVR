@@ -54,20 +54,16 @@ If you are on Linux, install these additional packages:
 Move to the root directory of the project, then run this command (paying attention to the bullet points below):
 
 ```bash
-cargo xtask prepare-deps --platform [your platform] [--gpl] [--no-nvidia]
+cargo xtask prepare-deps --platform linux
 ```
 
-* Replace `[your platform]` with your computer OS, either `windows` or `linux`
-* Use the `--gpl` flag if you want to download, build and bundle FFmpeg, x264 inside the ALVR streamer. As the name suggests, if you use this flag you can only redistribute the final package as GPLv2.0 licensed.
-* **Linux only:** Use the `--no-nvidia` flag if you have a AMD or Intel gpu.
+* Use the `--nvenc` flag if you have a Nvidia GPU.
 
 Next up is the proper build of the streamer. Run the following:
 
 ```bash
-cargo xtask build-streamer --release [--gpl]
+cargo xtask build-streamer --release
 ```
-
-Again, the `--gpl` flag is needed only if you want to bundle FFmpeg and x264.
 
 You can find the resulting package in `build/alvr_streamer_[your platform]`
 

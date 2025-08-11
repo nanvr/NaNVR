@@ -75,7 +75,6 @@ pub fn build_server_lib(
 
 pub fn build_streamer(
     profile: Profile,
-    gpl: bool,
     root: Option<String>,
     common_build_flags: CommonBuildFlags,
     keep_config: bool,
@@ -127,12 +126,6 @@ pub fn build_streamer(
 
     // build server
     {
-        let gpl_flag = if gpl {
-            vec!["--features", "gpl"]
-        } else {
-            vec![]
-        };
-
         let profiling_flag = if common_build_flags.profiling {
             vec!["--features", "server_core/trace-performance"]
         } else {
@@ -142,7 +135,7 @@ pub fn build_streamer(
         let _push_guard = sh.push_dir(filepaths::crate_dir("server_openvr"));
         cmd!(
             sh,
-            "cargo build {common_flags_ref...} {gpl_flag...} {profiling_flag...}"
+            "cargo build {common_flags_ref...} {profiling_flag...}"
         )
         .run()
         .unwrap();

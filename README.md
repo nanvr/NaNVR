@@ -65,7 +65,7 @@ You can follow the guide [here](https://github.com/nanvr/NANVR/wiki/Building-Fro
 
 ## License
 
-NaNVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL only due to ffmpeg, x264 usage)
+NaNVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL only due to ffmpeg, x264 usage, GPL only build in any case)
 
 ## Privacy policy
 

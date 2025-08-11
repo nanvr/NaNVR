@@ -1,5 +1,5 @@
 use crate::{
-    BuildPlatform,
+    TargetBuildPlatform,
     build::{self, Profile},
     command,
     dependencies::{self, OpenXRLoadersSelection},
@@ -44,9 +44,8 @@ pub fn include_licenses(root_path: &Path) {
 }
 
 pub fn package_streamer(
-    platform: Option<BuildPlatform>,
+    platform: Option<TargetBuildPlatform>,
     enable_nvenc: bool,
-    gpl: bool,
     root: Option<String>,
 ) {
     let sh = Shell::new().unwrap();
@@ -55,7 +54,6 @@ pub fn package_streamer(
 
     build::build_streamer(
         Profile::Distribution,
-        gpl,
         root,
         crate::CommonBuildFlags {
             locked: true,

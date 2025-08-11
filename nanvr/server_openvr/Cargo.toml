@@ -9,9 +9,6 @@ license = "MIT"
 [lib]
 crate-type = ["cdylib"]
 
-[features]
-gpl = [] # Enable for FFmpeg support on Windows. Always enabled on Linux
-
 [dependencies]
 shared.workspace = true
 filepaths.workspace = true
