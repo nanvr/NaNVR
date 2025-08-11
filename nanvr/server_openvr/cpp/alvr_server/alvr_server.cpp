@@ -202,7 +202,7 @@ void* CppOpenvrEntryPoint(const char* interface_name, int* return_code) {
 
 bool InitializeStreaming() {
     Settings::Instance().Load();
-    // clang-format off
+
     if (!g_driver_provider.devices_initialized) {
         if (!g_driver_provider.early_hmd_initialization) {
             auto hmd = new Hmd();
@@ -325,7 +325,7 @@ bool InitializeStreaming() {
 
         g_driver_provider.devices_initialized = true;
     }
-    // clang-format on
+
     if (g_driver_provider.hmd) {
         g_driver_provider.hmd->StartStreaming();
     }

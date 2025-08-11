@@ -1,3 +1,4 @@
+use cmd_exists::cmd_exists;
 use diffy::PatchFormatter;
 use diffy::create_patch;
 use filepaths as nanpaths;
@@ -56,7 +57,12 @@ pub fn check_format() {
 
     for path in files_to_format_paths() {
         let content = fs::read_to_string(&path).unwrap();
-        let mut output = cmd!(sh, "clang-format {path}").read().unwrap();
+        let clang_command = if cmd_exists("clang-format-20").is_ok() {
+            "clang-format-20"
+        } else {
+            "clang-format"
+        };
+        let mut output = cmd!(sh, "{clang_command} {path}").read().unwrap();
 
         if !content.ends_with('\n') {
             panic!("file {} missing final newline", path.display());
@@ -67,7 +73,7 @@ pub fn check_format() {
             let diff_out = create_patch(&content, &output);
             let formatter = PatchFormatter::new().with_color();
             panic!(
-                "clang-format check failed for {}, diff: {}",
+                "{clang_command} check failed for {}, diff: {}",
                 path.display(),
                 formatter.fmt_patch(&diff_out)
             );

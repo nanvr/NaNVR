@@ -1031,6 +1031,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "cmd-exists"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "023c523050bdbe68ab3814ae3d78f343e71710bb4d1e08df25bc2eda7d58dd3d"
+
+[[package]]
 name = "codespan-reporting"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7177,6 +7183,7 @@ checksum = "32ac00cd3f8ec9c1d33fb3e7958a82df6989c42d747bd326c822b1d625283547"
 name = "xtask"
 version = "1.0.0-dev0"
 dependencies = [
+ "cmd-exists",
  "diffy",
  "filepaths",
  "pico-args",
