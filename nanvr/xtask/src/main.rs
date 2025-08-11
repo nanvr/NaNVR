@@ -19,14 +19,6 @@ use xshell::{Shell, cmd};
 #[command(name = "cargo xtask")]
 #[command(about = "Developement actions for ALVR", long_about = None)]
 struct Cli {
-    /// Specify version to set with the bump-versions subcommand
-    #[arg(long)]
-    version: Option<String>,
-    /// Installation root. By default no root is set and paths are calculated
-    /// using relative paths, which requires conforming to FHS on Linux
-    #[arg(long, value_name = "PATH")]
-    root: Option<String>,
-
     #[command(subcommand)]
     commands: Commands,
 }
@@ -126,6 +118,8 @@ enum Commands {
     },
     /// Build streamer with distribution profile, make archive
     PackageStreamer {
+        /// Installation root. By default no root is set and paths are calculated
+        /// using relative paths, which requires conforming to FHS on Linux
         #[arg(long)]
         root: Option<String>,
         /// Enables nvenc support on Linux
@@ -156,6 +150,7 @@ enum Commands {
     Clean,
     /// Bump streamer and client package versions
     Bump {
+        /// Bump version
         #[arg(long)]
         version: Option<String>,
         /// Append nightly tag to versions
@@ -363,6 +358,7 @@ fn main() {
     }
     let elapsed_time = begin_time.elapsed();
 
+    // todo: useless on run commands
     println!(
         "\nDone [{}m {}s]\n",
         elapsed_time.as_secs() / 60,
