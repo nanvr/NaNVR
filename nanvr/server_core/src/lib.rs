@@ -18,7 +18,7 @@ use crate::connection::VideoPacket;
 use bitrate::{BitrateManager, DynamicEncoderParams};
 use configuration::{CodecType, OpenvrProperty, Settings};
 use events::{EventType, HapticsEvent};
-use filepaths as nanpaths;
+
 use net_packets::{
     BatteryInfo, ButtonEntry, ClientListAction, DecoderInitializationConfig, Haptics,
     VideoPacketHeader,
@@ -51,7 +51,7 @@ use std::{
 use tokio::{runtime::Runtime, sync::broadcast};
 use tracking::TrackingManager;
 
-static FILESYSTEM_LAYOUT: OnceLock<nanpaths::Layout> = OnceLock::new();
+static FILESYSTEM_LAYOUT: OnceLock<filepaths::Layout> = OnceLock::new();
 
 // This is lazily initialized when initializing logging or ServerCoreContext. So FILESYSTEM_LAYOUT
 // needs to be initialized first using initialize_environment().
@@ -63,7 +63,7 @@ static SESSION_MANAGER: LazyLock<RwLock<ServerSessionManager>> = LazyLock::new(|
     ))
 });
 
-pub fn initialize_environment(layout: nanpaths::Layout) {
+pub fn initialize_environment(layout: filepaths::Layout) {
     FILESYSTEM_LAYOUT.set(layout).unwrap();
 
     // This ensures that the session is written to disk
@@ -139,7 +139,7 @@ pub fn create_recording_file(connection_context: &ConnectionContext, settings: &
 
 pub fn notify_restart_driver() {
     if sysinfo::System::new_all()
-        .processes_by_name(OsStr::new(&nanpaths::dashboard_fname()))
+        .processes_by_name(OsStr::new(&filepaths::dashboard_fname()))
         .next()
         .is_some()
     {

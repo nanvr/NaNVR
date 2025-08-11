@@ -1,5 +1,5 @@
 use crate::command;
-use filepaths as nanpaths;
+
 use std::fs;
 use xshell::{Shell, cmd};
 
@@ -43,7 +43,7 @@ pub fn build_deps(enable_nvenc: bool) {
 }
 
 fn deps_path() -> std::path::PathBuf {
-    nanpaths::deps_dir().join("linux")
+    filepaths::deps_dir().join("linux")
 }
 
 fn x264_path() -> std::path::PathBuf {

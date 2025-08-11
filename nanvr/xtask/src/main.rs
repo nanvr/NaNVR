@@ -8,8 +8,8 @@ mod version;
 
 use crate::build::Profile;
 use dependencies::OpenXRLoadersSelection;
-use filepaths as nanpaths;
-use nanpaths::Layout;
+
+use filepaths::Layout;
 use packaging::ReleaseFlavor;
 use pico_args::Arguments;
 use std::{fs, process, time::Instant};
@@ -93,23 +93,23 @@ pub fn print_help_and_exit(message: &str) -> ! {
 pub fn run_streamer() {
     let sh = Shell::new().unwrap();
 
-    let dashboard_exe = Layout::new(&nanpaths::streamer_build_dir()).dashboard_exe();
+    let dashboard_exe = Layout::new(&filepaths::streamer_build_dir()).dashboard_exe();
     cmd!(sh, "{dashboard_exe}").run().unwrap();
 }
 
 pub fn run_launcher() {
     let sh = Shell::new().unwrap();
 
-    let launcher_exe = nanpaths::launcher_build_exe_path();
+    let launcher_exe = filepaths::launcher_build_exe_path();
     cmd!(sh, "{launcher_exe}").run().unwrap();
 }
 
 pub fn clean() {
-    fs::remove_dir_all(nanpaths::build_dir()).ok();
-    fs::remove_dir_all(nanpaths::deps_dir()).ok();
-    if nanpaths::target_dir() == nanpaths::workspace_dir().join("target") {
+    fs::remove_dir_all(filepaths::build_dir()).ok();
+    fs::remove_dir_all(filepaths::deps_dir()).ok();
+    if filepaths::target_dir() == filepaths::workspace_dir().join("target") {
         // Detete target folder only if in the local wokspace!
-        fs::remove_dir_all(nanpaths::target_dir()).ok();
+        fs::remove_dir_all(filepaths::target_dir()).ok();
     }
 }
 

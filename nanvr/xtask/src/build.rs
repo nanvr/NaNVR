@@ -1,5 +1,5 @@
 use crate::CommonBuildFlags;
-use filepaths::{self as nanpaths, Layout};
+use filepaths::Layout;
 use std::{
     env,
     fmt::{self, Display, Formatter},
@@ -51,20 +51,20 @@ pub fn build_server_lib(
     }
     let flags_ref = &flags;
 
-    let artifacts_dir = nanpaths::target_dir().join(profile.to_string());
+    let artifacts_dir = filepaths::target_dir().join(profile.to_string());
 
-    let build_dir = nanpaths::build_dir().join("server_core");
+    let build_dir = filepaths::build_dir().join("server_core");
     sh.create_dir(&build_dir).unwrap();
 
     if let Some(root) = root {
         sh.set_var("ALVR_ROOT_DIR", root);
     }
 
-    let _push_guard = sh.push_dir(nanpaths::crate_dir("server_core"));
+    let _push_guard = sh.push_dir(filepaths::crate_dir("server_core"));
     cmd!(sh, "cargo build {flags_ref...}").run().unwrap();
 
     sh.copy_file(
-        artifacts_dir.join(nanpaths::dynlib_fname("server_core")),
+        artifacts_dir.join(filepaths::dynlib_fname("server_core")),
         &build_dir,
     )
     .unwrap();
@@ -82,7 +82,7 @@ pub fn build_streamer(
 ) {
     let sh = Shell::new().unwrap();
 
-    let build_layout = Layout::new(&nanpaths::streamer_build_dir());
+    let build_layout = Layout::new(&filepaths::streamer_build_dir());
 
     let mut common_flags = vec![];
     match profile {
@@ -103,7 +103,7 @@ pub fn build_streamer(
         common_flags.push("--offline");
     }
 
-    let artifacts_dir = nanpaths::target_dir().join(profile.to_string());
+    let artifacts_dir = filepaths::target_dir().join(profile.to_string());
 
     let common_flags_ref = &common_flags;
 
@@ -113,7 +113,7 @@ pub fn build_streamer(
         None
     };
 
-    sh.remove_path(nanpaths::streamer_build_dir()).ok();
+    sh.remove_path(filepaths::streamer_build_dir()).ok();
     sh.create_dir(build_layout.openvr_driver_lib_dir()).unwrap();
     sh.create_dir(&build_layout.executables_dir).unwrap();
 
@@ -139,7 +139,7 @@ pub fn build_streamer(
             vec![]
         };
 
-        let _push_guard = sh.push_dir(nanpaths::crate_dir("server_openvr"));
+        let _push_guard = sh.push_dir(filepaths::crate_dir("server_openvr"));
         cmd!(
             sh,
             "cargo build {common_flags_ref...} {gpl_flag...} {profiling_flag...}"
@@ -148,7 +148,7 @@ pub fn build_streamer(
         .unwrap();
 
         sh.copy_file(
-            artifacts_dir.join(nanpaths::dynlib_fname("server_openvr")),
+            artifacts_dir.join(filepaths::dynlib_fname("server_openvr")),
             build_layout.openvr_driver_lib(),
         )
         .unwrap();
@@ -156,18 +156,18 @@ pub fn build_streamer(
 
     // Build dashboard
     {
-        let _push_guard = sh.push_dir(nanpaths::crate_dir("dashboard"));
+        let _push_guard = sh.push_dir(filepaths::crate_dir("dashboard"));
         cmd!(sh, "cargo build {common_flags_ref...}").run().unwrap();
 
         sh.copy_file(
-            artifacts_dir.join(nanpaths::exec_fname("dashboard")),
+            artifacts_dir.join(filepaths::exec_fname("dashboard")),
             build_layout.dashboard_exe(),
         )
         .unwrap();
     }
 
     // build compositor wrapper
-    let _push_guard = sh.push_dir(nanpaths::crate_dir("vrcompositor_wrapper"));
+    let _push_guard = sh.push_dir(filepaths::crate_dir("vrcompositor_wrapper"));
     cmd!(sh, "cargo build {common_flags_ref...}").run().unwrap();
     sh.create_dir(&build_layout.vrcompositor_wrapper_dir)
         .unwrap();
@@ -183,11 +183,11 @@ pub fn build_streamer(
     .unwrap();
 
     // build vulkan layer
-    let _push_guard = sh.push_dir(nanpaths::crate_dir("vulkan_layer"));
+    let _push_guard = sh.push_dir(filepaths::crate_dir("vulkan_layer"));
     cmd!(sh, "cargo build {common_flags_ref...}").run().unwrap();
     sh.create_dir(&build_layout.libraries_dir).unwrap();
     sh.copy_file(
-        artifacts_dir.join(nanpaths::dynlib_fname("vulkan_layer")),
+        artifacts_dir.join(filepaths::dynlib_fname("vulkan_layer")),
         build_layout.vulkan_layer(),
     )
     .unwrap();
@@ -196,20 +196,20 @@ pub fn build_streamer(
     sh.create_dir(&build_layout.vulkan_layer_manifest_dir)
         .unwrap();
     sh.copy_file(
-        nanpaths::crate_dir("vulkan_layer").join("layer/alvr_x86_64.json"),
+        filepaths::crate_dir("vulkan_layer").join("layer/alvr_x86_64.json"),
         build_layout.vulkan_layer_manifest(),
     )
     .unwrap();
 
     sh.copy_file(
-        nanpaths::workspace_dir().join("openvr/bin/linux64/libopenvr_api.so"),
+        filepaths::workspace_dir().join("openvr/bin/linux64/libopenvr_api.so"),
         build_layout.openvr_driver_lib_dir(),
     )
     .unwrap();
 
-    let firewall_script = nanpaths::crate_dir("xtask").join("firewall/alvr_fw_config.sh");
-    let firewalld = nanpaths::crate_dir("xtask").join("firewall/alvr-firewalld.xml");
-    let ufw = nanpaths::crate_dir("xtask").join("firewall/ufw-alvr");
+    let firewall_script = filepaths::crate_dir("xtask").join("firewall/alvr_fw_config.sh");
+    let firewalld = filepaths::crate_dir("xtask").join("firewall/alvr-firewalld.xml");
+    let ufw = filepaths::crate_dir("xtask").join("firewall/ufw-alvr");
 
     // copy linux specific firewalls
     sh.copy_file(firewall_script, build_layout.firewall_script())
@@ -222,7 +222,7 @@ pub fn build_streamer(
     {
         // copy driver manifest
         sh.copy_file(
-            nanpaths::crate_dir("xtask").join("resources/driver.vrdrivermanifest"),
+            filepaths::crate_dir("xtask").join("resources/driver.vrdrivermanifest"),
             build_layout.openvr_driver_manifest(),
         )
         .unwrap();
@@ -249,17 +249,17 @@ pub fn build_launcher(profile: Profile, common_build_flags: CommonBuildFlags) {
     }
     let common_flags_ref = &common_flags;
 
-    sh.create_dir(nanpaths::launcher_build_dir()).unwrap();
+    sh.create_dir(filepaths::launcher_build_dir()).unwrap();
 
     cmd!(sh, "cargo build -p launcher {common_flags_ref...}")
         .run()
         .unwrap();
 
     sh.copy_file(
-        nanpaths::target_dir()
+        filepaths::target_dir()
             .join(profile.to_string())
-            .join(nanpaths::exec_fname("launcher")),
-        nanpaths::launcher_build_exe_path(),
+            .join(filepaths::exec_fname("launcher")),
+        filepaths::launcher_build_exe_path(),
     )
     .unwrap();
 }
@@ -287,10 +287,10 @@ fn build_android_lib_impl(dir_name: &str, profile: Profile, link_stdcpp: bool, a
     }
     let rust_flags_ref = &rust_flags;
 
-    let build_dir = nanpaths::build_dir().join(format!("alvr_{dir_name}"));
+    let build_dir = filepaths::build_dir().join(format!("alvr_{dir_name}"));
     sh.create_dir(&build_dir).unwrap();
 
-    let _push_guard = sh.push_dir(nanpaths::crate_dir(dir_name));
+    let _push_guard = sh.push_dir(filepaths::crate_dir(dir_name));
     cmd!(
         sh,
         "cargo ndk {ndk_flags...} -o {build_dir} build {rust_flags_ref...}"
@@ -326,8 +326,8 @@ pub fn build_android_client(profile: Profile) {
 
     const ARTIFACT_NAME: &str = "alvr_client_android";
 
-    let target_dir = nanpaths::target_dir();
-    let build_dir = nanpaths::build_dir().join(ARTIFACT_NAME);
+    let target_dir = filepaths::target_dir();
+    let build_dir = filepaths::build_dir().join(ARTIFACT_NAME);
     sh.create_dir(&build_dir).unwrap();
 
     // Create debug keystore (signing will be overwritten by CI)
@@ -342,7 +342,7 @@ pub fn build_android_client(profile: Profile) {
         if !keystore_path.exists() {
             let keytool = PathBuf::from(env::var("JAVA_HOME").expect("Env var JAVA_HOME not set"))
                 .join("bin")
-                .join(nanpaths::exec_fname("keytool"));
+                .join(filepaths::exec_fname("keytool"));
             let pass = "alvrclient";
 
             let other = vec![
@@ -369,7 +369,7 @@ pub fn build_android_client(profile: Profile) {
         }
     }
 
-    let _push_guard = sh.push_dir(nanpaths::crate_dir("client_openxr"));
+    let _push_guard = sh.push_dir(filepaths::crate_dir("client_openxr"));
     cmd!(
         sh,
         "cargo apk build --target-dir={target_dir} {flags_ref...}"
@@ -378,7 +378,7 @@ pub fn build_android_client(profile: Profile) {
     .unwrap();
 
     sh.copy_file(
-        nanpaths::target_dir()
+        filepaths::target_dir()
             .join(profile.to_string())
             .join("apk/client_openxr.apk"),
         build_dir.join(format!("{ARTIFACT_NAME}.apk")),

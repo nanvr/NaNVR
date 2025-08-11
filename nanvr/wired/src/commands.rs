@@ -2,7 +2,7 @@
 
 use crate::parse::{self, Device, ForwardedPorts};
 use anyhow::{Context, Result, anyhow};
-use filepaths as nanpaths;
+
 use std::{
     collections::HashSet,
     io::{Cursor, Read},
@@ -125,7 +125,7 @@ pub fn is_activity_resumed(
 // ADB Installation
 
 pub fn require_adb(
-    layout: &nanpaths::Layout,
+    layout: &filepaths::Layout,
     progress_callback: impl Fn(usize, Option<usize>),
 ) -> Result<String> {
     if let Some(path) = get_adb_path(layout) {
@@ -137,7 +137,7 @@ pub fn require_adb(
 }
 
 fn install_adb(
-    layout: &nanpaths::Layout,
+    layout: &filepaths::Layout,
     progress_callback: impl Fn(usize, Option<usize>),
 ) -> Result<()> {
     let mut reader = Cursor::new(download_adb(progress_callback)?);
@@ -250,8 +250,8 @@ pub fn list_installed_packages(adb_path: &str, device_serial: &str) -> Result<Ha
 // Paths
 
 /// Returns the path of a local (i.e. installed by ALVR) or OS version of `adb` if found, `None` otherwise.
-pub fn get_adb_path(layout: &nanpaths::Layout) -> Option<String> {
-    let exe_name = nanpaths::exec_fname("adb").to_owned();
+pub fn get_adb_path(layout: &filepaths::Layout) -> Option<String> {
+    let exe_name = filepaths::exec_fname("adb").to_owned();
     let adb_path = get_command(&exe_name, &[])
         .output()
         .is_ok()

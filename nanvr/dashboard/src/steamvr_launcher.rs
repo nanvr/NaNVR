@@ -1,5 +1,5 @@
 use crate::data_sources;
-use filepaths as nanpaths;
+
 use serde_json::{self, json};
 use shared::{
     anyhow::{Context, Result, bail},
@@ -93,7 +93,7 @@ impl Launcher {
 
 fn is_steamvr_running() -> bool {
     System::new_all()
-        .processes_by_name(OsStr::new(&nanpaths::exec_fname("vrserver")))
+        .processes_by_name(OsStr::new(&filepaths::exec_fname("vrserver")))
         .count()
         != 0
 }
@@ -102,7 +102,7 @@ fn maybe_kill_steamvr() {
     let mut system = System::new_all();
 
     #[allow(unused_variables)]
-    for process in system.processes_by_name(OsStr::new(&nanpaths::exec_fname("vrmonitor"))) {
+    for process in system.processes_by_name(OsStr::new(&filepaths::exec_fname("vrmonitor"))) {
         debug!("Killing vrmonitor");
 
         terminate_process(process);
@@ -113,7 +113,7 @@ fn maybe_kill_steamvr() {
     system.refresh_processes(ProcessesToUpdate::All, true);
 
     #[allow(unused_variables)]
-    for process in system.processes_by_name(OsStr::new(&nanpaths::exec_fname("vrserver"))) {
+    for process in system.processes_by_name(OsStr::new(&filepaths::exec_fname("vrserver"))) {
         debug!("Killing vrserver");
 
         terminate_process(process);
