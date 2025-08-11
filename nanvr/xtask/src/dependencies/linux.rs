@@ -77,13 +77,13 @@ fn download_x264_src() {
 fn download_ffmpeg_src() {
     let deps_path = deps_path();
 
-    command::download_and_extract_zip(
-        "https://codeload.github.com/FFmpeg/FFmpeg/zip/n6.0",
+    command::download_and_extract_tar(
+        "https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.gz",
         &deps_path,
     )
     .unwrap();
 
-    fs::rename(deps_path.join("FFmpeg-n6.0"), ffmpeg_path()).unwrap();
+    fs::rename(deps_path.join("ffmpeg-7.1.1"), ffmpeg_path()).unwrap();
 }
 
 fn download_nvidia_ffmpeg_deps() {
@@ -173,8 +173,8 @@ fn build_ffmpeg(enable_nvenc: bool) {
     let _env_vars = sh.push_env("LDSOFLAGS", config_vars);
 
     // Patches ffmpeg for workarounds and patches that have yet to be unstreamed
-    let ffmpeg_command = "for p in ../../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
-    cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
+    // let ffmpeg_command = "for p in ../../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
+    // cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
 
     if enable_nvenc {
         /*
