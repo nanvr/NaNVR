@@ -1,7 +1,7 @@
 #pragma once
 
-#include <chrono>
 #include <arpa/inet.h>
+#include <chrono>
 #include <netinet/in.h>
 #include <string.h>
 

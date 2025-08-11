@@ -188,7 +188,6 @@ void CppInit(bool earlyHmdInitialization) {
     init_paths();
 
     Settings::Instance().Load();
-
 }
 
 void* CppOpenvrEntryPoint(const char* interface_name, int* return_code) {

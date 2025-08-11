@@ -1,7 +1,7 @@
 #include "EncodePipelineNvEnc.h"
-#include "common/packet_types.h"
 #include "alvr_server/Logger.h"
 #include "alvr_server/Settings.h"
+#include "common/packet_types.h"
 #include "ffmpeg_helper.h"
 #include <chrono>
 #include <memory>

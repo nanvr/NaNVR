@@ -1,6 +1,6 @@
-#include "common/packet_types.h"
 #include "Logger.h"
 #include "bindings.h"
+#include "common/packet_types.h"
 #include <memory>
 #include <mutex>
 

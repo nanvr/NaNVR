@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common/packet_types.h"
 #include "TrackedDevice.h"
+#include "common/packet_types.h"
 #include "openvr_driver_wrap.h"
 #include <memory>
 

@@ -16,12 +16,12 @@
 #include <sys/un.h>
 #include <unistd.h>
 
-#include "common/packet_types.h"
 #include "EncodePipeline.h"
 #include "FrameRender.h"
 #include "alvr_server/Logger.h"
 #include "alvr_server/PoseHistory.h"
 #include "alvr_server/Settings.h"
+#include "common/packet_types.h"
 #include "ffmpeg_helper.h"
 #include "protocol.h"
 

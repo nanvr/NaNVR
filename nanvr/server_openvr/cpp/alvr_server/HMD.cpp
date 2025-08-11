@@ -239,12 +239,12 @@ void Hmd::GetWindowBounds(int32_t* pnX, int32_t* pnY, uint32_t* pnWidth, uint32_
 }
 
 bool Hmd::IsDisplayRealDisplay() {
-// #ifdef _WIN32
-//     return false;
-// #else
-//     return true;
-// #endif
-// todo: might be needed for linux direct mode
+    // #ifdef _WIN32
+    //     return false;
+    // #else
+    //     return true;
+    // #endif
+    // todo: might be needed for linux direct mode
     return true;
 }
 
