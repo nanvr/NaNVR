@@ -83,13 +83,14 @@ jobs:
   check-format:
     runs-on: ubuntu-latest
     steps:
+      - name: Install clang 20
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod u+x llvm.sh
+          sudo ./llvm.sh 20 all
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: "20.0"
 
       - run: cargo xtask check-format
