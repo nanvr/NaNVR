@@ -65,7 +65,7 @@ jobs:
       - name: Build client
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-        working-directory: ./alvr/client_openxr
+        working-directory: ./nanvr/client_openxr
         run: cargo xtask build-client
 
   tests:

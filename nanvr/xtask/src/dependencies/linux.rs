@@ -112,7 +112,7 @@ fn build_x264() {
 
     let flags = ["--enable-static", "--disable-cli", "--enable-pic"];
 
-    let build_path = x264_src_path.join("alvr_build");
+    let build_path = x264_src_path.join("nanvr_build");
     sh.remove_path(&build_path).ok();
 
     let install_prefix = format!("--prefix={}", build_path.display());
@@ -160,7 +160,7 @@ fn build_ffmpeg(enable_nvenc: bool) {
         "--fatal-warnings",
     ];
 
-    let build_path = ffmpeg_src_path.join("alvr_build");
+    let build_path = ffmpeg_src_path.join("nanvr_build");
     sh.remove_path(&build_path).ok();
 
     let install_prefix = format!("--prefix={}", build_path.display());
@@ -173,7 +173,7 @@ fn build_ffmpeg(enable_nvenc: bool) {
     let _env_vars = sh.push_env("LDSOFLAGS", config_vars);
 
     // Patches ffmpeg for workarounds and patches that have yet to be unstreamed
-    let ffmpeg_command = "for p in ../../../alvr/xtask/patches/*; do patch -p1 < $p; done";
+    let ffmpeg_command = "for p in ../../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
     cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
 
     if enable_nvenc {

@@ -1,12 +1,12 @@
 use std::{env, path::PathBuf};
 
 fn get_ffmpeg_path() -> PathBuf {
-    filepaths::deps_dir().join("linux/ffmpeg/alvr_build")
+    filepaths::deps_dir().join("linux/ffmpeg/nanvr_build")
 }
 
 #[cfg(feature = "gpl")]
 fn get_linux_x264_path() -> PathBuf {
-    filepaths::deps_dir().join("linux/x264/alvr_build")
+    filepaths::deps_dir().join("linux/x264/nanvr_build")
 }
 
 fn main() {
