@@ -55,10 +55,6 @@ pub fn check_format() {
         .expect("cargo fmt check failed");
 
     for path in files_to_format_paths() {
-        let out_format = cmd!(sh, "clang-format -style=WebKit -dump-config")
-            .read()
-            .unwrap();
-        eprintln!("\n{out_format}\n");
         let content = fs::read_to_string(&path).unwrap();
         let mut output = cmd!(sh, "clang-format {path}").read().unwrap();
 
