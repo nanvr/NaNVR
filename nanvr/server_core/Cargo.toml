@@ -13,7 +13,7 @@ crate-type = ["rlib", "cdylib"]
 trace-performance = ["profiling/profile-with-tracy"]
 
 [dependencies]
-adb.workspace = true
+wired.workspace = true
 sound.workspace = true
 shared.workspace = true
 events.workspace = true

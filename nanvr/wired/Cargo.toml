@@ -1,5 +1,5 @@
 [package]
-name = "adb"
+name = "wired"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

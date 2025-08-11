@@ -148,7 +148,7 @@ pub fn build_streamer(
         .unwrap();
 
         sh.copy_file(
-            artifacts_dir.join(afs::dynlib_fname("alvr_server_openvr")),
+            artifacts_dir.join(afs::dynlib_fname("server_openvr")),
             build_layout.openvr_driver_lib(),
         )
         .unwrap();

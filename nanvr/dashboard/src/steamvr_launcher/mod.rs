@@ -1,7 +1,7 @@
 mod linux_steamvr;
 
 use crate::data_sources;
-use adb::commands as adb;
+use wired::commands as adb;
 use shared::{
     anyhow::{Context, Result},
     debug,

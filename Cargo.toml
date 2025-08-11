@@ -10,7 +10,7 @@ authors = ["nanvr"]
 license = "MIT"
 
 [workspace.dependencies]
-adb = { path = "nanvr/adb" }
+wired = { path = "nanvr/wired" }
 sound = { path = "nanvr/sound" }
 client_core = { path = "nanvr/client_core" }
 shared = { path = "nanvr/shared" }

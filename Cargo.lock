@@ -111,18 +111,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "adb"
-version = "1.0.0-dev0"
-dependencies = [
- "anyhow",
- "filepaths",
- "shared",
- "system_info",
- "ureq",
- "zip",
-]
-
-[[package]]
 name = "addr2line"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1359,7 +1347,6 @@ dependencies = [
 name = "dashboard"
 version = "1.0.0-dev0"
 dependencies = [
- "adb",
  "chrono",
  "configuration",
  "cros-libva",
@@ -1384,6 +1371,7 @@ dependencies = [
  "tungstenite 0.26.2",
  "ureq",
  "wgpu",
+ "wired",
 ]
 
 [[package]]
@@ -2932,7 +2920,6 @@ checksum = "e2db585e1d738fc771bf08a151420d3ed193d9d895a36df7f6f8a9456b911ddc"
 name = "launcher"
 version = "1.0.0-dev0"
 dependencies = [
- "adb",
  "anyhow",
  "eframe",
  "filepaths",
@@ -2947,6 +2934,7 @@ dependencies = [
  "system_info",
  "tar",
  "tokio",
+ "wired",
  "zip",
 ]
 
@@ -4901,7 +4889,6 @@ dependencies = [
 name = "server_core"
 version = "1.0.0-dev0"
 dependencies = [
- "adb",
  "ash",
  "bytes",
  "chrono",
@@ -4928,6 +4915,7 @@ dependencies = [
  "tokio",
  "tokio-tungstenite",
  "tokio-util",
+ "wired",
 ]
 
 [[package]]
@@ -7009,6 +6997,18 @@ checksum = "524e57b2c537c0f9b1e69f1965311ec12182b4122e45035b1508cd24d2adadb1"
 dependencies = [
  "cfg-if",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "wired"
+version = "1.0.0-dev0"
+dependencies = [
+ "anyhow",
+ "filepaths",
+ "shared",
+ "system_info",
+ "ureq",
+ "zip",
 ]
 
 [[package]]

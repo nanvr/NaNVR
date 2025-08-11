@@ -7,7 +7,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-adb.workspace = true
+wired.workspace = true
 shared.workspace = true
 filepaths.workspace = true
 gui_shared.workspace = true
