@@ -296,14 +296,7 @@ void FormatConverter::Sync() {
 uint64_t FormatConverter::GetTimestamp() {
     uint64_t query;
     VK_CHECK(vkGetQueryPoolResults(
-        r->m_dev,
-        m_queryPool,
-        0,
-        1,
-        sizeof(uint64_t),
-        &query,
-        sizeof(uint64_t),
-        VK_QUERY_RESULT_64_BIT
+        r->m_dev, m_queryPool, 0, 1, sizeof(uint64_t), &query, sizeof(uint64_t), VK_QUERY_RESULT_64_BIT
     ));
     return query * r->m_timestampPeriod;
 }

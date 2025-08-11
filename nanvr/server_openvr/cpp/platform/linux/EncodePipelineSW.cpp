@@ -131,8 +131,8 @@ void alvr::EncodePipelineSW::SetParams(FfiDynamicEncoderParams params) {
     // x264 doesn't work well with adaptive bitrate/fps
     param.i_fps_num = Settings::Instance().m_refreshRate;
     param.i_fps_den = 1;
-    param.rc.i_bitrate
-        = params.bitrate_bps / 1'000 * 1.4; // needs higher value to hit target bitrate
+    param.rc.i_bitrate = params.bitrate_bps / 1'000 * 1.4; // needs higher value to hit target
+                                                           // bitrate
     param.rc.i_vbv_buffer_size = param.rc.i_bitrate / param.i_fps_num * 1.1;
     param.rc.i_vbv_max_bitrate = param.rc.i_bitrate;
     param.rc.f_vbv_buffer_init = 0.75;

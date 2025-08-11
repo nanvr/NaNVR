@@ -68,9 +68,7 @@ vr::EVRInitError ViveTrackerProxy::Activate(vr::TrackedDeviceIndex_t unObjectId)
         vr::k_unHmdMatrix34PropertyTag
     );
 
-    vr_properties->SetBoolProperty(
-        propertyContainer, vr::Prop_Firmware_UpdateAvailable_Bool, false
-    );
+    vr_properties->SetBoolProperty(propertyContainer, vr::Prop_Firmware_UpdateAvailable_Bool, false);
     vr_properties->SetBoolProperty(propertyContainer, vr::Prop_Firmware_ManualUpdate_Bool, false);
     vr_properties->SetStringProperty(
         propertyContainer,
@@ -83,9 +81,7 @@ vr::EVRInitError ViveTrackerProxy::Activate(vr::TrackedDeviceIndex_t unObjectId)
     vr_properties->SetUint64Property(
         propertyContainer, vr::Prop_FirmwareVersion_Uint64, 1541800000
     ); // Changed
-    vr_properties->SetUint64Property(
-        propertyContainer, vr::Prop_FPGAVersion_Uint64, 512
-    ); // Changed
+    vr_properties->SetUint64Property(propertyContainer, vr::Prop_FPGAVersion_Uint64, 512); // Changed
     vr_properties->SetUint64Property(
         propertyContainer, vr::Prop_VRCVersion_Uint64, 1514800000
     ); // Changed

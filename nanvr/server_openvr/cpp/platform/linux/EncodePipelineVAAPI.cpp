@@ -235,16 +235,16 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     SetParams(params);
 
     vlVaQualityBits quality = {};
-    quality.vbaq_mode
-        = Settings::Instance()
-              .m_enableVbaq; // No noticable performance difference and should improve subjective
-                             // quality by allocating more bits to smooth areas
+    quality.vbaq_mode = Settings::Instance().m_enableVbaq; // No noticable performance difference
+                                                           // and should improve subjective quality
+                                                           // by allocating more bits to smooth
+                                                           // areas
     switch (settings.m_encoderQualityPreset) {
     case ALVR_QUALITY:
         if (vk_ctx.amd) {
             quality.preset_mode = PRESET_MODE_QUALITY;
-            encoder_ctx->compression_level
-                = quality.quality; // (QUALITY preset, no pre-encoding, vbaq)
+            encoder_ctx->compression_level = quality.quality; // (QUALITY preset, no pre-encoding,
+                                                              // vbaq)
         } else if (vk_ctx.intel) {
             encoder_ctx->compression_level = 1;
         }
@@ -252,8 +252,8 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     case ALVR_BALANCED:
         if (vk_ctx.amd) {
             quality.preset_mode = PRESET_MODE_BALANCE;
-            encoder_ctx->compression_level
-                = quality.quality; // (BALANCE preset, no pre-encoding, vbaq)
+            encoder_ctx->compression_level = quality.quality; // (BALANCE preset, no pre-encoding,
+                                                              // vbaq)
         } else if (vk_ctx.intel) {
             encoder_ctx->compression_level = 4;
         }
@@ -262,8 +262,8 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     default:
         if (vk_ctx.amd) {
             quality.preset_mode = PRESET_MODE_SPEED;
-            encoder_ctx->compression_level
-                = quality.quality; // (speed preset, no pre-encoding, vbaq)
+            encoder_ctx->compression_level = quality.quality; // (speed preset, no pre-encoding,
+                                                              // vbaq)
         } else if (vk_ctx.intel) {
             encoder_ctx->compression_level = 7;
         }

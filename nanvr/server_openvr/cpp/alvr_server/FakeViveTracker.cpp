@@ -68,9 +68,7 @@ bool FakeViveTracker::activate() {
     vr_properties->SetBoolProperty(
         this->prop_container, vr::Prop_Firmware_UpdateAvailable_Bool, false
     );
-    vr_properties->SetBoolProperty(
-        this->prop_container, vr::Prop_Firmware_ManualUpdate_Bool, false
-    );
+    vr_properties->SetBoolProperty(this->prop_container, vr::Prop_Firmware_ManualUpdate_Bool, false);
     vr_properties->SetStringProperty(
         this->prop_container,
         vr::Prop_Firmware_ManualUpdateURL_String,
@@ -140,9 +138,7 @@ bool FakeViveTracker::activate() {
         "{htc}/input/vive_tracker_profile.json"
     );
     vr_properties->SetBoolProperty(this->prop_container, vr::Prop_Identifiable_Bool, false);
-    vr_properties->SetBoolProperty(
-        this->prop_container, vr::Prop_Firmware_RemindUpdate_Bool, false
-    );
+    vr_properties->SetBoolProperty(this->prop_container, vr::Prop_Firmware_RemindUpdate_Bool, false);
     vr_properties->SetInt32Property(
         this->prop_container, vr::Prop_ControllerRoleHint_Int32, vr::TrackedControllerRole_Invalid
     );
