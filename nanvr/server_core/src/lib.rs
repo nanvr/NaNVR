@@ -167,6 +167,7 @@ pub struct ServerCoreContext {
     is_restarting: RelaxedAtomic,
     connection_context: Arc<ConnectionContext>,
     connection_thread: Arc<RwLock<Option<JoinHandle<()>>>>,
+    #[allow(dead_code)]
     webserver_runtime: Option<Runtime>,
 }
 
