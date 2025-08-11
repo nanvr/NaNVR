@@ -62,11 +62,12 @@ pub fn check_msrv() {
     .run()
     .unwrap();
 
+    // todo: more paths?
     let paths = [
-        "alvr/server_openvr",
-        "alvr/dashboard",
-        "alvr/launcher",
-        "alvr/client_openxr",
+        "nanvr/server_openvr",
+        "nanvr/dashboard",
+        "nanvr/launcher",
+        "nanvr/client_openxr",
     ];
     for path in paths {
         cmd!(sh, "cargo msrv verify --path {path}").run().unwrap()

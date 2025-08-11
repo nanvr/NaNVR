@@ -3,7 +3,7 @@ use crate::command;
 use std::fs;
 use xshell::{Shell, cmd};
 
-pub fn prepare_deps(enable_nvenc: bool) {
+pub fn prepare_server_deps(enable_nvenc: bool) {
     let sh = Shell::new().unwrap();
 
     let deps_path = deps_path();
@@ -20,7 +20,7 @@ pub fn prepare_deps(enable_nvenc: bool) {
     build_ffmpeg(enable_nvenc);
 }
 
-pub fn download_deps(enable_nvenc: bool) {
+pub fn download_server_deps(enable_nvenc: bool) {
     let sh = Shell::new().unwrap();
 
     let deps_path = deps_path();
@@ -34,7 +34,7 @@ pub fn download_deps(enable_nvenc: bool) {
     }
 }
 
-pub fn build_deps(enable_nvenc: bool) {
+pub fn build_server_deps(enable_nvenc: bool) {
     let deps_path = deps_path();
     assert!(deps_path.exists(), "Please download dependencies first.");
 

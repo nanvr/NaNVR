@@ -90,7 +90,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
         run: |
-          cargo xtask package-streamer --ci --nvenc
+          cargo xtask package-streamer --ci --enable-nvenc
           cargo xtask package-launcher --ci
 
       - name: Upload streamer (tar.gz)

@@ -1,14 +1,16 @@
 use crate::{
-    TargetBuildPlatform,
     build::{self, Profile},
     command,
     dependencies::{self, OpenXRLoadersSelection},
 };
 
+use clap::ValueEnum;
 use std::{fs, path::Path};
 use xshell::{Shell, cmd};
 
+#[derive(Clone, Copy, Default, ValueEnum)]
 pub enum ReleaseFlavor {
+    #[default]
     GitHub,
     MetaStore,
     PicoStore,
@@ -43,14 +45,10 @@ pub fn include_licenses(root_path: &Path) {
         .unwrap();
 }
 
-pub fn package_streamer(
-    platform: Option<TargetBuildPlatform>,
-    enable_nvenc: bool,
-    root: Option<String>,
-) {
+pub fn package_streamer(enable_nvenc: bool, root: Option<String>) {
     let sh = Shell::new().unwrap();
 
-    dependencies::prepare_server_deps(platform, enable_nvenc);
+    dependencies::linux::prepare_server_deps(enable_nvenc);
 
     build::build_streamer(
         Profile::Distribution,

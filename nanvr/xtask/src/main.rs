@@ -7,85 +7,193 @@ mod packaging;
 mod version;
 
 use crate::build::Profile;
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use dependencies::OpenXRLoadersSelection;
 
 use filepaths::Layout;
 use packaging::ReleaseFlavor;
-use pico_args::Arguments;
-use std::{fs, process, time::Instant};
+use std::{fs, time::Instant};
 use xshell::{Shell, cmd};
 
-const HELP_STR: &str = r"
-cargo xtask
-Developement actions for ALVR.
+#[derive(Parser)]
+#[command(name = "cargo xtask")]
+#[command(about = "Developement actions for ALVR", long_about = None)]
+struct Cli {
+    /// Specify version to set with the bump-versions subcommand
+    #[arg(long)]
+    version: Option<String>,
+    /// Installation root. By default no root is set and paths are calculated
+    /// using relative paths, which requires conforming to FHS on Linux
+    #[arg(long, value_name = "PATH")]
+    root: Option<String>,
 
-USAGE:
-    cargo xtask <SUBCOMMAND> [FLAG] [ARGS]
+    #[command(subcommand)]
+    commands: Commands,
+}
+#[derive(Subcommand)]
+enum Commands {
+    /// Download and compile streamer or/and client external dependencies
+    PrepareDeps {
+        /// If not specified, prepares server and android dependencies at the same time
+        #[arg(long, value_enum)]
+        platform: Option<TargetBuildPlatform>,
+        /// Build for all android supported ABI targets
+        #[arg(long)]
+        all_targets: bool,
+        /// Enables nvenc support on Linux
+        #[arg(long)]
+        enable_nvenc: bool,
+    },
+    /// Download streamer external dependencies
+    DownloadServerDeps {
+        /// Enables nvenc support on Linux
+        #[arg(long)]
+        enable_nvenc: bool,
+    },
+    /// Compile streamer external dependencies
+    BuildServerDeps {
+        /// Enables nvenc support on Linux
+        #[arg(long)]
+        enable_nvenc: bool,
+    },
+    /// Build streamer, then copy binaries to build folder
+    BuildStreamer {
+        /// Preserve the configuration file between rebuilds (session.json)
+        #[arg(long)]
+        keep_config: bool,
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+        #[clap(flatten)]
+        common_build_flags: CommonBuildFlags,
+    },
+    /// Build launcher, then copy binaries to build folder
+    BuildLauncher {
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+        #[clap(flatten)]
+        common_build_flags: CommonBuildFlags,
+    },
+    /// Build a C-ABI ALVR server library and header
+    BuildServerLib {
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+        #[clap(flatten)]
+        common_build_flags: CommonBuildFlags,
+    },
+    /// Build client, then copy binaries to build folder.
+    /// Requires JAVA_HOME set to at least JDK17 folder,
+    /// ANDROID_NDK_HOME set to Android NDK 25.1.8937893 folder,
+    /// ANDROID_HOME set to Android SDK folder
+    BuildClient {
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+    },
+    /// Build a C-ABI NaNVR client library and header
+    BuildClientLib {
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+        /// Configure linking to libc++_shared with build-client-lib
+        #[arg(long, default_value_t = true)]
+        link_stdcpp: bool,
+        /// Build for all android supported ABI targets
+        #[arg(long)]
+        all_targets: bool,
+    },
+    /// Build a C-ABI NaNVR OpenXR entry point client library and header
+    BuildClientXrLib {
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+        /// Configure linking to libc++_shared with build-client-lib
+        #[arg(long, default_value_t = true)]
+        link_stdcpp: bool,
+    },
+    /// Build streamer and then open the dashboard
+    RunStreamer {
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+        #[clap(flatten)]
+        common_build_flags: CommonBuildFlags,
+        /// Preserve the configuration file between rebuilds (session.json)
+        #[arg(long)]
+        keep_config: bool,
+    },
+    /// Build launcher and then open it
+    RunLauncher {
+        #[arg(long, value_enum, default_value_t = Profile::Debug)]
+        profile: Profile,
+        #[clap(flatten)]
+        common_build_flags: CommonBuildFlags,
+    },
+    /// Build streamer with distribution profile, make archive
+    PackageStreamer {
+        #[arg(long)]
+        root: Option<String>,
+        /// Enables nvenc support on Linux
+        #[arg(long)]
+        enable_nvenc: bool,
+    },
+    /// Build launcher with distribution profile, make archive
+    PackageLauncher,
+    /// Build client with distribution profile
+    PackageClient {
+        #[arg(long, value_enum, default_value_t = ReleaseFlavor::GitHub)]
+        package_flavor: ReleaseFlavor,
+    },
+    /// Build client library then zip it
+    PackageClientLib {
+        /// Configure linking to libc++_shared with build-client-lib
+        #[arg(long, default_value_t = true)]
+        link_stdcpp: bool,
+        /// Build for all android supported ABI targets
+        #[arg(long)]
+        all_targets: bool,
+    },
+    /// Autoformat the code
+    Format,
+    /// Check if code is correctly formatted
+    CheckFormat,
+    /// Removes all build artifacts and dependencies
+    Clean,
+    /// Bump streamer and client package versions
+    Bump {
+        #[arg(long)]
+        version: Option<String>,
+        /// Append nightly tag to versions
+        #[arg(long)]
+        is_nightly: bool,
+    },
+    /// Show warnings for selected clippy lints
+    Clippy {
+        /// Do some CI related tweaks.
+        #[arg(long)]
+        ci: bool,
+    },
+    /// Verify MSRV version
+    CheckMsrv,
+}
 
-SUBCOMMANDS:
-    prepare-deps            Download and compile streamer and client external dependencies
-    download-server-deps    Download streamer external dependencies
-    build-server-deps       Compile streamer external dependencies
-    build-streamer          Build streamer, then copy binaries to build folder
-    build-launcher          Build launcher, then copy binaries to build folder
-    build-server-lib        Build a C-ABI ALVR server library and header
-    build-client            Build client, then copy binaries to build folder
-    build-client-lib        Build a C-ABI ALVR client library and header
-    build-client-xr-lib     Build a C-ABI ALVR OpenXR entry point client library and header
-    run-streamer            Build streamer and then open the dashboard
-    run-launcher            Build launcher and then open it
-    format                  Autoformat all code
-    check-format            Check if code is correctly formatted
-    package-streamer        Build streamer with distribution profile, make archive
-    package-launcher        Build launcher with distribution profile, make archive
-    package-client          Build client with distribution profile
-    package-client-lib      Build client library then zip it
-    clean                   Removes all build artifacts and dependencies
-    bump                    Bump streamer and client package versions
-    clippy                  Show warnings for selected clippy lints
-
-FLAGS:
-    --help                  Print this text
-    --keep-config           Preserve the configuration file between rebuilds (session.json)
-    --nvenc                 Enabled nvenc support on Linux.
-    --release               Optimized build with less debug checks. For build subcommands
-    --profiling             Enable Profiling
-    --nightly               Append nightly tag to versions. For bump subcommand
-    --ci                    Do some CI related tweaks. Depends on the other flags and subcommand
-    --no-stdcpp             Disable linking to libc++_shared with build-client-lib
-    --all-targets           For prepare-deps and build-client-lib subcommand, will build for all android supported ABI targets
-    --meta-store            For package-client subcommand, build for Meta Store
-    --pico-store            For package-client subcommand, build for Pico Store
-    --locked                Forces build subcommands to use only dependencies specified from Cargo.lock 
-    --frozen                Forces build subcommands to use locally cached dependencies specified in Cargo.lock
-                            and fail if internet access was required during build
-    --offline               Forces build subcommands to fail if they try to use internet. 
-                            Note that 'xtask' and 'cargo about' dependencies are downloaded and built during build of alvr
-
-ARGS:
-    --platform <NAME>       Can be one of: linux, android. Can be omitted
-    --version <VERSION>     Specify version to set with the bump-versions subcommand
-    --root <PATH>           Installation root. By default no root is set and paths are calculated using
-                            relative paths, which requires conforming to FHS on Linux
-";
-
+#[derive(Clone, ValueEnum)]
 enum TargetBuildPlatform {
     Linux,
     Android,
 }
 
-#[derive(Default)]
+#[derive(Default, Clone, Args)]
 pub struct CommonBuildFlags {
+    /// Forces build subcommands to use only dependencies specified from Cargo.lock
+    #[arg(long)]
     locked: bool,
+    /// Forces build subcommands to use locally cached dependencies specified in Cargo.lock
+    /// and fail if internet access was required during build
+    #[arg(long)]
     frozen: bool,
+    /// Forces build subcommands to fail if they try to use internet.
+    /// Note that 'xtask' and 'cargo about' dependencies are downloaded and built during build of alvr
+    #[arg(long)]
     offline: bool,
+    /// Enable Profiling
+    #[arg(long)]
     profiling: bool,
-}
-
-pub fn print_help_and_exit(message: &str) -> ! {
-    eprintln!("\n{message}");
-    eprintln!("{HELP_STR}");
-    process::exit(1);
 }
 
 pub fn run_streamer() {
@@ -161,119 +269,100 @@ fn clippy() {
 }
 
 fn main() {
+    let cli = Cli::parse();
+
     let begin_time = Instant::now();
-
-    let mut args = Arguments::from_env();
-
-    if args.contains(["-h", "--help"]) {
-        println!("{HELP_STR}");
-    } else if let Ok(Some(subcommand)) = args.subcommand() {
-        let enable_nvenc = args.contains("--nvenc");
-        let is_release = args.contains("--release");
-        let profile = if is_release {
-            Profile::Release
-        } else {
-            Profile::Debug
-        };
-        let is_nightly: bool = args.contains("--nightly");
-        let for_ci = args.contains("--ci");
-        let keep_config = args.contains("--keep-config");
-        let link_stdcpp = !args.contains("--no-stdcpp");
-        let all_targets = args.contains("--all-targets");
-        let common_build_flags = CommonBuildFlags {
-            locked: args.contains("--locked"),
-            frozen: args.contains("--frozen"),
-            offline: args.contains("--offline"),
-            profiling: args.contains("--profiling"),
-        };
-
-        let platform: Option<String> = args.opt_value_from_str("--platform").unwrap();
-        let platform = platform.as_deref().map(|platform| match platform {
-            "linux" => TargetBuildPlatform::Linux,
-            "android" => TargetBuildPlatform::Android,
-            _ => print_help_and_exit("Unrecognized platform"),
-        });
-
-        let version: Option<String> = args.opt_value_from_str("--version").unwrap();
-        let root: Option<String> = args.opt_value_from_str("--root").unwrap();
-
-        let package_flavor = if args.contains("--meta-store") {
-            ReleaseFlavor::MetaStore
-        } else if args.contains("--pico-store") {
-            ReleaseFlavor::PicoStore
-        } else {
-            ReleaseFlavor::GitHub
-        };
-
-        if args.finish().is_empty() {
-            match subcommand.as_str() {
-                "prepare-deps" => {
-                    if let Some(platform) = platform {
-                        if matches!(platform, TargetBuildPlatform::Android) {
-                            dependencies::android::build_deps(
-                                all_targets,
-                                OpenXRLoadersSelection::All,
-                            );
-                        } else {
-                            dependencies::prepare_server_deps(Some(platform), enable_nvenc);
-                        }
-                    } else {
-                        dependencies::prepare_server_deps(platform, enable_nvenc);
-
-                        dependencies::android::build_deps(all_targets, OpenXRLoadersSelection::All);
-                    }
+    match cli.commands {
+        Commands::PrepareDeps {
+            platform,
+            all_targets,
+            enable_nvenc,
+        } => {
+            if let Some(platform) = platform {
+                if matches!(platform, TargetBuildPlatform::Android) {
+                    dependencies::android::build_deps(all_targets, OpenXRLoadersSelection::All);
+                } else {
+                    dependencies::linux::prepare_server_deps(enable_nvenc);
                 }
-                "download-server-deps" => {
-                    dependencies::download_server_deps(platform, enable_nvenc)
-                }
-                "build-server-deps" => dependencies::build_server_deps(platform, enable_nvenc),
-                "build-streamer" => {
-                    build::build_streamer(profile, None, common_build_flags, keep_config)
-                }
-                "build-launcher" => build::build_launcher(profile, common_build_flags),
-                "build-server-lib" => build::build_server_lib(profile, None, common_build_flags),
-                "build-client" => build::build_android_client(profile),
-                "build-client-lib" => {
-                    build::build_android_client_core_lib(profile, link_stdcpp, all_targets)
-                }
-                "build-client-xr-lib" => {
-                    build::build_android_client_openxr_lib(profile, link_stdcpp)
-                }
-                "run-streamer" => {
-                    build::build_streamer(profile, None, common_build_flags, keep_config);
+            } else {
+                dependencies::linux::prepare_server_deps(enable_nvenc);
 
-                    run_streamer();
-                }
-                "run-launcher" => {
-                    build::build_launcher(profile, common_build_flags);
-                    run_launcher();
-                }
-                "package-streamer" => packaging::package_streamer(platform, enable_nvenc, root),
-                "package-launcher" => packaging::package_launcher(),
-                "package-client" => packaging::package_client_openxr(package_flavor),
-                "package-client-lib" => packaging::package_client_lib(link_stdcpp, all_targets),
-                "format" => format::format(),
-                "check-format" => format::check_format(),
-                "clean" => clean(),
-                "bump" => version::bump_version(version, is_nightly),
-                "clippy" => {
-                    if for_ci {
-                        ci::clippy_ci();
-                    } else {
-                        clippy();
-                    }
-                }
-                "check-msrv" => version::check_msrv(),
-                _ => print_help_and_exit("Unrecognized subcommand."),
+                dependencies::android::build_deps(all_targets, OpenXRLoadersSelection::All);
             }
-        } else {
-            print_help_and_exit("Wrong arguments.");
         }
-    } else {
-        print_help_and_exit("Missing subcommand.");
+        Commands::DownloadServerDeps { enable_nvenc } => {
+            dependencies::linux::download_server_deps(enable_nvenc)
+        }
+        Commands::BuildServerDeps { enable_nvenc } => {
+            dependencies::linux::build_server_deps(enable_nvenc)
+        }
+        Commands::BuildStreamer {
+            keep_config,
+            profile,
+            common_build_flags,
+        } => build::build_streamer(profile, None, common_build_flags, keep_config),
+        Commands::BuildLauncher {
+            profile,
+            common_build_flags,
+        } => build::build_launcher(profile, common_build_flags),
+        Commands::BuildServerLib {
+            profile,
+            common_build_flags,
+        } => build::build_server_lib(profile, None, common_build_flags),
+        Commands::BuildClient { profile } => build::build_android_client(profile),
+        Commands::BuildClientLib {
+            profile,
+            link_stdcpp,
+            all_targets,
+        } => build::build_android_client_core_lib(profile, link_stdcpp, all_targets),
+        Commands::BuildClientXrLib {
+            profile,
+            link_stdcpp,
+        } => build::build_android_client_openxr_lib(profile, link_stdcpp),
+        Commands::RunStreamer {
+            profile,
+            common_build_flags,
+            keep_config,
+        } => {
+            build::build_streamer(profile, None, common_build_flags, keep_config);
+            run_streamer();
+        }
+        Commands::RunLauncher {
+            profile,
+            common_build_flags,
+        } => {
+            build::build_launcher(profile, common_build_flags);
+            run_launcher();
+        }
+        Commands::PackageStreamer { root, enable_nvenc } => {
+            packaging::package_streamer(enable_nvenc, root)
+        }
+        Commands::PackageLauncher => packaging::package_launcher(),
+        Commands::PackageClient { package_flavor } => {
+            packaging::package_client_openxr(package_flavor)
+        }
+        Commands::PackageClientLib {
+            link_stdcpp,
+            all_targets,
+        } => packaging::package_client_lib(link_stdcpp, all_targets),
+        Commands::Format => format::format(),
+        Commands::CheckFormat => format::check_format(),
+        Commands::Clean => clean(),
+        Commands::Bump {
+            version,
+            is_nightly,
+        } => version::bump_version(version, is_nightly),
+        Commands::Clippy { ci } => {
+            if ci {
+                ci::clippy_ci();
+            } else {
+                clippy();
+            }
+        }
+        Commands::CheckMsrv => version::check_msrv(),
     }
-
     let elapsed_time = begin_time.elapsed();
+
     println!(
         "\nDone [{}m {}s]\n",
         elapsed_time.as_secs() / 60,

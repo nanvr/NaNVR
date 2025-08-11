@@ -1,4 +1,5 @@
 use crate::CommonBuildFlags;
+use clap::ValueEnum;
 use filepaths::Layout;
 use std::{
     env,
@@ -9,8 +10,9 @@ use std::{
 };
 use xshell::{Shell, cmd};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Default, ValueEnum)]
 pub enum Profile {
+    #[default]
     Debug,
     Release,
     Distribution,
@@ -133,12 +135,9 @@ pub fn build_streamer(
         };
 
         let _push_guard = sh.push_dir(filepaths::crate_dir("server_openvr"));
-        cmd!(
-            sh,
-            "cargo build {common_flags_ref...} {profiling_flag...}"
-        )
-        .run()
-        .unwrap();
+        cmd!(sh, "cargo build {common_flags_ref...} {profiling_flag...}")
+            .run()
+            .unwrap();
 
         sh.copy_file(
             artifacts_dir.join(filepaths::dynlib_fname("server_openvr")),

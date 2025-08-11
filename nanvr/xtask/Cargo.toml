@@ -17,3 +17,4 @@ walkdir = "2"
 pkg-config = "0.3"
 diffy = "0.4.2"
 cmd-exists = "0.1.2"
+clap = { version = "4.5.43", features = ["derive"] }
