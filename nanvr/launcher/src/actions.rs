@@ -148,7 +148,7 @@ fn install_and_launch_apk(
             .assets
             .get(apk_name)
             .ok_or(anyhow::anyhow!("Unable to determine download URL"))?;
-        let apk_buffer = adb::commands::download(apk_url, |downloaded, total| {
+        let apk_buffer = wired::commands::download(apk_url, |downloaded, total| {
             let progress = total.map_or(0.0, |t| downloaded as f32 / t as f32);
             worker_message_sender
                 .send(WorkerMessage::ProgressUpdate(Progress {
@@ -162,7 +162,7 @@ fn install_and_launch_apk(
     }
 
     let layout = filepaths::Layout::new(&root);
-    let adb_path = adb::commands::require_adb(&layout, |downloaded, total| {
+    let adb_path = wired::commands::require_adb(&layout, |downloaded, total| {
         let progress = total.map_or(0.0, |t| downloaded as f32 / t as f32);
         worker_message_sender
             .send(WorkerMessage::ProgressUpdate(Progress {
@@ -172,7 +172,7 @@ fn install_and_launch_apk(
             .ok();
     })?;
 
-    let device_serial = adb::commands::list_devices(&adb_path)?
+    let device_serial = wired::commands::list_devices(&adb_path)?
         .iter()
         .find_map(|d| d.serial.clone())
         .ok_or(anyhow::anyhow!("Failed to find connected device"))?;
@@ -190,21 +190,21 @@ fn install_and_launch_apk(
         system_info::PACKAGE_NAME_GITHUB_DEV
     };
 
-    if adb::commands::is_package_installed(&adb_path, &device_serial, application_id)? {
+    if wired::commands::is_package_installed(&adb_path, &device_serial, application_id)? {
         worker_message_sender.send(WorkerMessage::ProgressUpdate(Progress {
             message: "Uninstalling old APK".into(),
             progress: 0.0,
         }))?;
-        adb::commands::uninstall_package(&adb_path, &device_serial, application_id)?;
+        wired::commands::uninstall_package(&adb_path, &device_serial, application_id)?;
     }
 
     worker_message_sender.send(WorkerMessage::ProgressUpdate(Progress {
         message: "Installing new APK".into(),
         progress: 0.0,
     }))?;
-    adb::commands::install_package(&adb_path, &device_serial, &apk_path.to_string_lossy())?;
+    wired::commands::install_package(&adb_path, &device_serial, &apk_path.to_string_lossy())?;
 
-    adb::commands::start_application(&adb_path, &device_serial, application_id)?;
+    wired::commands::start_application(&adb_path, &device_serial, application_id)?;
 
     Ok(())
 }
