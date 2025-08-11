@@ -15,7 +15,7 @@ mod bindings {
 use bindings::*;
 
 use configuration::{CodecType, ControllersConfig};
-use filepaths as afs;
+use filepaths as nanpaths;
 use net_packets::{ButtonValue, Haptics};
 use server_core::{HandType, ServerCoreContext, ServerCoreEvent};
 use shared::{
@@ -460,7 +460,7 @@ pub unsafe extern "C" fn HmdDriverFactory(
     };
 
     let dashboard_process_paths = sysinfo::System::new_all()
-        .processes_by_name(OsStr::new(&afs::dashboard_fname()))
+        .processes_by_name(OsStr::new(&nanpaths::dashboard_fname()))
         .filter_map(|proc| Some(proc.exe()?.to_owned()))
         .collect::<Vec<_>>();
 

@@ -1,4 +1,4 @@
-use filepaths as afs;
+use filepaths as nanpaths;
 use std::fs;
 use std::mem;
 use std::path::PathBuf;
@@ -6,7 +6,7 @@ use walkdir::WalkDir;
 use xshell::{Shell, cmd};
 
 fn files_to_format_paths() -> Vec<PathBuf> {
-    let cpp_dir = afs::crate_dir("server_openvr").join("cpp");
+    let cpp_dir = nanpaths::crate_dir("server_openvr").join("cpp");
 
     WalkDir::new(cpp_dir)
         .into_iter()
@@ -33,7 +33,7 @@ fn files_to_format_paths() -> Vec<PathBuf> {
 
 pub fn format() {
     let sh = Shell::new().unwrap();
-    let dir = sh.push_dir(afs::workspace_dir());
+    let dir = sh.push_dir(nanpaths::workspace_dir());
 
     cmd!(sh, "cargo fmt --all").run().unwrap();
 
@@ -46,7 +46,7 @@ pub fn format() {
 
 pub fn check_format() {
     let sh = Shell::new().unwrap();
-    let dir = sh.push_dir(afs::workspace_dir());
+    let dir = sh.push_dir(nanpaths::workspace_dir());
 
     cmd!(sh, "cargo fmt --all -- --check")
         .run()

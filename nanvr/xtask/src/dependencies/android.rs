@@ -1,5 +1,5 @@
 use crate::{command, dependencies::OpenXRLoadersSelection};
-use filepaths as afs;
+use filepaths as nanpaths;
 use std::fs;
 use xshell::{Shell, cmd};
 
@@ -37,10 +37,10 @@ pub fn build_deps(all_targets: bool, openxr_loaders_selection: OpenXRLoadersSele
 fn get_android_openxr_loaders(selection: OpenXRLoadersSelection) {
     fn get_openxr_loader(name: &str, url: &str, source_dir: &str) {
         let sh = Shell::new().unwrap();
-        let temp_dir = afs::build_dir().join("temp_download");
+        let temp_dir = nanpaths::build_dir().join("temp_download");
         sh.remove_path(&temp_dir).ok();
         sh.create_dir(&temp_dir).unwrap();
-        let destination_dir = afs::deps_dir().join("android_openxr/arm64-v8a");
+        let destination_dir = nanpaths::deps_dir().join("android_openxr/arm64-v8a");
         fs::create_dir_all(&destination_dir).unwrap();
 
         command::download_and_extract_zip(url, &temp_dir).unwrap();

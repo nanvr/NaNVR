@@ -1,7 +1,7 @@
 mod linux_steamvr;
 
 use crate::data_sources;
-use filepaths as afs;
+use filepaths as nanpaths;
 use serde_json::{self, json};
 use shared::{
     anyhow::{Context, Result},
@@ -26,7 +26,7 @@ const BLOCKED_KEY: &str = "blocked_by_safe_mode";
 
 pub fn is_steamvr_running() -> bool {
     System::new_all()
-        .processes_by_name(OsStr::new(&afs::exec_fname("vrserver")))
+        .processes_by_name(OsStr::new(&nanpaths::exec_fname("vrserver")))
         .count()
         != 0
 }
@@ -35,7 +35,7 @@ pub fn maybe_kill_steamvr() {
     let mut system = System::new_all();
 
     #[allow(unused_variables)]
-    for process in system.processes_by_name(OsStr::new(&afs::exec_fname("vrmonitor"))) {
+    for process in system.processes_by_name(OsStr::new(&nanpaths::exec_fname("vrmonitor"))) {
         debug!("Killing vrmonitor");
 
         linux_steamvr::terminate_process(process);
@@ -46,7 +46,7 @@ pub fn maybe_kill_steamvr() {
     system.refresh_processes(ProcessesToUpdate::All, true);
 
     #[allow(unused_variables)]
-    for process in system.processes_by_name(OsStr::new(&afs::exec_fname("vrserver"))) {
+    for process in system.processes_by_name(OsStr::new(&nanpaths::exec_fname("vrserver"))) {
         debug!("Killing vrserver");
 
         linux_steamvr::terminate_process(process);

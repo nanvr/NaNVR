@@ -4,7 +4,7 @@ use crate::{
     command,
     dependencies::{self, OpenXRLoadersSelection},
 };
-use filepaths as afs;
+use filepaths as nanpaths;
 use std::{fs, path::Path};
 use xshell::{Shell, cmd};
 
@@ -21,12 +21,12 @@ pub fn include_licenses(root_path: &Path) {
     let licenses_dir = root_path.join("licenses");
     sh.create_dir(&licenses_dir).unwrap();
     sh.copy_file(
-        afs::workspace_dir().join("LICENSE"),
+        nanpaths::workspace_dir().join("LICENSE"),
         licenses_dir.join("ALVR.txt"),
     )
     .unwrap();
     sh.copy_file(
-        afs::crate_dir("server_openvr").join("LICENSE-Valve"),
+        nanpaths::crate_dir("server_openvr").join("LICENSE-Valve"),
         licenses_dir.join("Valve.txt"),
     )
     .unwrap();
@@ -35,7 +35,7 @@ pub fn include_licenses(root_path: &Path) {
     cmd!(sh, "cargo install cargo-about --version 0.6.4")
         .run()
         .unwrap();
-    let licenses_template = afs::crate_dir("xtask").join("licenses_template.hbs");
+    let licenses_template = nanpaths::crate_dir("xtask").join("licenses_template.hbs");
     let licenses_content = cmd!(sh, "cargo about generate {licenses_template}")
         .read()
         .unwrap();
@@ -64,15 +64,15 @@ pub fn package_streamer(
         false,
     );
 
-    include_licenses(&afs::streamer_build_dir());
+    include_licenses(&nanpaths::streamer_build_dir());
 
-    command::targz(&sh, &afs::streamer_build_dir()).unwrap();
+    command::targz(&sh, &nanpaths::streamer_build_dir()).unwrap();
 }
 
 pub fn package_launcher() {
     let sh = Shell::new().unwrap();
 
-    sh.remove_path(afs::launcher_build_dir()).ok();
+    sh.remove_path(nanpaths::launcher_build_dir()).ok();
 
     build::build_launcher(
         Profile::Distribution,
@@ -82,13 +82,13 @@ pub fn package_launcher() {
         },
     );
 
-    include_licenses(&afs::launcher_build_dir());
+    include_licenses(&nanpaths::launcher_build_dir());
 
-    command::targz(&sh, &afs::launcher_build_dir()).unwrap();
+    command::targz(&sh, &nanpaths::launcher_build_dir()).unwrap();
 }
 
 pub fn replace_client_openxr_manifest(from_pattern: &str, to: &str) {
-    let manifest_path = afs::crate_dir("client_openxr").join("Cargo.toml");
+    let manifest_path = nanpaths::crate_dir("client_openxr").join("Cargo.toml");
     let manifest_string = fs::read_to_string(&manifest_path)
         .unwrap()
         .replace(from_pattern, to);
@@ -97,7 +97,7 @@ pub fn replace_client_openxr_manifest(from_pattern: &str, to: &str) {
 }
 
 pub fn package_client_openxr(flavor: ReleaseFlavor) {
-    fs::remove_dir_all(afs::deps_dir().join("android_openxr")).ok();
+    fs::remove_dir_all(nanpaths::deps_dir().join("android_openxr")).ok();
 
     let openxr_selection = match flavor {
         ReleaseFlavor::GitHub => OpenXRLoadersSelection::All,
@@ -126,5 +126,5 @@ pub fn package_client_lib(link_stdcpp: bool, all_targets: bool) {
 
     build::build_android_client_core_lib(Profile::Distribution, link_stdcpp, all_targets);
 
-    command::zip(&sh, &afs::build_dir().join("client_core")).unwrap();
+    command::zip(&sh, &nanpaths::build_dir().join("client_core")).unwrap();
 }

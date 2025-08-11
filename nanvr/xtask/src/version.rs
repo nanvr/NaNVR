@@ -1,5 +1,5 @@
 use crate::command;
-use filepaths as afs;
+use filepaths as nanpaths;
 use std::fs;
 use xshell::{Shell, cmd};
 
@@ -15,7 +15,7 @@ pub fn split_string(source: &str, start_pattern: &str, end: char) -> (String, St
 }
 
 pub fn version() -> String {
-    let manifest_path = afs::workspace_dir().join("Cargo.toml");
+    let manifest_path = nanpaths::workspace_dir().join("Cargo.toml");
     println!("cargo:rerun-if-changed={}", manifest_path.to_string_lossy());
 
     let manifest = fs::read_to_string(manifest_path).unwrap();
@@ -25,7 +25,7 @@ pub fn version() -> String {
 }
 
 fn bump_cargo_version(new_version: &str) {
-    let manifest_path = afs::workspace_dir().join("Cargo.toml");
+    let manifest_path = nanpaths::workspace_dir().join("Cargo.toml");
 
     let manifest = fs::read_to_string(&manifest_path).unwrap();
 

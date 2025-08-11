@@ -17,10 +17,10 @@ use data_sources::DataSources;
 use data_sources_wasm::DataSources;
 
 use dashboard::Dashboard;
-use filepaths as afs;
+use filepaths as nanpaths;
 
-fn get_filesystem_layout() -> afs::Layout {
-    afs::filesystem_layout_from_dashboard_exe(&std::env::current_exe().unwrap()).unwrap()
+fn get_filesystem_layout() -> nanpaths::Layout {
+    nanpaths::filesystem_layout_from_dashboard_exe(&std::env::current_exe().unwrap()).unwrap()
 }
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -29,7 +29,7 @@ fn main() {
         NativeOptions,
         egui::{IconData, ViewportBuilder},
     };
-    use filepaths as afs;
+    use filepaths as nanpaths;
     use ico::IconDir;
     use shared::ALVR_VERSION;
     use shared::info;
@@ -41,7 +41,9 @@ fn main() {
 
     // Kill any other dashboard instance
     let self_path = std::env::current_exe().unwrap();
-    for proc in sysinfo::System::new_all().processes_by_name(OsStr::new(&afs::dashboard_fname())) {
+    for proc in
+        sysinfo::System::new_all().processes_by_name(OsStr::new(&nanpaths::dashboard_fname()))
+    {
         if let Some(other_path) = proc.exe()
             && other_path != self_path
         {
