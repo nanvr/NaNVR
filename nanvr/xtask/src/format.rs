@@ -1,3 +1,5 @@
+use diffy::PatchFormatter;
+use diffy::create_patch;
 use filepaths as nanpaths;
 use std::fs;
 use std::mem;
@@ -62,10 +64,12 @@ pub fn check_format() {
         output.push('\n');
 
         if content != output {
-            let diff_out = diffy::create_patch(&content, &output);
+            let diff_out = create_patch(&content, &output);
+            let formatter = PatchFormatter::new().with_color();
             panic!(
-                "clang-format check failed for {}, diff: {diff_out}",
-                path.display()
+                "clang-format check failed for {}, diff: {}",
+                path.display(),
+                formatter.fmt_patch(&diff_out)
             );
         }
     }
