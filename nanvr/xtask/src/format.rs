@@ -63,6 +63,11 @@ pub fn check_format() {
         }
         output.push('\n');
 
+        let out_format = cmd!(sh, "clang-format -style=WebKit -dump-config")
+            .read()
+            .unwrap();
+        eprintln!("\n{out_format}\n");
+
         if content != output {
             let diff_out = create_patch(&content, &output);
             let formatter = PatchFormatter::new().with_color();
