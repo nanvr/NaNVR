@@ -81,7 +81,7 @@ void init_paths() {
     BODY_IDS.insert(BODY_LEFT_FOOT_ID);
     BODY_IDS.insert(BODY_RIGHT_KNEE_ID);
     BODY_IDS.insert(BODY_RIGHT_FOOT_ID);
-
+    // clang-format off
     LEFT_CONTROLLER_BUTTON_MAPPING.insert(
         { PathStringToHash("/user/hand/left/input/system/click"),
           { { "/input/system/click" }, ButtonType::Binary } }
@@ -291,7 +291,7 @@ void init_paths() {
         { PathStringToHash("/user/hand/right/input/thumbrest/touch"),
           { { "/input/thumbrest/touch" }, ButtonType::Binary } }
     );
-
+    // clang-format on
     for (auto hand : { LEFT_CONTROLLER_BUTTON_MAPPING, RIGHT_CONTROLLER_BUTTON_MAPPING }) {
         for (auto info : hand) {
             std::vector<uint64_t> ids;
