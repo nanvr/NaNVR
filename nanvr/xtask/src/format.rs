@@ -19,14 +19,7 @@ fn files_to_format_paths() -> Vec<PathBuf> {
 
             let excluded = matches!(
                 entry.file_name().to_str().unwrap(),
-                "shared"
-                    | "include"
-                    | "NvCodecUtils.h"
-                    | "NvEncoder.cpp"
-                    | "NvEncoder.h"
-                    | "NvEncoderD3D11.cpp" // todo: windows-only?
-                    | "NvEncoderD3D11.h" // todo: windows-only?
-                    | "nvEncodeAPI.h"
+                "shared" | "include" | "nvEncodeAPI.h"
             );
 
             included && !excluded
@@ -69,7 +62,11 @@ pub fn check_format() {
         output.push('\n');
 
         if content != output {
-            panic!("clang-format check failed for {}", path.display());
+            let diff_out = diffy::create_patch(&content, &output);
+            panic!(
+                "clang-format check failed for {}, diff: {diff_out}",
+                path.display()
+            );
         }
     }
 
