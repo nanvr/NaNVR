@@ -1,9 +1,9 @@
 use crate::openvrpaths;
+use serde_json as json;
 use shared::{
     ToAny,
     anyhow::{Result, bail},
 };
-use serde_json as json;
 use std::{
     collections::{HashMap, HashSet},
     fs,

@@ -1,7 +1,7 @@
-use shared::{anyhow::Result, glam::EulerRot};
-use net_packets::{FaceData, FaceExpressions};
 use configuration::FaceTrackingSinkConfig;
+use net_packets::{FaceData, FaceExpressions};
 use rosc::{OscMessage, OscPacket, OscType};
+use shared::{anyhow::Result, glam::EulerRot};
 use std::{f32::consts::PI, net::UdpSocket};
 
 const RAD_TO_DEG: f32 = 180.0 / PI;

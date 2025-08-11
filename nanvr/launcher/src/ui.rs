@@ -1,5 +1,4 @@
 use crate::{InstallationInfo, Progress, ReleaseChannelsInfo, UiMessage, WorkerMessage, actions};
-use gui_shared::ModalButton;
 use eframe::{
     egui::{
         self, Button, CentralPanel, ComboBox, Context, Frame, Grid, Layout, ProgressBar, RichText,
@@ -8,6 +7,7 @@ use eframe::{
     emath::Align,
     epaint::Color32,
 };
+use gui_shared::ModalButton;
 use std::{
     mem,
     sync::mpsc::{Receiver, Sender},

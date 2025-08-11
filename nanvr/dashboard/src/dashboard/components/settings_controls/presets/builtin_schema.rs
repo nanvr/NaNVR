@@ -291,7 +291,6 @@ pub fn microphone_schema() -> PresetSchemaNode {
     })
 }
 
-
 pub fn hand_tracking_interaction_schema() -> PresetSchemaNode {
     const HELP: &str = r"Disabled: hands cannot emulate buttons. Useful for using Joy-Cons or other non-native controllers.
 SteamVR Input 2.0: create separate SteamVR devices for hand tracking.

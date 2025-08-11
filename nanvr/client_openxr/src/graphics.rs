@@ -1,7 +1,7 @@
-use shared::glam::UVec2;
 use client_graphics::GraphicsContext;
 use configuration::ClientsidePostProcessingConfig;
 use openxr as xr;
+use shared::glam::UVec2;
 use std::ptr;
 
 #[allow(unused)]

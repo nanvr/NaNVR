@@ -17,17 +17,17 @@ mod audio;
 
 pub mod video_decoder;
 
+use configuration::CodecType;
+use connection::{ConnectionContext, DecoderCallback};
+use net_packets::{
+    BatteryInfo, ButtonEntry, ClientControlPacket, RealTimeConfig, StreamConfig, TrackingData,
+};
 use shared::{
     ConnectionState, LifecycleState, ViewParams, dbg_client_core, error,
     glam::{UVec2, Vec2},
     parking_lot::{Mutex, RwLock},
     warn,
 };
-use net_packets::{
-    BatteryInfo, ButtonEntry, ClientControlPacket, RealTimeConfig, StreamConfig, TrackingData,
-};
-use configuration::CodecType;
-use connection::{ConnectionContext, DecoderCallback};
 use std::{
     collections::{HashSet, VecDeque},
     sync::Arc,

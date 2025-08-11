@@ -1,9 +1,9 @@
+use net_packets::ClientControlPacket;
 use shared::{
     DebugGroupsConfig, LogSeverity,
     log::{Level, Record},
     parking_lot::Mutex,
 };
-use net_packets::ClientControlPacket;
 use std::{
     sync::{LazyLock, mpsc},
     time::{Duration, Instant},

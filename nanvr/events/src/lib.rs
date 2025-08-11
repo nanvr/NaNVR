@@ -1,7 +1,7 @@
-use shared::{DeviceMotion, LogEntry, LogSeverity, Pose, info};
-use net_packets::{ButtonValue, FaceData};
 use configuration::SessionConfig;
+use net_packets::{ButtonValue, FaceData};
 use serde::{Deserialize, Serialize};
+use shared::{DeviceMotion, LogEntry, LogSeverity, Pose, info};
 use std::{path::PathBuf, time::Duration};
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]

@@ -4,12 +4,12 @@
 use crate::{
     SESSION_MANAGER, ServerCoreContext, ServerCoreEvent, logging_backend, tracking::HandType,
 };
+use configuration::CodecType;
+use net_packets::{ButtonEntry, ButtonValue, Haptics};
 use shared::{
     AlvrCodecType, AlvrPose, AlvrViewParams, log,
     parking_lot::{Mutex, RwLock},
 };
-use net_packets::{ButtonEntry, ButtonValue, Haptics};
-use configuration::CodecType;
 use std::{
     collections::{HashMap, VecDeque},
     ffi::{CStr, CString, c_char},

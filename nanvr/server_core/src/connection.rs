@@ -7,7 +7,20 @@ use crate::{
     statistics::StatisticsManager,
     tracking::{self, TrackingManager},
 };
-use wired::{WiredConnection, WiredConnectionStatus};
+use configuration::{
+    BodyTrackingSinkConfig, CodecType, ControllersEmulationMode, FrameSize, H264Profile,
+    OpenvrConfig, SessionConfig, SocketProtocol,
+};
+use events::{AdbEvent, ButtonEvent, EventType};
+use net_packets::{
+    AUDIO, ClientConnectionResult, ClientControlPacket, ClientListAction, ClientStatistics,
+    HAPTICS, NegotiatedStreamingConfig, NegotiatedStreamingConfigExt, RealTimeConfig, STATISTICS,
+    ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO, VideoPacketHeader,
+};
+use net_sockets::{
+    CONTROL_PORT, KEEPALIVE_INTERVAL, KEEPALIVE_TIMEOUT, PeerType, ProtoControlSocket,
+    StreamSocketBuilder, WIRED_CLIENT_HOSTNAME,
+};
 use shared::{
     AnyhowToCon, BUTTON_INFO, CONTROLLER_PROFILE_INFO, ConResult, ConnectionError, ConnectionState,
     LifecycleState, QUEST_CONTROLLER_PROFILE_PATH, con_bail, dbg_connection, debug, error,
@@ -17,20 +30,6 @@ use shared::{
     settings_schema::Switch,
     warn,
 };
-use events::{AdbEvent, ButtonEvent, EventType};
-use net_packets::{
-    AUDIO, ClientConnectionResult, ClientControlPacket, ClientListAction, ClientStatistics,
-    HAPTICS, NegotiatedStreamingConfig, NegotiatedStreamingConfigExt, RealTimeConfig, STATISTICS,
-    ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO, VideoPacketHeader,
-};
-use configuration::{
-    BodyTrackingSinkConfig, CodecType, ControllersEmulationMode, FrameSize, H264Profile,
-    OpenvrConfig, SessionConfig, SocketProtocol,
-};
-use net_sockets::{
-    CONTROL_PORT, KEEPALIVE_INTERVAL, KEEPALIVE_TIMEOUT, PeerType, ProtoControlSocket,
-    StreamSocketBuilder, WIRED_CLIENT_HOSTNAME,
-};
 use std::{
     collections::HashMap,
     net::{IpAddr, Ipv4Addr},
@@ -39,6 +38,7 @@ use std::{
     thread,
     time::{Duration, Instant},
 };
+use wired::{WiredConnection, WiredConnectionStatus};
 
 const RETRY_CONNECT_MIN_INTERVAL: Duration = Duration::from_secs(1);
 const HANDSHAKE_ACTION_TIMEOUT: Duration = Duration::from_secs(2);

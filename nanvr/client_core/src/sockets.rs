@@ -1,5 +1,5 @@
-use shared::anyhow::{Result, bail};
 use mdns_sd::{ServiceDaemon, ServiceInfo};
+use shared::anyhow::{Result, bail};
 
 pub struct AnnouncerSocket {
     hostname: String,

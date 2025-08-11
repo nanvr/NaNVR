@@ -1,10 +1,10 @@
+use flume::TryRecvError;
+use mdns_sd::{Receiver, ServiceDaemon, ServiceEvent};
 use shared::{
     ToAny,
     anyhow::{Result, bail},
     warn,
 };
-use flume::TryRecvError;
-use mdns_sd::{Receiver, ServiceDaemon, ServiceEvent};
 use std::{collections::HashMap, net::IpAddr};
 
 pub struct WelcomeSocket {

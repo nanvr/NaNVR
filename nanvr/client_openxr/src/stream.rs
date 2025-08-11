@@ -6,6 +6,13 @@ use client_core::{
     ClientCoreContext,
     video_decoder::{self, VideoDecoderConfig, VideoDecoderSource},
 };
+use client_graphics::{GraphicsContext, StreamRenderer, StreamViewParams};
+use configuration::{
+    ClientsideFoveationConfig, ClientsideFoveationMode, ClientsidePostProcessingConfig, CodecType,
+    FoveatedEncodingConfig, MediacodecProperty, PassthroughMode, UpscalingConfig,
+};
+use net_packets::{RealTimeConfig, StreamConfig, TrackingData};
+use openxr as xr;
 use shared::{
     HAND_LEFT_ID, HAND_RIGHT_ID, HEAD_ID, Pose, RelaxedAtomic, ViewParams,
     anyhow::Result,
@@ -13,14 +20,6 @@ use shared::{
     glam::{UVec2, Vec2},
     parking_lot::RwLock,
 };
-use client_graphics::{GraphicsContext, StreamRenderer, StreamViewParams};
-use net_packets::{RealTimeConfig, StreamConfig, TrackingData};
-use configuration::{
-    ClientsideFoveationConfig, ClientsideFoveationMode, ClientsidePostProcessingConfig, CodecType,
-    FoveatedEncodingConfig, MediacodecProperty, PassthroughMode, UpscalingConfig,
-};
-use system_info::Platform;
-use openxr as xr;
 use std::{
     ptr,
     rc::Rc,
@@ -28,6 +27,7 @@ use std::{
     thread::{self, JoinHandle},
     time::{Duration, Instant},
 };
+use system_info::Platform;
 
 const DECODER_MAX_TIMEOUT_MULTIPLIER: f32 = 0.8;
 

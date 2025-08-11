@@ -8,15 +8,8 @@ mod stream;
 
 use crate::stream::ParsedStreamConfig;
 use client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
-use shared::{
-    Fov, HAND_LEFT_ID, Pose, error,
-    glam::{Quat, UVec2, Vec3},
-    info,
-    parking_lot::RwLock,
-};
 use client_graphics::GraphicsContext;
 use configuration::{BodyTrackingBDConfig, BodyTrackingSourcesConfig};
-use system_info::Platform;
 use extra_extensions::{
     BD_BODY_TRACKING_EXTENSION_NAME, BD_MOTION_TRACKING_EXTENSION_NAME,
     META_BODY_TRACKING_FIDELITY_EXTENSION_NAME, META_BODY_TRACKING_FULL_BODY_EXTENSION_NAME,
@@ -27,8 +20,15 @@ use interaction::{InteractionContext, InteractionSourcesConfig};
 use lobby::Lobby;
 use openxr as xr;
 use passthrough::PassthroughLayer;
+use shared::{
+    Fov, HAND_LEFT_ID, Pose, error,
+    glam::{Quat, UVec2, Vec3},
+    info,
+    parking_lot::RwLock,
+};
 use std::{path::Path, rc::Rc, sync::Arc, thread, time::Duration};
 use stream::StreamContext;
+use system_info::Platform;
 
 fn from_xr_vec3(v: xr::Vector3f) -> Vec3 {
     Vec3::new(v.x, v.y, v.z)

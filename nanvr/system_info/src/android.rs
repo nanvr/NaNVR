@@ -1,5 +1,5 @@
-use shared::warn;
 use jni::{JNIEnv, JavaVM, objects::JObject, sys::jobject};
+use shared::warn;
 use std::net::{IpAddr, Ipv4Addr};
 
 pub const MICROPHONE_PERMISSION: &str = "android.permission.RECORD_AUDIO";

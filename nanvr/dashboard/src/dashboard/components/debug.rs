@@ -1,5 +1,5 @@
-use net_packets::ServerRequest;
 use eframe::egui::Ui;
+use net_packets::ServerRequest;
 
 pub fn debug_tab_ui(ui: &mut Ui) -> Option<ServerRequest> {
     let mut request = None;

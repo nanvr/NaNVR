@@ -1,9 +1,9 @@
+use encoding_rs_io::DecodeReaderBytes;
+use serde_json as json;
 use shared::{
     ToAny,
     anyhow::{Result, bail},
 };
-use encoding_rs_io::DecodeReaderBytes;
-use serde_json as json;
 use std::{
     fs::{self, File},
     io::Read,

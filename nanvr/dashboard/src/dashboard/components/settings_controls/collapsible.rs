@@ -1,6 +1,6 @@
 use super::NestingInfo;
-use net_packets::PathValuePair;
 use eframe::egui::Ui;
+use net_packets::PathValuePair;
 use serde_json as json;
 
 pub fn collapsible_button(

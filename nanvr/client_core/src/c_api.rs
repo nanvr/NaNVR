@@ -4,6 +4,14 @@ use crate::{
     ClientCapabilities, ClientCoreContext, ClientCoreEvent, storage,
     video_decoder::{self, VideoDecoderConfig, VideoDecoderSource},
 };
+use client_graphics::{
+    GraphicsContext, LobbyRenderer, LobbyViewParams, SDR_FORMAT_GL, StreamRenderer,
+    StreamViewParams,
+};
+use configuration::{
+    CodecType, FoveatedEncodingConfig, MediacodecPropType, MediacodecProperty, UpscalingConfig,
+};
+use net_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
 use shared::{
     AlvrCodecType, AlvrFov, AlvrPose, AlvrQuat, AlvrViewParams, DeviceMotion, Pose, ViewParams,
     anyhow::Result,
@@ -12,14 +20,6 @@ use shared::{
     info,
     parking_lot::Mutex,
     warn,
-};
-use client_graphics::{
-    GraphicsContext, LobbyRenderer, LobbyViewParams, SDR_FORMAT_GL, StreamRenderer,
-    StreamViewParams,
-};
-use net_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
-use configuration::{
-    CodecType, FoveatedEncodingConfig, MediacodecPropType, MediacodecProperty, UpscalingConfig,
 };
 use std::{
     cell::RefCell,
@@ -722,9 +722,7 @@ pub extern "C" fn alvr_render_lobby_opengl(
             },
             LobbyViewParams {
                 swapchain_index: (*view_inputs.offset(1)).swapchain_index,
-                view_params: shared::from_capi_view_params(
-                    &(*view_inputs.offset(1)).view_params,
-                ),
+                view_params: shared::from_capi_view_params(&(*view_inputs.offset(1)).view_params),
             },
         ]
     };
@@ -933,7 +931,6 @@ pub extern "C" fn alvr_get_frame(
 #[unsafe(no_mangle)]
 pub extern "C" fn alvr_rotation_delta(source: AlvrQuat, destination: AlvrQuat) -> AlvrQuat {
     shared::to_capi_quat(
-        &(shared::from_capi_quat(&source).inverse()
-            * shared::from_capi_quat(&destination)),
+        &(shared::from_capi_quat(&source).inverse() * shared::from_capi_quat(&destination)),
     )
 }

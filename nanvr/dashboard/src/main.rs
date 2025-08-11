@@ -16,8 +16,8 @@ use data_sources::DataSources;
 #[cfg(target_arch = "wasm32")]
 use data_sources_wasm::DataSources;
 
-use filepaths as afs;
 use dashboard::Dashboard;
+use filepaths as afs;
 
 fn get_filesystem_layout() -> afs::Layout {
     afs::filesystem_layout_from_dashboard_exe(&std::env::current_exe().unwrap()).unwrap()
@@ -25,14 +25,14 @@ fn get_filesystem_layout() -> afs::Layout {
 
 #[cfg(not(target_arch = "wasm32"))]
 fn main() {
-    use shared::ALVR_VERSION;
-    use shared::info;
-    use filepaths as afs;
     use eframe::{
         NativeOptions,
         egui::{IconData, ViewportBuilder},
     };
+    use filepaths as afs;
     use ico::IconDir;
+    use shared::ALVR_VERSION;
+    use shared::info;
     use std::{env, ffi::OsStr, fs};
     use std::{io::Cursor, sync::mpsc};
 

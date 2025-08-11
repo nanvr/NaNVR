@@ -1,8 +1,8 @@
 #[cfg(target_os = "android")]
 mod android;
 
-use shared::anyhow::Result;
 use configuration::{CodecType, MediacodecProperty};
+use shared::anyhow::Result;
 use std::time::Duration;
 
 #[derive(Clone, Default, PartialEq)]

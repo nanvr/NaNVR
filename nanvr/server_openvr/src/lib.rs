@@ -14,6 +14,10 @@ mod bindings {
 }
 use bindings::*;
 
+use configuration::{CodecType, ControllersConfig};
+use filepaths as afs;
+use net_packets::{ButtonValue, Haptics};
+use server_core::{HandType, ServerCoreContext, ServerCoreEvent};
 use shared::{
     BUTTON_INFO, HAND_LEFT_ID, HAND_RIGHT_ID, HAND_TRACKER_LEFT_ID, HAND_TRACKER_RIGHT_ID, HEAD_ID,
     Pose, ViewParams, error,
@@ -21,10 +25,6 @@ use shared::{
     settings_schema::Switch,
     warn,
 };
-use filepaths as afs;
-use net_packets::{ButtonValue, Haptics};
-use server_core::{HandType, ServerCoreContext, ServerCoreEvent};
-use configuration::{CodecType, ControllersConfig};
 use std::{
     collections::VecDeque,
     ffi::{CString, OsStr, c_char, c_void},
@@ -427,10 +427,7 @@ extern "C" fn wait_for_vsync() {
         .and_then(|ctx| ctx.duration_until_next_vsync());
 
     if let Some(duration) = sleep_duration {
-        if server_core::settings()
-            .video
-            .enforce_server_frame_pacing
-        {
+        if server_core::settings().video.enforce_server_frame_pacing {
             thread::sleep(duration);
         } else {
             thread::yield_now();

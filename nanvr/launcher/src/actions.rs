@@ -1,10 +1,10 @@
 use crate::{
     InstallationInfo, Progress, ReleaseChannelsInfo, ReleaseInfo, UiMessage, WorkerMessage,
 };
-use shared::{ToAny, anyhow::Result, semver::Version};
 use anyhow::Context;
 use flate2::read::GzDecoder;
 use futures_util::StreamExt;
+use shared::{ToAny, anyhow::Result, semver::Version};
 use std::{
     env,
     fs::{self, File},

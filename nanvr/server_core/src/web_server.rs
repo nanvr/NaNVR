@@ -2,14 +2,8 @@ use crate::{
     ConnectionContext, FILESYSTEM_LAYOUT, SESSION_MANAGER, ServerCoreEvent,
     logging_backend::LOGGING_EVENTS_SENDER,
 };
-use shared::{
-    ConnectionState,
-    anyhow::{self, Result},
-    error, info, log,
-};
-use events::{ButtonEvent, EventType};
-use net_packets::{ButtonEntry, ClientListAction, ServerRequest};
 use bytes::Buf;
+use events::{ButtonEvent, EventType};
 use futures::SinkExt;
 use headers::{
     AccessControlAllowHeaders, AccessControlAllowMethods, AccessControlRequestHeaders,
@@ -22,8 +16,14 @@ use hyper::{
     },
     service,
 };
+use net_packets::{ButtonEntry, ClientListAction, ServerRequest};
 use serde::de::DeserializeOwned;
 use serde_json as json;
+use shared::{
+    ConnectionState,
+    anyhow::{self, Result},
+    error, info, log,
+};
 use std::{net::SocketAddr, sync::Arc};
 use tokio::sync::broadcast::{self, error::RecvError};
 use tokio_tungstenite::{WebSocketStream, tungstenite::protocol};

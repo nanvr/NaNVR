@@ -6,13 +6,13 @@ use crate::{
         FacialTrackerHTC, MotionTrackerBD, MultimodalMeta,
     },
 };
+use configuration::{BodyTrackingBDConfig, BodyTrackingSourcesConfig, FaceTrackingSourcesConfig};
+use net_packets::{ButtonEntry, ButtonValue, FaceData, FaceExpressions, StreamConfig};
+use openxr as xr;
 use shared::{
     glam::{Quat, Vec3},
     *,
 };
-use net_packets::{ButtonEntry, ButtonValue, FaceData, FaceExpressions, StreamConfig};
-use configuration::{BodyTrackingBDConfig, BodyTrackingSourcesConfig, FaceTrackingSourcesConfig};
-use openxr as xr;
 use std::{
     collections::{HashMap, HashSet},
     time::Duration,

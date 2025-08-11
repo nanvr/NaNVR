@@ -1,10 +1,10 @@
 use crate::backend::{SocketReader, SocketWriter, tcp};
 
 use super::CONTROL_PORT;
-use shared::{ConResult, HandleTryAgain, ToCon, anyhow::Result};
-use configuration::SocketBufferSize;
 use bincode::config;
+use configuration::SocketBufferSize;
 use serde::{Serialize, de::DeserializeOwned};
+use shared::{ConResult, HandleTryAgain, ToCon, anyhow::Result};
 use std::{
     marker::PhantomData,
     mem,

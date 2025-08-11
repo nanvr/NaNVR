@@ -1,14 +1,14 @@
+use configuration::{
+    ClientsidePostProcessingConfig, CodecType, PassthroughMode, SessionConfig, Settings,
+};
+use serde::{Deserialize, Serialize};
+use serde_json as json;
 use shared::{
     BodySkeleton, ConnectionState, DeviceMotion, LogEntry, LogSeverity, Pose, ViewParams,
     anyhow::Result,
     glam::{Quat, UVec2, Vec2},
     semver::Version,
 };
-use configuration::{
-    ClientsidePostProcessingConfig, CodecType, PassthroughMode, SessionConfig, Settings,
-};
-use serde::{Deserialize, Serialize};
-use serde_json as json;
 use std::{
     collections::HashSet,
     fmt::{self, Debug},

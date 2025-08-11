@@ -1,11 +1,4 @@
 use super::VideoDecoderConfig;
-use shared::{
-    RelaxedAtomic, ToAny,
-    anyhow::{Context, Result, anyhow, bail},
-    error, info,
-    parking_lot::{Condvar, Mutex},
-    warn,
-};
 use configuration::{CodecType, MediacodecPropType};
 use ndk::{
     hardware_buffer::HardwareBufferUsage,
@@ -16,6 +9,13 @@ use ndk::{
             MediaCodecDirection, MediaFormat,
         },
     },
+};
+use shared::{
+    RelaxedAtomic, ToAny,
+    anyhow::{Context, Result, anyhow, bail},
+    error, info,
+    parking_lot::{Condvar, Mutex},
+    warn,
 };
 use std::{
     collections::VecDeque,

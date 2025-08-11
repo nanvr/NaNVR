@@ -1,14 +1,14 @@
-use shared::{
-    ALVR_VERSION, DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
-    LogSeverityDefaultVariant,
-};
-use system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
 use bytemuck::{Pod, Zeroable};
 use serde::{Deserialize, Serialize};
 use settings_schema::{
     ArrayDefault, DictionaryDefault, OptionalDefault, SettingsSchema, Switch, SwitchDefault,
     VectorDefault,
 };
+use shared::{
+    ALVR_VERSION, DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
+    LogSeverityDefaultVariant,
+};
+use system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
 
 include!(concat!(env!("OUT_DIR"), "/openvr_property_keys.rs"));
 

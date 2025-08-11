@@ -1,7 +1,7 @@
 use super::{NestingInfo, SettingControl, collapsible};
-use net_packets::PathValuePair;
 use configuration::settings_schema::SchemaNode;
 use eframe::egui::Ui;
+use net_packets::PathValuePair;
 use serde_json as json;
 
 pub struct Control {

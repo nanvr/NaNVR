@@ -6,15 +6,15 @@ pub use firewall::*;
 pub use openvr_drivers::*;
 pub use openvrpaths::*;
 
+use configuration::{ClientConnectionConfig, SessionConfig, Settings};
+use events::EventType;
+use net_packets::{ClientListAction, PathSegment, PathValuePair};
+use serde_json as json;
 use shared::{
     ConnectionState,
     anyhow::{Result, bail},
     error, info,
 };
-use events::EventType;
-use net_packets::{ClientListAction, PathSegment, PathValuePair};
-use configuration::{ClientConnectionConfig, SessionConfig, Settings};
-use serde_json as json;
 use std::{
     collections::{HashMap, hash_map::Entry},
     fmt::{self, Debug},

@@ -1,4 +1,6 @@
 use super::{INDENTATION_STEP, NestingInfo, SettingControl, collapsible, notice};
+use configuration::settings_schema::{SchemaEntry, SchemaNode};
+use eframe::egui::Ui;
 use gui_shared::{
     DisplayString,
     theme::{
@@ -7,8 +9,6 @@ use gui_shared::{
     },
 };
 use net_packets::PathValuePair;
-use configuration::settings_schema::{SchemaEntry, SchemaNode};
-use eframe::egui::Ui;
 use serde_json as json;
 
 struct Entry {

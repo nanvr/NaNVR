@@ -15,6 +15,16 @@ pub use logging_backend::init_logging;
 pub use tracking::HandType;
 
 use crate::connection::VideoPacket;
+use bitrate::{BitrateManager, DynamicEncoderParams};
+use configuration::{CodecType, OpenvrProperty, Settings};
+use events::{EventType, HapticsEvent};
+use filepaths as afs;
+use net_packets::{
+    BatteryInfo, ButtonEntry, ClientListAction, DecoderInitializationConfig, Haptics,
+    VideoPacketHeader,
+};
+use net_sockets::StreamSender;
+use server_io::ServerSessionManager;
 use shared::{
     ConnectionState, DEVICE_ID_TO_PATH, DeviceMotion, LifecycleState, Pose, RelaxedAtomic,
     ViewParams, dbg_server_core, error,
@@ -23,16 +33,6 @@ use shared::{
     settings_schema::Switch,
     warn,
 };
-use events::{EventType, HapticsEvent};
-use filepaths as afs;
-use net_packets::{
-    BatteryInfo, ButtonEntry, ClientListAction, DecoderInitializationConfig, Haptics,
-    VideoPacketHeader,
-};
-use server_io::ServerSessionManager;
-use configuration::{CodecType, OpenvrProperty, Settings};
-use net_sockets::StreamSender;
-use bitrate::{BitrateManager, DynamicEncoderParams};
 use statistics::StatisticsManager;
 use std::{
     collections::HashSet,

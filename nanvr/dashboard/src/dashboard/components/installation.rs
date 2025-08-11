@@ -1,9 +1,9 @@
-use gui_shared::theme;
-use net_packets::{FirewallRulesAction, ServerRequest};
 use eframe::{
     egui::{Frame, Grid, Layout, RichText, Ui},
     emath::Align,
 };
+use gui_shared::theme;
+use net_packets::{FirewallRulesAction, ServerRequest};
 use std::{
     path::PathBuf,
     time::{Duration, Instant},

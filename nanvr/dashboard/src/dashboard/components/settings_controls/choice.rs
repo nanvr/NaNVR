@@ -1,11 +1,11 @@
 use super::{NestingInfo, SettingControl, reset};
-use gui_shared::DisplayString;
-use net_packets::PathValuePair;
 use configuration::settings_schema::{ChoiceControlType, SchemaEntry, SchemaNode};
 use eframe::{
     egui::{ComboBox, Layout, Ui},
     emath::Align,
 };
+use gui_shared::DisplayString;
+use net_packets::PathValuePair;
 use serde_json as json;
 use std::collections::HashMap;
 

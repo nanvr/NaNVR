@@ -1,11 +1,11 @@
 use super::{GraphicsContext, MAX_PUSH_CONSTANTS_SIZE, SDR_FORMAT};
-use shared::{
-    BodySkeleton, DeviceMotion, Pose, ViewParams,
-    glam::{IVec2, Mat4, Quat, UVec2, Vec3},
-};
 use glyph_brush_layout::{
     FontId, GlyphPositioner, HorizontalAlign, Layout, SectionGeometry, SectionText, VerticalAlign,
     ab_glyph::{Font, FontRef, ScaleFont},
+};
+use shared::{
+    BodySkeleton, DeviceMotion, Pose, ViewParams,
+    glam::{IVec2, Mat4, Quat, UVec2, Vec3},
 };
 use std::{f32::consts::FRAC_PI_2, mem, rc::Rc};
 use wgpu::{

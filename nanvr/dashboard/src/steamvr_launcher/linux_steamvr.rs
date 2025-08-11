@@ -18,9 +18,7 @@ pub fn terminate_process(process: &Process) {
 }
 
 pub fn maybe_wrap_vrcompositor_launcher() -> shared::anyhow::Result<()> {
-    let steamvr_bin_dir = server_io::steamvr_root_dir()?
-        .join("bin")
-        .join("linux64");
+    let steamvr_bin_dir = server_io::steamvr_root_dir()?.join("bin").join("linux64");
     let steamvr_vrserver_path = steamvr_bin_dir.join("vrserver");
     debug!(
         "File path used to check for linux files: {}",
@@ -243,9 +241,7 @@ fn linux_encoder_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
                             }
                         }
                     }
-                    Err(e) => {
-                        shared::show_e(format!("Can't initialize NVML engine, error: {e}."))
-                    }
+                    Err(e) => shared::show_e(format!("Can't initialize NVML engine, error: {e}.")),
                 }
             }
             DeviceInfo::Amd { device_type: _ } | DeviceInfo::Intel { device_type: _ } => {

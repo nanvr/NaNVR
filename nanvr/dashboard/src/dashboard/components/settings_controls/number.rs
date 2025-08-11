@@ -1,12 +1,12 @@
 use super::{NestingInfo, reset};
 use crate::dashboard::components::f64_eq;
-use net_packets::PathValuePair;
 use configuration::settings_schema::{NumberType, NumericGuiType};
 use eframe::{
     egui::{DragValue, Layout, Slider, Ui},
     emath::Align,
 };
 use json::Number;
+use net_packets::PathValuePair;
 use serde_json as json;
 
 fn to_json_value(number: f64, ty: NumberType) -> json::Value {

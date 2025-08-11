@@ -1,6 +1,6 @@
-use shared::{ConnectionError, anyhow::Result, debug, error, parking_lot::Mutex};
 use configuration::AudioBufferingConfig;
 use net_sockets::{StreamReceiver, StreamSender};
+use shared::{ConnectionError, anyhow::Result, debug, error, parking_lot::Mutex};
 
 use std::os::unix::fs::FileTypeExt;
 use std::{

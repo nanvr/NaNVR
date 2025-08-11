@@ -1,9 +1,9 @@
-use shared::*;
-use net_packets::{ButtonEntry, ButtonValue};
 use configuration::{
     AutomaticButtonMappingConfig, BinaryToScalarStates, ButtonBindingTarget, ButtonMappingType,
     ControllersEmulationMode, HysteresisThreshold, Range,
 };
+use net_packets::{ButtonEntry, ButtonValue};
+use shared::*;
 use std::collections::{HashMap, HashSet};
 
 pub fn registered_button_set(
@@ -34,10 +34,9 @@ pub fn registered_button_set(
             .button_set
             .clone(),
         ControllersEmulationMode::ViveTracker => HashSet::new(),
-        ControllersEmulationMode::Custom { button_set, .. } => button_set
-            .iter()
-            .map(|b| shared::hash_string(b))
-            .collect(),
+        ControllersEmulationMode::Custom { button_set, .. } => {
+            button_set.iter().map(|b| shared::hash_string(b)).collect()
+        }
     }
 }
 

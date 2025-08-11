@@ -1,8 +1,8 @@
 use crate::extra_extensions::{PassthroughFB, PassthroughHTC};
-use shared::anyhow::{Result, bail};
-use system_info::Platform;
 use openxr::{self as xr};
+use shared::anyhow::{Result, bail};
 use std::{marker::PhantomData, ops::Deref, ptr};
+use system_info::Platform;
 
 pub struct PassthroughLayer<'a> {
     handle_fb: Option<PassthroughFB>,

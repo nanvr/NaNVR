@@ -3,9 +3,9 @@ use super::{
     presets::{PresetControl, builtin_schema},
 };
 use crate::dashboard::ServerRequest;
-use gui_shared::{DisplayString, theme};
 use configuration::{SessionSettings, Settings};
 use eframe::egui::{self, Align, Frame, Grid, Layout, RichText, ScrollArea, Ui};
+use gui_shared::{DisplayString, theme};
 #[cfg(target_arch = "wasm32")]
 use instant::Instant;
 use serde_json as json;

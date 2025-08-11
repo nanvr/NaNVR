@@ -1,6 +1,4 @@
 use crate::dashboard::{ServerRequest, theme::graph_colors};
-use events::{GraphStatistics, StatisticsSummary};
-use gui_shared::theme;
 use eframe::{
     egui::{
         Align2, Color32, CornerRadius, FontId, Frame, Grid, Id, Painter, Rect, RichText,
@@ -9,6 +7,8 @@ use eframe::{
     emath::RectTransform,
     epaint::Pos2,
 };
+use events::{GraphStatistics, StatisticsSummary};
+use gui_shared::theme;
 use statrs::statistics::{self, OrderStatistics};
 use std::{collections::VecDeque, ops::RangeInclusive};
 

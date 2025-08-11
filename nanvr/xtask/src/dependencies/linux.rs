@@ -190,8 +190,7 @@ fn build_ffmpeg(enable_nvenc: bool) {
         let header_build_dir = nvenc_headers_path.join("build");
         sh.remove_path(&header_build_dir).ok();
         {
-            let make_header_cmd =
-                format!("make install PREFIX='{}'", header_build_dir.display());
+            let make_header_cmd = format!("make install PREFIX='{}'", header_build_dir.display());
             let _header_push_guard = sh.push_dir(nvenc_headers_path);
             cmd!(sh, "bash -c {make_header_cmd}").run().unwrap();
         }

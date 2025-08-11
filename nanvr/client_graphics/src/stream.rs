@@ -1,9 +1,9 @@
 use super::{GraphicsContext, MAX_PUSH_CONSTANTS_SIZE, staging::StagingRenderer};
+use configuration::{FoveatedEncodingConfig, PassthroughMode, UpscalingConfig};
 use shared::{
     ViewParams,
     glam::{self, Mat4, UVec2, Vec3, Vec4},
 };
-use configuration::{FoveatedEncodingConfig, PassthroughMode, UpscalingConfig};
 use std::{collections::HashMap, ffi::c_void, iter, mem, rc::Rc};
 use wgpu::{
     BindGroup, BindGroupDescriptor, BindGroupEntry, BindGroupLayoutDescriptor,

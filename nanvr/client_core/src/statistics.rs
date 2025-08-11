@@ -1,5 +1,5 @@
-use shared::SlidingWindowAverage;
 use net_packets::ClientStatistics;
+use shared::SlidingWindowAverage;
 use std::{
     collections::VecDeque,
     time::{Duration, Instant},

@@ -1,14 +1,14 @@
 use crate::dashboard::ServerRequest;
-use shared::ConnectionState;
-use gui_shared::theme::{self, log_colors};
-use net_packets::ClientListAction;
 use configuration::{ClientConnectionConfig, SessionConfig};
-use net_sockets::WIRED_CLIENT_HOSTNAME;
 use eframe::{
     egui::{self, Frame, Grid, Layout, ProgressBar, RichText, TextEdit, Ui, Window},
     emath::{Align, Align2},
     epaint::Color32,
 };
+use gui_shared::theme::{self, log_colors};
+use net_packets::ClientListAction;
+use net_sockets::WIRED_CLIENT_HOSTNAME;
+use shared::ConnectionState;
 
 struct EditPopupState {
     new_devices: bool,

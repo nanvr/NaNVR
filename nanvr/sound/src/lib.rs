@@ -1,20 +1,19 @@
-
 #[cfg(target_os = "linux")]
 pub mod linux;
 
+use configuration::{AudioBufferingConfig, CustomAudioDeviceConfig};
+use cpal::{
+    BufferSize, Host, Sample, SampleFormat, StreamConfig,
+    traits::{DeviceTrait, HostTrait, StreamTrait},
+};
+use net_sockets::{StreamReceiver, StreamSender};
+use rodio::{OutputStreamBuilder, Source};
 use shared::{
     ConnectionError, ToAny,
     anyhow::{self, Context, Result, bail},
     info,
     parking_lot::Mutex,
 };
-use configuration::{AudioBufferingConfig, CustomAudioDeviceConfig};
-use net_sockets::{StreamReceiver, StreamSender};
-use cpal::{
-    BufferSize, Host, Sample, SampleFormat, StreamConfig,
-    traits::{DeviceTrait, HostTrait, StreamTrait},
-};
-use rodio::{OutputStreamBuilder, Source};
 use std::{collections::VecDeque, sync::Arc, thread, time::Duration};
 
 pub use cpal::Device;

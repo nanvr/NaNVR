@@ -14,9 +14,9 @@ pub mod text;
 pub mod up_down;
 pub mod vector;
 
-use net_packets::{PathSegment, PathValuePair};
 use configuration::settings_schema::SchemaNode;
 use eframe::egui::Ui;
+use net_packets::{PathSegment, PathValuePair};
 use serde_json as json;
 use std::collections::HashMap;
 

@@ -66,9 +66,7 @@ impl<T> HandleTryAgain<T> for io::Result<T> {
     fn handle_try_again(self) -> ConResult<T> {
         self.map_err(|e| {
             // Ignore ERROR_IO_PENDING on Windows (code 997)
-            if e.kind() == io::ErrorKind::TimedOut
-                || e.kind() == io::ErrorKind::WouldBlock
-            {
+            if e.kind() == io::ErrorKind::TimedOut || e.kind() == io::ErrorKind::WouldBlock {
                 ConnectionError::TryAgain(e.into())
             } else {
                 ConnectionError::Other(e.into())

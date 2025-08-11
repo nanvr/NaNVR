@@ -17,12 +17,12 @@
 // cannot be removed. This is because we need to make sure at least shards are written whole.
 
 use crate::backend::{SocketReader, SocketWriter, tcp, udp};
+use bincode::config;
+use configuration::{DscpTos, SocketBufferSize, SocketProtocol};
+use serde::{Serialize, de::DeserializeOwned};
 use shared::{
     AnyhowToCon, ConResult, HandleTryAgain, ToCon, anyhow::Result, debug, parking_lot::Mutex,
 };
-use configuration::{DscpTos, SocketBufferSize, SocketProtocol};
-use bincode::config;
-use serde::{Serialize, de::DeserializeOwned};
 use std::{
     cmp::Ordering,
     collections::{HashMap, HashSet},

@@ -20,10 +20,7 @@ fn main() {
 
     let common_iter = walkdir::WalkDir::new("cpp")
         .into_iter()
-        .filter_entry(|entry| {
-            entry.file_name() != "tools"
-                && entry.file_name() != "platform"
-        });
+        .filter_entry(|entry| entry.file_name() != "tools" && entry.file_name() != "platform");
 
     let platform_iter = walkdir::WalkDir::new(platform_subpath).into_iter();
 

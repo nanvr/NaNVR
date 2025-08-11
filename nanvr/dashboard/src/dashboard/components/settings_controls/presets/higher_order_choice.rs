@@ -2,12 +2,12 @@ use std::collections::{HashMap, HashSet};
 
 use super::schema::{HigherOrderChoiceSchema, PresetModifierOperation};
 use crate::dashboard::components::{self, INDENTATION_STEP, NestingInfo, SettingControl, notice};
+use eframe::egui::Ui;
 use gui_shared::theme::{
     OK_GREEN,
     log_colors::{INFO_LIGHT, WARNING_LIGHT},
 };
 use net_packets::{PathSegment, PathValuePair};
-use eframe::egui::Ui;
 use serde_json as json;
 use settings_schema::{SchemaEntry, SchemaNode};
 

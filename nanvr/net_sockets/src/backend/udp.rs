@@ -1,8 +1,8 @@
 use crate::LOCAL_IP;
 
 use super::{SocketReader, SocketWriter};
-use shared::{ConResult, HandleTryAgain, anyhow::Result};
 use configuration::{DscpTos, SocketBufferSize};
+use shared::{ConResult, HandleTryAgain, anyhow::Result};
 use socket2::{MaybeUninitSlice, Socket};
 use std::{
     ffi::c_int,

@@ -1,11 +1,11 @@
 use crate::tracking::HandType;
+use configuration::VMCConfig;
+use rosc::{OscMessage, OscPacket, OscType};
 use shared::{
     BODY_CHEST_ID, BODY_HIPS_ID, BODY_LEFT_ELBOW_ID, BODY_LEFT_FOOT_ID, BODY_LEFT_KNEE_ID,
     BODY_RIGHT_ELBOW_ID, BODY_RIGHT_FOOT_ID, BODY_RIGHT_KNEE_ID, DeviceMotion, HAND_LEFT_ID,
     HAND_RIGHT_ID, HEAD_ID, Pose, anyhow::Result, glam::Quat,
 };
-use configuration::VMCConfig;
-use rosc::{OscMessage, OscPacket, OscType};
 use std::{collections::HashMap, net::UdpSocket, sync::LazyLock};
 
 // Transform DeviceMotion into Unity HumanBodyBones

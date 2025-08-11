@@ -1,8 +1,8 @@
-use net_packets::{FirewallRulesAction, ServerRequest};
 use eframe::{
     egui::{Button, Label, Layout, RichText, Ui},
     emath::Align,
 };
+use net_packets::{FirewallRulesAction, ServerRequest};
 
 pub enum SetupWizardRequest {
     ServerRequest(ServerRequest),

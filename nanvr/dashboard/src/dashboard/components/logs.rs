@@ -1,12 +1,12 @@
-use shared::LogSeverity;
-use events::{Event, EventType};
-use gui_shared::theme::log_colors;
 use configuration::{RawEventsConfig, Settings};
 use eframe::{
     egui::{Grid, OpenUrl, OutputCommand, RichText, ScrollArea, Ui},
     epaint::Color32,
 };
+use events::{Event, EventType};
+use gui_shared::theme::log_colors;
 use settings_schema::Switch;
+use shared::LogSeverity;
 use std::collections::VecDeque;
 
 struct Entry {

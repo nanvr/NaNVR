@@ -7,21 +7,21 @@ use crate::{
     statistics::StatisticsManager,
     storage::Config,
 };
-use shared::{
-    ALVR_VERSION, AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState,
-    ViewParams, dbg_connection, debug, error, info,
-    parking_lot::{Condvar, Mutex, RwLock},
-    wait_rwlock, warn,
-};
+use configuration::{SocketProtocol, settings_schema::Switch};
 use net_packets::{
     AUDIO, ClientConnectionResult, ClientControlPacket, ClientStatistics, HAPTICS, Haptics,
     STATISTICS, ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO,
     VideoPacketHeader, VideoStreamingCapabilities, VideoStreamingCapabilitiesExt,
 };
-use configuration::{SocketProtocol, settings_schema::Switch};
 use net_sockets::{
     ControlSocketSender, KEEPALIVE_INTERVAL, KEEPALIVE_TIMEOUT, PeerType, ProtoControlSocket,
     StreamSender, StreamSocketBuilder,
+};
+use shared::{
+    ALVR_VERSION, AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState,
+    ViewParams, dbg_connection, debug, error, info,
+    parking_lot::{Condvar, Mutex, RwLock},
+    wait_rwlock, warn,
 };
 use std::{
     collections::VecDeque,

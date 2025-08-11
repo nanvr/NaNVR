@@ -1,14 +1,14 @@
-use sound::Device;
-use shared::{
-    anyhow::{Result, bail},
-    parking_lot::Mutex,
-};
 use configuration::AudioBufferingConfig;
-use net_sockets::{StreamReceiver, StreamSender};
 use ndk::audio::{
     AudioCallbackResult, AudioDirection, AudioError, AudioFormat, AudioPerformanceMode,
     AudioSharingMode, AudioStreamBuilder,
 };
+use net_sockets::{StreamReceiver, StreamSender};
+use shared::{
+    anyhow::{Result, bail},
+    parking_lot::Mutex,
+};
+use sound::Device;
 use std::{
     collections::VecDeque,
     mem, slice,

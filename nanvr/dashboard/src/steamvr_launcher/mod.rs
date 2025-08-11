@@ -1,7 +1,8 @@
 mod linux_steamvr;
 
 use crate::data_sources;
-use wired::commands as adb;
+use filepaths as afs;
+use serde_json::{self, json};
 use shared::{
     anyhow::{Context, Result},
     debug,
@@ -9,8 +10,6 @@ use shared::{
     parking_lot::Mutex,
     warn,
 };
-use filepaths as afs;
-use serde_json::{self, json};
 use std::{
     ffi::OsStr,
     fs,
@@ -19,6 +18,7 @@ use std::{
     time::{Duration, Instant},
 };
 use sysinfo::{ProcessesToUpdate, System};
+use wired::commands as adb;
 
 const SHUTDOWN_TIMEOUT: Duration = Duration::from_secs(10);
 const DRIVER_KEY: &str = "driver_alvr_server";

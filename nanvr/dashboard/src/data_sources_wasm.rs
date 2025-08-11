@@ -1,8 +1,8 @@
-use events::Event;
-use net_packets::ServerRequest;
 use eframe::{egui, web_sys};
+use events::Event;
 use ewebsock::{WsEvent, WsMessage, WsReceiver};
 use gloo_net::http::Request;
+use net_packets::ServerRequest;
 
 pub struct DataSources {
     context: egui::Context,

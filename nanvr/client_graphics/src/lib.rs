@@ -5,12 +5,12 @@ mod stream;
 pub use lobby::*;
 pub use stream::*;
 
+use glow::{self as gl, HasContext};
+use khronos_egl as egl;
 use shared::{
     Fov,
     glam::{Mat4, UVec2, Vec4},
 };
-use glow::{self as gl, HasContext};
-use khronos_egl as egl;
 use std::{ffi::c_void, num::NonZeroU32, ptr};
 use wgpu::{
     Adapter, Device, Extent3d, Instance, Queue, Texture, TextureDescriptor, TextureDimension,

@@ -1,6 +1,6 @@
 use crate::data_sources::PolledEvent;
-use shared::{LogEntry, LogSeverity, log::LevelFilter, parking_lot::Mutex};
 use events::{Event, EventType};
+use shared::{LogEntry, LogSeverity, log::LevelFilter, parking_lot::Mutex};
 use std::{
     io::Write,
     sync::{Arc, mpsc},

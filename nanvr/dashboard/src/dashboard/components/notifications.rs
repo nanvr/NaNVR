@@ -1,12 +1,12 @@
-use shared::{LogEntry, LogSeverity};
-use gui_shared::theme::{self, log_colors};
 use configuration::Settings;
 use eframe::{
     egui::{self, Frame, Label, Layout, RichText, TopBottomPanel},
     emath::Align,
     epaint::{Color32, Stroke},
 };
+use gui_shared::theme::{self, log_colors};
 use rand::seq::IndexedRandom;
+use shared::{LogEntry, LogSeverity};
 use std::time::Duration;
 
 #[cfg(target_arch = "wasm32")]

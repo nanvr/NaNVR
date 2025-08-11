@@ -3,12 +3,12 @@ use crate::dashboard::components::{
     collapsible,
     up_down::{self, UpDownResult},
 };
-use net_packets::PathValuePair;
 use configuration::settings_schema::SchemaNode;
 use eframe::{
     egui::{Layout, Ui},
     emath::Align,
 };
+use net_packets::PathValuePair;
 use serde_json as json;
 
 pub struct Control {

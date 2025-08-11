@@ -1,7 +1,7 @@
 use super::{GraphicsContext, ck};
 use crate::GL_TEXTURE_EXTERNAL_OES;
-use shared::glam::{IVec2, UVec2};
 use glow::{self as gl, HasContext};
+use shared::glam::{IVec2, UVec2};
 use std::{ffi::c_void, rc::Rc};
 
 fn create_program(

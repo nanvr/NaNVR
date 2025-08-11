@@ -1,8 +1,8 @@
 use crate::LOCAL_IP;
 
 use super::{SocketReader, SocketWriter};
-use shared::{ConResult, HandleTryAgain, ToCon, anyhow::Result, con_bail};
 use configuration::{DscpTos, SocketBufferSize};
+use shared::{ConResult, HandleTryAgain, ToCon, anyhow::Result, con_bail};
 use std::{
     io::Read,
     io::Write,

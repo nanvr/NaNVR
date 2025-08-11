@@ -1,7 +1,7 @@
-use shared::{error, info};
 use app_dirs2::{AppDataType, AppInfo};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
+use shared::{error, info};
 use std::{fs, path::PathBuf};
 
 fn config_path() -> PathBuf {

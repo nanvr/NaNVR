@@ -1,8 +1,8 @@
 use std::{path::PathBuf, process::Command};
 
+use eframe::egui::{self, Context, OpenUrl, Ui};
 use gui_shared::ModalButton;
 use net_packets::{PathValuePair, ServerRequest};
-use eframe::egui::{self, Context, OpenUrl, Ui};
 
 pub enum CloseAction {
     Close,

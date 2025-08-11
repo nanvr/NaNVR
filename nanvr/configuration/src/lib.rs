@@ -3,14 +3,14 @@ mod settings;
 pub use settings::*;
 pub use settings_schema;
 
+use serde::{Deserialize, Serialize};
+use serde_json as json;
+use settings_schema::{NumberType, SchemaNode};
 use shared::{
     ALVR_VERSION, ConnectionState, ToAny,
     anyhow::{Result, bail},
     semver::Version,
 };
-use serde::{Deserialize, Serialize};
-use serde_json as json;
-use settings_schema::{NumberType, SchemaNode};
 use std::{
     collections::{HashMap, HashSet},
     net::IpAddr,

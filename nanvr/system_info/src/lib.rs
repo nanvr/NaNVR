@@ -4,8 +4,8 @@ pub mod android;
 #[cfg(target_os = "android")]
 pub use android::*;
 
-use shared::settings_schema::SettingsSchema;
 use serde::{Deserialize, Serialize};
+use shared::settings_schema::SettingsSchema;
 use std::fmt::{Display, Formatter};
 
 pub const PACKAGE_NAME_STORE: &str = "alvr.client";
@@ -160,11 +160,7 @@ pub fn platform() -> Platform {
     {
         Platform::LinuxPc
     }
-    #[cfg(not(any(
-        target_os = "android",
-        target_os = "ios",
-        target_os = "linux",
-    )))]
+    #[cfg(not(any(target_os = "android", target_os = "ios", target_os = "linux",)))]
     {
         Platform::Unknown
     }

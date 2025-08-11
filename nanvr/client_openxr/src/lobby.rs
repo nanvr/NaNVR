@@ -2,11 +2,11 @@ use crate::{
     graphics::{self, ProjectionLayerAlphaConfig, ProjectionLayerBuilder},
     interaction::{self, InteractionContext},
 };
-use shared::{Pose, ViewParams, glam::UVec2, parking_lot::RwLock};
 use client_graphics::{GraphicsContext, LobbyRenderer, LobbyViewParams, SDR_FORMAT_GL};
-use system_info::Platform;
 use openxr as xr;
+use shared::{Pose, ViewParams, glam::UVec2, parking_lot::RwLock};
 use std::{rc::Rc, sync::Arc, time::Duration};
+use system_info::Platform;
 
 // todo: add interaction?
 pub struct Lobby {

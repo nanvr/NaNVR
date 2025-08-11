@@ -1,11 +1,11 @@
+use configuration::BodyTrackingSinkConfig;
+use rosc::{OscMessage, OscPacket, OscType};
 use shared::{
     BODY_CHEST_ID, BODY_HIPS_ID, BODY_LEFT_ELBOW_ID, BODY_LEFT_FOOT_ID, BODY_LEFT_KNEE_ID,
     BODY_RIGHT_ELBOW_ID, BODY_RIGHT_FOOT_ID, BODY_RIGHT_KNEE_ID, BodySkeleton, DeviceMotion,
     GENERIC_TRACKER_1_ID, GENERIC_TRACKER_2_ID, GENERIC_TRACKER_3_ID, HEAD_ID, anyhow::Result,
     glam::Vec3,
 };
-use configuration::BodyTrackingSinkConfig;
-use rosc::{OscMessage, OscPacket, OscType};
 use std::{collections::HashMap, net::UdpSocket, sync::LazyLock};
 
 const CHEST_FB: usize = 5;

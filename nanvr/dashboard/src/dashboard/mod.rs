@@ -7,12 +7,12 @@ use crate::{
     DataSources,
     dashboard::components::{CloseAction, NewVersionPopup, StatisticsTab},
 };
-use shared::parking_lot::{Condvar, Mutex};
+use configuration::SessionConfig;
+use eframe::egui::{self, Align, CentralPanel, Frame, Layout, Margin, RichText, SidePanel, Stroke};
 use events::EventType;
 use gui_shared::theme;
 use net_packets::{PathValuePair, ServerRequest};
-use configuration::SessionConfig;
-use eframe::egui::{self, Align, CentralPanel, Frame, Layout, Margin, RichText, SidePanel, Stroke};
+use shared::parking_lot::{Condvar, Mutex};
 use std::{collections::BTreeMap, sync::Arc};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]

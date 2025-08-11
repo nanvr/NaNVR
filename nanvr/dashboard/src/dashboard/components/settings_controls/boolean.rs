@@ -1,9 +1,9 @@
 use super::{NestingInfo, reset};
-use net_packets::PathValuePair;
 use eframe::{
     egui::{Layout, Ui},
     emath::Align,
 };
+use net_packets::PathValuePair;
 use serde_json as json;
 
 pub struct Control {

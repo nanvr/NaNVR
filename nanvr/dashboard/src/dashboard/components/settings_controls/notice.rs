@@ -1,8 +1,8 @@
-use gui_shared::theme::log_colors;
 use eframe::{
     egui::{Frame, Label, RichText, Ui},
     epaint::Color32,
 };
+use gui_shared::theme::log_colors;
 
 pub fn notice(ui: &mut Ui, text: &str) {
     Frame::group(ui.style())

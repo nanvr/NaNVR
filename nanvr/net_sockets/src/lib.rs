@@ -2,8 +2,8 @@ mod backend;
 mod control_socket;
 mod stream_socket;
 
-use shared::{anyhow::Result, info};
 use configuration::{DscpTos, SocketBufferSize};
+use shared::{anyhow::Result, info};
 use socket2::Socket;
 use std::{
     net::{IpAddr, Ipv4Addr},

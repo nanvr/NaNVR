@@ -1,6 +1,6 @@
-use system_info::Platform;
 use openxr::{self as xr, raw, sys};
 use std::ptr;
+use system_info::Platform;
 
 pub struct PassthroughFB {
     handle: sys::PassthroughFB,

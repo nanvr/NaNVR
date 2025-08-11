@@ -1,8 +1,8 @@
-use shared::SlidingWindowAverage;
-use events::BitrateDirectives;
 use configuration::{
     BitrateAdaptiveFramerateConfig, BitrateConfig, BitrateMode, settings_schema::Switch,
 };
+use events::BitrateDirectives;
+use shared::SlidingWindowAverage;
 use std::{
     collections::VecDeque,
     time::{Duration, Instant},

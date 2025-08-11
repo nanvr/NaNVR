@@ -1,14 +1,14 @@
 use client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
-use shared::{
-    DeviceMotion, HEAD_ID, Pose, RelaxedAtomic, ViewParams,
-    glam::{Quat, UVec2, Vec3},
-    parking_lot::RwLock,
-};
-use net_packets::{FaceData, TrackingData};
 use configuration::CodecType;
 use eframe::{
     Frame, NativeOptions,
     egui::{CentralPanel, Context, RichText, Slider, ViewportBuilder},
+};
+use net_packets::{FaceData, TrackingData};
+use shared::{
+    DeviceMotion, HEAD_ID, Pose, RelaxedAtomic, ViewParams,
+    glam::{Quat, UVec2, Vec3},
+    parking_lot::RwLock,
 };
 use std::{
     f32::consts::{FRAC_PI_2, PI},

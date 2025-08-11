@@ -1,8 +1,8 @@
 use crate::SESSION_MANAGER;
-use shared::{LogEntry, LogSeverity, log::LevelFilter};
-use events::{Event, EventType};
 use chrono::Local;
+use events::{Event, EventType};
 use fern::Dispatch;
+use shared::{LogEntry, LogSeverity, log::LevelFilter};
 use std::{fs, path::PathBuf, sync::LazyLock};
 use tokio::sync::broadcast;
 

@@ -1,13 +1,13 @@
+use eframe::egui;
+use events::{Event, EventType};
+use net_packets::ServerRequest;
+use server_io::ServerSessionManager;
 use shared::{
     ALVR_VERSION, RelaxedAtomic, debug, error, info,
     parking_lot::Mutex,
     semver::{Version, VersionReq},
     warn,
 };
-use events::{Event, EventType};
-use net_packets::ServerRequest;
-use server_io::ServerSessionManager;
-use eframe::egui;
 use std::{
     io::ErrorKind,
     net::{SocketAddr, TcpStream},
@@ -243,8 +243,7 @@ impl DataSources {
                                     report_session_local(&context, &events_sender, session_manager);
                                 }
                                 ServerRequest::FirewallRules(action) => {
-                                    if server_io::firewall_rules(action, &filesystem_layout)
-                                        .is_ok()
+                                    if server_io::firewall_rules(action, &filesystem_layout).is_ok()
                                     {
                                         info!("Setting firewall rules succeeded!");
                                     } else {
@@ -255,8 +254,7 @@ impl DataSources {
                                     let alvr_driver_dir =
                                         filesystem_layout.openvr_driver_root_dir.clone();
 
-                                    server_io::driver_registration(&[alvr_driver_dir], true)
-                                        .ok();
+                                    server_io::driver_registration(&[alvr_driver_dir], true).ok();
 
                                     if let Ok(list) = server_io::get_registered_drivers() {
                                         report_event_local(

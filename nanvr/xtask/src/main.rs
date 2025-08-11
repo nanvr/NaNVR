@@ -8,8 +8,8 @@ mod version;
 
 use crate::build::Profile;
 use afs::Layout;
-use filepaths as afs;
 use dependencies::OpenXRLoadersSelection;
+use filepaths as afs;
 use packaging::ReleaseFlavor;
 use pico_args::Arguments;
 use std::{fs, process, time::Instant};
@@ -224,15 +224,10 @@ fn main() {
                     } else {
                         dependencies::prepare_server_deps(platform, !no_nvidia);
 
-                        dependencies::android::build_deps(
-                            all_targets,
-                            OpenXRLoadersSelection::All,
-                        );
+                        dependencies::android::build_deps(all_targets, OpenXRLoadersSelection::All);
                     }
                 }
-                "download-server-deps" => {
-                    dependencies::download_server_deps(platform, !no_nvidia)
-                }
+                "download-server-deps" => dependencies::download_server_deps(platform, !no_nvidia),
                 "build-server-deps" => dependencies::build_server_deps(platform, !no_nvidia),
                 "build-streamer" => {
                     build::build_streamer(profile, gpl, None, common_build_flags, keep_config)
@@ -258,9 +253,7 @@ fn main() {
                     }
                     run_launcher();
                 }
-                "package-streamer" => {
-                    packaging::package_streamer(platform, !no_nvidia, gpl, root)
-                }
+                "package-streamer" => packaging::package_streamer(platform, !no_nvidia, gpl, root),
                 "package-launcher" => packaging::package_launcher(),
                 "package-client" => packaging::package_client_openxr(package_flavor),
                 "package-client-lib" => packaging::package_client_lib(link_stdcpp, all_targets),

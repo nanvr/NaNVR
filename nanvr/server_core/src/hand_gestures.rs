@@ -1,10 +1,10 @@
 use crate::input_mapping::ButtonMappingManager;
+use configuration::HandTrackingInteractionConfig;
+use net_packets::{ButtonEntry, ButtonValue};
 use shared::{
     glam::{Vec2, Vec3},
     *,
 };
-use net_packets::{ButtonEntry, ButtonValue};
-use configuration::HandTrackingInteractionConfig;
 use std::{
     collections::{HashMap, HashSet},
     hash::Hash,

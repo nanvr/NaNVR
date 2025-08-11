@@ -1,15 +1,9 @@
-use crate::{
-    command,
-    dependencies::{OpenXRLoadersSelection},
-};
+use crate::{command, dependencies::OpenXRLoadersSelection};
 use filepaths as afs;
 use std::fs;
 use xshell::{Shell, cmd};
 
-pub fn build_deps(
-    all_targets: bool,
-    openxr_loaders_selection: OpenXRLoadersSelection,
-) {
+pub fn build_deps(all_targets: bool, openxr_loaders_selection: OpenXRLoadersSelection) {
     let sh = Shell::new().unwrap();
 
     cmd!(sh, "rustup target add aarch64-linux-android")

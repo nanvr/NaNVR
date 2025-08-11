@@ -12,6 +12,13 @@ use crate::{
     hand_gestures::{self, HAND_GESTURE_BUTTON_SET, HandGestureManager},
     input_mapping::ButtonMappingManager,
 };
+use configuration::{
+    BodyTrackingConfig, HeadsetConfig, PositionRecenteringMode, RotationRecenteringMode, Settings,
+    VMCConfig, settings_schema::Switch,
+};
+use events::{EventType, TrackingEvent};
+use net_packets::TrackingData;
+use net_sockets::StreamReceiver;
 use shared::{
     BODY_CHEST_ID, BODY_HIPS_ID, BODY_LEFT_ELBOW_ID, BODY_LEFT_FOOT_ID, BODY_LEFT_KNEE_ID,
     BODY_RIGHT_ELBOW_ID, BODY_RIGHT_FOOT_ID, BODY_RIGHT_KNEE_ID, ConnectionError,
@@ -19,13 +26,6 @@ use shared::{
     glam::{EulerRot, Quat, Vec3},
     parking_lot::Mutex,
 };
-use events::{EventType, TrackingEvent};
-use net_packets::TrackingData;
-use configuration::{
-    BodyTrackingConfig, HeadsetConfig, PositionRecenteringMode, RotationRecenteringMode, Settings,
-    VMCConfig, settings_schema::Switch,
-};
-use net_sockets::StreamReceiver;
 use std::{
     cmp::Ordering,
     collections::{HashMap, VecDeque},
