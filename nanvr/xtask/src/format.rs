@@ -69,9 +69,11 @@ pub fn check_format() {
         let clang_command = clang_format_name();
         let mut output = cmd!(sh, "{clang_command} {path}").read().unwrap();
 
-        if !content.ends_with('\n') {
-            panic!("file {} missing final newline", path.display());
-        }
+        assert!(
+            content.ends_with('\n'),
+            "file {} missing final newline",
+            path.display()
+        );
         output.push('\n');
 
         if content != output {

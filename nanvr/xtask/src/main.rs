@@ -73,9 +73,9 @@ enum Commands {
         common_build_flags: CommonBuildFlags,
     },
     /// Build client, then copy binaries to build folder.
-    /// Requires JAVA_HOME set to at least JDK17 folder,
-    /// ANDROID_NDK_HOME set to Android NDK 25.1.8937893 folder,
-    /// ANDROID_HOME set to Android SDK folder
+    /// Requires `JAVA_HOME` set to at least JDK17 folder,
+    /// `ANDROID_NDK_HOME` set to Android NDK 25.1.8937893 folder,
+    /// `ANDROID_HOME` set to Android SDK folder
     BuildClient {
         #[arg(long, value_enum, default_value_t = Profile::Debug)]
         profile: Profile,
@@ -275,21 +275,21 @@ fn main() {
         } => {
             if let Some(platform) = platform {
                 if matches!(platform, TargetBuildPlatform::Android) {
-                    dependencies::android::build_deps(all_targets, OpenXRLoadersSelection::All);
+                    dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
                 } else {
                     dependencies::linux::prepare_server_deps(enable_nvenc);
                 }
             } else {
                 dependencies::linux::prepare_server_deps(enable_nvenc);
 
-                dependencies::android::build_deps(all_targets, OpenXRLoadersSelection::All);
+                dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
             }
         }
         Commands::DownloadServerDeps { enable_nvenc } => {
-            dependencies::linux::download_server_deps(enable_nvenc)
+            dependencies::linux::download_server_deps(enable_nvenc);
         }
         Commands::BuildServerDeps { enable_nvenc } => {
-            dependencies::linux::build_server_deps(enable_nvenc)
+            dependencies::linux::build_server_deps(enable_nvenc);
         }
         Commands::BuildStreamer {
             keep_config,
@@ -299,7 +299,7 @@ fn main() {
         Commands::BuildLauncher {
             profile,
             common_build_flags,
-        } => build::build_launcher(profile, common_build_flags),
+        } => build::build_launcher(profile, &common_build_flags),
         Commands::BuildServerLib {
             profile,
             common_build_flags,
@@ -326,15 +326,15 @@ fn main() {
             profile,
             common_build_flags,
         } => {
-            build::build_launcher(profile, common_build_flags);
+            build::build_launcher(profile, &common_build_flags);
             run_launcher();
         }
         Commands::PackageStreamer { root, enable_nvenc } => {
-            packaging::package_streamer(enable_nvenc, root)
+            packaging::package_streamer(enable_nvenc, root);
         }
         Commands::PackageLauncher => packaging::package_launcher(),
         Commands::PackageClient { package_flavor } => {
-            packaging::package_client_openxr(package_flavor)
+            packaging::package_client_openxr(package_flavor);
         }
         Commands::PackageClientLib {
             link_stdcpp,

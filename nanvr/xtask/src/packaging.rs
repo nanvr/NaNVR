@@ -72,7 +72,7 @@ pub fn package_launcher() {
 
     build::build_launcher(
         Profile::Distribution,
-        crate::CommonBuildFlags {
+        &crate::CommonBuildFlags {
             locked: true,
             ..Default::default()
         },
@@ -101,7 +101,7 @@ pub fn package_client_openxr(flavor: ReleaseFlavor) {
         ReleaseFlavor::PicoStore => OpenXRLoadersSelection::OnlyPico,
     };
 
-    dependencies::android::build_deps(false, openxr_selection);
+    dependencies::android::build_deps(false, &openxr_selection);
 
     if !matches!(flavor, ReleaseFlavor::GitHub) {
         replace_client_openxr_manifest(

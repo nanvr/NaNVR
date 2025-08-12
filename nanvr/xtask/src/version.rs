@@ -70,6 +70,6 @@ pub fn check_msrv() {
         "nanvr/client_openxr",
     ];
     for path in paths {
-        cmd!(sh, "cargo msrv verify --path {path}").run().unwrap()
+        cmd!(sh, "cargo msrv verify --path {path}").run().unwrap();
     }
 }

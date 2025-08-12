@@ -221,7 +221,7 @@ pub fn build_streamer(
     }
 }
 
-pub fn build_launcher(profile: Profile, common_build_flags: CommonBuildFlags) {
+pub fn build_launcher(profile: Profile, common_build_flags: &CommonBuildFlags) {
     let sh = Shell::new().unwrap();
 
     let mut common_flags = vec![];
@@ -269,7 +269,7 @@ fn build_android_lib_impl(dir_name: &str, profile: Profile, link_stdcpp: bool, a
     match profile {
         Profile::Distribution => {
             rust_flags.push("--profile");
-            rust_flags.push("distribution")
+            rust_flags.push("distribution");
         }
         Profile::Release => rust_flags.push("--release"),
         Profile::Debug => (),
@@ -295,28 +295,27 @@ fn build_android_lib_impl(dir_name: &str, profile: Profile, link_stdcpp: bool, a
 }
 
 pub fn build_android_client_core_lib(profile: Profile, link_stdcpp: bool, all_targets: bool) {
-    build_android_lib_impl("client_core", profile, link_stdcpp, all_targets)
+    build_android_lib_impl("client_core", profile, link_stdcpp, all_targets);
 }
 
 pub fn build_android_client_openxr_lib(profile: Profile, link_stdcpp: bool) {
-    build_android_lib_impl("client_openxr", profile, link_stdcpp, false)
+    build_android_lib_impl("client_openxr", profile, link_stdcpp, false);
 }
 
 pub fn build_android_client(profile: Profile) {
+    const ARTIFACT_NAME: &str = "alvr_client_android";
     let sh = Shell::new().unwrap();
 
     let mut flags = vec![];
     match profile {
         Profile::Distribution => {
             flags.push("--profile");
-            flags.push("distribution")
+            flags.push("distribution");
         }
         Profile::Release => flags.push("--release"),
         Profile::Debug => (),
     }
     let flags_ref = &flags;
-
-    const ARTIFACT_NAME: &str = "alvr_client_android";
 
     let target_dir = filepaths::target_dir();
     let build_dir = filepaths::build_dir().join(ARTIFACT_NAME);

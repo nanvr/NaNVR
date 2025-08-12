@@ -3,7 +3,7 @@ use crate::{command, dependencies::OpenXRLoadersSelection};
 use std::fs;
 use xshell::{Shell, cmd};
 
-pub fn build_deps(all_targets: bool, openxr_loaders_selection: OpenXRLoadersSelection) {
+pub fn build_deps(all_targets: bool, openxr_loaders_selection: &OpenXRLoadersSelection) {
     let sh = Shell::new().unwrap();
 
     cmd!(sh, "rustup target add aarch64-linux-android")
@@ -34,7 +34,7 @@ pub fn build_deps(all_targets: bool, openxr_loaders_selection: OpenXRLoadersSele
     get_android_openxr_loaders(openxr_loaders_selection);
 }
 
-fn get_android_openxr_loaders(selection: OpenXRLoadersSelection) {
+fn get_android_openxr_loaders(selection: &OpenXRLoadersSelection) {
     fn get_openxr_loader(name: &str, url: &str, source_dir: &str) {
         let sh = Shell::new().unwrap();
         let temp_dir = filepaths::build_dir().join("temp_download");

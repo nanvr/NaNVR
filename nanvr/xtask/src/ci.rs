@@ -62,7 +62,7 @@ pub fn clippy_ci() {
             Level::Error => Some("error"),
             Level::Warning => Some("warning"),
             Level::Note | Level::Help => Some("notice"),
-            _ => None,
+            Level::FailureNote => None,
         };
 
         if let Some(level) = level {
@@ -92,11 +92,13 @@ pub fn clippy_ci() {
         }
     }
 
-    if !out.status.success() {
-        panic!("ci clippy didn't exit with 0 code, propagating failure");
-    }
+    assert!(
+        out.status.success(),
+        "ci clippy didn't exit with 0 code, propagating failure"
+    );
 
-    if !diagnostic_messages.is_empty() {
-        panic!("ci clippy produced warnings");
-    }
+    assert!(
+        diagnostic_messages.is_empty(),
+        "ci clippy produced warnings"
+    );
 }
