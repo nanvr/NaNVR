@@ -145,27 +145,20 @@ impl Control {
             ui.add_space(INDENTATION_STEP);
             ui.label(&self.name);
 
-            if let Some(string) = &self.help
-                && ui.colored_label(INFO_LIGHT, "❓").hovered()
-            {
-                gui_shared::tooltip(ui, &format!("{}_help_tooltip", self.name), string);
+            if let Some(string) = &self.help {
+                ui.colored_label(INFO_LIGHT, "❓")
+                    .on_hover_text_at_pointer(string);
             }
-            if self.steamvr_restart_flag && ui.colored_label(WARNING_LIGHT, "⚠").hovered() {
-                gui_shared::tooltip(
-                    ui,
-                    "steamvr_restart_tooltip",
-                    &format!(
-                        "Changing this setting will make SteamVR restart!\n{}",
-                        "Please save your in-game progress first"
-                    ),
-                );
+            if self.steamvr_restart_flag {
+                ui.colored_label(WARNING_LIGHT, "⚠").on_hover_text(format!(
+                    "Changing this setting will make SteamVR restart!\n{}",
+                    "Please save your in-game progress first"
+                ));
             }
 
             // The emoji is blue but it will be green in the UI
-            if self.real_time_flag && ui.colored_label(OK_GREEN, "🔵").hovered() {
-                gui_shared::tooltip(
-                    ui,
-                    "real_time_tooltip",
+            if self.real_time_flag {
+                ui.colored_label(OK_GREEN, "🔵").on_hover_text_at_pointer(
                     "This setting can be changed in real-time during streaming!",
                 );
             }

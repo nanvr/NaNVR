@@ -5,7 +5,7 @@ use std::{
     sync::LazyLock,
 };
 
-pub static ALVR_VERSION: LazyLock<Version> =
+pub static NANVR_VERSION: LazyLock<Version> =
     LazyLock::new(|| Version::parse(env!("CARGO_PKG_VERSION")).unwrap());
 
 // Consistent across architectures, might not be consistent across different compiler versions.
@@ -16,21 +16,21 @@ pub fn hash_string(string: &str) -> u64 {
 }
 
 pub fn is_nightly() -> bool {
-    ALVR_VERSION.build.contains("nightly")
+    NANVR_VERSION.build.contains("nightly")
 }
 
 pub fn is_stable() -> bool {
-    ALVR_VERSION.pre.is_empty() && !is_nightly()
+    NANVR_VERSION.pre.is_empty() && !is_nightly()
 }
 
 // Semver compatible versions will produce the same protocol ID. Protocol IDs are not ordered
 // As a convention, encode/decode the protocol ID bytes as little endian.
 // Only makor and
 pub fn protocol_id() -> String {
-    if ALVR_VERSION.pre.is_empty() {
-        ALVR_VERSION.major.to_string()
+    if NANVR_VERSION.pre.is_empty() {
+        NANVR_VERSION.major.to_string()
     } else {
-        format!("{}-{}", ALVR_VERSION.major, ALVR_VERSION.pre)
+        format!("{}-{}", NANVR_VERSION.major, NANVR_VERSION.pre)
     }
 }
 

@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json as json;
 use settings_schema::{NumberType, SchemaNode};
 use shared::{
-    ALVR_VERSION, ConnectionState, ToAny,
+    NANVR_VERSION, ConnectionState, ToAny,
     anyhow::{Result, bail},
     semver::Version,
 };
@@ -129,7 +129,7 @@ pub struct SessionConfig {
 impl Default for SessionConfig {
     fn default() -> Self {
         Self {
-            server_version: ALVR_VERSION.clone(),
+            server_version: NANVR_VERSION.clone(),
             openvr_config: OpenvrConfig {
                 // avoid realistic resolutions, as on first start, on Linux, it
                 // could trigger direct mode on an existing monitor

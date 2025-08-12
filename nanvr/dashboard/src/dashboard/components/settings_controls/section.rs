@@ -114,32 +114,26 @@ impl Control {
                         label_res.on_hover_text(&*entry.id);
                     }
 
-                    if let Some(string) = &entry.help
-                        && ui.colored_label(INFO_LIGHT, "❓").hovered()
-                    {
-                        gui_shared::tooltip(
-                            ui,
-                            &format!("{}_help_tooltip", entry.id.display),
-                            string,
-                        );
+                    if let Some(string) = &entry.help {
+                        ui.colored_label(INFO_LIGHT, "❓")
+                            .on_hover_text_at_pointer(string);
+                        // gui_shared::tooltip(
+                        //     ui,
+                        //     &format!("{}_help_tooltip", entry.id.display),
+                        //     string,
+                        // );
                     }
-                    if entry.steamvr_restart_flag && ui.colored_label(WARNING_LIGHT, "⚠").hovered()
-                    {
-                        gui_shared::tooltip(
-                            ui,
-                            "steamvr_restart_tooltip",
-                            &format!(
+                    if entry.steamvr_restart_flag {
+                        ui.colored_label(WARNING_LIGHT, "⚠")
+                            .on_hover_text_at_pointer(format!(
                                 "Changing this setting will make SteamVR restart!\n{}",
                                 "Please save your in-game progress first"
-                            ),
-                        );
+                            ));
                     }
 
                     // The emoji is blue but it will be green in the UI
-                    if entry.real_time_flag && ui.colored_label(OK_GREEN, "🔵").hovered() {
-                        gui_shared::tooltip(
-                            ui,
-                            "real_time_tooltip",
+                    if entry.real_time_flag {
+                        ui.colored_label(OK_GREEN, "🔵").on_hover_text_at_pointer(
                             "This setting can be changed in real-time during streaming!",
                         );
                     }

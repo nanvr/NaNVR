@@ -46,16 +46,25 @@ impl InstallationTab {
         }
 
         ui.vertical_centered_justified(|ui| {
-            if ui.button("Run setup wizard").clicked() {
+            if ui
+                .button(gui_shared::button_text("Run setup wizard"))
+                .clicked()
+            {
                 requests.push(InstallationTabRequest::OpenSetupWizard);
             }
             ui.columns(2, |ui| {
-                if ui[0].button("Add firewall rules").clicked() {
+                if ui[0]
+                    .button(gui_shared::button_text("Add firewall rules"))
+                    .clicked()
+                {
                     requests.push(InstallationTabRequest::ServerRequest(
                         ServerRequest::FirewallRules(FirewallRulesAction::Add),
                     ));
                 }
-                if ui[1].button("Remove firewall rules").clicked() {
+                if ui[1]
+                    .button(gui_shared::button_text("Remove firewall rules"))
+                    .clicked()
+                {
                     requests.push(InstallationTabRequest::ServerRequest(
                         ServerRequest::FirewallRules(FirewallRulesAction::Remove),
                     ));
@@ -77,7 +86,7 @@ impl InstallationTab {
                                 ui.label(driver_path.to_string_lossy());
                             });
                             ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                                if ui.button("Remove").clicked() {
+                                if ui.button(gui_shared::button_text("Remove")).clicked() {
                                     requests.push(InstallationTabRequest::ServerRequest(
                                         ServerRequest::UnregisterDriver(driver_path.clone()),
                                     ));
@@ -87,7 +96,10 @@ impl InstallationTab {
                         }
                     });
 
-                    if ui.button("Register ALVR driver").clicked() {
+                    if ui
+                        .button(gui_shared::button_text("Register ALVR driver"))
+                        .clicked()
+                    {
                         requests.push(InstallationTabRequest::ServerRequest(
                             ServerRequest::RegisterAlvrDriver,
                         ));

@@ -5,7 +5,7 @@ use settings_schema::{
     VectorDefault,
 };
 use shared::{
-    ALVR_VERSION, DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
+    NANVR_VERSION, DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
     LogSeverityDefaultVariant,
 };
 use system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
@@ -2034,7 +2034,7 @@ pub fn session_settings_default() -> SettingsDefault {
             new_version_popup: SwitchDefault {
                 enabled: shared::is_stable(),
                 content: NewVersionPopupConfigDefault {
-                    hide_while_version: ALVR_VERSION.to_string(),
+                    hide_while_version: NANVR_VERSION.to_string(),
                 },
             },
         },

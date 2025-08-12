@@ -65,7 +65,7 @@ impl DevicesTab {
                             ui.add_space(10.0);
                             ui.heading(
                                 RichText::new(format!(
-                                    "ALVR requires running SteamVR! {}",
+                                    "NaNVR requires running SteamVR! {}",
                                     "Devices will not be discovered or connected"
                                 ))
                                 .color(Color32::BLACK)
@@ -75,7 +75,10 @@ impl DevicesTab {
 
                         #[cfg(not(target_arch = "wasm32"))]
                         ui.with_layout(Layout::right_to_left(eframe::emath::Align::Center), |ui| {
-                            if ui.button("Launch SteamVR").clicked() {
+                            if ui
+                                .button(gui_shared::button_text("Launch SteamVR"))
+                                .clicked()
+                            {
                                 crate::steamvr_launcher::LAUNCHER.lock().launch_steamvr();
                             }
                         });
@@ -315,7 +318,10 @@ fn trusted_clients_section(
                 });
 
                 ui.with_layout(Layout::right_to_left(eframe::emath::Align::Center), |ui| {
-                    if ui.button("Add device manually").clicked() {
+                    if ui
+                        .button(gui_shared::button_text("Add device manually"))
+                        .clicked()
+                    {
                         *edit_popup_state = Some(EditPopupState {
                             hostname: "XXXX.client.local.".into(),
                             new_devices: true,

@@ -61,7 +61,7 @@ impl Dashboard {
             selected_tab: Tab::Devices,
             tab_labels: [
                 (Tab::Devices, "🔌  Devices"),
-                (Tab::Statistics, "📈  Statistics"),
+                (Tab::Statistics, "📊  Statistics"),
                 (Tab::Settings, "⚙  Settings"),
                 #[cfg(not(target_arch = "wasm32"))]
                 (Tab::Installation, "💾  Installation"),
@@ -210,17 +210,20 @@ impl eframe::App for Dashboard {
                         .inner_margin(Margin::same(7))
                         .stroke(Stroke::new(1.0, theme::SEPARATOR_BG)),
                 )
-                .exact_width(160.0)
                 .show(context, |ui| {
                     ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
                         ui.add_space(13.0);
-                        ui.heading(RichText::new("ALVR").size(25.0).strong());
+                        ui.heading(RichText::new("NaNVR").size(25.0).strong());
                         egui::warn_if_debug_build(ui);
                     });
 
                     ui.with_layout(Layout::top_down_justified(Align::Min), |ui| {
                         for (tab, label) in &self.tab_labels {
-                            ui.selectable_value(&mut self.selected_tab, *tab, *label);
+                            ui.selectable_value(
+                                &mut self.selected_tab,
+                                *tab,
+                                gui_shared::button_text(label),
+                            );
                         }
                     });
 
@@ -231,28 +234,31 @@ impl eframe::App for Dashboard {
                             ui.add_space(5.0);
 
                             if connected_to_server {
-                                if ui.button("Restart SteamVR").clicked() {
+                                if ui
+                                    .button(gui_shared::button_text("Restart SteamVR"))
+                                    .clicked()
+                                {
                                     self.restart_steamvr(&mut requests);
                                 }
-                            } else if ui.button("Launch SteamVR").clicked() {
+                            } else if ui
+                                .button(gui_shared::button_text("Launch SteamVR"))
+                                .clicked()
+                            {
                                 crate::steamvr_launcher::LAUNCHER.lock().launch_steamvr();
                             }
 
                             ui.horizontal(|ui| {
-                                ui.add_space(5.0);
-                                ui.label(RichText::new("SteamVR:").size(13.0));
+                                // todo: this spacing isn't nice, need to find a way to scale it without spacing
+                                ui.add_space(10.0);
+                                ui.label(gui_shared::button_text("SteamVR driver:"));
                                 ui.add_space(-10.0);
                                 if connected_to_server {
                                     ui.label(
-                                        RichText::new("Connected")
-                                            .color(theme::OK_GREEN)
-                                            .size(13.0),
+                                        gui_shared::button_text("Active").color(theme::OK_GREEN),
                                     );
                                 } else {
                                     ui.label(
-                                        RichText::new("Disconnected")
-                                            .color(theme::KO_RED)
-                                            .size(13.0),
+                                        gui_shared::button_text("Inactive").color(theme::KO_RED),
                                     );
                                 }
                             })
@@ -263,6 +269,7 @@ impl eframe::App for Dashboard {
             CentralPanel::default()
                 .frame(Frame::new().inner_margin(Margin::same(20)).fill(theme::BG))
                 .show(context, |ui| {
+                    global_style_configuration(ui);
                     ui.with_layout(Layout::top_down_justified(Align::LEFT), |ui| {
                         ui.heading(RichText::new(self.tab_labels[&self.selected_tab]).size(25.0));
                         match self.selected_tab {
@@ -337,4 +344,11 @@ impl eframe::App for Dashboard {
             shutdown_alvr();
         }
     }
+}
+
+fn global_style_configuration(ui: &mut egui::Ui) {
+    let style_mut = ui.style_mut();
+    style_mut.interaction.tooltip_delay = 0.0;
+    style_mut.interaction.tooltip_grace_time = 0.0;
+    style_mut.interaction.show_tooltips_only_when_still = false;
 }
