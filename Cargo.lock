@@ -7231,6 +7231,7 @@ dependencies = [
  "pkg-config",
  "serde",
  "serde_json",
+ "shared",
  "walkdir",
  "xshell",
 ]

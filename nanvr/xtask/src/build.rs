@@ -1,6 +1,8 @@
 use crate::CommonBuildFlags;
 use clap::ValueEnum;
 use filepaths::Layout;
+use shared::NANVR_HIGH_NAME;
+use shared::NANVR_LOW_NAME;
 use std::{
     env,
     fmt::{self, Display, Formatter},
@@ -59,7 +61,7 @@ pub fn build_server_lib(
     sh.create_dir(&build_dir).unwrap();
 
     if let Some(root) = root {
-        sh.set_var("ALVR_ROOT_DIR", root);
+        sh.set_var(format!("{NANVR_HIGH_NAME}_ROOT_DIR"), root);
     }
 
     let _push_guard = sh.push_dir(filepaths::crate_dir("server_core"));
@@ -123,7 +125,7 @@ pub fn build_streamer(
     }
 
     if let Some(root) = root {
-        sh.set_var("ALVR_ROOT_DIR", root);
+        sh.set_var(format!("{NANVR_HIGH_NAME}_ROOT_DIR"), root);
     }
 
     // build server
@@ -169,7 +171,7 @@ pub fn build_streamer(
     )
     .unwrap();
     sh.copy_file(
-        artifacts_dir.join("alvr_drm_lease_shim.so"),
+        artifacts_dir.join(format!("{NANVR_LOW_NAME}_drm_lease_shim.so")),
         build_layout.drm_lease_shim(),
     )
     .unwrap();
@@ -188,7 +190,7 @@ pub fn build_streamer(
     sh.create_dir(&build_layout.vulkan_layer_manifest_dir)
         .unwrap();
     sh.copy_file(
-        filepaths::crate_dir("vulkan_layer").join("layer/alvr_x86_64.json"),
+        filepaths::crate_dir("vulkan_layer").join(format!("layer/{NANVR_LOW_NAME}_x86_64.json")),
         build_layout.vulkan_layer_manifest(),
     )
     .unwrap();
@@ -199,9 +201,11 @@ pub fn build_streamer(
     )
     .unwrap();
 
-    let firewall_script = filepaths::crate_dir("xtask").join("firewall/alvr_fw_config.sh");
-    let firewalld = filepaths::crate_dir("xtask").join("firewall/alvr-firewalld.xml");
-    let ufw = filepaths::crate_dir("xtask").join("firewall/ufw-alvr");
+    let firewall_script =
+        filepaths::crate_dir("xtask").join(format!("firewall/{NANVR_LOW_NAME}_fw_config.sh"));
+    let firewalld =
+        filepaths::crate_dir("xtask").join(format!("firewall/{NANVR_LOW_NAME}-firewalld.xml"));
+    let ufw = filepaths::crate_dir("xtask").join(format!("firewall/ufw-{NANVR_LOW_NAME}"));
 
     // copy linux specific firewalls
     sh.copy_file(firewall_script, build_layout.firewall_script())
@@ -279,7 +283,7 @@ fn build_android_lib_impl(dir_name: &str, profile: Profile, link_stdcpp: bool, a
     }
     let rust_flags_ref = &rust_flags;
 
-    let build_dir = filepaths::build_dir().join(format!("alvr_{dir_name}"));
+    let build_dir = filepaths::build_dir().join(format!("{NANVR_LOW_NAME}_{dir_name}"));
     sh.create_dir(&build_dir).unwrap();
 
     let _push_guard = sh.push_dir(filepaths::crate_dir(dir_name));
@@ -290,7 +294,7 @@ fn build_android_lib_impl(dir_name: &str, profile: Profile, link_stdcpp: bool, a
     .run()
     .unwrap();
 
-    let out = build_dir.join(format!("alvr_{dir_name}.h"));
+    let out = build_dir.join(format!("{NANVR_LOW_NAME}_{dir_name}.h"));
     cmd!(sh, "cbindgen --output {out}").run().unwrap();
 }
 
@@ -303,7 +307,7 @@ pub fn build_android_client_openxr_lib(profile: Profile, link_stdcpp: bool) {
 }
 
 pub fn build_android_client(profile: Profile) {
-    const ARTIFACT_NAME: &str = "alvr_client_android";
+    let artifact_name: String = format!("{NANVR_LOW_NAME}_client_android");
     let sh = Shell::new().unwrap();
 
     let mut flags = vec![];
@@ -318,7 +322,7 @@ pub fn build_android_client(profile: Profile) {
     let flags_ref = &flags;
 
     let target_dir = filepaths::target_dir();
-    let build_dir = filepaths::build_dir().join(ARTIFACT_NAME);
+    let build_dir = filepaths::build_dir().join(&artifact_name);
     sh.create_dir(&build_dir).unwrap();
 
     // Create debug keystore (signing will be overwritten by CI)
@@ -372,7 +376,7 @@ pub fn build_android_client(profile: Profile) {
         filepaths::target_dir()
             .join(profile.to_string())
             .join("apk/client_openxr.apk"),
-        build_dir.join(format!("{ARTIFACT_NAME}.apk")),
+        build_dir.join(format!("{artifact_name}.apk")),
     )
     .unwrap();
 }

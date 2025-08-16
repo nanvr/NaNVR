@@ -12,7 +12,7 @@ use eframe::egui::{self, Align, CentralPanel, Frame, Layout, Margin, RichText, S
 use events::EventType;
 use gui_shared::theme;
 use net_packets::{PathValuePair, ServerRequest};
-use shared::parking_lot::{Condvar, Mutex};
+use shared::{parking_lot::{Condvar, Mutex}, NANVR_NAME};
 use std::{collections::BTreeMap, sync::Arc};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
@@ -214,7 +214,7 @@ impl eframe::App for Dashboard {
                 .show(context, |ui| {
                     ui.with_layout(Layout::top_down_justified(Align::Center), |ui| {
                         ui.add_space(13.0);
-                        ui.heading(RichText::new("ALVR").size(25.0).strong());
+                        ui.heading(RichText::new(NANVR_NAME).size(25.0).strong());
                         egui::warn_if_debug_build(ui);
                     });
 

@@ -17,7 +17,7 @@ use xshell::{Shell, cmd};
 
 #[derive(Parser)]
 #[command(name = "cargo xtask")]
-#[command(about = "Developement actions for ALVR", long_about = None)]
+#[command(about = "Developement actions for NaNVR", long_about = None)]
 struct Cli {
     #[command(subcommand)]
     commands: Commands,
@@ -65,7 +65,7 @@ enum Commands {
         #[clap(flatten)]
         common_build_flags: CommonBuildFlags,
     },
-    /// Build a C-ABI ALVR server library and header
+    /// Build a C-ABI NaNVR server library and header
     BuildServerLib {
         #[arg(long, value_enum, default_value_t = Profile::Debug)]
         profile: Profile,
@@ -183,7 +183,7 @@ pub struct CommonBuildFlags {
     #[arg(long)]
     frozen: bool,
     /// Forces build subcommands to fail if they try to use internet.
-    /// Note that 'xtask' and 'cargo about' dependencies are downloaded and built during build of alvr
+    /// Note that 'xtask' and 'cargo about' dependencies are downloaded and built during build of nanvr
     #[arg(long)]
     offline: bool,
     /// Enable Profiling

@@ -7,6 +7,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
+shared.workspace = true
 filepaths.workspace = true
 
 serde = { version = "1.0", features = ["derive"] }

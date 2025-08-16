@@ -5,6 +5,8 @@ use crate::{
 };
 
 use clap::ValueEnum;
+use shared::NANVR_HIGH_NAME;
+use shared::NANVR_LOW_NAME;
 use std::{fs, path::Path};
 use xshell::{Shell, cmd};
 
@@ -24,7 +26,7 @@ pub fn include_licenses(root_path: &Path) {
     sh.create_dir(&licenses_dir).unwrap();
     sh.copy_file(
         filepaths::workspace_dir().join("LICENSE"),
-        licenses_dir.join("ALVR.txt"),
+        licenses_dir.join(format!("{NANVR_HIGH_NAME}.txt")),
     )
     .unwrap();
     sh.copy_file(
@@ -105,8 +107,8 @@ pub fn package_client_openxr(flavor: ReleaseFlavor) {
 
     if !matches!(flavor, ReleaseFlavor::GitHub) {
         replace_client_openxr_manifest(
-            r#"package = "alvr.client.stable""#,
-            r#"package = "alvr.client""#,
+            &format!(r#"package = "{NANVR_LOW_NAME}.client.stable""#),
+            &format!(r#"package = "{NANVR_LOW_NAME}.client""#),
         );
     }
 
