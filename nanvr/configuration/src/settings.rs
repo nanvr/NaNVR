@@ -5,8 +5,8 @@ use settings_schema::{
     VectorDefault,
 };
 use shared::{
-    NANVR_VERSION, DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
-    LogSeverityDefaultVariant,
+    DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
+    LogSeverityDefaultVariant, NANVR_VERSION,
 };
 use system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
 

@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json as json;
 use settings_schema::{NumberType, SchemaNode};
 use shared::{
-    NANVR_VERSION, ConnectionState, ToAny,
+    ConnectionState, NANVR_VERSION, ToAny,
     anyhow::{Result, bail},
     semver::Version,
 };

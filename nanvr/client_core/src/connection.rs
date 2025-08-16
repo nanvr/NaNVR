@@ -18,7 +18,7 @@ use net_sockets::{
     StreamSender, StreamSocketBuilder,
 };
 use shared::{
-    NANVR_VERSION, AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState,
+    AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState, NANVR_VERSION,
     ViewParams, dbg_connection, debug, error, info,
     parking_lot::{Condvar, Mutex, RwLock},
     wait_rwlock, warn,

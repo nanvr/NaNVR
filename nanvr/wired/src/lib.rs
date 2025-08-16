@@ -2,7 +2,7 @@ pub mod commands;
 mod parse;
 
 use shared::anyhow::Result;
-use shared::{dbg_connection, error};
+use shared::{NANVR_HIGH_NAME, NANVR_NAME, dbg_connection, error};
 use std::collections::HashSet;
 use system_info::{
     ClientFlavor, PACKAGE_NAME_GITHUB_DEV, PACKAGE_NAME_GITHUB_STABLE, PACKAGE_NAME_STORE,
@@ -60,26 +60,26 @@ impl WiredConnection {
 
         let Some(process_name) = get_process_name(&self.adb_path, &device_serial, client_type)
         else {
-            return Ok(WiredConnectionStatus::NotReady(
-                "No suitable ALVR client is installed".to_owned(),
-            ));
+            return Ok(WiredConnectionStatus::NotReady(format!(
+                "No suitable {NANVR_NAME} client is installed"
+            )));
         };
 
         if commands::get_process_id(&self.adb_path, &device_serial, &process_name)?.is_none() {
             if client_autolaunch {
                 commands::start_application(&self.adb_path, &device_serial, &process_name)?;
-                Ok(WiredConnectionStatus::NotReady(
-                    "Starting ALVR client".to_owned(),
-                ))
+                Ok(WiredConnectionStatus::NotReady(format!(
+                    "Starting {NANVR_NAME} client"
+                )))
             } else {
-                Ok(WiredConnectionStatus::NotReady(
-                    "ALVR client is not running".to_owned(),
-                ))
+                Ok(WiredConnectionStatus::NotReady(format!(
+                    "{NANVR_NAME} client is not running"
+                )))
             }
         } else if !commands::is_activity_resumed(&self.adb_path, &device_serial, &process_name)? {
-            Ok(WiredConnectionStatus::NotReady(
-                "ALVR client is paused".to_owned(),
-            ))
+            Ok(WiredConnectionStatus::NotReady(format!(
+                "{NANVR_NAME} client is paused"
+            )))
         } else {
             Ok(WiredConnectionStatus::Ready)
         }

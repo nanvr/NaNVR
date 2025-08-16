@@ -249,7 +249,7 @@ pub fn list_installed_packages(adb_path: &str, device_serial: &str) -> Result<Ha
 ////////
 // Paths
 
-/// Returns the path of a local (i.e. installed by ALVR) or OS version of `adb` if found, `None` otherwise.
+/// Returns the path of a local (i.e. installed by NaNVR) or OS version of `adb` if found, `None` otherwise.
 pub fn get_adb_path(layout: &filepaths::Layout) -> Option<String> {
     let exe_name = filepaths::exec_fname("adb").to_owned();
     let adb_path = get_command(&exe_name, &[])

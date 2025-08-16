@@ -12,7 +12,10 @@ use eframe::egui::{self, Align, CentralPanel, Frame, Layout, Margin, RichText, S
 use events::EventType;
 use gui_shared::theme;
 use net_packets::{PathValuePair, ServerRequest};
-use shared::{parking_lot::{Condvar, Mutex}, NANVR_NAME};
+use shared::{
+    NANVR_NAME,
+    parking_lot::{Condvar, Mutex},
+};
 use std::{collections::BTreeMap, sync::Arc};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
