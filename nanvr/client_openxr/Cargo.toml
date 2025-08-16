@@ -84,7 +84,7 @@ authorities = "org.khronos.openxr.runtime_broker;org.khronos.openxr.system_runti
 debuggable = false
 theme = "@android:style/Theme.Black.NoTitleBar.Fullscreen"
 icon = "@mipmap/ic_launcher"
-label = "ALVR"
+label = "NaNVR"
 
 [package.metadata.android.application.activity]
 config_changes = "density|keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|uiMode"

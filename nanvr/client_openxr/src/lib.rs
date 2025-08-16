@@ -21,7 +21,7 @@ use lobby::Lobby;
 use openxr as xr;
 use passthrough::PassthroughLayer;
 use shared::{
-    Fov, HAND_LEFT_ID, Pose, error,
+    Fov, HAND_LEFT_ID, NANVR_NAME, Pose, error,
     glam::{Quat, UVec2, Vec3},
     info,
     parking_lot::RwLock,
@@ -209,9 +209,9 @@ pub fn entry_point() {
     let xr_instance = xr_entry
         .create_instance(
             &xr::ApplicationInfo {
-                application_name: "ALVR Client",
+                application_name: &format!("{NANVR_NAME} Client"),
                 application_version: 0,
-                engine_name: "ALVR",
+                engine_name: NANVR_NAME,
                 engine_version: 0,
             },
             &exts,
