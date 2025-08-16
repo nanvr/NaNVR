@@ -3430,6 +3430,7 @@ version = "1.0.0-dev0"
 dependencies = [
  "bincode",
  "configuration",
+ "const_format",
  "profiling",
  "serde",
  "serde_json",

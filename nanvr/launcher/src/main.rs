@@ -3,6 +3,7 @@ mod ui;
 
 use eframe::egui::{IconData, ViewportBuilder};
 use ico::IconDir;
+use shared::{NANVR_LOW_NAME, NANVR_NAME};
 use std::{collections::BTreeMap, env, fs, io::Cursor, sync::mpsc, thread};
 use ui::Launcher;
 
@@ -66,10 +67,10 @@ fn main() {
     }
 
     eframe::run_native(
-        "ALVR Launcher",
+        &format!("{NANVR_NAME} Launcher"),
         eframe::NativeOptions {
             viewport: ViewportBuilder::default()
-                .with_app_id("alvr.launcher")
+                .with_app_id(format!("{NANVR_LOW_NAME}.launcher"))
                 .with_inner_size((700.0, 400.0))
                 .with_icon(IconData {
                     rgba: image.rgba_data().to_owned(),

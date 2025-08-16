@@ -4,7 +4,9 @@ use crate::{
 use anyhow::Context;
 use flate2::read::GzDecoder;
 use futures_util::StreamExt;
-use shared::{ToAny, anyhow::Result, semver::Version};
+use shared::{
+    NANVR_GH_REPO_PATH, NANVR_LOW_NAME, NANVR_NAME, ToAny, anyhow::Result, semver::Version,
+};
 use std::{
     env,
     fs::{self, File},
@@ -28,7 +30,7 @@ pub fn worker(
         .expect("Failed to create tokio runtime")
         .block_on(async {
             let req_client = reqwest::Client::builder()
-                .user_agent("ALVR-Launcher")
+                .user_agent(format!("{NANVR_NAME}-Launcher"))
                 .build()
                 .unwrap();
             let version_data = match fetch_all_releases(&req_client).await {
@@ -79,12 +81,12 @@ async fn fetch_all_releases(client: &reqwest::Client) -> Result<ReleaseChannelsI
     Ok(ReleaseChannelsInfo {
         stable: fetch_releases_for_repo(
             client,
-            "https://api.github.com/repos/alvr-org/ALVR/releases",
+            &format!("https://api.github.com/repos/{NANVR_GH_REPO_PATH}/releases"),
         )
         .await?,
         nightly: fetch_releases_for_repo(
             client,
-            "https://api.github.com/repos/alvr-org/ALVR-nightly/releases",
+            &format!("https://api.github.com/repos/{NANVR_GH_REPO_PATH}-nightly/releases"),
         )
         .await?,
     })
@@ -141,7 +143,7 @@ fn install_and_launch_apk(
     }))?;
 
     let root = installations_dir().join(&release.version);
-    let apk_name = "alvr_client_android.apk";
+    let apk_name = &format!("{NANVR_LOW_NAME}_client_android.apk");
     let apk_path = root.join(apk_name);
     if !apk_path.exists() {
         let apk_url = release
@@ -250,7 +252,7 @@ async fn install_server(
         progress: 0.0,
     }))?;
 
-    let file_name = "alvr_streamer_linux.tar.gz";
+    let file_name = &format!("{NANVR_LOW_NAME}_streamer_linux.tar.gz");
 
     let url = release_info
         .assets
@@ -304,7 +306,7 @@ async fn install_server(
 
 pub fn data_dir() -> PathBuf {
     PathBuf::from(env::var("HOME").expect("Failed to determine home directory"))
-        .join(".local/share/ALVR-Launcher")
+        .join(format!(".local/share/{NANVR_NAME}-Launcher"))
 }
 
 pub fn get_installations() -> Vec<InstallationInfo> {
@@ -352,7 +354,8 @@ pub fn get_installations() -> Vec<InstallationInfo> {
 pub fn launch_dashboard(version: &str) -> Result<()> {
     let installation_dir = installations_dir().join(version);
 
-    let dashboard_path = installation_dir.join("alvr_streamer_linux/bin/dashboard");
+    let dashboard_path =
+        installation_dir.join(format!("{NANVR_LOW_NAME}_streamer_linux/bin/dashboard"));
 
     Command::new(dashboard_path).spawn()?;
 

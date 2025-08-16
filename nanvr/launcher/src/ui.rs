@@ -8,6 +8,7 @@ use eframe::{
     epaint::Color32,
 };
 use gui_shared::ModalButton;
+use shared::NANVR_NAME;
 use std::{
     mem,
     sync::mpsc::{Receiver, Sender},
@@ -299,9 +300,20 @@ impl eframe::App for Launcher {
         CentralPanel::default().show(ctx, |ui| match &self.state {
             State::Default => {
                 ui.with_layout(Layout::top_down(Align::Center), |ui| {
-                    ui.label(RichText::new("ALVR Launcher").size(25.0).strong());
+                    ui.label(
+                        RichText::new(format!("{NANVR_NAME} Launcher"))
+                            .size(25.0)
+                            .strong(),
+                    );
                     ui.label(match &self.release_channels_info {
-                        Some(data) => format!("Latest stable release: {}", data.stable[0].version),
+                        Some(data) => {
+                            // todo: workaround for now
+                            if !data.stable.is_empty() {
+                                format!("Latest stable release: {}", data.stable[0].version)
+                            } else {
+                                "No latest release found, is Github down?".into()
+                            }
+                        }
                         None => "Fetching latest release...".into(),
                     });
 
@@ -378,11 +390,11 @@ impl eframe::App for Launcher {
                                     })
                             });
                     }
-
+                    // todo: workaround for now
                     if ui
                         .add_enabled(
                             self.release_channels_info.is_some(),
-                            Button::new("Add version"),
+                            Button::new("Add version (TODO: DOESNT WORK WITHOUT RELEASE)"),
                         )
                         .clicked()
                     {
