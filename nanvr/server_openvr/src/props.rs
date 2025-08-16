@@ -13,8 +13,8 @@ use configuration::{
 use shared::{
     BODY_CHEST_ID, BODY_HIPS_ID, BODY_LEFT_ELBOW_ID, BODY_LEFT_FOOT_ID, BODY_LEFT_KNEE_ID,
     BODY_RIGHT_ELBOW_ID, BODY_RIGHT_FOOT_ID, BODY_RIGHT_KNEE_ID, DEVICE_ID_TO_PATH, HAND_LEFT_ID,
-    HAND_RIGHT_ID, HAND_TRACKER_LEFT_ID, HAND_TRACKER_RIGHT_ID, HEAD_ID, debug,
-    settings_schema::Switch, warn,
+    HAND_RIGHT_ID, HAND_TRACKER_LEFT_ID, HAND_TRACKER_RIGHT_ID, HEAD_ID, NANVR_HIGH_NAME,
+    NANVR_NAME, debug, settings_schema::Switch, warn,
 };
 use std::{
     ffi::{CString, c_char, c_void},
@@ -136,7 +136,9 @@ fn serial_number(device_id: u64) -> String {
                 | ControllersEmulationMode::Pico4
                 | ControllersEmulationMode::ValveIndex
                 | ControllersEmulationMode::ViveWand
-                | ControllersEmulationMode::ViveTracker => "ALVR Remote Controller",
+                | ControllersEmulationMode::ViveTracker => {
+                    &format!("{NANVR_NAME} Remote Controller")
+                }
                 ControllersEmulationMode::Custom { serial_number, .. } => serial_number,
             };
 
@@ -149,25 +151,25 @@ fn serial_number(device_id: u64) -> String {
             "Unknown".into()
         }
     } else if device_id == *HAND_TRACKER_LEFT_ID {
-        "ALVR_Left_Hand_Full_Skeletal".into()
+        format!("{NANVR_HIGH_NAME}_Left_Hand_Full_Skeletal")
     } else if device_id == *HAND_TRACKER_RIGHT_ID {
-        "ALVR_Right_Hand_Full_Skeletal".into()
+        format!("{NANVR_HIGH_NAME}_Right_Hand_Full_Skeletal")
     } else if device_id == *BODY_CHEST_ID {
-        "ALVR Tracker (chest)".into()
+        format!("{NANVR_NAME} Tracker (chest)")
     } else if device_id == *BODY_HIPS_ID {
-        "ALVR Tracker (waist)".into()
+        format!("{NANVR_NAME} Tracker (waist)")
     } else if device_id == *BODY_LEFT_ELBOW_ID {
-        "ALVR Tracker (left elbow)".into()
+        format!("{NANVR_NAME} Tracker (left elbow)")
     } else if device_id == *BODY_RIGHT_ELBOW_ID {
-        "ALVR Tracker (right elbow)".into()
+        format!("{NANVR_NAME} Tracker (right elbow)")
     } else if device_id == *BODY_LEFT_KNEE_ID {
-        "ALVR Tracker (left knee)".into()
+        format!("{NANVR_NAME} Tracker (left knee)")
     } else if device_id == *BODY_RIGHT_KNEE_ID {
-        "ALVR Tracker (right knee)".into()
+        format!("{NANVR_NAME} Tracker (right knee)")
     } else if device_id == *BODY_LEFT_FOOT_ID {
-        "ALVR Tracker (left foot)".into()
+        format!("{NANVR_NAME} Tracker (left foot)")
     } else if device_id == *BODY_RIGHT_FOOT_ID {
-        "ALVR Tracker (right foot)".into()
+        format!("{NANVR_NAME} Tracker (right foot)")
     } else {
         "Unknown".into()
     }
@@ -282,7 +284,7 @@ pub extern "C" fn set_device_openvr_props(instance_ptr: *mut c_void, device_id: 
             }
             HeadsetEmulationMode::Vive => {
                 set_prop(TrackingSystemNameString, "Vive Tracker");
-                set_prop(ModelNumberString, "ALVR driver server");
+                set_prop(ModelNumberString, &format!("{NANVR_NAME} driver server"));
                 set_prop(ManufacturerNameString, "HTC");
                 set_prop(RenderModelNameString, "generic_hmd");
                 set_prop(RegisteredDeviceTypeString, "vive");
@@ -455,13 +457,13 @@ pub extern "C" fn set_device_openvr_props(instance_ptr: *mut c_void, device_id: 
                     if left_hand {
                         set_prop(
                             ModelNumberString,
-                            "ALVR Remote Controller (Left Controller)",
+                            &format!("{NANVR_NAME} Remote Controller (Left Controller)"),
                         );
                         set_prop(RegisteredDeviceTypeString, "htc/vive_controller_Left");
                     } else if right_hand {
                         set_prop(
                             ModelNumberString,
-                            "ALVR Remote Controller (Right Controller)",
+                            &format!("{NANVR_NAME} Remote Controller (Right Controller)"),
                         );
                         set_prop(RegisteredDeviceTypeString, "htc/vive_controller_Right");
                     }
@@ -474,11 +476,17 @@ pub extern "C" fn set_device_openvr_props(instance_ptr: *mut c_void, device_id: 
                     set_prop(RenderModelNameString, "{htc}vr_tracker_vive_1_0");
                     if left_hand {
                         set_prop(ModelNumberString, "Vive Tracker Pro MV (Left Controller)");
-                        set_prop(RegisteredDeviceTypeString, "ALVR/tracker/left_foot");
+                        set_prop(
+                            RegisteredDeviceTypeString,
+                            &format!("{NANVR_HIGH_NAME}/tracker/left_foot"),
+                        );
                         set_prop(ControllerTypeString, "vive_tracker_left_foot");
                     } else if right_hand {
                         set_prop(ModelNumberString, "Vive Tracker Pro MV (Right Controller)");
-                        set_prop(RegisteredDeviceTypeString, "ALVR/tracker/right_foot");
+                        set_prop(
+                            RegisteredDeviceTypeString,
+                            &format!("{NANVR_HIGH_NAME}/tracker/right_foot"),
+                        );
                         set_prop(ControllerTypeString, "vive_tracker_right_foot");
                     }
                     set_prop(

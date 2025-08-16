@@ -501,13 +501,13 @@ pub unsafe extern "C" fn HmdDriverFactory(
         graphics::initialize_shaders();
 
         unsafe {
-            LogError = Some(server_core::alvr_error);
-            LogWarn = Some(server_core::alvr_warn);
-            LogInfo = Some(server_core::alvr_info);
-            LogDebug = Some(server_core::alvr_dbg_server_impl);
-            LogEncoder = Some(server_core::alvr_dbg_encoder);
-            LogPeriodically = Some(server_core::alvr_log_periodically);
-            PathStringToHash = Some(server_core::alvr_path_to_id);
+            LogError = Some(server_core::nanvr_error);
+            LogWarn = Some(server_core::nanvr_warn);
+            LogInfo = Some(server_core::nanvr_info);
+            LogDebug = Some(server_core::nanvr_dbg_server_impl);
+            LogEncoder = Some(server_core::nanvr_dbg_encoder);
+            LogPeriodically = Some(server_core::nanvr_log_periodically);
+            PathStringToHash = Some(server_core::nanvr_path_to_id);
             GetSerialNumber = Some(props::get_serial_number);
             SetOpenvrProps = Some(props::set_device_openvr_props);
             RegisterButtons = Some(register_buttons);
@@ -521,7 +521,7 @@ pub unsafe extern "C" fn HmdDriverFactory(
             WaitForVSync = Some(wait_for_vsync);
             ShutdownRuntime = Some(shutdown_driver);
 
-            // When there is already a ALVR dashboard running, initialize the HMD device early to
+            // When there is already a NaNVR dashboard running, initialize the HMD device early to
             // avoid buggy SteamVR behavior
             // NB: we already bail out before if the dashboards don't belong to this streamer
             let early_hmd_initialization = !dashboard_process_paths.is_empty();

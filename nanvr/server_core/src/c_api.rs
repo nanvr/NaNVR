@@ -114,12 +114,12 @@ pub extern "C" fn alvr_get_time_ns() -> u64 {
 // The libalvr user is responsible of interpreting values and calling functions using
 // device/input/output identifiers obtained using this function
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_path_to_id(path_string: *const c_char) -> u64 {
+pub unsafe extern "C" fn nanvr_path_to_id(path_string: *const c_char) -> u64 {
     shared::hash_string(unsafe { CStr::from_ptr(path_string) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_error(string_ptr: *const c_char) {
+pub unsafe extern "C" fn nanvr_error(string_ptr: *const c_char) {
     shared::show_e(unsafe { CStr::from_ptr(string_ptr) }.to_string_lossy());
 }
 
@@ -132,17 +132,17 @@ pub unsafe fn log(level: log::Level, string_ptr: *const c_char) {
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_warn(string_ptr: *const c_char) {
+pub unsafe extern "C" fn nanvr_warn(string_ptr: *const c_char) {
     unsafe { log(log::Level::Warn, string_ptr) };
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_info(string_ptr: *const c_char) {
+pub unsafe extern "C" fn nanvr_info(string_ptr: *const c_char) {
     unsafe { log(log::Level::Info, string_ptr) };
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_dbg_server_impl(string_ptr: *const c_char) {
+pub unsafe extern "C" fn nanvr_dbg_server_impl(string_ptr: *const c_char) {
     shared::dbg_server_impl!(
         "{}",
         unsafe { CStr::from_ptr(string_ptr) }.to_string_lossy()
@@ -150,7 +150,7 @@ pub unsafe extern "C" fn alvr_dbg_server_impl(string_ptr: *const c_char) {
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_dbg_encoder(string_ptr: *const c_char) {
+pub unsafe extern "C" fn nanvr_dbg_encoder(string_ptr: *const c_char) {
     shared::dbg_encoder!(
         "{}",
         unsafe { CStr::from_ptr(string_ptr) }.to_string_lossy()
@@ -159,7 +159,10 @@ pub unsafe extern "C" fn alvr_dbg_encoder(string_ptr: *const c_char) {
 
 // Should not be used in production
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_log_periodically(tag_ptr: *const c_char, message_ptr: *const c_char) {
+pub unsafe extern "C" fn nanvr_log_periodically(
+    tag_ptr: *const c_char,
+    message_ptr: *const c_char,
+) {
     const INTERVAL: Duration = Duration::from_secs(1);
     static LASTEST_TAG_TIMESTAMPS: LazyLock<Mutex<HashMap<String, Instant>>> =
         LazyLock::new(|| Mutex::new(HashMap::new()));
