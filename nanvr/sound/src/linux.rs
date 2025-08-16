@@ -1,6 +1,7 @@
 use configuration::AudioBufferingConfig;
 use net_sockets::{StreamReceiver, StreamSender};
 use shared::{ConnectionError, anyhow::Result, debug, error, parking_lot::Mutex};
+use shared::{NANVR_GH_REPO_PATH, NANVR_LOW_NAME, NANVR_NAME};
 
 use std::os::unix::fs::FileTypeExt;
 use std::{
@@ -49,11 +50,11 @@ pub fn try_load_pipewire() -> Result<()> {
                 "Please visit the following page to find help on how to fix broken audio on flatpak."
             );
             error!(
-                "https://github.com/alvr-org/ALVR/wiki/Installing-ALVR-and-using-SteamVR-on-Linux-through-Flatpak#failed-to-create-pipewire-errors"
+                "https://github.com/{NANVR_GH_REPO_PATH}/wiki/Installing-ALVR-and-using-SteamVR-on-Linux-through-Flatpak#failed-to-create-pipewire-errors"
             );
         }
         error!("Make sure PipeWire is installed on your system, running and it's version is at least 0.3.49.
-        To retry, please restart SteamVR with ALVR.");
+        To retry, please restart SteamVR with {NANVR_NAME}.");
     } else {
         debug!("Pipewire loads OK")
     }
@@ -223,10 +224,10 @@ fn create_speaker_stream(
 ) -> Result<(Stream, StreamListener<i16>), pipewire::Error> {
     let stream = Stream::new(
         pw_core,
-        "alvr-audio",
+        &format!("{NANVR_LOW_NAME}-audio"),
         properties::properties! {
-            *keys::NODE_NAME => "ALVR Audio",
-            *keys::MEDIA_NAME => "alvr-audio",
+            *keys::NODE_NAME => format!("{NANVR_NAME} Audio"),
+            *keys::MEDIA_NAME => format!("{NANVR_LOW_NAME}-audio"),
             *keys::MEDIA_TYPE => "Audio",
             *keys::MEDIA_CATEGORY => "Capture",
             *keys::MEDIA_CLASS => "Audio/Sink",
@@ -278,10 +279,10 @@ fn create_mic_stream(
 ) -> Result<(Stream, StreamListener<f32>), pipewire::Error> {
     let stream = Stream::new(
         pw_core,
-        "alvr-mic",
+        &format!("{NANVR_LOW_NAME}-mic"),
         properties::properties! {
-            *keys::NODE_NAME => "ALVR Microphone",
-            *keys::MEDIA_NAME => "alvr-mic",
+            *keys::NODE_NAME => format!("{NANVR_NAME} Microphone"),
+            *keys::MEDIA_NAME => format!("{NANVR_LOW_NAME}-mic"),
             *keys::MEDIA_TYPE => "Audio",
             *keys::MEDIA_CATEGORY => "Playback",
             *keys::MEDIA_CLASS => "Audio/Source",
