@@ -1,4 +1,5 @@
 use net_packets::FirewallRulesAction;
+use shared::NANVR_LOW_NAME;
 use std::{path::PathBuf, process::Command};
 
 // todo: might need to be moved somewhere else
@@ -21,7 +22,7 @@ pub fn firewall_rules(
             PathBuf::from("../").join(
                 filesystem_layout
                     .firewall_script_dir
-                    .join("alvr_fw_config.sh"),
+                    .join(format!("{NANVR_LOW_NAME}_fw_config.sh")),
             ),
         )
         .arg(action)

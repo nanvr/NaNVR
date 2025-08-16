@@ -1,7 +1,7 @@
 use crate::openvrpaths;
 use serde_json as json;
 use shared::{
-    ToAny,
+    NANVR_LOW_NAME, NANVR_NAME, ToAny,
     anyhow::{Result, bail},
 };
 use std::{
@@ -52,11 +52,11 @@ pub fn get_driver_dir_from_registered() -> Result<PathBuf> {
         }();
 
         if let Ok(json::Value::String(str)) = maybe_driver_name
-            && str == "alvr_server"
+            && str == format!("{NANVR_LOW_NAME}_server")
         {
             return Ok(dir);
         }
     }
 
-    bail!("ALVR driver path not registered")
+    bail!("{NANVR_NAME} driver path not registered")
 }
