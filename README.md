@@ -2,7 +2,7 @@
 
 # NaNVR
 
-<!-- [![badge-discord][]][link-discord] [![badge-matrix][]][link-matrix] [![badge-opencollective][]][link-opencollective] -->
+## !Project is currently under heavy development, expect a lot of breaking changes!
 
 Stream VR games from your PC to your headset via Wi-Fi.
 This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
@@ -14,8 +14,8 @@ This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
 
 |          VR Headset          |                                        Support                                         |
 | :--------------------------: | :------------------------------------------------------------------------------------: |
-|       Apple Vision Pro       |    :heavy_check_mark:     |
-|      Quest 1/2/3/3S/Pro      | :heavy_check_mark: |
+|       Apple Vision Pro       |             :x: ([supported under alvr](https://github.com/alvr-org/alvr-visionos))    |
+|      Quest 1/2/3/3S/Pro      |                                   :heavy_check_mark:                                   |
 |     Pico Neo 3/4/4 Ultra     |                                   :heavy_check_mark:                                   |
 |    Play For Dream YVR 1/2/MR |                                   :heavy_check_mark:                                   |
 | Vive Focus 3/Vision/XR Elite |                                   :heavy_check_mark:                                   |
@@ -29,9 +29,8 @@ This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
 
 |     PC OS      |                                    Support                                    |
 | :------------: | :---------------------------------------------------------------------------: |
-|     Linux      |                             :heavy_check_mark:***                             |
+|     Linux      |                             :heavy_check_mark:                                |
 
-\*** : Please check the wiki for compatibility info
 
 ### Requirements
 
@@ -40,9 +39,8 @@ This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
 -   SteamVR
 
 -   High-end gaming PC
-    -   See OS compatibility table above.
     -   NVIDIA GPU that supports NVENC (1000 GTX Series or higher) (or with an AMD GPU that supports AMF VCE) with the latest driver.
-    -   Laptops with an onboard (Intel HD, AMD iGPU) and an additional dedicated GPU (NVidia GTX/RTX, AMD HD/R5/R7): you should assign the dedicated GPU or "high performance graphics adapter" to the applications ALVR, SteamVR for best performance and compatibility. (NVidia: Nvidia control panel->3d settings->application settings; AMD: similiar way)
+    -   Laptops with an onboard (Intel HD, AMD iGPU) and an additional dedicated GPU.
 
 -   802.11ac 5Ghz wireless or ethernet wired connection
     -   It is recommended to use 802.11ac 5Ghz for the headset and ethernet for PC
@@ -70,14 +68,3 @@ NaNVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL 
 ## Privacy policy
 
 NaNVR apps do not directly collect any kind of data.
-
-<!-- ## Donate
-
-If you want to support this project you can make a donation to our [Open Source Collective account](https://opencollective.com/alvr).
-
-[badge-discord]: https://img.shields.io/discord/720612397580025886?style=for-the-badge&logo=discord&color=5865F2 "Join us on Discord"
-[link-discord]: https://discord.gg/ALVR
-[badge-matrix]: https://img.shields.io/static/v1?label=chat&message=%23alvr&style=for-the-badge&logo=matrix&color=blueviolet "Join us on Matrix"
-[link-matrix]: https://matrix.to/#/#alvr:ckie.dev?via=ckie.dev
-[badge-opencollective]: https://img.shields.io/opencollective/all/alvr?style=for-the-badge&logo=opencollective&color=79a3e6 "Donate"
-[link-opencollective]: https://opencollective.com/alvr -->
