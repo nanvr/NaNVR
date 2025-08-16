@@ -4,13 +4,15 @@ pub mod android;
 #[cfg(target_os = "android")]
 pub use android::*;
 
+use const_format::formatcp;
 use serde::{Deserialize, Serialize};
+use shared::NANVR_LOW_NAME;
 use shared::settings_schema::SettingsSchema;
 use std::fmt::{Display, Formatter};
 
-pub const PACKAGE_NAME_STORE: &str = "alvr.client";
-pub const PACKAGE_NAME_GITHUB_DEV: &str = "alvr.client.dev";
-pub const PACKAGE_NAME_GITHUB_STABLE: &str = "alvr.client.stable";
+pub const PACKAGE_NAME_STORE: &str = formatcp!("{NANVR_LOW_NAME}.client");
+pub const PACKAGE_NAME_GITHUB_DEV: &str = formatcp!("{NANVR_LOW_NAME}.client.dev");
+pub const PACKAGE_NAME_GITHUB_STABLE: &str = formatcp!("{NANVR_LOW_NAME}.client.stable");
 
 // Platform of the device. It is used to match the VR runtime and enable features conditionally.
 #[derive(PartialEq, Eq, Clone, Copy)]

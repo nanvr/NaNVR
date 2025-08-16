@@ -27,8 +27,8 @@ pub use primitives::*;
 pub use version::*;
 
 // todo: temp progress, rename later
-pub const NANVR_HIGH_NAME: &str = "ALVR";
 pub const NANVR_NAME: &str = "ALVR";
+pub const NANVR_HIGH_NAME: &str = "ALVR";
 pub const NANVR_LOW_NAME: &str = "alvr";
 
 // Simple wrapper for AtomicBool when using Ordering::Relaxed. Deref cannot be implemented (cannot

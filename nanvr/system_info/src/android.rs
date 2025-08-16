@@ -1,4 +1,5 @@
 use jni::{JNIEnv, JavaVM, objects::JObject, sys::jobject};
+use shared::NANVR_LOW_NAME;
 use shared::warn;
 use std::net::{IpAddr, Ipv4Addr};
 
@@ -158,7 +159,9 @@ pub fn set_wifi_lock(enabled: bool) {
         }
     }
 
-    let wifi_lock_jstring = env.new_string("alvr_wifi_lock").unwrap();
+    let wifi_lock_jstring = env
+        .new_string(format!("{NANVR_LOW_NAME}_wifi_lock"))
+        .unwrap();
     let wifi_lock = env
         .call_method(
             &wifi_manager,
@@ -180,7 +183,9 @@ pub fn set_wifi_lock(enabled: bool) {
         .unwrap();
     set_lock(&mut env, &wifi_lock, enabled);
 
-    let multicast_lock_jstring = env.new_string("alvr_multicast_lock").unwrap();
+    let multicast_lock_jstring = env
+        .new_string(format!("{NANVR_LOW_NAME}_multicast_lock"))
+        .unwrap();
     let multicast_lock = env
         .call_method(
             wifi_manager,

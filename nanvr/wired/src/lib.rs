@@ -2,7 +2,7 @@ pub mod commands;
 mod parse;
 
 use shared::anyhow::Result;
-use shared::{NANVR_HIGH_NAME, NANVR_NAME, dbg_connection, error};
+use shared::{NANVR_NAME, dbg_connection, error};
 use std::collections::HashSet;
 use system_info::{
     ClientFlavor, PACKAGE_NAME_GITHUB_DEV, PACKAGE_NAME_GITHUB_STABLE, PACKAGE_NAME_STORE,
