@@ -1003,6 +1003,7 @@ dependencies = [
  "app_dirs2",
  "client_graphics",
  "configuration",
+ "const_format",
  "env_logger",
  "mdns-sd",
  "ndk",

@@ -1,5 +1,8 @@
 use mdns_sd::{ServiceDaemon, ServiceInfo};
-use shared::anyhow::{Result, bail};
+use shared::{
+    NANVR_LOW_NAME,
+    anyhow::{Result, bail},
+};
 
 pub struct AnnouncerSocket {
     hostname: String,
@@ -24,7 +27,7 @@ impl AnnouncerSocket {
 
         self.daemon.register(ServiceInfo::new(
             net_sockets::MDNS_SERVICE_TYPE,
-            &format!("alvr{}", rand::random::<u16>()),
+            &format!("{NANVR_LOW_NAME}{}", rand::random::<u16>()),
             &self.hostname,
             local_ip,
             5353,

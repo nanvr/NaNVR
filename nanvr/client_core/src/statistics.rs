@@ -86,7 +86,7 @@ impl StatisticsManager {
         }
     }
 
-    // vsync_queue is the latency between this call and the vsync. it cannot be measured by ALVR and
+    // vsync_queue is the latency between this call and the vsync. it cannot be measured by NaNVR and
     // should be reported by the VR runtime
     pub fn report_submit(&mut self, target_timestamp: Duration, vsync_queue: Duration) {
         let now = Instant::now();

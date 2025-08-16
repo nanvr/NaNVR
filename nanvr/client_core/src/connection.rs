@@ -8,6 +8,7 @@ use crate::{
     storage::Config,
 };
 use configuration::{SocketProtocol, settings_schema::Switch};
+use const_format::formatcp;
 use net_packets::{
     AUDIO, ClientConnectionResult, ClientControlPacket, ClientStatistics, HAPTICS, Haptics,
     STATISTICS, ServerControlPacket, StreamConfigPacket, TRACKING, TrackingData, VIDEO,
@@ -18,8 +19,8 @@ use net_sockets::{
     StreamSender, StreamSocketBuilder,
 };
 use shared::{
-    AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState, NANVR_VERSION,
-    ViewParams, dbg_connection, debug, error, info,
+    AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState, NANVR_NAME,
+    NANVR_VERSION, ViewParams, dbg_connection, debug, error, info,
     parking_lot::{Condvar, Mutex, RwLock},
     wait_rwlock, warn,
 };
@@ -35,10 +36,10 @@ use crate::audio;
 #[cfg(not(target_os = "android"))]
 use sound as audio;
 
-const INITIAL_MESSAGE: &str = concat!(
-    "Searching for streamer...\n",
-    "Open ALVR on your PC then click \"Trust\"\n",
-    "next to the device entry",
+const INITIAL_MESSAGE: &str = formatcp!(
+    "Searching for streamer...\n
+Open {NANVR_NAME} on your PC then click \"Trust\"\n
+next to the device entry",
 );
 const SUCCESS_CONNECT_MESSAGE: &str = "Successful connection!\nPlease wait...";
 const STREAM_STARTING_MESSAGE: &str = "The stream will begin soon\nPlease wait...";
@@ -71,7 +72,7 @@ pub struct ConnectionContext {
 
 fn set_hud_message(event_queue: &Mutex<VecDeque<ClientCoreEvent>>, message: &str) {
     let message = format!(
-        "ALVR v{}\nhostname: {}\nIP: {}\n\n{message}",
+        "{NANVR_NAME} v{}\nhostname: {}\nIP: {}\n\n{message}",
         *NANVR_VERSION,
         Config::load().hostname,
         system_info::local_ip(),

@@ -13,8 +13,8 @@ use configuration::{
 };
 use net_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
 use shared::{
-    DeviceMotion, NanvrCodecType, NanvrFov, NanvrPose, NanvrQuat, NanvrViewParams, Pose,
-    ViewParams,
+    DeviceMotion, NANVR_HIGH_NAME, NanvrCodecType, NanvrFov, NanvrPose, NanvrQuat, NanvrViewParams,
+    Pose, ViewParams,
     anyhow::Result,
     debug, error,
     glam::{UVec2, Vec2, Vec3},
@@ -40,7 +40,7 @@ static DECODER_CONFIG_BUFFER: Mutex<Vec<u8>> = Mutex::new(vec![]);
 // Core interface:
 
 #[repr(C)]
-pub struct AlvrClientCapabilities {
+pub struct NanvrClientCapabilities {
     default_view_width: u32,
     default_view_height: u32,
     refresh_rates: *const f32,
@@ -56,7 +56,7 @@ pub struct AlvrClientCapabilities {
 }
 
 #[repr(u8)]
-pub enum AlvrEvent {
+pub enum NanvrEvent {
     HudMessageUpdated,
     StreamingStarted {
         view_width: u32,
@@ -82,7 +82,7 @@ pub enum AlvrEvent {
 }
 
 #[repr(C)]
-pub struct AlvrVideoFrameData {
+pub struct NanvrVideoFrameData {
     callback_context: *mut c_void,
     timestamp_ns: u64,
     buffer_ptr: *const u8,
@@ -91,7 +91,7 @@ pub struct AlvrVideoFrameData {
 
 #[repr(C)]
 #[derive(Clone, Default)]
-pub struct AlvrDeviceMotion {
+pub struct NanvrDeviceMotion {
     device_id: u64,
     pose: NanvrPose,
     linear_velocity: [f32; 3],
@@ -100,14 +100,14 @@ pub struct AlvrDeviceMotion {
 
 #[allow(dead_code)]
 #[repr(C)]
-pub enum AlvrButtonValue {
+pub enum NanvrButtonValue {
     Binary(bool),
     Scalar(f32),
 }
 
 #[allow(dead_code)]
 #[repr(u8)]
-pub enum AlvrLogLevel {
+pub enum NanvrLogLevel {
     Error,
     Warn,
     Info,
@@ -115,42 +115,42 @@ pub enum AlvrLogLevel {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_initialize_logging() {
+pub extern "C" fn nanvr_initialize_logging() {
     crate::init_logging();
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_path_string_to_id(path: *const c_char) -> u64 {
+pub extern "C" fn nanvr_path_string_to_id(path: *const c_char) -> u64 {
     shared::hash_string(unsafe { CStr::from_ptr(path) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_log(level: AlvrLogLevel, message: *const c_char) {
+pub extern "C" fn nanvr_log(level: NanvrLogLevel, message: *const c_char) {
     let message = unsafe { CStr::from_ptr(message) }.to_str().unwrap();
     match level {
-        AlvrLogLevel::Error => error!("[ALVR NATIVE] {message}"),
-        AlvrLogLevel::Warn => warn!("[ALVR NATIVE] {message}"),
-        AlvrLogLevel::Info => info!("[ALVR NATIVE] {message}"),
-        AlvrLogLevel::Debug => debug!("[ALVR NATIVE] {message}"),
+        NanvrLogLevel::Error => error!("[{NANVR_HIGH_NAME} NATIVE] {message}"),
+        NanvrLogLevel::Warn => warn!("[{NANVR_HIGH_NAME} NATIVE] {message}"),
+        NanvrLogLevel::Info => info!("[{NANVR_HIGH_NAME} NATIVE] {message}"),
+        NanvrLogLevel::Debug => debug!("[{NANVR_HIGH_NAME} NATIVE] {message}"),
     }
 }
 
 #[unsafe(no_mangle)]
 #[cfg_attr(not(debug_assertions), expect(unused_variables))]
-pub extern "C" fn alvr_dbg_client_impl(message: *const c_char) {
+pub extern "C" fn nanvr_dbg_client_impl(message: *const c_char) {
     shared::dbg_client_impl!("{}", unsafe { CStr::from_ptr(message) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
 #[cfg_attr(not(debug_assertions), expect(unused_variables))]
-pub extern "C" fn alvr_dbg_decoder(message: *const c_char) {
+pub extern "C" fn nanvr_dbg_decoder(message: *const c_char) {
     shared::dbg_decoder!("{}", unsafe { CStr::from_ptr(message) }.to_str().unwrap())
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_log_time(tag: *const c_char) {
+pub extern "C" fn nanvr_log_time(tag: *const c_char) {
     let tag = unsafe { CStr::from_ptr(tag) }.to_str().unwrap();
-    error!("[ALVR NATIVE] {tag}: {:?}", Instant::now());
+    error!("[{NANVR_HIGH_NAME} NATIVE] {tag}: {:?}", Instant::now());
 }
 
 fn string_to_c_str(buffer: *mut c_char, value: &str) -> u64 {
@@ -165,38 +165,38 @@ fn string_to_c_str(buffer: *mut c_char, value: &str) -> u64 {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_mdns_service(service_buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_mdns_service(service_buffer: *mut c_char) -> u64 {
     string_to_c_str(service_buffer, net_sockets::MDNS_SERVICE_TYPE)
 }
 
-/// To make sure the value is correct, call after alvr_initialize()
+/// To make sure the value is correct, call after nanvr_initialize()
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_hostname(hostname_buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_hostname(hostname_buffer: *mut c_char) -> u64 {
     string_to_c_str(hostname_buffer, &storage::Config::load().hostname)
 }
 
-/// To make sure the value is correct, call after alvr_initialize()
+/// To make sure the value is correct, call after nanvr_initialize()
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_protocol_id(protocol_buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_protocol_id(protocol_buffer: *mut c_char) -> u64 {
     string_to_c_str(protocol_buffer, &storage::Config::load().protocol_id)
 }
 
 #[cfg(target_os = "android")]
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_try_get_permission(permission: *const c_char) {
+pub extern "C" fn nanvr_try_get_permission(permission: *const c_char) {
     system_info::try_get_permission(unsafe { CStr::from_ptr(permission) }.to_str().unwrap());
 }
 
 /// NB: for android, `context` must be thread safe.
 #[cfg(target_os = "android")]
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_initialize_android_context(java_vm: *mut c_void, context: *mut c_void) {
+pub extern "C" fn nanvr_initialize_android_context(java_vm: *mut c_void, context: *mut c_void) {
     unsafe { ndk_context::initialize_android_context(java_vm, context) };
 }
 
-/// On android, alvr_initialize_android_context() must be called first, then alvr_initialize().
+/// On android, nanvr_initialize_android_context() must be called first, then nanvr_initialize().
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_initialize(capabilities: AlvrClientCapabilities) {
+pub extern "C" fn nanvr_initialize(capabilities: NanvrClientCapabilities) {
     let default_view_resolution = UVec2::new(
         capabilities.default_view_width,
         capabilities.default_view_height,
@@ -226,7 +226,7 @@ pub extern "C" fn alvr_initialize(capabilities: AlvrClientCapabilities) {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_destroy() {
+pub extern "C" fn nanvr_destroy() {
     *CLIENT_CORE_CONTEXT.lock() = None;
 
     #[cfg(target_os = "android")]
@@ -236,14 +236,14 @@ pub extern "C" fn alvr_destroy() {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_resume() {
+pub extern "C" fn nanvr_resume() {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.resume();
     }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_pause() {
+pub extern "C" fn nanvr_pause() {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.pause();
     }
@@ -251,7 +251,7 @@ pub extern "C" fn alvr_pause() {
 
 /// Returns true if there was a new event
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent) -> bool {
+pub extern "C" fn nanvr_poll_event(out_event: *mut NanvrEvent) -> bool {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock()
         && let Some(event) = context.poll_event()
     {
@@ -259,13 +259,13 @@ pub extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent) -> bool {
             ClientCoreEvent::UpdateHudMessage(message) => {
                 *HUD_MESSAGE.lock() = message;
 
-                AlvrEvent::HudMessageUpdated
+                NanvrEvent::HudMessageUpdated
             }
             ClientCoreEvent::StreamingStarted(stream_config) => {
                 *SETTINGS.lock() = serde_json::to_string(&stream_config.settings).unwrap();
                 *SERVER_VERSION.lock() = stream_config.server_version.to_string();
 
-                AlvrEvent::StreamingStarted {
+                NanvrEvent::StreamingStarted {
                     view_width: stream_config.negotiated_config.view_resolution.x,
                     view_height: stream_config.negotiated_config.view_resolution.y,
                     refresh_rate_hint: stream_config.negotiated_config.refresh_rate_hint,
@@ -276,13 +276,13 @@ pub extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent) -> bool {
                     enable_hdr: stream_config.negotiated_config.enable_hdr,
                 }
             }
-            ClientCoreEvent::StreamingStopped => AlvrEvent::StreamingStopped,
+            ClientCoreEvent::StreamingStopped => NanvrEvent::StreamingStopped,
             ClientCoreEvent::Haptics {
                 device_id,
                 duration,
                 frequency,
                 amplitude,
-            } => AlvrEvent::Haptics {
+            } => NanvrEvent::Haptics {
                 device_id,
                 duration_s: duration.as_secs_f32(),
                 frequency,
@@ -291,7 +291,7 @@ pub extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent) -> bool {
             ClientCoreEvent::DecoderConfig { codec, config_nal } => {
                 *DECODER_CONFIG_BUFFER.lock() = config_nal;
 
-                AlvrEvent::DecoderConfig {
+                NanvrEvent::DecoderConfig {
                     codec: match codec {
                         CodecType::H264 => NanvrCodecType::H264,
                         CodecType::Hevc => NanvrCodecType::Hevc,
@@ -299,7 +299,7 @@ pub extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent) -> bool {
                     },
                 }
             }
-            ClientCoreEvent::RealTimeConfig(_) => AlvrEvent::RealTimeConfig {},
+            ClientCoreEvent::RealTimeConfig(_) => NanvrEvent::RealTimeConfig {},
         };
 
         unsafe { *out_event = event };
@@ -312,7 +312,7 @@ pub extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent) -> bool {
 
 // Returns the length of the message. message_buffer can be null.
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_hud_message(message_buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_hud_message(message_buffer: *mut c_char) -> u64 {
     let cstring = CString::new(HUD_MESSAGE.lock().clone()).unwrap();
     if !message_buffer.is_null() {
         unsafe {
@@ -329,19 +329,19 @@ pub extern "C" fn alvr_hud_message(message_buffer: *mut c_char) -> u64 {
 
 /// Settings will be updated after receiving StreamingStarted event
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_get_settings_json(out_buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_get_settings_json(out_buffer: *mut c_char) -> u64 {
     string_to_c_str(out_buffer, &SETTINGS.lock())
 }
 
 /// Will be updated after receiving StreamingStarted event
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_get_server_version(out_buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_get_server_version(out_buffer: *mut c_char) -> u64 {
     string_to_c_str(out_buffer, &SERVER_VERSION.lock())
 }
 
 /// Returns the number of bytes of the decoder_buffer
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_get_decoder_config(out_buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_get_decoder_config(out_buffer: *mut c_char) -> u64 {
     let buffer = DECODER_CONFIG_BUFFER.lock();
 
     let size = buffer.len();
@@ -354,21 +354,21 @@ pub extern "C" fn alvr_get_decoder_config(out_buffer: *mut c_char) -> u64 {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_battery(device_id: u64, gauge_value: f32, is_plugged: bool) {
+pub extern "C" fn nanvr_send_battery(device_id: u64, gauge_value: f32, is_plugged: bool) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.send_battery(device_id, gauge_value, is_plugged);
     }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_playspace(width: f32, height: f32) {
+pub extern "C" fn nanvr_send_playspace(width: f32, height: f32) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.send_playspace(Some(Vec2::new(width, height)));
     }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_active_interaction_profile(
+pub extern "C" fn nanvr_send_active_interaction_profile(
     device_id: u64,
     profile_id: u64,
     input_ids_ptr: *const u64,
@@ -390,10 +390,10 @@ pub extern "C" fn alvr_send_active_interaction_profile(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_button(path_id: u64, value: AlvrButtonValue) {
+pub extern "C" fn nanvr_send_button(path_id: u64, value: NanvrButtonValue) {
     let value = match value {
-        AlvrButtonValue::Binary(value) => ButtonValue::Binary(value),
-        AlvrButtonValue::Scalar(value) => ButtonValue::Scalar(value),
+        NanvrButtonValue::Binary(value) => ButtonValue::Binary(value),
+        NanvrButtonValue::Scalar(value) => ButtonValue::Scalar(value),
     };
 
     // crate::send_buttons(vec![ButtonEntry { path_id, value }]);
@@ -405,7 +405,7 @@ pub extern "C" fn alvr_send_button(path_id: u64, value: AlvrButtonValue) {
 /// The view poses need to be in local space, as if the head is at the origin.
 /// view_params: array of 2
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_view_params(view_params: *const NanvrViewParams) {
+pub extern "C" fn nanvr_send_view_params(view_params: *const NanvrViewParams) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.send_view_params(unsafe {
             [
@@ -422,14 +422,14 @@ pub extern "C" fn alvr_send_view_params(view_params: *const NanvrViewParams) {
 ///
 /// combined_eye_gaze: can be null if eye gaze is absent
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_tracking(
+pub extern "C" fn nanvr_send_tracking(
     poll_timestamp_ns: u64,
-    device_motions: *const AlvrDeviceMotion,
+    device_motions: *const NanvrDeviceMotion,
     device_motions_count: u64,
     hand_skeletons: *const *const NanvrPose,
     combined_eye_gaze: *const NanvrQuat,
 ) {
-    let mut raw_motions = vec![AlvrDeviceMotion::default(); device_motions_count as _];
+    let mut raw_motions = vec![NanvrDeviceMotion::default(); device_motions_count as _];
     unsafe {
         ptr::copy_nonoverlapping(
             device_motions,
@@ -501,9 +501,9 @@ pub extern "C" fn alvr_send_tracking(
 
 /// Safety: `context` must be thread safe and valid until the StreamingStopped event.
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_set_decoder_input_callback(
+pub extern "C" fn nanvr_set_decoder_input_callback(
     callback_context: *mut c_void,
-    callback: extern "C" fn(AlvrVideoFrameData) -> bool,
+    callback: extern "C" fn(NanvrVideoFrameData) -> bool,
 ) {
     struct CallbackContext(*mut c_void);
     unsafe impl Send for CallbackContext {}
@@ -516,7 +516,7 @@ pub extern "C" fn alvr_set_decoder_input_callback(
             // borrow checker happy
             let callback_context = &callback_context;
 
-            callback(AlvrVideoFrameData {
+            callback(NanvrVideoFrameData {
                 callback_context: callback_context.0,
                 timestamp_ns: timestamp.as_nanos() as u64,
                 buffer_ptr: buffer.as_ptr(),
@@ -527,14 +527,14 @@ pub extern "C" fn alvr_set_decoder_input_callback(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_report_frame_decoded(target_timestamp_ns: u64) {
+pub extern "C" fn nanvr_report_frame_decoded(target_timestamp_ns: u64) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.report_frame_decoded(Duration::from_nanos(target_timestamp_ns));
     }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_report_fatal_decoder_error(message: *const c_char) {
+pub extern "C" fn nanvr_report_fatal_decoder_error(message: *const c_char) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.report_fatal_decoder_error(unsafe { CStr::from_ptr(message).to_str().unwrap() });
     }
@@ -543,7 +543,7 @@ pub extern "C" fn alvr_report_fatal_decoder_error(message: *const c_char) {
 /// out_view_params must be a vector of 2 elements
 /// out_view_params is populated only if the core context is valid
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_report_compositor_start(
+pub extern "C" fn nanvr_report_compositor_start(
     target_timestamp_ns: u64,
     out_view_params: *mut NanvrViewParams,
 ) {
@@ -559,7 +559,7 @@ pub extern "C" fn alvr_report_compositor_start(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_report_submit(target_timestamp_ns: u64, vsync_queue_ns: u64) {
+pub extern "C" fn nanvr_report_submit(target_timestamp_ns: u64, vsync_queue_ns: u64) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.report_submit(
             Duration::from_nanos(target_timestamp_ns),
@@ -577,20 +577,20 @@ thread_local! {
 }
 
 #[repr(C)]
-pub struct AlvrLobbyViewParams {
+pub struct NanvrLobbyViewParams {
     swapchain_index: u32,
     view_params: NanvrViewParams,
 }
 
 #[repr(C)]
-pub struct AlvrStreamViewParams {
+pub struct NanvrStreamViewParams {
     swapchain_index: u32,
     reprojection_rotation: NanvrQuat,
     fov: NanvrFov,
 }
 
 #[repr(C)]
-pub struct AlvrStreamConfig {
+pub struct NanvrStreamConfig {
     view_resolution_width: u32,
     view_resolution_height: u32,
     swapchain_textures: *mut *const u32,
@@ -610,12 +610,12 @@ pub struct AlvrStreamConfig {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_initialize_opengl() {
+pub extern "C" fn nanvr_initialize_opengl() {
     GRAPHICS_CONTEXT.set(Some(Rc::new(GraphicsContext::new_gl())));
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_destroy_opengl() {
+pub extern "C" fn nanvr_destroy_opengl() {
     GRAPHICS_CONTEXT.set(None);
 }
 
@@ -645,7 +645,7 @@ fn convert_swapchain_array(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_resume_opengl(
+pub extern "C" fn nanvr_resume_opengl(
     preferred_view_width: u32,
     preferred_view_height: u32,
     swapchain_textures: *mut *const u32,
@@ -660,13 +660,13 @@ pub extern "C" fn alvr_resume_opengl(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_pause_opengl() {
+pub extern "C" fn nanvr_pause_opengl() {
     STREAM_RENDERER.set(None);
     LOBBY_RENDERER.set(None)
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_update_hud_message_opengl(message: *const c_char) {
+pub extern "C" fn nanvr_update_hud_message_opengl(message: *const c_char) {
     LOBBY_RENDERER.with_borrow(|renderer| {
         if let Some(renderer) = renderer {
             renderer.update_hud_message(unsafe { CStr::from_ptr(message) }.to_str().unwrap());
@@ -675,7 +675,7 @@ pub extern "C" fn alvr_update_hud_message_opengl(message: *const c_char) {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_start_stream_opengl(config: AlvrStreamConfig) {
+pub extern "C" fn nanvr_start_stream_opengl(config: NanvrStreamConfig) {
     let view_resolution = UVec2::new(config.view_resolution_width, config.view_resolution_height);
     let swapchain_textures =
         convert_swapchain_array(config.swapchain_textures, config.swapchain_length);
@@ -711,8 +711,8 @@ pub extern "C" fn alvr_start_stream_opengl(config: AlvrStreamConfig) {
 
 // todo: support hands
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_render_lobby_opengl(
-    view_inputs: *const AlvrLobbyViewParams,
+pub extern "C" fn nanvr_render_lobby_opengl(
+    view_inputs: *const NanvrLobbyViewParams,
     render_background: bool,
 ) {
     let view_inputs = unsafe {
@@ -744,9 +744,9 @@ pub extern "C" fn alvr_render_lobby_opengl(
 
 /// view_params: array of 2
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_render_stream_opengl(
+pub extern "C" fn nanvr_render_stream_opengl(
     hardware_buffer: *mut c_void,
-    view_params: *const AlvrStreamViewParams,
+    view_params: *const NanvrStreamViewParams,
 ) {
     STREAM_RENDERER.with_borrow(|renderer| {
         if let Some(renderer) = renderer {
@@ -799,7 +799,7 @@ pub extern "C" fn alvr_render_stream_opengl(
 static DECODER_SOURCE: Mutex<Option<VideoDecoderSource>> = Mutex::new(None);
 
 #[repr(u8)]
-pub enum AlvrMediacodecPropType {
+pub enum NanvrMediacodecPropType {
     Float,
     Int32,
     Int64,
@@ -807,7 +807,7 @@ pub enum AlvrMediacodecPropType {
 }
 
 #[repr(C)]
-pub union AlvrMediacodecPropValue {
+pub union NanvrMediacodecPropValue {
     float_: f32,
     int32: i32,
     int64: i64,
@@ -815,27 +815,27 @@ pub union AlvrMediacodecPropValue {
 }
 
 #[repr(C)]
-pub struct AlvrMediacodecOption {
+pub struct NanvrMediacodecOption {
     key: *const c_char,
-    ty: AlvrMediacodecPropType,
-    value: AlvrMediacodecPropValue,
+    ty: NanvrMediacodecPropType,
+    value: NanvrMediacodecPropValue,
 }
 
 #[repr(C)]
-pub struct AlvrDecoderConfig {
+pub struct NanvrDecoderConfig {
     codec: NanvrCodecType,
     force_software_decoder: bool,
     max_buffering_frames: f32,
     buffering_history_weight: f32,
-    options: *const AlvrMediacodecOption,
+    options: *const NanvrMediacodecOption,
     options_count: u64,
     config_buffer: *const u8,
     config_buffer_size: u64,
 }
 
-/// alvr_initialize() must be called before alvr_create_decoder
+/// nanvr_initialize() must be called before nanvr_create_decoder
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_create_decoder(config: AlvrDecoderConfig) {
+pub extern "C" fn nanvr_create_decoder(config: NanvrDecoderConfig) {
     let config = VideoDecoderConfig {
         codec: match config.codec {
             NanvrCodecType::H264 => CodecType::H264,
@@ -853,19 +853,19 @@ pub extern "C" fn alvr_create_decoder(config: AlvrDecoderConfig) {
                 .map(|option| unsafe {
                     let key = CStr::from_ptr(option.key).to_str().unwrap();
                     let prop = match option.ty {
-                        AlvrMediacodecPropType::Float => MediacodecProperty {
+                        NanvrMediacodecPropType::Float => MediacodecProperty {
                             ty: MediacodecPropType::Float,
                             value: option.value.float_.to_string(),
                         },
-                        AlvrMediacodecPropType::Int32 => MediacodecProperty {
+                        NanvrMediacodecPropType::Int32 => MediacodecProperty {
                             ty: MediacodecPropType::Int32,
                             value: option.value.int32.to_string(),
                         },
-                        AlvrMediacodecPropType::Int64 => MediacodecProperty {
+                        NanvrMediacodecPropType::Int64 => MediacodecProperty {
                             ty: MediacodecPropType::Int64,
                             value: option.value.int64.to_string(),
                         },
-                        AlvrMediacodecPropType::String => MediacodecProperty {
+                        NanvrMediacodecPropType::String => MediacodecProperty {
                             ty: MediacodecPropType::String,
                             value: CStr::from_ptr(option.value.string)
                                 .to_str()
@@ -905,13 +905,13 @@ pub extern "C" fn alvr_create_decoder(config: AlvrDecoderConfig) {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_destroy_decoder() {
+pub extern "C" fn nanvr_destroy_decoder() {
     *DECODER_SOURCE.lock() = None;
 }
 
 // Returns true if the timestamp and buffer has been written to
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_get_frame(
+pub extern "C" fn nanvr_get_frame(
     out_timestamp_ns: *mut u64,
     out_buffer_ptr: *mut *mut c_void,
 ) -> bool {
@@ -930,7 +930,7 @@ pub extern "C" fn alvr_get_frame(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_rotation_delta(source: NanvrQuat, destination: NanvrQuat) -> NanvrQuat {
+pub extern "C" fn nanvr_rotation_delta(source: NanvrQuat, destination: NanvrQuat) -> NanvrQuat {
     shared::to_capi_quat(
         &(shared::from_capi_quat(&source).inverse() * shared::from_capi_quat(&destination)),
     )

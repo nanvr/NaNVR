@@ -1,4 +1,5 @@
 use net_packets::ClientControlPacket;
+
 use shared::{
     DebugGroupsConfig, LogSeverity,
     log::{Level, Record},
@@ -92,9 +93,10 @@ pub fn init_logging() {
 
     #[cfg(target_os = "android")]
     {
+        use shared::NANVR_NAME;
         android_logger::init_once(
             android_logger::Config::default()
-                .with_tag("[ALVR NATIVE-RUST]")
+                .with_tag(format!("[{NANVR_NAME} NATIVE-RUST]"))
                 .format(|f, record| {
                     if send_log(record) {
                         writeln!(f, "{}", record.args())

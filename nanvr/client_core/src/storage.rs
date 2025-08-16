@@ -1,15 +1,16 @@
 use app_dirs2::{AppDataType, AppInfo};
+use const_format::formatcp;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
-use shared::{error, info};
+use shared::{NANVR_NAME, error, info};
 use std::{fs, path::PathBuf};
 
 fn config_path() -> PathBuf {
     app_dirs2::app_root(
         AppDataType::UserConfig,
         &AppInfo {
-            name: "ALVR Client",
-            author: "ALVR",
+            name: formatcp!("{NANVR_NAME} Client"),
+            author: NANVR_NAME,
         },
     )
     .unwrap()
@@ -47,10 +48,10 @@ impl Config {
             if let Ok(config) = serde_json::from_str(&config_string) {
                 return config;
             } else {
-                info!("Error parsing ALVR config. Using default");
+                info!("Error parsing {NANVR_NAME} config. Using default");
             }
         } else {
-            info!("Error reading ALVR config. Using default");
+            info!("Error reading {NANVR_NAME} config. Using default");
         }
 
         let config = Config::default();
@@ -62,7 +63,7 @@ impl Config {
     pub fn store(&self) {
         let config_string = serde_json::to_string(self).unwrap();
         if let Err(e) = fs::write(config_path(), config_string) {
-            error!("Error writing ALVR config: {e}")
+            error!("Error writing {NANVR_NAME} config: {e}")
         }
     }
 }
