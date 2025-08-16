@@ -104,7 +104,7 @@ async fn http_api(
         .session_settings
         .connection
         .allow_untrusted_http;
-    
+
     // A browser is asking for CORS info
     if request.method() == Method::OPTIONS {
         let bad_request: Response<Body> = Response::builder()
