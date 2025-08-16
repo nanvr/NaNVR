@@ -30,7 +30,7 @@ fn main() {
     };
 
     use ico::IconDir;
-    use shared::ALVR_VERSION;
+    use shared::NANVR_VERSION;
     use shared::info;
     use std::{env, ffi::OsStr, fs};
     use std::{io::Cursor, sync::mpsc};
@@ -79,7 +79,7 @@ fn main() {
     }
 
     eframe::run_native(
-        &format!("ALVR Dashboard (streamer v{})", *ALVR_VERSION),
+        &format!("ALVR Dashboard (streamer v{})", *NANVR_VERSION),
         NativeOptions {
             viewport: ViewportBuilder::default()
                 .with_app_id("alvr.dashboard")

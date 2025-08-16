@@ -354,7 +354,7 @@ async fn http_api(
                 .header(header::CONTENT_TYPE, "application/json")
                 .body(latency.to_string().into())?
         }
-        "/api/version" => Response::builder().body(shared::ALVR_VERSION.to_string().into())?,
+        "/api/version" => Response::builder().body(shared::NANVR_VERSION.to_string().into())?,
         "/api/ping" => reply(StatusCode::OK)?,
         _ => reply(StatusCode::NOT_FOUND)?,
     };
