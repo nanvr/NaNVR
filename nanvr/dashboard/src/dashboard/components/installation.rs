@@ -4,6 +4,7 @@ use eframe::{
 };
 use gui_shared::theme;
 use net_packets::{FirewallRulesAction, ServerRequest};
+use shared::NANVR_LOW_NAME;
 use std::{
     path::PathBuf,
     time::{Duration, Instant},
@@ -87,7 +88,10 @@ impl InstallationTab {
                         }
                     });
 
-                    if ui.button("Register ALVR driver").clicked() {
+                    if ui
+                        .button(format!("Register {NANVR_LOW_NAME} driver"))
+                        .clicked()
+                    {
                         requests.push(InstallationTabRequest::ServerRequest(
                             ServerRequest::RegisterNanvrDriver,
                         ));

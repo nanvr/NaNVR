@@ -1,9 +1,10 @@
+use const_format::formatcp;
 use eframe::egui;
 use events::{Event, EventType};
 use net_packets::ServerRequest;
 use server_io::ServerSessionManager;
 use shared::{
-    NANVR_VERSION, RelaxedAtomic, debug, error, info,
+    NANVR_HIGH_NAME, NANVR_NAME, NANVR_VERSION, RelaxedAtomic, debug, error, info,
     parking_lot::Mutex,
     semver::{Version, VersionReq},
     warn,
@@ -164,7 +165,9 @@ impl DataSources {
                     .build()
                     .into();
                 if let Ok(response) = request_agent
-                    .get("https://api.github.com/repos/alvr-org/ALVR/releases/latest")
+                    .get(format!(
+                        "https://api.github.com/repos/{NANVR_HIGH_NAME}/releases/latest"
+                    ))
                     .call()
                 {
                     let version_data =
@@ -251,10 +254,10 @@ impl DataSources {
                                     }
                                 }
                                 ServerRequest::RegisterNanvrDriver => {
-                                    let alvr_driver_dir =
+                                    let nanvr_driver_dir =
                                         filesystem_layout.openvr_driver_root_dir.clone();
 
-                                    server_io::driver_registration(&[alvr_driver_dir], true).ok();
+                                    server_io::driver_registration(&[nanvr_driver_dir], true).ok();
 
                                     if let Ok(list) = server_io::get_registered_drivers() {
                                         report_event_local(
@@ -300,7 +303,7 @@ impl DataSources {
                             // todo: this should be changed to a GET request, requires removing body
                             request_agent
                                 .post(&uri)
-                                .header("X-ALVR", "true")
+                                .header(format!("X-{NANVR_HIGH_NAME}"), "true")
                                 .send_json(&request)
                                 .ok();
                         }
@@ -335,8 +338,10 @@ impl DataSources {
                     };
 
                     let mut req = uri.into_client_request().unwrap();
-                    req.headers_mut()
-                        .insert("X-ALVR", HeaderValue::from_str("true").unwrap());
+                    req.headers_mut().insert(
+                        formatcp!("X-{NANVR_HIGH_NAME}"),
+                        HeaderValue::from_str("true").unwrap(),
+                    );
 
                     let Ok((mut ws, _)) = tungstenite::client(req, socket) else {
                         thread::sleep(Duration::from_millis(500));
@@ -394,7 +399,7 @@ impl DataSources {
                 loop {
                     let maybe_server_version = request_agent
                         .get(&uri)
-                        .header("X-ALVR", "true")
+                        .header(format!("X-{NANVR_HIGH_NAME}"), "true")
                         .call()
                         .ok()
                         .and_then(|r| {
@@ -409,7 +414,7 @@ impl DataSources {
 
                         if !matches {
                             error!(
-                                "Server version mismatch: found {version}. Please remove all previous ALVR installations"
+                                "Server version mismatch: found {version}. Please remove all previous {NANVR_NAME} installations"
                             );
                         }
 

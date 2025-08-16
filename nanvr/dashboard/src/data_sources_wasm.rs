@@ -21,7 +21,7 @@ impl DataSources {
         let context = self.context.clone();
         wasm_bindgen_futures::spawn_local(async move {
             Request::post("/api/dashboard-request")
-                .header("X-ALVR", "true")
+                .header(format!("X-{NANVR_HIGH_NAME}"), "true")
                 .body(serde_json::to_string(&request).unwrap())
                 .send()
                 .await
@@ -34,9 +34,9 @@ impl DataSources {
     pub fn poll_event(&mut self) -> Option<Event> {
         if self.ws_receiver.is_none() {
             let host = web_sys::window().unwrap().location().host().unwrap();
-            // TODO: Set X-ALVR
+            // TODO: Set X-NANVR
             //let mut options = ewebsock::Options::default();
-            //options.additional_headers = vec!(("X-ALVR", "true"));
+            //options.additional_headers = vec!(("X-NANVR", "true"));
             let Ok((_, receiver)) = ewebsock::connect(format!("ws://{host}/api/events")) else {
                 return None;
             };

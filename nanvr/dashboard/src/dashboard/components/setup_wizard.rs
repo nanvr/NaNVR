@@ -3,6 +3,7 @@ use eframe::{
     emath::Align,
 };
 use net_packets::{FirewallRulesAction, ServerRequest};
+use shared::NANVR_NAME;
 
 pub enum SetupWizardRequest {
     ServerRequest(ServerRequest),
@@ -72,7 +73,7 @@ impl SetupWizard {
             ui.add_space(60.0);
             ui.vertical(|ui| {
                 ui.add_space(30.0);
-                ui.heading(RichText::new("Welcome to ALVR").size(30.0));
+                ui.heading(RichText::new(format!("Welcome to {NANVR_NAME}")).size(30.0));
                 ui.add_space(5.0);
             });
             ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
@@ -86,14 +87,16 @@ impl SetupWizard {
         match &self.page {
             Page::Welcome => page_content(
                 ui,
-                "This setup wizard will help you setup ALVR.",
+                &format!("This setup wizard will help you setup {NANVR_NAME}."),
                 "",
                 |_| (),
             ),
             Page::ResetSettings => page_content(
                 ui,
                 "Reset settings",
-                "It is recommended to reset your settings everytime you update ALVR.",
+                &format!(
+                    "It is recommended to reset your settings everytime you update {NANVR_NAME}."
+                ),
                 |ui| {
                     if ui.button("Reset settings").clicked() {
                         request = Some(SetupWizardRequest::ServerRequest(
@@ -105,8 +108,10 @@ impl SetupWizard {
             Page::HardwareRequirements => page_content(
                 ui,
                 "Hardware requirements",
-                r"ALVR requires a dedicated and recent graphics card. Low-end Intel integrated graphics may fail to work.
-Make sure you have at least one output audio device.",
+                &format!(
+                    r"{NANVR_NAME} requires a dedicated and recent graphics card. Low-end Intel integrated graphics may fail to work.
+Make sure you have at least one output audio device."
+                ),
                 |_| (),
             ),
             Page::SoftwareRequirements => page_content(
@@ -132,7 +137,9 @@ This requires administrator rights!",
             Page::Recommendations => page_content(
                 ui,
                 "Recommendations",
-                r"ALVR supports multiple types of PC hardware and headsets but not all might work correctly with default settings. Please try tweaking different settings like resolution, bitrate, encoder and others if your ALVR experience is not optimal.",
+                &format!(
+                    r"{NANVR_NAME} supports multiple types of PC hardware and headsets but not all might work correctly with default settings. Please try tweaking different settings like resolution, bitrate, encoder and others if your {NANVR_NAME} experience is not optimal."
+                ),
                 |_| (),
             ),
             Page::Finished => page_content(

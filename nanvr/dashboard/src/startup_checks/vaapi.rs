@@ -1,5 +1,5 @@
-use libva::{Display, VAProfile};
-use shared::{error, info};
+use libva::{Display, VAEntrypoint, VAProfile};
+use shared::{NANVR_GH_REPO_PATH, error, info};
 
 pub fn encoder_check() {
     if let Some(libva_display) = Display::open() {
@@ -15,14 +15,14 @@ pub fn encoder_check() {
             false,
         );
     } else {
-        shared::show_e(
+        shared::show_e(format!(
             "Couldn't find VA-API runtime on system, \
                         you unlikely to have hardware encoding. \
                         Please install VA-API runtime for your distribution \
                         and make sure it works (Manjaro, Fedora affected). \
                         For detailed advice, check wiki: \
-                        https://github.com/alvr-org/ALVR/wiki/Linux-Troubleshooting#failed-to-create-vaapi-encoder",
-        );
+                        https://github.com/{NANVR_GH_REPO_PATH}/wiki/Linux-Troubleshooting#failed-to-create-vaapi-encoder",
+        ));
     }
 }
 
@@ -39,7 +39,7 @@ fn probe_libva_encoder_profile(
     } else if let Ok(profile) = profile_probe {
         if profile.is_empty() {
             message = format!("{profile_name} profile entrypoint is empty.");
-        } else if !profile.contains(&libva::VAEntrypoint::VAEntrypointEncSlice) {
+        } else if !profile.contains(&VAEntrypoint::VAEntrypointEncSlice) {
             message = format!("{profile_name} profile does not contain encoding entrypoint.");
         }
     }

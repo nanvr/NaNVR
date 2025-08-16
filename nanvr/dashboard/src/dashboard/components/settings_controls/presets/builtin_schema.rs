@@ -2,7 +2,9 @@ use super::schema::{
     HigherOrderChoiceOption, HigherOrderChoiceSchema, PresetModifier, PresetSchemaNode,
 };
 use crate::dashboard::components::presets::schema::PresetModifierOperation;
+use const_format::formatcp;
 use settings_schema::ChoiceControlType;
+use shared::NANVR_NAME;
 use std::{
     collections::{HashMap, HashSet},
     str::FromStr,
@@ -292,10 +294,12 @@ pub fn microphone_schema() -> PresetSchemaNode {
 }
 
 pub fn hand_tracking_interaction_schema() -> PresetSchemaNode {
-    const HELP: &str = r"Disabled: hands cannot emulate buttons. Useful for using Joy-Cons or other non-native controllers.
+    const HELP: &str = formatcp!(
+        r"Disabled: hands cannot emulate buttons. Useful for using Joy-Cons or other non-native controllers.
 SteamVR Input 2.0: create separate SteamVR devices for hand tracking.
-ALVR bindings: use ALVR hand tracking button bindings. Check the wiki for help.
-";
+{NANVR_NAME} bindings: use {NANVR_NAME} hand tracking button bindings. Check the wiki for help.
+",
+    );
 
     const PREFIX: &str = "session_settings.headset.controllers.content";
 
@@ -336,7 +340,7 @@ ALVR bindings: use ALVR hand tracking button bindings. Check the wiki for help.
                 content: None,
             },
             HigherOrderChoiceOption {
-                display_name: "ALVR bindings".into(),
+                display_name: format!("{NANVR_NAME} bindings"),
                 modifiers: vec![
                     bool_modifier("session_settings.headset.controllers.enabled", true),
                     bool_modifier(

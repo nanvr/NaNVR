@@ -1415,6 +1415,7 @@ version = "1.0.0-dev0"
 dependencies = [
  "chrono",
  "configuration",
+ "const_format",
  "cros-libva",
  "eframe",
  "env_logger",

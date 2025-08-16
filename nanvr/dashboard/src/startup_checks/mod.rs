@@ -2,7 +2,7 @@ mod nvenc;
 mod vaapi;
 use std::path::Path;
 
-use shared::{debug, error, info, warn};
+use shared::{NANVR_GH_REPO_PATH, NANVR_NAME, debug, error, info, warn};
 
 #[derive(PartialEq)]
 enum DeviceInfo {
@@ -92,7 +92,7 @@ fn gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
                 "Amdvlk or amdgpu-pro vulkan drivers detected, SteamVR may not function properly. \
             Please remove them or make them unavailable for SteamVR and games you're trying to launch.\n\
             For more detailed info visit the wiki: \
-            https://github.com/alvr-org/ALVR/wiki/Linux-Troubleshooting#artifacting-no-steamvr-overlay-or-graphical-glitches-in-streaming-view"
+            https://github.com/{NANVR_GH_REPO_PATH}/wiki/Linux-Troubleshooting#artifacting-no-steamvr-overlay-or-graphical-glitches-in-streaming-view"
             )
         }
     }
@@ -111,7 +111,7 @@ fn gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
             error!(
                 "Couldn't detect openvr or steamvr files. \
             Please make sure you have installed and ran SteamVR at least once. \
-            Or if you're using Flatpak Steam, make sure to use ALVR Dashboard from Flatpak ALVR. {e}"
+            Or if you're using Flatpak Steam, make sure to use {NANVR_NAME} Dashboard from Flatpak {NANVR_NAME}. {e}"
             );
             return;
         }
@@ -156,7 +156,7 @@ fn gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
                 "Beware, using just integrated graphics might lead to very poor performance in SteamVR and VR games."
             );
             warn!(
-                "For more information, please refer to the wiki: https://github.com/alvr-org/ALVR/wiki/Linux-Troubleshooting"
+                "For more information, please refer to the wiki: https://github.com/{NANVR_GH_REPO_PATH}/wiki/Linux-Troubleshooting"
             )
         }
     }

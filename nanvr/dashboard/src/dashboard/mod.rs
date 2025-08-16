@@ -307,7 +307,7 @@ impl eframe::App for Dashboard {
                 });
         }
 
-        let shutdown_alvr = || {
+        let shutdown_nanvr = || {
             self.data_sources.request(ServerRequest::ShutdownSteamvr);
 
             crate::steamvr_launcher::LAUNCHER
@@ -316,7 +316,7 @@ impl eframe::App for Dashboard {
         };
 
         if let Some(popup) = &self.new_version_popup
-            && let Some(action) = popup.ui(context, shutdown_alvr)
+            && let Some(action) = popup.ui(context, shutdown_nanvr)
         {
             if let CloseAction::CloseWithRequest(request) = action {
                 requests.push(request);
@@ -337,7 +337,7 @@ impl eframe::App for Dashboard {
                     .open_close_steamvr_with_dashboard
             })
         {
-            shutdown_alvr();
+            shutdown_nanvr();
         }
     }
 }

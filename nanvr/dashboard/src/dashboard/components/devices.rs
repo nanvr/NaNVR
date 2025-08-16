@@ -8,7 +8,7 @@ use eframe::{
 use gui_shared::theme::{self, log_colors};
 use net_packets::ClientListAction;
 use net_sockets::WIRED_CLIENT_HOSTNAME;
-use shared::ConnectionState;
+use shared::{ConnectionState, NANVR_NAME};
 
 struct EditPopupState {
     new_devices: bool,
@@ -65,7 +65,7 @@ impl DevicesTab {
                             ui.add_space(10.0);
                             ui.heading(
                                 RichText::new(format!(
-                                    "ALVR requires running SteamVR! {}",
+                                    "{NANVR_NAME} requires running SteamVR! {}",
                                     "Devices will not be discovered or connected"
                                 ))
                                 .color(Color32::BLACK)

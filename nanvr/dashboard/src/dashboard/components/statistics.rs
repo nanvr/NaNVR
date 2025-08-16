@@ -9,6 +9,7 @@ use eframe::{
 };
 use events::{GraphStatistics, StatisticsSummary};
 use gui_shared::theme;
+use shared::NANVR_NAME;
 use statrs::statistics::{self, OrderStatistics};
 use std::{collections::VecDeque, ops::RangeInclusive};
 
@@ -188,10 +189,15 @@ impl StatisticsTab {
                         stats.total_pipeline_latency_s,
                         theme::FG,
                     );
-                    label(ui, "ALVR Latency", transmission_total_latency_s, theme::FG);
                     label(
                         ui,
-                        "Client System (not ALVR latency)",
+                        &format!("{NANVR_NAME} Latency"),
+                        transmission_total_latency_s,
+                        theme::FG,
+                    );
+                    label(
+                        ui,
+                        &format!("Client System (not {NANVR_NAME} latency)"),
                         stats.vsync_queue_s,
                         RENDER_EXTERNAL_LABEL,
                     );
@@ -208,7 +214,7 @@ impl StatisticsTab {
                     label(ui, "Streamer Compositor", stats.server_compositor_s, RENDER);
                     label(
                         ui,
-                        "Game Render (not ALVR latency)",
+                        &format!("Game Render (not {NANVR_NAME} latency)"),
                         stats.game_time_s,
                         RENDER_EXTERNAL_LABEL,
                     );
