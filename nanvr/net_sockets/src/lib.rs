@@ -3,7 +3,8 @@ mod control_socket;
 mod stream_socket;
 
 use configuration::{DscpTos, SocketBufferSize};
-use shared::{anyhow::Result, info};
+use const_format::formatcp;
+use shared::{NANVR_LOW_NAME, anyhow::Result, info};
 use socket2::Socket;
 use std::{
     net::{IpAddr, Ipv4Addr},
@@ -19,7 +20,7 @@ pub const HANDSHAKE_PACKET_SIZE_BYTES: usize = 56; // this may change in future 
 pub const KEEPALIVE_INTERVAL: Duration = Duration::from_millis(500);
 pub const KEEPALIVE_TIMEOUT: Duration = Duration::from_secs(2);
 
-pub const MDNS_SERVICE_TYPE: &str = "_alvr._tcp.local.";
+pub const MDNS_SERVICE_TYPE: &str = formatcp!("_{NANVR_LOW_NAME}._tcp.local.");
 pub const MDNS_PROTOCOL_KEY: &str = "protocol";
 pub const MDNS_DEVICE_ID_KEY: &str = "device_id";
 
