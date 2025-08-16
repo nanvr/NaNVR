@@ -18,11 +18,11 @@
 
 #include "EncodePipeline.h"
 #include "FrameRender.h"
+#include "common/packet_types.h"
+#include "ffmpeg_helper.h"
 #include "nanvr_server/Logger.h"
 #include "nanvr_server/PoseHistory.h"
 #include "nanvr_server/Settings.h"
-#include "common/packet_types.h"
-#include "ffmpeg_helper.h"
 #include "protocol.h"
 
 extern "C" {
