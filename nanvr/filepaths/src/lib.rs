@@ -72,7 +72,7 @@ pub fn dashboard_fname() -> &'static str {
     "dashboard"
 }
 
-// Layout of the ALVR installation. All paths are absolute
+// Layout of the NaNVR installation. All paths are absolute
 #[derive(Clone, Default, Debug)]
 pub struct Layout {
     // directory containing the dashboard executable
@@ -244,7 +244,7 @@ impl Layout {
     }
 
     pub fn ufw_config(&self) -> PathBuf {
-        self.ufw_config_dir.join("ufw-alvr")
+        self.ufw_config_dir.join(format!("ufw-{NANVR_LOW_NAME}"))
     }
 
     pub fn vulkan_layer_manifest(&self) -> PathBuf {
@@ -264,7 +264,7 @@ fn layout_from_env() -> Option<Layout> {
 }
 
 // The path should include the executable file name
-// The path argument is used only if ALVR is built as portable
+// The path argument is used only if NaNVR is built as portable
 pub fn filesystem_layout_from_dashboard_exe(path: &Path) -> Option<Layout> {
     layout_from_env().or_else(|| {
         // FHS path is expected
@@ -274,7 +274,7 @@ pub fn filesystem_layout_from_dashboard_exe(path: &Path) -> Option<Layout> {
     })
 }
 
-// The dir argument is used only if ALVR is built as portable
+// The dir argument is used only if NaNVR is built as portable
 pub fn filesystem_layout_from_openvr_driver_root_dir(dir: &Path) -> Option<Layout> {
     layout_from_env().or_else(|| {
         // FHS path is expected

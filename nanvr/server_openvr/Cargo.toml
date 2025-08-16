@@ -22,6 +22,8 @@ sysinfo = "0.33"
 
 [build-dependencies]
 filepaths.workspace = true
+shared.workspace = true
+
 bindgen = "0.71"
 cc = { version = "1", features = ["parallel"] }
 walkdir = "2"

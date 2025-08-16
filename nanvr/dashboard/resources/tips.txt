@@ -1,15 +1,15 @@
-If you started having crashes after changing some settings, reset ALVR by re-running "Run setup wizard" from the "Installation" tab and clicking "Reset settings".
+If you started having crashes after changing some settings, reset NaNVR by re-running "Run setup wizard" from the "Installation" tab and clicking "Reset settings".
 Some settings are hidden by default. Click the "Expand" button next to some settings to expand the submenus.
-It's highly advisable to keep audio settings as default in ALVR and modify the default audio device in the taskbar tray.
+It's highly advisable to keep audio settings as default in NaNVR and modify the default audio device in the taskbar tray.
 Increasing "Maximum buffering" may reduce stutters at the cost of more latency.
 Sometimes switching between h264 and HEVC codecs is necessary on certain GPUs to fix crashing or fallback to software encoding.
 If you're using an NVIDIA GPU, it's best to use high-bitrate H264; if you're using an AMD GPU, HEVC might look better.
 If you experience "white snow" flickering, reduce the resolution to "Low" and disable "Foveated encoding".
 Increasing "Color correction"->"Sharpness" may improve the perceived image quality.
-If you have problems syncing external controllers or trackers to ALVR tracking space, add one element to "Extra openvr props", then set a custom "Tracking system name".
+If you have problems syncing external controllers or trackers to NaNVR tracking space, add one element to "Extra openvr props", then set a custom "Tracking system name".
 To change the visual appearance of controllers, set "Headset"->"Controllers"->"Emulation mode".
-ALVR supports custom button bindings! If you need help, please ask us on our Discord server.
-ALVR supports hand tracking gestures ("Presets"->"Hand tracking interaction"->"ALVR Bindings"). Check out wiki how to use them properly: https://github.com/nanvr/NaNVR/wiki/Hand-tracking-controller-bindings.
+NaNVR supports custom button bindings! If you need help, please ask us on our Discord server.
+NaNVR supports hand tracking gestures ("Presets"->"Hand tracking interaction"->"NaNVR Bindings"). Check out wiki how to use them properly: https://github.com/nanvr/NaNVR/wiki/Hand-tracking-controller-bindings.
 If hand tracking gestures are annoying, you can disable them in "Controllers"->"Gestures". Alternatively, you can enable "Gestures"->"Only touch".
 You can fine-tune the controllers responsiveness with "Controllers"->"Prediction".
 If the visual controller/hand models do not match the physical controller, you can tweak the offset in "Headset"->"Controllers"->"Left controller position/rotation offset" (affects both controllers).
@@ -21,7 +21,7 @@ In case you want to report a bug, to get a log file, enable "Extra"->"Logging"->
 For hacking purposes, you can enable "Log tracking", "Log button presses" and "Log haptics". You can get the data using a websocket at ws://localhost:8082/api/events
 In case you want to report a bug and share your log, you should enable "Extra"->"Logging"->"Prefer backtrace".
 You can quickly cycle through tips like this one by toggling "Show notification tip"
-If you want to use body trackers or other SteamVR drivers together with ALVR, set "Driver launch action" to "Unregister ALVR at shutdown"
+If you want to use body trackers or other SteamVR drivers together with NaNVR, set "Driver launch action" to "Unregister NaNVR at shutdown"
 It's handy to enable "Extra"->"Steamvr Launcher"->"Open and close SteamVR with dashboard"
 If you want to share a video recording for reporting a bug, you can enable "Extra"->"Capture"->"Rolling video files" to limit the file size of the upload
 If your headset does not appear in the device list, it might be in a different subnet. Try "Add device manually" with IP shown from inside device.

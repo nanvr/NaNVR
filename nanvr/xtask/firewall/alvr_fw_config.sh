@@ -7,6 +7,7 @@
 # 3 - Failed to copy UFW configuration
 # 99 - Firewall not found
 # 126 - pkexec failed - Request dismissed
+# todo: port script to rust
 
 firewalld_cfg() {
     # Iterate around each active zone

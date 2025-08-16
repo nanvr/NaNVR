@@ -1,5 +1,7 @@
 use std::{env, path::PathBuf};
 
+use shared::{NANVR_HIGH_NAME, NANVR_LOW_NAME};
+
 fn get_ffmpeg_path() -> PathBuf {
     filepaths::deps_dir().join("linux/ffmpeg/nanvr_build")
 }
@@ -47,7 +49,7 @@ fn main() {
         .include("cpp");
 
     #[cfg(debug_assertions)]
-    build.define("ALVR_DEBUG_LOG", None);
+    build.define(&format!("{NANVR_HIGH_NAME}_DEBUG_LOG"), None);
 
     let ffmpeg_path = get_ffmpeg_path();
 
@@ -59,7 +61,7 @@ fn main() {
     assert!(x264_path.join("include").exists());
     build.include(x264_path.join("include"));
 
-    build.define("ALVR_GPL", None);
+    build.define(&format!("{NANVR_HIGH_NAME}_GPL"), None);
 
     build.compile("bindings");
 
@@ -122,7 +124,7 @@ fn main() {
 
     bindgen::builder()
         .clang_arg("-xc++")
-        .header("cpp/alvr_server/bindings.h")
+        .header(format!("cpp/{NANVR_LOW_NAME}_server/bindings.h"))
         .derive_default(true)
         .generate()
         .unwrap()

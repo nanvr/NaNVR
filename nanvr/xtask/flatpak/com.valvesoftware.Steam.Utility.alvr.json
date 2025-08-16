@@ -1,5 +1,5 @@
 {
-  "id": "com.valvesoftware.Steam.Utility.alvr",
+  "id": "com.valvesoftware.Steam.Utility.nanvr",
   "branch": "stable",
   "sdk": "org.freedesktop.Sdk//24.08",
   "sdk-extensions": [
@@ -26,17 +26,17 @@
   ],
   "modules": [
     {
-      "name": "alvr",
+      "name": "nanvr",
       "buildsystem": "simple",
       "build-commands": [
-        "mkdir -p /app/utils/alvr/bin",
-        "cd alvr/launcher",
+        "mkdir -p /app/utils/nanvr/bin",
+        "cd nanvr/launcher",
         "cargo xtask prepare-deps --platform linux",
         "cargo xtask build-launcher --release",
-        "mv '/run/build/alvr/build/launcher_linux/ALVR Launcher' /app/utils/alvr/bin/launcher",
+        "mv '/run/build/nanvr/build/launcher_linux/ALVR Launcher' /app/utils/nanvr/bin/launcher",
         " # get read-only errors from following lines - because this is an extension - so leave as comments until someone figures this out",
         " # install -D dashboard.ico /app/share/icons/launcher.ico",
-        " # install -D com.valvesoftware.Steam.Utility.alvr.desktop /app/share/applications/com.valvesoftware.Steam.Utility.alvr.desktop"
+        " # install -D com.valvesoftware.Steam.Utility.nanvr.desktop /app/share/applications/com.valvesoftware.Steam.Utility.nanvr.desktop"
       ],
       "sources": [ { "type": "dir", "path": "../../../" } ]
     }
