@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 use settings_schema::SettingsSchema;
 use std::{error::Error, fmt::Display};
 
+use crate::NANVR_NAME;
+
 pub const SERVER_IMPL_DBG_LABEL: &str = "SERVER IMPL";
 pub const CLIENT_IMPL_DBG_LABEL: &str = "CLIENT IMPL";
 pub const SERVER_CORE_DBG_LABEL: &str = "SERVER CORE";
@@ -191,14 +193,14 @@ pub fn set_panic_hook() {
             Backtrace::new()
         );
 
-        log::error!("ALVR panicked: {err_str}");
+        log::error!("{NANVR_NAME} panicked: {err_str}");
 
         #[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
         std::thread::spawn({
             let panic_str = panic_info.to_string();
             move || {
                 rfd::MessageDialog::new()
-                    .set_title("ALVR panicked")
+                    .set_title(format!("{NANVR_NAME} panicked"))
                     .set_description(&panic_str)
                     .set_level(rfd::MessageLevel::Error)
                     .show();
@@ -213,7 +215,7 @@ pub fn show_w<W: Display + Send + 'static>(w: W) {
     #[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
     std::thread::spawn(move || {
         rfd::MessageDialog::new()
-            .set_title("ALVR warning")
+            .set_title(format!("{NANVR_NAME} warning"))
             .set_description(w.to_string())
             .set_level(rfd::MessageLevel::Warning)
             .show()
@@ -244,7 +246,7 @@ fn show_e_block<E: Display>(e: E, blocking: bool) {
                 let err_string = err_string.clone();
                 move || {
                     rfd::MessageDialog::new()
-                        .set_title("ALVR error")
+                        .set_title(format!("{NANVR_NAME} error"))
                         .set_description(&err_string)
                         .set_level(rfd::MessageLevel::Error)
                         .show()

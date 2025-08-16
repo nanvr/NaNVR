@@ -13,7 +13,8 @@ use configuration::{
 };
 use net_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
 use shared::{
-    NanvrCodecType, NanvrFov, NanvrPose, NanvrQuat, NanvrViewParams, DeviceMotion, Pose, ViewParams,
+    DeviceMotion, NanvrCodecType, NanvrFov, NanvrPose, NanvrQuat, NanvrViewParams, Pose,
+    ViewParams,
     anyhow::Result,
     debug, error,
     glam::{UVec2, Vec2, Vec3},
