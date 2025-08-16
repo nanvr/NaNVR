@@ -1,6 +1,6 @@
 #ifndef ALVRCLIENT_PACKETTYPES_H
 #define ALVRCLIENT_PACKETTYPES_H
-#include "../alvr_server/bindings.h"
+#include "../nanvr_server/bindings.h"
 #include <assert.h>
 #include <stdint.h>
 

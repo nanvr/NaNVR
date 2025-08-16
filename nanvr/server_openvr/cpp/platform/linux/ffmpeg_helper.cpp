@@ -6,8 +6,8 @@
 #include <sys/sysmacros.h>
 #include <unistd.h>
 
-#include "alvr_server/Logger.h"
-#include "alvr_server/bindings.h"
+#include "nanvr_server/Logger.h"
+#include "nanvr_server/bindings.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>

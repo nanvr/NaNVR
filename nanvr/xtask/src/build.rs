@@ -338,7 +338,7 @@ pub fn build_android_client(profile: Profile) {
             let keytool = PathBuf::from(env::var("JAVA_HOME").expect("Env var JAVA_HOME not set"))
                 .join("bin")
                 .join(filepaths::exec_fname("keytool"));
-            let pass = "alvrclient";
+            let pass = "nanvrclient";
 
             let other = vec![
                 "-genkey",

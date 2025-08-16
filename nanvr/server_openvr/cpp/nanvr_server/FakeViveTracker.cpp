@@ -17,12 +17,12 @@ bool FakeViveTracker::activate() {
 
     // Normally a vive tracker emulator would (logically) always set the tracking system to
     // "lighthouse" but in order to do space calibration with existing tools such as OpenVR Space
-    // calibrator and be able to calibrate to/from ALVR HMD (and the proxy tracker) space to/from a
+    // calibrator and be able to calibrate to/from NaNVR HMD (and the proxy tracker) space to/from a
     // native HMD/tracked device which is already using "lighthouse" as the tracking system the
     // proxy tracker needs to be in a different tracking system to treat them differently and
     // prevent those tools doing the same space transform to the proxy tracker.
     vr_properties->SetStringProperty(
-        this->prop_container, vr::Prop_TrackingSystemName_String, "ALVRTrackerCustom"
+        this->prop_container, vr::Prop_TrackingSystemName_String, "NaNVRTrackerCustom"
     ); //"lighthouse");
     vr_properties->SetStringProperty(
         this->prop_container, vr::Prop_ModelNumber_String, "Vive Tracker Pro MV"
@@ -111,23 +111,23 @@ bool FakeViveTracker::activate() {
 
     const char* name;
     if (this->device_id == BODY_CHEST_ID) {
-        name = "ALVR/tracker/chest";
+        name = "NaNVR/tracker/chest";
     } else if (this->device_id == BODY_HIPS_ID) {
-        name = "ALVR/tracker/waist";
+        name = "NaNVR/tracker/waist";
     } else if (this->device_id == BODY_LEFT_FOOT_ID) {
-        name = "ALVR/tracker/left_foot";
+        name = "NaNVR/tracker/left_foot";
     } else if (this->device_id == BODY_RIGHT_FOOT_ID) {
-        name = "ALVR/tracker/right_foot";
+        name = "NaNVR/tracker/right_foot";
     } else if (this->device_id == BODY_LEFT_KNEE_ID) {
-        name = "ALVR/tracker/left_knee";
+        name = "NaNVR/tracker/left_knee";
     } else if (this->device_id == BODY_RIGHT_KNEE_ID) {
-        name = "ALVR/tracker/right_knee";
+        name = "NaNVR/tracker/right_knee";
     } else if (this->device_id == BODY_LEFT_ELBOW_ID) {
-        name = "ALVR/tracker/left_elbow";
+        name = "NaNVR/tracker/left_elbow";
     } else if (this->device_id == BODY_RIGHT_ELBOW_ID) {
-        name = "ALVR/tracker/right_elbow";
+        name = "NaNVR/tracker/right_elbow";
     } else {
-        name = "ALVR/tracker/unknown";
+        name = "NaNVR/tracker/unknown";
     }
     vr_properties->SetStringProperty(
         this->prop_container, vr::Prop_RegisteredDeviceType_String, name

@@ -10,7 +10,7 @@
 #include <filesystem>
 
 #define PICOJSON_USE_INT64
-#include "../server_openvr/cpp/alvr_server/include/picojson.h"
+#include "../server_openvr/cpp/nanvr_server/include/picojson.h"
 
 #define LOAD_FN(f) \
     if (!real_##f) { \
@@ -211,7 +211,7 @@ extern "C" drmModeConnectorPtr drmModeGetConnector(int fd, uint32_t connectorId)
 
     auto con = real_drmModeGetConnector(fd, connectorId);
     if (con) {
-        auto sessionFile = std::ifstream(getenv("ALVR_CONFIGURATION_JSON"));
+        auto sessionFile = std::ifstream(getenv("NANVR_CONFIGURATION_JSON"));
         auto json = std::string(std::istreambuf_iterator<char>(sessionFile), std::istreambuf_iterator<char>());
         picojson::value v;
         picojson::parse(v, json);

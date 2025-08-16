@@ -1,3 +1,5 @@
+use shared::NANVR_HIGH_NAME;
+
 fn main() {
     use std::{env, path::PathBuf};
 
@@ -33,7 +35,7 @@ fn main() {
         .includes(vulkan.include_paths)
         .includes(libunwind.include_paths);
 
-    build.compile("VkLayer_ALVR");
+    build.compile(&format!("VkLayer_{NANVR_HIGH_NAME}"));
 
     bindgen::builder()
         .clang_arg("-xc++")

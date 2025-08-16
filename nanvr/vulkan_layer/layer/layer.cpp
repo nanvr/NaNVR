@@ -45,10 +45,10 @@
 namespace layer {
 
 static const VkLayerProperties global_layer = {
-    "VK_LAYER_ALVR_capture",
+    "VK_LAYER_NANVR_capture",
     VK_LAYER_API_VERSION,
     1,
-    "ALVR capture layer",
+    "NANVR capture layer",
 };
 static const VkExtensionProperties device_extension[] = {
     {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_SWAPCHAIN_SPEC_VERSION}};

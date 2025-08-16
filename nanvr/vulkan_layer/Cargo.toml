@@ -14,6 +14,8 @@ shared.workspace = true
 filepaths.workspace = true
 
 [build-dependencies]
+shared.workspace = true
+
 bindgen = "0.71"
 cc = { version = "1", features = ["parallel"] }
 pkg-config = "0.3"

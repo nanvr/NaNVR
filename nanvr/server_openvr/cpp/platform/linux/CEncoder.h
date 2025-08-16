@@ -1,6 +1,6 @@
 #pragma once
 
-#include "alvr_server/IDRScheduler.h"
+#include "nanvr_server/IDRScheduler.h"
 #include "shared/threadtools.h"
 #include <atomic>
 #include <memory>

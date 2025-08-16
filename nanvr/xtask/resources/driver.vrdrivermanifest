@@ -1,6 +1,6 @@
 {
 	"alwaysActivate": true,
-	"name" : "alvr_server",
+	"name" : "nanvr_server",
 	"redirectsDisplay": true,
 
 	"hmd_presence" :

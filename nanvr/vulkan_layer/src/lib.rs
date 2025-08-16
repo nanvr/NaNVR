@@ -21,7 +21,7 @@ mod bindings {
 use bindings::*;
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn ALVR_Negotiate(nli: *mut VkNegotiateLayerInterface) -> VkResult {
+pub unsafe extern "C" fn NANVR_Negotiate(nli: *mut VkNegotiateLayerInterface) -> VkResult {
     unsafe {
         g_sessionPath = CString::new(
             filepaths::filesystem_layout_invalid()

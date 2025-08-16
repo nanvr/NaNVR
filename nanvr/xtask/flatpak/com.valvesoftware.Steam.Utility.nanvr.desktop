@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=NaNVR Launcher
+GenericName=Game
+Comment=NaNVR is an open source remote VR display which allows playing SteamVR games on a standalone headset such as Gear VR or Oculus Go/Quest.
+Exec=/usr/bin/flatpak run --command=/app/utils/nanvr/bin/launcher com.valvesoftware.Steam
+Icon=application-nanvr-launcher
+Categories=Game;
+StartupNotify=true
+StartupWMClass=NaNVR

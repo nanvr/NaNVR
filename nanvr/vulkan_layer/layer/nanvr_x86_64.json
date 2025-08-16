@@ -1,12 +1,12 @@
 {
 	"file_format_version" : "1.1.2",
 	"layer" : {
-		"name": "VK_LAYER_ALVR_capture",
+		"name": "VK_LAYER_NANVR_capture",
 		"type": "GLOBAL",
 		"library_path": "../../../lib64/libvulkan_layer.so",
 		"api_version": "1.0.68",
 		"implementation_version": "1",
-		"description": "ALVR display intercept layer",
+		"description": "NaNVR display intercept layer",
 		"instance_extensions": [
 			{
 				"name" : "VK_EXT_headless_surface",
@@ -32,10 +32,10 @@
 			}
 		],
 		"functions": {
-			"vkNegotiateLoaderLayerInterfaceVersion" : "ALVR_Negotiate"
+			"vkNegotiateLoaderLayerInterfaceVersion" : "NANVR_Negotiate"
 		},
 		"disable_environment": {
-			"DISABLE_ALVR_DISPLAY": "1"
+			"DISABLE_NANVR_DISPLAY": "1"
 		}
 	}
 }

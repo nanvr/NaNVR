@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Basic script to add / remove firewall configuration for ALVR
-# Usage: ./alvr_fw_config.sh add|remove
+# Basic script to add / remove firewall configuration for NaNVR
+# Usage: ./nanvr_fw_config.sh add|remove
 # Exit codes:
 # 1 - Invalid command
 # 2 - Invalid action
@@ -13,20 +13,20 @@ firewalld_cfg() {
     # Iterate around each active zone
     for zone in $(firewall-cmd --get-active-zones | grep -P '^\w+'); do
         if [ "${1}" == 'add' ]; then
-            # If running or permanent alvr service is missing, add it
-            if ! firewall-cmd --zone="${zone}" --list-services | grep 'alvr' >/dev/null 2>&1; then
-                firewall-cmd --zone="${zone}" --add-service='alvr'
+            # If running or permanent nanvr service is missing, add it
+            if ! firewall-cmd --zone="${zone}" --list-services | grep 'nanvr' >/dev/null 2>&1; then
+                firewall-cmd --zone="${zone}" --add-service='nanvr'
             fi
-            if ! firewall-cmd --zone="${zone}" --list-services --permanent | grep 'alvr' >/dev/null 2>&1; then
-                firewall-cmd --zone="${zone}" --add-service='alvr' --permanent
+            if ! firewall-cmd --zone="${zone}" --list-services --permanent | grep 'nanvr' >/dev/null 2>&1; then
+                firewall-cmd --zone="${zone}" --add-service='nanvr' --permanent
             fi
         elif [ "${1}" == 'remove' ]; then
-            # If running or persistent alvr service exists, remove it
-            if firewall-cmd --zone="${zone}" --list-services | grep 'alvr' >/dev/null 2>&1; then
-                firewall-cmd --zone="${zone}" --remove-service='alvr'
+            # If running or persistent nanvr service exists, remove it
+            if firewall-cmd --zone="${zone}" --list-services | grep 'nanvr' >/dev/null 2>&1; then
+                firewall-cmd --zone="${zone}" --remove-service='nanvr'
             fi
-            if firewall-cmd --zone="${zone}" --list-services --permanent | grep 'alvr' >/dev/null 2>&1; then
-                firewall-cmd --zone="${zone}" --remove-service='alvr' --permanent
+            if firewall-cmd --zone="${zone}" --list-services --permanent | grep 'nanvr' >/dev/null 2>&1; then
+                firewall-cmd --zone="${zone}" --remove-service='nanvr' --permanent
             fi
         else
             exit 2
@@ -36,21 +36,21 @@ firewalld_cfg() {
 
 ufw_cfg() {
     # Try and install the application file
-    if ! ufw app info 'alvr'; then
+    if ! ufw app info 'nanvr'; then
         # Pull application file from local build first if the script lives inside it
-        if [ -f "$(dirname "$(realpath "${0}")")/ufw-alvr" ]; then
-            cp "$(dirname "$(realpath "${0}")")/ufw-alvr" '/etc/ufw/applications.d/'
-        elif [ -f '/usr/share/alvr/ufw-alvr' ]; then
-            cp '/usr/share/alvr/ufw-alvr' '/etc/ufw/applications.d/'
+        if [ -f "$(dirname "$(realpath "${0}")")/ufw-nanvr" ]; then
+            cp "$(dirname "$(realpath "${0}")")/ufw-nanvr" '/etc/ufw/applications.d/'
+        elif [ -f '/usr/share/nanvr/ufw-nanvr' ]; then
+            cp '/usr/share/nanvr/ufw-nanvr' '/etc/ufw/applications.d/'
         else
             exit 3
         fi
     fi
 
-    if [ "${1}" == 'add' ] && ! ufw status | grep 'alvr' >/dev/null 2>&1; then
-        ufw allow 'alvr'
-    elif [ "${1}" == 'remove' ] && ufw status | grep 'alvr' >/dev/null 2>&1; then
-        ufw delete allow 'alvr'
+    if [ "${1}" == 'add' ] && ! ufw status | grep 'nanvr' >/dev/null 2>&1; then
+        ufw allow 'nanvr'
+    elif [ "${1}" == 'remove' ] && ufw status | grep 'nanvr' >/dev/null 2>&1; then
+        ufw delete allow 'nanvr'
     else
         exit 2
     fi
