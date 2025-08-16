@@ -1,10 +1,10 @@
 use std::{
-    env::{
-        self,
-        consts::{DLL_EXTENSION, DLL_PREFIX, DLL_SUFFIX, EXE_SUFFIX, OS},
-    },
+    env::consts::{DLL_EXTENSION, DLL_PREFIX, DLL_SUFFIX, EXE_SUFFIX, OS},
     path::{Path, PathBuf},
 };
+
+use const_format::formatcp;
+use shared::{NANVR_LOW_NAME, NANVR_NAME};
 
 pub fn exec_fname(name: &str) -> String {
     format!("{name}{EXE_SUFFIX}")
@@ -53,11 +53,11 @@ pub fn build_dir() -> PathBuf {
 }
 
 pub fn streamer_build_dir() -> PathBuf {
-    build_dir().join(format!("alvr_streamer_{OS}"))
+    build_dir().join(format!("{NANVR_LOW_NAME}_streamer_{OS}"))
 }
 
 pub fn launcher_fname() -> String {
-    exec_fname("ALVR Launcher")
+    exec_fname(&format!("{NANVR_NAME} Launcher"))
 }
 
 pub fn launcher_build_dir() -> PathBuf {
@@ -66,10 +66,6 @@ pub fn launcher_build_dir() -> PathBuf {
 
 pub fn launcher_build_exe_path() -> PathBuf {
     launcher_build_dir().join(launcher_fname())
-}
-
-pub fn installer_path() -> PathBuf {
-    env::temp_dir().join(exec_fname("alvr_installer"))
 }
 
 pub fn dashboard_fname() -> &'static str {
@@ -109,25 +105,43 @@ impl Layout {
         let or_path = |opt: Option<&'static str>, path| opt.map_or(root.join(path), PathBuf::from);
 
         // Get paths from environment or use FHS compliant paths
-        let executables_dir = or_path(option_env!("ALVR_EXECUTABLES_DIR"), "bin");
-        let libraries_dir = or_path(option_env!("ALVR_LIBRARIES_DIR"), "lib64");
-        let static_resources_dir = or_path(option_env!("ALVR_STATIC_RESOURCES_DIR"), "share/alvr");
-        let openvr_driver_root_dir =
-            or_path(option_env!("ALVR_OPENVR_DRIVER_ROOT_DIR"), "lib64/alvr");
-        let vrcompositor_wrapper_dir =
-            or_path(option_env!("ALVR_VRCOMPOSITOR_WRAPPER_DIR"), "libexec/alvr");
-        let firewall_script_dir = or_path(option_env!("FIREWALL_SCRIPT_DIR"), "libexec/alvr");
-        let firewalld_config_dir = or_path(option_env!("FIREWALLD_CONFIG_DIR"), "libexec/alvr");
-        let ufw_config_dir = or_path(option_env!("UFW_CONFIG_DIR"), "libexec/alvr");
+        let executables_dir = or_path(option_env!("BUILD_EXECUTABLES_DIR"), "bin");
+        let libraries_dir = or_path(option_env!("BUILD_LIBRARIES_DIR"), "lib64");
+        let static_resources_dir = or_path(
+            option_env!("BUILD_STATIC_RESOURCES_DIR"),
+            formatcp!("share/{NANVR_LOW_NAME}"),
+        );
+        let openvr_driver_root_dir = or_path(
+            option_env!("BUILD_OPENVR_DRIVER_ROOT_DIR"),
+            formatcp!("lib64/{NANVR_LOW_NAME}"),
+        );
+        let vrcompositor_wrapper_dir = or_path(
+            option_env!("BUILD_VRCOMPOSITOR_WRAPPER_DIR"),
+            formatcp!("libexec/{NANVR_LOW_NAME}"),
+        );
+        let firewall_script_dir = or_path(
+            option_env!("BUILD_FIREWALL_SCRIPT_DIR"),
+            formatcp!("libexec/{NANVR_LOW_NAME}"),
+        );
+        let firewalld_config_dir = or_path(
+            option_env!("BUILD_FIREWALLD_CONFIG_DIR"),
+            formatcp!("libexec/{NANVR_LOW_NAME}"),
+        );
+        let ufw_config_dir = or_path(
+            option_env!("BUILD_UFW_CONFIG_DIR"),
+            formatcp!("libexec/{NANVR_LOW_NAME}"),
+        );
         let vulkan_layer_manifest_dir = or_path(
-            option_env!("ALVR_VULKAN_LAYER_MANIFEST_DIR"),
+            option_env!("BUILD_VULKAN_LAYER_MANIFEST_DIR"),
             "share/vulkan/explicit_layer.d",
         );
 
-        let config_dir = option_env!("ALVR_CONFIG_DIR")
-            .map_or_else(|| dirs::config_dir().unwrap().join("alvr"), PathBuf::from);
+        let config_dir = option_env!("BUILD_CONFIG_DIR").map_or_else(
+            || dirs::config_dir().unwrap().join(NANVR_LOW_NAME),
+            PathBuf::from,
+        );
         let log_dir =
-            option_env!("ALVR_LOG_DIR").map_or_else(|| dirs::home_dir().unwrap(), PathBuf::from);
+            option_env!("BUILD_LOG_DIR").map_or_else(|| dirs::home_dir().unwrap(), PathBuf::from);
 
         Self {
             executables_dir,
@@ -198,7 +212,7 @@ impl Layout {
     // path to the shared library to be loaded by openVR
     pub fn openvr_driver_lib(&self) -> PathBuf {
         self.openvr_driver_lib_dir()
-            .join(format!("driver_alvr_server.{DLL_EXTENSION}"))
+            .join(format!("driver_{NANVR_LOW_NAME}_server.{DLL_EXTENSION}"))
     }
 
     // path to the manifest file for openVR
@@ -211,7 +225,8 @@ impl Layout {
     }
 
     pub fn drm_lease_shim(&self) -> PathBuf {
-        self.vrcompositor_wrapper_dir.join("alvr_drm_lease_shim.so")
+        self.vrcompositor_wrapper_dir
+            .join(format!("{NANVR_LOW_NAME}_drm_lease_shim.so"))
     }
 
     pub fn vulkan_layer(&self) -> PathBuf {
@@ -219,11 +234,13 @@ impl Layout {
     }
 
     pub fn firewall_script(&self) -> PathBuf {
-        self.firewall_script_dir.join("alvr_fw_config.sh")
+        self.firewall_script_dir
+            .join(format!("{NANVR_LOW_NAME}_fw_config.sh"))
     }
 
     pub fn firewalld_config(&self) -> PathBuf {
-        self.firewalld_config_dir.join("alvr-firewalld.xml")
+        self.firewalld_config_dir
+            .join(format!("{NANVR_LOW_NAME}-firewalld.xml"))
     }
 
     pub fn ufw_config(&self) -> PathBuf {
@@ -231,7 +248,8 @@ impl Layout {
     }
 
     pub fn vulkan_layer_manifest(&self) -> PathBuf {
-        self.vulkan_layer_manifest_dir.join("alvr_x86_64.json")
+        self.vulkan_layer_manifest_dir
+            .join(format!("{NANVR_LOW_NAME}_x86_64.json"))
     }
 
     pub fn launcher_exe(&self) -> Option<PathBuf> {
@@ -242,7 +260,7 @@ impl Layout {
 }
 
 fn layout_from_env() -> Option<Layout> {
-    option_env!("ALVR_ROOT_DIR").map(|path| Layout::new(Path::new(path)))
+    option_env!("BUILD_ROOT_DIR").map(|path| Layout::new(Path::new(path)))
 }
 
 // The path should include the executable file name

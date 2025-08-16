@@ -1922,7 +1922,9 @@ dependencies = [
 name = "filepaths"
 version = "1.0.0-dev0"
 dependencies = [
+ "const_format",
  "dirs",
+ "shared",
 ]
 
 [[package]]
