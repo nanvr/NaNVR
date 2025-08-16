@@ -13,7 +13,7 @@ use configuration::{
 };
 use net_packets::{ButtonEntry, ButtonValue, FaceData, TrackingData};
 use shared::{
-    AlvrCodecType, AlvrFov, AlvrPose, AlvrQuat, AlvrViewParams, DeviceMotion, Pose, ViewParams,
+    NanvrCodecType, NanvrFov, NanvrPose, NanvrQuat, NanvrViewParams, DeviceMotion, Pose, ViewParams,
     anyhow::Result,
     debug, error,
     glam::{UVec2, Vec2, Vec3},
@@ -74,7 +74,7 @@ pub enum AlvrEvent {
     },
     /// Note: All subsequent DecoderConfig events should be ignored until reconnection
     DecoderConfig {
-        codec: AlvrCodecType,
+        codec: NanvrCodecType,
     },
     // Unimplemented
     RealTimeConfig {},
@@ -92,7 +92,7 @@ pub struct AlvrVideoFrameData {
 #[derive(Clone, Default)]
 pub struct AlvrDeviceMotion {
     device_id: u64,
-    pose: AlvrPose,
+    pose: NanvrPose,
     linear_velocity: [f32; 3],
     angular_velocity: [f32; 3],
 }
@@ -292,9 +292,9 @@ pub extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent) -> bool {
 
                 AlvrEvent::DecoderConfig {
                     codec: match codec {
-                        CodecType::H264 => AlvrCodecType::H264,
-                        CodecType::Hevc => AlvrCodecType::Hevc,
-                        CodecType::AV1 => AlvrCodecType::AV1,
+                        CodecType::H264 => NanvrCodecType::H264,
+                        CodecType::Hevc => NanvrCodecType::Hevc,
+                        CodecType::AV1 => NanvrCodecType::AV1,
                     },
                 }
             }
@@ -404,7 +404,7 @@ pub extern "C" fn alvr_send_button(path_id: u64, value: AlvrButtonValue) {
 /// The view poses need to be in local space, as if the head is at the origin.
 /// view_params: array of 2
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_view_params(view_params: *const AlvrViewParams) {
+pub extern "C" fn alvr_send_view_params(view_params: *const NanvrViewParams) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         context.send_view_params(unsafe {
             [
@@ -425,8 +425,8 @@ pub extern "C" fn alvr_send_tracking(
     poll_timestamp_ns: u64,
     device_motions: *const AlvrDeviceMotion,
     device_motions_count: u64,
-    hand_skeletons: *const *const AlvrPose,
-    combined_eye_gaze: *const AlvrQuat,
+    hand_skeletons: *const *const NanvrPose,
+    combined_eye_gaze: *const NanvrQuat,
 ) {
     let mut raw_motions = vec![AlvrDeviceMotion::default(); device_motions_count as _];
     unsafe {
@@ -544,7 +544,7 @@ pub extern "C" fn alvr_report_fatal_decoder_error(message: *const c_char) {
 #[unsafe(no_mangle)]
 pub extern "C" fn alvr_report_compositor_start(
     target_timestamp_ns: u64,
-    out_view_params: *mut AlvrViewParams,
+    out_view_params: *mut NanvrViewParams,
 ) {
     if let Some(context) = &*CLIENT_CORE_CONTEXT.lock() {
         let view_params =
@@ -578,14 +578,14 @@ thread_local! {
 #[repr(C)]
 pub struct AlvrLobbyViewParams {
     swapchain_index: u32,
-    view_params: AlvrViewParams,
+    view_params: NanvrViewParams,
 }
 
 #[repr(C)]
 pub struct AlvrStreamViewParams {
     swapchain_index: u32,
-    reprojection_rotation: AlvrQuat,
-    fov: AlvrFov,
+    reprojection_rotation: NanvrQuat,
+    fov: NanvrFov,
 }
 
 #[repr(C)]
@@ -822,7 +822,7 @@ pub struct AlvrMediacodecOption {
 
 #[repr(C)]
 pub struct AlvrDecoderConfig {
-    codec: AlvrCodecType,
+    codec: NanvrCodecType,
     force_software_decoder: bool,
     max_buffering_frames: f32,
     buffering_history_weight: f32,
@@ -837,9 +837,9 @@ pub struct AlvrDecoderConfig {
 pub extern "C" fn alvr_create_decoder(config: AlvrDecoderConfig) {
     let config = VideoDecoderConfig {
         codec: match config.codec {
-            AlvrCodecType::H264 => CodecType::H264,
-            AlvrCodecType::Hevc => CodecType::Hevc,
-            AlvrCodecType::AV1 => CodecType::AV1,
+            NanvrCodecType::H264 => CodecType::H264,
+            NanvrCodecType::Hevc => CodecType::Hevc,
+            NanvrCodecType::AV1 => CodecType::AV1,
         },
         force_software_decoder: config.force_software_decoder,
         max_buffering_frames: config.max_buffering_frames,
@@ -929,7 +929,7 @@ pub extern "C" fn alvr_get_frame(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_rotation_delta(source: AlvrQuat, destination: AlvrQuat) -> AlvrQuat {
+pub extern "C" fn alvr_rotation_delta(source: NanvrQuat, destination: NanvrQuat) -> NanvrQuat {
     shared::to_capi_quat(
         &(shared::from_capi_quat(&source).inverse() * shared::from_capi_quat(&destination)),
     )

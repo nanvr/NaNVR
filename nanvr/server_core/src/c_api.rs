@@ -7,7 +7,7 @@ use crate::{
 use configuration::CodecType;
 use net_packets::{ButtonEntry, ButtonValue, Haptics};
 use shared::{
-    AlvrCodecType, AlvrPose, AlvrViewParams, log,
+    NanvrCodecType, NanvrPose, NanvrViewParams, log,
     parking_lot::{Mutex, RwLock},
 };
 use std::{
@@ -26,7 +26,7 @@ static BUTTONS_QUEUE: Mutex<VecDeque<Vec<ButtonEntry>>> = Mutex::new(VecDeque::n
 
 #[repr(C)]
 pub struct AlvrDeviceMotion {
-    pub pose: AlvrPose,
+    pub pose: NanvrPose,
     pub linear_velocity: [f32; 3],
     pub angular_velocity: [f32; 3],
 }
@@ -64,7 +64,7 @@ pub enum AlvrEvent {
     ClientDisconnected,
     Battery(AlvrBatteryInfo),
     PlayspaceSync([f32; 2]),
-    LocalViewParams([AlvrViewParams; 2]), // In relation to head
+    LocalViewParams([NanvrViewParams; 2]), // In relation to head
     TrackingUpdated { sample_timestamp_ns: u64 },
     ButtonsUpdated,
     RequestIDR,
@@ -332,7 +332,7 @@ pub unsafe extern "C" fn alvr_get_device_motion(
 pub unsafe extern "C" fn alvr_get_hand_skeleton(
     hand_type: AlvrHandType,
     sample_timestamp_ns: u64,
-    out_skeleton: *mut AlvrPose,
+    out_skeleton: *mut NanvrPose,
 ) -> bool {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read()
         && let Some(skeleton) = context.get_hand_skeleton(
@@ -400,14 +400,14 @@ pub extern "C" fn alvr_send_haptics(
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn alvr_set_video_config_nals(
-    codec: AlvrCodecType,
+    codec: NanvrCodecType,
     buffer_ptr: *const u8,
     len: i32,
 ) {
     let codec = match codec {
-        AlvrCodecType::H264 => CodecType::H264,
-        AlvrCodecType::Hevc => CodecType::Hevc,
-        AlvrCodecType::AV1 => CodecType::AV1,
+        NanvrCodecType::H264 => CodecType::H264,
+        NanvrCodecType::Hevc => CodecType::Hevc,
+        NanvrCodecType::AV1 => CodecType::AV1,
     };
 
     let mut config_buffer = vec![0; len as usize];
@@ -423,7 +423,7 @@ pub unsafe extern "C" fn alvr_set_video_config_nals(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn alvr_send_video_nal(
     timestamp_ns: u64,
-    global_view_params: *const AlvrViewParams,
+    global_view_params: *const NanvrViewParams,
     is_idr: bool,
     buffer_ptr: *mut u8,
     len: i32,
