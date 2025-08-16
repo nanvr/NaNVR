@@ -26,6 +26,7 @@ pub struct NotificationBar {
     min_notification_level: LogSeverity,
     tip_message: Option<String>,
     expanded: bool,
+    tips: Vec<&'static str>,
 }
 
 impl NotificationBar {
@@ -37,6 +38,7 @@ impl NotificationBar {
             min_notification_level: LogSeverity::Debug,
             tip_message: None,
             expanded: false,
+            tips: NOTIFICATION_TIPS.split("\n").collect(),
         }
     }
 
@@ -45,10 +47,10 @@ impl NotificationBar {
 
         if settings.extra.logging.show_notification_tip {
             if self.tip_message.is_none() {
-                // todo: fairly inefficient, needs to be a compile time variable (probably proc-macro)
-                let tips: Vec<&str> = NOTIFICATION_TIPS.split("\n").collect();
-
-                self.tip_message = tips.choose(&mut rand::rng()).map(|s| format!("Tip: {s}"));
+                self.tip_message = self
+                    .tips
+                    .choose(&mut rand::rng())
+                    .map(|s| format!("Tip: {s}"));
             }
         } else {
             self.tip_message = None;

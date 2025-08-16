@@ -30,8 +30,8 @@ fn main() {
     };
 
     use ico::IconDir;
-    use shared::{NANVR_LOW_NAME, NANVR_NAME, NANVR_VERSION};
     use shared::info;
+    use shared::{NANVR_LOW_NAME, NANVR_NAME, NANVR_VERSION};
     use std::{env, ffi::OsStr, fs};
     use std::{io::Cursor, sync::mpsc};
 

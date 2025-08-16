@@ -3,7 +3,12 @@ use crate::data_sources;
 use const_format::formatcp;
 use serde_json::{self, json};
 use shared::{
-    anyhow::{bail, Context, Result}, debug, glam::bool, parking_lot::Mutex, warn, NANVR_LOW_NAME, NANVR_NAME
+    NANVR_LOW_NAME, NANVR_NAME,
+    anyhow::{Context, Result, bail},
+    debug,
+    glam::bool,
+    parking_lot::Mutex,
+    warn,
 };
 use std::{
     ffi::OsStr,

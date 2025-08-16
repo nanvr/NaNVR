@@ -24,5 +24,4 @@ You can quickly cycle through tips like this one by toggling "Show notification 
 If you want to use body trackers or other SteamVR drivers together with ALVR, set "Driver launch action" to "Unregister ALVR at shutdown"
 It's handy to enable "Extra"->"Steamvr Launcher"->"Open and close SteamVR with dashboard"
 If you want to share a video recording for reporting a bug, you can enable "Extra"->"Capture"->"Rolling video files" to limit the file size of the upload
-
 If your headset does not appear in the device list, it might be in a different subnet. Try "Add device manually" with IP shown from inside device.
