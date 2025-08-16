@@ -6,7 +6,7 @@ use settings_schema::{
 };
 use shared::{
     DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
-    LogSeverityDefaultVariant, NANVR_VERSION,
+    LogSeverityDefaultVariant, NANVR_LOW_NAME, NANVR_NAME, NANVR_VERSION,
 };
 use system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
 
@@ -755,27 +755,6 @@ pub struct GameAudioConfig {
     pub buffering: AudioBufferingConfig,
 }
 
-#[derive(SettingsSchema, Serialize, Deserialize, Clone)]
-pub enum MicrophoneDevicesConfig {
-    Automatic,
-    #[schema(strings(display_name = "Virtual Audio Cable"))]
-    VAC,
-    #[schema(strings(display_name = "VB Cable"))]
-    VBCable,
-    #[schema(strings(display_name = "VoiceMeeter"))]
-    VoiceMeeter,
-    #[schema(strings(display_name = "VoiceMeeter Aux"))]
-    VoiceMeeterAux,
-    #[schema(strings(display_name = "VoiceMeeter VAIO3"))]
-    VoiceMeeterVaio3,
-    Custom {
-        #[schema(strings(help = "This device is used by ALVR to output microphone audio"))]
-        sink: CustomAudioDeviceConfig,
-        #[schema(strings(help = "This device is set in SteamVR as the default microphone"))]
-        source: CustomAudioDeviceConfig,
-    },
-}
-
 // Note: sample rate is a free parameter for microphone, because both server and client supports
 // resampling. In contrary, for game audio, the server does not support resampling.
 #[derive(SettingsSchema, Serialize, Deserialize, Clone)]
@@ -1250,12 +1229,12 @@ TCP: Slower than UDP, but more stable. Pick this if you experience video or audi
     pub client_discovery: Switch<DiscoveryConfig>,
 
     #[schema(strings(
-        help = r#"Which release type of client should ALVR look for when establishing a wired connection."#
+        help = r#"Which release type of client should NaNVR look for when establishing a wired connection."#
     ))]
     pub wired_client_type: ClientFlavor,
 
     #[schema(strings(
-        help = r#"Wether ALVR should try to automatically launch the client when establishing a wired connection."#
+        help = r#"Wether NaNVR should try to automatically launch the client when establishing a wired connection."#
     ))]
     pub wired_client_autolaunch: bool,
 
@@ -1271,7 +1250,7 @@ TCP: Slower than UDP, but more stable. Pick this if you experience video or audi
     pub enable_on_disconnect_script: bool,
 
     #[schema(strings(
-        help = "Allow cross-origin browser requests to control ALVR settings remotely."
+        help = "Allow cross-origin browser requests to control NaNVR settings remotely."
     ))]
     #[schema(flag = "real-time")]
     pub allow_untrusted_http: bool,
@@ -1349,7 +1328,7 @@ pub struct RawEventsConfig {
 
 #[derive(SettingsSchema, Serialize, Deserialize, Clone)]
 pub struct LoggingConfig {
-    #[schema(strings(help = "Notification tips teach you how to use ALVR"))]
+    #[schema(strings(help = "Notification tips teach you how to use NaNVR"))]
     pub show_notification_tip: bool,
 
     #[schema(strings(help = "This applies only to certain error or warning messages."))]
@@ -1816,7 +1795,7 @@ pub fn session_settings_default() -> SettingsDefault {
                     multimodal_tracking: false,
                     emulation_mode: ControllersEmulationModeDefault {
                         Custom: ControllersEmulationModeCustomDefault {
-                            serial_number: "ALVR Controller".into(),
+                            serial_number: format!("{NANVR_NAME} Controller"),
                             button_set: VectorDefault {
                                 gui_collapsed: false,
                                 element: "/user/hand/left/input/a/click".into(),
@@ -1937,7 +1916,7 @@ pub fn session_settings_default() -> SettingsDefault {
                 },
             },
             wired_client_type: ClientFlavorDefault {
-                Custom: "alvr.client".to_owned(),
+                Custom: format!("{NANVR_LOW_NAME}.client"),
                 variant: if shared::is_stable() {
                     ClientFlavorDefaultVariant::Store
                 } else {

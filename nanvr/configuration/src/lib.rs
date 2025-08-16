@@ -20,7 +20,7 @@ use std::{
 // the settings representation that the UI uses.
 pub type SessionSettings = settings::SettingsDefault;
 
-// This structure is used to store the minimum configuration data that ALVR driver needs to
+// This structure is used to store the minimum configuration data that NaNVR driver needs to
 // initialize OpenVR before having the chance to communicate with a client. When a client is
 // connected, a new OpenvrConfig instance is generated, then the connection is accepted only if that
 // instance is equivalent to the one stored in the session, otherwise SteamVR is restarted.
