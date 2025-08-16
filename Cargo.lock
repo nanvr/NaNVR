@@ -4977,6 +4977,7 @@ dependencies = [
  "bytes",
  "chrono",
  "configuration",
+ "const_format",
  "events",
  "fern",
  "filepaths",

@@ -25,33 +25,33 @@ static EVENTS_RECEIVER: Mutex<Option<mpsc::Receiver<ServerCoreEvent>>> = Mutex::
 static BUTTONS_QUEUE: Mutex<VecDeque<Vec<ButtonEntry>>> = Mutex::new(VecDeque::new());
 
 #[repr(C)]
-pub struct AlvrDeviceMotion {
+pub struct NanvrDeviceMotion {
     pub pose: NanvrPose,
     pub linear_velocity: [f32; 3],
     pub angular_velocity: [f32; 3],
 }
 
 #[repr(u8)]
-pub enum AlvrHandType {
+pub enum NanvrHandType {
     Left = 0,
     Right = 1,
 }
 
 #[repr(C)]
-pub union AlvrButtonValue {
+pub union NanvrButtonValue {
     pub scalar: bool,
     pub float: f32,
 }
 
 // the profile is implied
 #[repr(C)]
-pub struct AlvrButtonEntry {
+pub struct NanvrButtonEntry {
     pub id: u64,
-    pub value: AlvrButtonValue,
+    pub value: NanvrButtonValue,
 }
 
 #[repr(C)]
-pub struct AlvrBatteryInfo {
+pub struct NanvrBatteryInfo {
     pub device_id: u64,
     /// range [0, 1]
     pub gauge_value: f32,
@@ -59,10 +59,10 @@ pub struct AlvrBatteryInfo {
 }
 
 #[repr(u8)]
-pub enum AlvrEvent {
+pub enum NanvrEvent {
     ClientConnected,
     ClientDisconnected,
-    Battery(AlvrBatteryInfo),
+    Battery(NanvrBatteryInfo),
     PlayspaceSync([f32; 2]),
     LocalViewParams([NanvrViewParams; 2]), // In relation to head
     TrackingUpdated { sample_timestamp_ns: u64 },
@@ -74,7 +74,7 @@ pub enum AlvrEvent {
 }
 
 #[repr(C)]
-pub struct AlvrTargetConfig {
+pub struct NanvrTargetConfig {
     game_render_width: u32,
     game_render_height: u32,
     stream_width: u32,
@@ -82,13 +82,13 @@ pub struct AlvrTargetConfig {
 }
 
 #[repr(C)]
-pub struct AlvrDeviceConfig {
+pub struct NanvrDeviceConfig {
     device_id: u64,
     interaction_profile_id: u64,
 }
 
 #[repr(C)]
-pub struct AlvrDynamicEncoderParams {
+pub struct NanvrDynamicEncoderParams {
     bitrate_bps: f32,
     framerate: f32,
 }
@@ -104,14 +104,14 @@ fn string_to_c_str(buffer: *mut c_char, value: &str) -> u64 {
     cstring.as_bytes_with_nul().len() as u64
 }
 
-// Get ALVR server time. The libalvr user should provide timestamps in the provided time frame of
+// Get NaNVR server time. The libnanvr user should provide timestamps in the provided time frame of
 // reference in the following functions
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_get_time_ns() -> u64 {
+pub extern "C" fn nanvr_get_time_ns() -> u64 {
     Instant::now().elapsed().as_nanos() as u64
 }
 
-// The libalvr user is responsible of interpreting values and calling functions using
+// The libnanvr user is responsible of interpreting values and calling functions using
 // device/input/output identifiers obtained using this function
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn nanvr_path_to_id(path_string: *const c_char) -> u64 {
@@ -182,13 +182,13 @@ pub unsafe extern "C" fn nanvr_log_periodically(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_get_settings_json(buffer: *mut c_char) -> u64 {
+pub extern "C" fn nanvr_get_settings_json(buffer: *mut c_char) -> u64 {
     string_to_c_str(buffer, &serde_json::to_string(&crate::settings()).unwrap())
 }
 
-/// This must be called before alvr_initialize()
+/// This must be called before nanvr_initialize()
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_initialize_environment(
+pub unsafe extern "C" fn nanvr_initialize_environment(
     config_dir: *const c_char,
     log_dir: *const c_char,
 ) {
@@ -206,7 +206,7 @@ pub unsafe extern "C" fn alvr_initialize_environment(
 /// Either session_log_path or crash_log_path can be null, in which case log is outputted to
 /// stdout/stderr on Windows.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_initialize_logging(
+pub unsafe extern "C" fn nanvr_initialize_logging(
     session_log_path: *const c_char,
     crash_log_path: *const c_char,
 ) {
@@ -226,7 +226,7 @@ pub unsafe extern "C" fn alvr_initialize_logging(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_initialize() -> AlvrTargetConfig {
+pub extern "C" fn nanvr_initialize() -> NanvrTargetConfig {
     let (context, receiver) = ServerCoreContext::new();
     *SERVER_CORE_CONTEXT.write() = Some(context);
     *EVENTS_RECEIVER.lock() = Some(receiver);
@@ -234,7 +234,7 @@ pub extern "C" fn alvr_initialize() -> AlvrTargetConfig {
     let session_manager_lock = SESSION_MANAGER.read();
     let restart_settings = &session_manager_lock.session().openvr_config;
 
-    AlvrTargetConfig {
+    NanvrTargetConfig {
         game_render_width: restart_settings.target_eye_resolution_width,
         game_render_height: restart_settings.target_eye_resolution_height,
         stream_width: restart_settings.eye_resolution_width,
@@ -243,56 +243,56 @@ pub extern "C" fn alvr_initialize() -> AlvrTargetConfig {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_start_connection() {
+pub extern "C" fn nanvr_start_connection() {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read() {
         context.start_connection();
     }
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent, timeout_ns: u64) -> bool {
+pub unsafe extern "C" fn nanvr_poll_event(out_event: *mut NanvrEvent, timeout_ns: u64) -> bool {
     if let Some(receiver) = &*EVENTS_RECEIVER.lock()
         && let Ok(event) = receiver.recv_timeout(Duration::from_nanos(timeout_ns))
     {
         match event {
             ServerCoreEvent::ClientConnected => unsafe {
-                *out_event = AlvrEvent::ClientConnected;
+                *out_event = NanvrEvent::ClientConnected;
             },
             ServerCoreEvent::ClientDisconnected => unsafe {
-                *out_event = AlvrEvent::ClientDisconnected;
+                *out_event = NanvrEvent::ClientDisconnected;
             },
             ServerCoreEvent::Battery(battery) => unsafe {
-                *out_event = AlvrEvent::Battery(AlvrBatteryInfo {
+                *out_event = NanvrEvent::Battery(NanvrBatteryInfo {
                     device_id: battery.device_id,
                     gauge_value: battery.gauge_value,
                     is_plugged: battery.is_plugged,
                 });
             },
             ServerCoreEvent::PlayspaceSync(bounds) => unsafe {
-                *out_event = AlvrEvent::PlayspaceSync(bounds.to_array())
+                *out_event = NanvrEvent::PlayspaceSync(bounds.to_array())
             },
             ServerCoreEvent::LocalViewParams(config) => unsafe {
-                *out_event = AlvrEvent::LocalViewParams([
+                *out_event = NanvrEvent::LocalViewParams([
                     shared::to_capi_view_params(&config[0]),
                     shared::to_capi_view_params(&config[1]),
                 ])
             },
             ServerCoreEvent::Tracking { poll_timestamp } => unsafe {
-                *out_event = AlvrEvent::TrackingUpdated {
+                *out_event = NanvrEvent::TrackingUpdated {
                     sample_timestamp_ns: poll_timestamp.as_nanos() as u64,
                 };
             },
             ServerCoreEvent::Buttons(entries) => {
                 BUTTONS_QUEUE.lock().push_back(entries);
-                unsafe { *out_event = AlvrEvent::ButtonsUpdated };
+                unsafe { *out_event = NanvrEvent::ButtonsUpdated };
             }
-            ServerCoreEvent::RequestIDR => unsafe { *out_event = AlvrEvent::RequestIDR },
-            ServerCoreEvent::CaptureFrame => unsafe { *out_event = AlvrEvent::CaptureFrame },
+            ServerCoreEvent::RequestIDR => unsafe { *out_event = NanvrEvent::RequestIDR },
+            ServerCoreEvent::CaptureFrame => unsafe { *out_event = NanvrEvent::CaptureFrame },
             ServerCoreEvent::RestartPending => unsafe {
-                *out_event = AlvrEvent::RestartPending;
+                *out_event = NanvrEvent::RestartPending;
             },
             ServerCoreEvent::ShutdownPending => unsafe {
-                *out_event = AlvrEvent::ShutdownPending;
+                *out_event = NanvrEvent::ShutdownPending;
             },
             ServerCoreEvent::GameRenderLatencyFeedback(_)
             | ServerCoreEvent::SetOpenvrProperty { .. } => {} // implementation not needed
@@ -306,17 +306,17 @@ pub unsafe extern "C" fn alvr_poll_event(out_event: *mut AlvrEvent, timeout_ns: 
 
 /// Returns false if there is no tracking sample for the requested sample timestamp
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_get_device_motion(
+pub unsafe extern "C" fn nanvr_get_device_motion(
     device_id: u64,
     sample_timestamp_ns: u64,
-    out_motion: *mut AlvrDeviceMotion,
+    out_motion: *mut NanvrDeviceMotion,
 ) -> bool {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read()
         && let Some(motion) =
             context.get_device_motion(device_id, Duration::from_nanos(sample_timestamp_ns))
     {
         unsafe {
-            *out_motion = AlvrDeviceMotion {
+            *out_motion = NanvrDeviceMotion {
                 pose: shared::to_capi_pose(&motion.pose),
                 linear_velocity: motion.linear_velocity.to_array(),
                 angular_velocity: motion.angular_velocity.to_array(),
@@ -332,16 +332,16 @@ pub unsafe extern "C" fn alvr_get_device_motion(
 /// out_skeleton must be an array of length 26
 /// Returns false if there is no tracking sample for the requested sample timestamp
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_get_hand_skeleton(
-    hand_type: AlvrHandType,
+pub unsafe extern "C" fn nanvr_get_hand_skeleton(
+    hand_type: NanvrHandType,
     sample_timestamp_ns: u64,
     out_skeleton: *mut NanvrPose,
 ) -> bool {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read()
         && let Some(skeleton) = context.get_hand_skeleton(
             match hand_type {
-                AlvrHandType::Left => HandType::Left,
-                AlvrHandType::Right => HandType::Right,
+                NanvrHandType::Left => HandType::Left,
+                NanvrHandType::Right => HandType::Right,
             },
             Duration::from_nanos(sample_timestamp_ns),
         )
@@ -359,7 +359,7 @@ pub unsafe extern "C" fn alvr_get_hand_skeleton(
 /// Call with null out_entries to get the buffer length
 /// call with non-null out_entries to get the buttons and advanced the internal queue
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_get_buttons(out_entries: *mut AlvrButtonEntry) -> u64 {
+pub unsafe extern "C" fn nanvr_get_buttons(out_entries: *mut NanvrButtonEntry) -> u64 {
     let entries_count = BUTTONS_QUEUE.lock().front().map_or(0, |e| e.len()) as u64;
 
     if out_entries.is_null() {
@@ -383,7 +383,7 @@ pub unsafe extern "C" fn alvr_get_buttons(out_entries: *mut AlvrButtonEntry) -> 
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_send_haptics(
+pub extern "C" fn nanvr_send_haptics(
     device_id: u64,
     duration_s: f32,
     frequency: f32,
@@ -402,7 +402,7 @@ pub extern "C" fn alvr_send_haptics(
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_set_video_config_nals(
+pub unsafe extern "C" fn nanvr_set_video_config_nals(
     codec: NanvrCodecType,
     buffer_ptr: *const u8,
     len: i32,
@@ -424,7 +424,7 @@ pub unsafe extern "C" fn alvr_set_video_config_nals(
 
 /// global_view_params must be an array of length 2
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_send_video_nal(
+pub unsafe extern "C" fn nanvr_send_video_nal(
     timestamp_ns: u64,
     global_view_params: *const NanvrViewParams,
     is_idr: bool,
@@ -452,8 +452,8 @@ pub unsafe extern "C" fn alvr_send_video_nal(
 
 /// Returns true if updated
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_get_dynamic_encoder_params(
-    out_params: *mut AlvrDynamicEncoderParams,
+pub unsafe extern "C" fn nanvr_get_dynamic_encoder_params(
+    out_params: *mut NanvrDynamicEncoderParams,
 ) -> bool {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read()
         && let Some(params) = context.get_dynamic_encoder_params()
@@ -470,7 +470,7 @@ pub unsafe extern "C" fn alvr_get_dynamic_encoder_params(
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_report_composed(timestamp_ns: u64, offset_ns: u64) {
+pub extern "C" fn nanvr_report_composed(timestamp_ns: u64, offset_ns: u64) {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read() {
         context.report_composed(
             Duration::from_nanos(timestamp_ns),
@@ -480,7 +480,7 @@ pub extern "C" fn alvr_report_composed(timestamp_ns: u64, offset_ns: u64) {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_report_present(timestamp_ns: u64, offset_ns: u64) {
+pub extern "C" fn nanvr_report_present(timestamp_ns: u64, offset_ns: u64) {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read() {
         context.report_present(
             Duration::from_nanos(timestamp_ns),
@@ -491,7 +491,7 @@ pub extern "C" fn alvr_report_present(timestamp_ns: u64, offset_ns: u64) {
 
 /// Retr  un true if a valid value is provided
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn alvr_duration_until_next_vsync(out_ns: *mut u64) -> bool {
+pub unsafe extern "C" fn nanvr_duration_until_next_vsync(out_ns: *mut u64) -> bool {
     if let Some(context) = &*SERVER_CORE_CONTEXT.read()
         && let Some(duration) = context.duration_until_next_vsync()
     {
@@ -504,13 +504,13 @@ pub unsafe extern "C" fn alvr_duration_until_next_vsync(out_ns: *mut u64) -> boo
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_restart() {
+pub extern "C" fn nanvr_restart() {
     if let Some(context) = SERVER_CORE_CONTEXT.write().take() {
         context.restart();
     }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn alvr_shutdown() {
+pub extern "C" fn nanvr_shutdown() {
     SERVER_CORE_CONTEXT.write().take();
 }

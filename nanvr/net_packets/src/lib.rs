@@ -332,7 +332,7 @@ pub enum ServerRequest {
     StartRecording,
     StopRecording,
     FirewallRules(FirewallRulesAction),
-    RegisterAlvrDriver,
+    RegisterNanvrDriver,
     UnregisterDriver(PathBuf),
     GetDriverList,
     RestartSteamvr,

@@ -89,7 +89,7 @@ impl InstallationTab {
 
                     if ui.button("Register ALVR driver").clicked() {
                         requests.push(InstallationTabRequest::ServerRequest(
-                            ServerRequest::RegisterAlvrDriver,
+                            ServerRequest::RegisterNanvrDriver,
                         ));
                     }
                 });

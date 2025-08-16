@@ -250,7 +250,7 @@ impl DataSources {
                                         error!("Setting firewall rules failed!");
                                     }
                                 }
-                                ServerRequest::RegisterAlvrDriver => {
+                                ServerRequest::RegisterNanvrDriver => {
                                     let alvr_driver_dir =
                                         filesystem_layout.openvr_driver_root_dir.clone();
 

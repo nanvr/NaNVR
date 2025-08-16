@@ -3,6 +3,7 @@ use crate::{
     logging_backend::LOGGING_EVENTS_SENDER,
 };
 use bytes::Buf;
+use const_format::formatcp;
 use events::{ButtonEvent, EventType};
 use futures::SinkExt;
 use headers::{
@@ -20,7 +21,7 @@ use net_packets::{ButtonEntry, ClientListAction, ServerRequest};
 use serde::de::DeserializeOwned;
 use serde_json as json;
 use shared::{
-    ConnectionState,
+    ConnectionState, NANVR_HIGH_NAME,
     anyhow::{self, Result},
     error, info, log,
 };
@@ -95,15 +96,15 @@ async fn http_api(
     connection_context: &ConnectionContext,
     request: Request<Body>,
 ) -> Result<Response<Body>> {
+    const X_NANVR: &str = formatcp!("X-{NANVR_HIGH_NAME}");
+
     let allow_untrusted_http = SESSION_MANAGER
         .read()
         .session()
         .session_settings
         .connection
         .allow_untrusted_http;
-
-    const X_ALVR: &str = "X-ALVR";
-
+    
     // A browser is asking for CORS info
     if request.method() == Method::OPTIONS {
         let bad_request: Response<Body> = Response::builder()
@@ -126,18 +127,18 @@ async fn http_api(
         if let Some(requested_headers) =
             request.headers().typed_get::<AccessControlRequestHeaders>()
         {
-            let mut found_x_alvr = false;
+            let mut found_x_nanvr = false;
             for header in requested_headers.iter() {
-                if header == HeaderName::from_static(X_ALVR) {
-                    found_x_alvr = true;
+                if header == HeaderName::from_static(X_NANVR) {
+                    found_x_nanvr = true;
                 } else if header != CONTENT_TYPE {
                     return Ok(bad_request);
                 }
             }
 
-            // Ensure it actually requested the X-ALVR header, because we don't want to allow it
+            // Ensure it actually requested the X-NANVR header, because we don't want to allow it
             // if it never got asked for
-            if !found_x_alvr {
+            if !found_x_nanvr {
                 return Ok(bad_request);
             }
         } else {
@@ -147,7 +148,7 @@ async fn http_api(
         let allowed_methods = [Method::GET, Method::POST, Method::OPTIONS]
             .into_iter()
             .collect::<AccessControlAllowMethods>();
-        let allowed_headers = [CONTENT_TYPE, HeaderName::from_static(X_ALVR)]
+        let allowed_headers = [CONTENT_TYPE, HeaderName::from_static(X_NANVR)]
             .into_iter()
             .collect::<AccessControlAllowHeaders>();
 
@@ -171,15 +172,15 @@ async fn http_api(
     }
 
     // This is the actual core part of cors
-    // We require the X-ALVR header, but the browser forces a cors preflight
+    // We require the X-NANVR header, but the browser forces a cors preflight
     // if the site tries to send a request with it set since it's not-whitelisted
     //
     // The dashboard can just set the header and be allowed through without the preflight
     // thus not getting blocked by allow_untrusted_http being disabled
-    if request.headers().get(X_ALVR) != Some(&HeaderValue::from_static("true")) {
+    if request.headers().get(X_NANVR) != Some(&HeaderValue::from_static("true")) {
         return Ok(Response::builder()
             .status(StatusCode::BAD_REQUEST)
-            .body("missing X-ALVR header".into())?);
+            .body(format!("missing X-{NANVR_HIGH_NAME} header").into())?);
     }
 
     let mut response = match request.uri().path() {
@@ -251,7 +252,7 @@ async fn http_api(
                             info!("Setting firewall rules succeeded!");
                         }
                     }
-                    ServerRequest::RegisterAlvrDriver => {
+                    ServerRequest::RegisterNanvrDriver => {
                         server_io::driver_registration(
                             &[FILESYSTEM_LAYOUT
                                 .get()
