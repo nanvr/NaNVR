@@ -1,3 +1,5 @@
+use shared::NANVR_LOW_NAME;
+
 fn main() {
     use std::{env, path::PathBuf};
     use xshell::{Shell, cmd};
@@ -7,7 +9,7 @@ fn main() {
 
     let sh = Shell::new().unwrap();
     let command = format!(
-        "g++ -shared -fPIC $(pkg-config --cflags libdrm) drm-lease-shim.cpp -o {}/alvr_drm_lease_shim.so",
+        "g++ -shared -fPIC $(pkg-config --cflags libdrm) drm-lease-shim.cpp -o {}/{NANVR_LOW_NAME}_drm_lease_shim.so",
         target_dir.display()
     );
     cmd!(sh, "bash -c {command}").run().unwrap();

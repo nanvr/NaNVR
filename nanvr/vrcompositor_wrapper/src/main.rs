@@ -1,6 +1,8 @@
+use shared::{NANVR_HIGH_NAME, NANVR_LOW_NAME};
+
 fn main() {
     let argv0 = std::env::args().next().unwrap();
-    // location of the ALVR vulkan layer manifest
+    // location of the NaNVR vulkan layer manifest
     let layer_path = match std::fs::read_link(&argv0) {
         Ok(path) => path
             .parent()
@@ -25,13 +27,16 @@ fn main() {
     }
     if std::env::var("WAYLAND_DISPLAY").is_ok() {
         let drm_lease_shim_path = match std::fs::read_link(&argv0) {
-            Ok(path) => path.parent().unwrap().join("alvr_drm_lease_shim.so"),
+            Ok(path) => path
+                .parent()
+                .unwrap()
+                .join(format!("{NANVR_LOW_NAME}_drm_lease_shim.so")),
             Err(err) => panic!("Failed to read vrcompositor symlink: {err}"),
         };
         unsafe {
             std::env::set_var("LD_PRELOAD", drm_lease_shim_path);
             std::env::set_var(
-                "ALVR_CONFIGURATION_JSON",
+                format!("{NANVR_HIGH_NAME}_CONFIGURATION_JSON"),
                 filepaths::filesystem_layout_invalid()
                     .session()
                     .to_string_lossy()
