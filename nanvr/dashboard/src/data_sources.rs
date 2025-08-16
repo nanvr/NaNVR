@@ -3,7 +3,7 @@ use events::{Event, EventType};
 use net_packets::ServerRequest;
 use server_io::ServerSessionManager;
 use shared::{
-    NANVR_VERSION, RelaxedAtomic, debug, error, info,
+    ALVR_VERSION, RelaxedAtomic, debug, error, info,
     parking_lot::Mutex,
     semver::{Version, VersionReq},
     warn,
@@ -56,9 +56,9 @@ pub fn clean_session() {
             .linux_async_reprojection = false;
     }
 
-    if session_manager.session().server_version != *NANVR_VERSION {
+    if session_manager.session().server_version != *ALVR_VERSION {
         let mut session_ref = session_manager.session_mut();
-        session_ref.server_version = NANVR_VERSION.clone();
+        session_ref.server_version = ALVR_VERSION.clone();
         session_ref.client_connections.clear();
         session_ref.session_settings.extra.open_setup_wizard = true;
         session_ref
@@ -66,7 +66,7 @@ pub fn clean_session() {
             .extra
             .new_version_popup
             .content
-            .hide_while_version = NANVR_VERSION.to_string();
+            .hide_while_version = ALVR_VERSION.to_string();
     }
 }
 
@@ -405,7 +405,7 @@ impl DataSources {
                         // We need exact match because we don't do session extrapolation at the
                         // dashboard level. In the future we may relax the contraint and consider
                         // protocol compatibility check for dashboard.
-                        let matches = version == *shared::NANVR_VERSION;
+                        let matches = version == *shared::ALVR_VERSION;
 
                         if !matches {
                             error!(

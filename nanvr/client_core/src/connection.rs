@@ -18,7 +18,7 @@ use net_sockets::{
     StreamSender, StreamSocketBuilder,
 };
 use shared::{
-    NANVR_VERSION, AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState,
+    ALVR_VERSION, AnyhowToCon, ConResult, ConnectionError, ConnectionState, LifecycleState,
     ViewParams, dbg_connection, debug, error, info,
     parking_lot::{Condvar, Mutex, RwLock},
     wait_rwlock, warn,
@@ -72,7 +72,7 @@ pub struct ConnectionContext {
 fn set_hud_message(event_queue: &Mutex<VecDeque<ClientCoreEvent>>, message: &str) {
     let message = format!(
         "ALVR v{}\nhostname: {}\nIP: {}\n\n{message}",
-        *NANVR_VERSION,
+        *ALVR_VERSION,
         Config::load().hostname,
         system_info::local_ip(),
     );

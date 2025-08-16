@@ -8,11 +8,7 @@ Stream VR games from your PC to your headset via Wi-Fi.
 This is a fork of [ALVR](https://github.com/alvr-org/ALVR).
 
 ### Direct download to the latest version:
-<<<<<<< Updated upstream
 ### [Linux Launcher](https://github.com/nanvr/NANVR/releases/latest/download/launcher_linux.tar.gz)
-=======
-### [Linux Launcher](https://github.com/alvr-org/ALVR/releases/latest/download/alvr_launcher_linux.tar.gz)
->>>>>>> Stashed changes
 
 ## Compatibility
 
@@ -69,11 +65,7 @@ You can follow the guide [here](https://github.com/nanvr/NANVR/wiki/Building-Fro
 
 ## License
 
-<<<<<<< Updated upstream
 NaNVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL only due to ffmpeg, x264 usage, GPL only build in any case)
-=======
-ALVR is licensed under the [MIT License](LICENSE). (TODO: possibly will be GPL only due to ffmpeg, x264 usage)
->>>>>>> Stashed changes
 
 ## Privacy policy
 

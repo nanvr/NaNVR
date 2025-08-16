@@ -1,8 +1,8 @@
 use crate::dashboard::{ServerRequest, theme::graph_colors};
 use eframe::{
     egui::{
-        Align2, Color32, CornerRadius, FontId, Frame, Grid, Painter, Rect, RichText,
-        ScrollArea, Shape, Stroke, Ui, pos2, vec2,
+        Align2, Color32, CornerRadius, FontId, Frame, Grid, Id, Painter, Rect, RichText,
+        ScrollArea, Shape, Stroke, Ui, popup, pos2, vec2,
     },
     emath::RectTransform,
     epaint::Pos2,
@@ -116,9 +116,13 @@ impl StatisticsTab {
             let graph_pos =
                 RectTransform::from_to(canvas_response.response.rect, canvas_response.inner) * pos;
             let history_index = (graph_pos.x as usize).clamp(0, GRAPH_HISTORY_SIZE - 1);
-            canvas_response
-                .response
-                .on_hover_ui(|ui| tooltip_content(ui, &self.history[history_index]));
+
+            popup::show_tooltip(
+                ui.ctx(),
+                ui.layer_id(),
+                Id::new(format!("{title}_popup")),
+                |ui| tooltip_content(ui, &self.history[history_index]),
+            );
         }
     }
 
