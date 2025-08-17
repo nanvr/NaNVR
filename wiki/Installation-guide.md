@@ -18,7 +18,7 @@ Launcher will allow you to manage old, current and new installations of NaNVR st
 * Launch NaNVR app on your headset. While the headset screen is on, click `Trust` next to the device entry (in the NaNVR streamer app on PC, in the `Devices` tab) to start streaming.
 * You can change settings on the PC in the `Settings` tab. Most of the settings require to restart SteamVR to be applied. Use the apposite button on the bottom right corner.
 
-For any problem visit the [Troubleshooting page](Troubleshooting.md).
+For any problem visit the [Troubleshooting page](Troubleshooting).
 
 ## Advanced installation
 
@@ -39,7 +39,7 @@ Since nightly releases can be unstable, always use matching versions for PC and 
 
 ### Flatpak
 
-For Flatpak users, refer to the instructions [here](Installing-NaNVR-and-using-SteamVR-on-Linux-through-Flatpak.md)
+For Flatpak users, refer to the instructions [here](Installing-NaNVR-and-using-SteamVR-on-Linux-through-Flatpak)
 
 ## Advanced usage
 
@@ -57,4 +57,4 @@ Open Dashboard, go to the `Installation` tab and click on `Register NaNVR driver
 
 ### Connect headset to PC via a USB Cable
 
-Check out the guide [here](NaNVR-over-USB.md).
+Check out the guide [here](NaNVR-over-USB).

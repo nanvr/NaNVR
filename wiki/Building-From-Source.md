@@ -45,7 +45,7 @@ Install these additional packages:
   sudo dnf install nasm yasm libdrm-devel vulkan-headers pipewire-jack-audio-connection-kit-devel atk-devel gdk-pixbuf2-devel cairo-devel rust-gdk0.15-devel x264-devel vulkan-devel libunwind-devel clang openssl-devel alsa-lib-devel libva-devel pipewire-devel git
   ```
   
-  If you are using Nvidia, see [Fedora cuda installation](Building-From-Source.md#fedora-cuda-installation)
+  If you are using Nvidia, see [Fedora cuda installation](Building-From-Source#fedora-cuda-installation)
 
 Move to the root directory of the project, then run this command (paying attention to the bullet points below):
 
@@ -67,7 +67,7 @@ If you want to edit and rebuild the code, you can skip the `prepare-deps` comman
 
 ## Fedora CUDA installation
 
-If you are here for CUDA installation on Fedora you're at the right place! Else continue down to [Android App Building](Building-From-Source.md#android-app-building)
+If you are here for CUDA installation on Fedora you're at the right place! Else continue down to [Android App Building](Building-From-Source#android-app-building)
 
 ### 1. Install Nvidia drivers and Fedora CUDA driver
 
@@ -140,7 +140,7 @@ From the NaNVR directory edit the ./nanvr/xtask/src/dependencies.rs, and change 
 * Line 159, change ```cuda``` -> ```cuda-12.3``` (or whatever version you have)
 * Line 179, replace that line with ```--nvccflags=\"-ccbin /home/linuxbrew/.linuxbrew/bin/g++-11 -gencode arch=compute_52,code=sm_52 -O2\"``` (Change homebrew path if needed, default is used)
 
-You should be good to go! Refer to [Streamer Building](Building-From-Source.md#streamer-building) for the commands to build application
+You should be good to go! Refer to [Streamer Building](Building-From-Source#streamer-building) for the commands to build application
 
 # Android App Building
 
