@@ -1,7 +1,6 @@
 use crate::CommonBuildFlags;
 use clap::ValueEnum;
 use filepaths::Layout;
-use shared::NANVR_HIGH_NAME;
 use shared::NANVR_LOW_NAME;
 use std::{
     env,
@@ -61,7 +60,7 @@ pub fn build_server_lib(
     sh.create_dir(&build_dir).unwrap();
 
     if let Some(root) = root {
-        sh.set_var(format!("{NANVR_HIGH_NAME}_ROOT_DIR"), root);
+        sh.set_var("BUILD_ROOT_DIR", root);
     }
 
     let _push_guard = sh.push_dir(filepaths::crate_dir("server_core"));
@@ -125,7 +124,7 @@ pub fn build_streamer(
     }
 
     if let Some(root) = root {
-        sh.set_var(format!("{NANVR_HIGH_NAME}_ROOT_DIR"), root);
+        sh.set_var("BUILD_ROOT_DIR", root);
     }
 
     // build server
