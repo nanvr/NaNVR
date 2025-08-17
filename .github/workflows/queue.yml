@@ -33,7 +33,7 @@ jobs:
           RUST_BACKTRACE: 1
         run:  cargo xtask prepare-deps --platform linux
 
-      - run: cargo clippy
+      - run: cargo xtask ci-clippy
 
   check-msrv-linux:
     if: github.event_name == 'merge_group'

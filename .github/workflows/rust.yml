@@ -32,7 +32,7 @@ jobs:
           RUST_BACKTRACE: 1
         run:  cargo xtask prepare-deps --platform linux
 
-      - run: cargo xtask clippy --ci
+      - run: cargo xtask ci-clippy
 
   build-android:
     runs-on: ubuntu-latest

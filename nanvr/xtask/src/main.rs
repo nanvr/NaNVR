@@ -143,9 +143,11 @@ enum Commands {
         all_targets: bool,
     },
     /// Autoformat the code
-    Format,
-    /// Check if code is correctly formatted
-    CheckFormat,
+    Format {
+        /// Only check if code is correctly formatted
+        #[arg(long)]
+        check: bool,
+    },
     /// Removes all build artifacts and dependencies
     Clean,
     /// Bump streamer and client package versions
@@ -158,11 +160,7 @@ enum Commands {
         is_nightly: bool,
     },
     /// Show warnings for selected clippy lints
-    Clippy {
-        /// Do some CI related tweaks.
-        #[arg(long)]
-        ci: bool,
-    },
+    CiClippy,
     /// Verify MSRV version
     CheckMsrv,
 }
@@ -212,55 +210,6 @@ pub fn clean() {
         // Detete target folder only if in the local wokspace!
         fs::remove_dir_all(filepaths::target_dir()).ok();
     }
-}
-
-fn clippy() {
-    // lints updated for Rust 1.59
-    let restriction_lints = [
-        "allow_attributes_without_reason",
-        "clone_on_ref_ptr",
-        "create_dir",
-        "decimal_literal_representation",
-        "expect_used",
-        "float_cmp_const",
-        "fn_to_numeric_cast_any",
-        "get_unwrap",
-        "if_then_some_else_none",
-        "let_underscore_must_use",
-        "lossy_float_literal",
-        "mem_forget",
-        "multiple_inherent_impl",
-        "rest_pat_in_fully_bound_structs",
-        // "self_named_module_files",
-        "str_to_string",
-        // "string_slice",
-        "string_to_string",
-        "try_err",
-        "unnecessary_self_imports",
-        "unneeded_field_pattern",
-        "unseparated_literal_suffix",
-        "verbose_file_reads",
-        "wildcard_enum_match_arm",
-    ];
-    let pedantic_lints = [
-        "borrow_as_ptr",
-        "enum_glob_use",
-        "explicit_deref_methods",
-        "explicit_into_iter_loop",
-        "explicit_iter_loop",
-        "filter_map_next",
-        "flat_map_option",
-        "float_cmp",
-        // todo: add more lints
-    ];
-
-    let flags = restriction_lints
-        .into_iter()
-        .chain(pedantic_lints)
-        .flat_map(|name| ["-W".to_owned(), format!("clippy::{name}")]);
-
-    let sh = Shell::new().unwrap();
-    cmd!(sh, "cargo clippy -- {flags...}").run().unwrap();
 }
 
 fn main() {
@@ -340,20 +289,19 @@ fn main() {
             link_stdcpp,
             all_targets,
         } => packaging::package_client_lib(link_stdcpp, all_targets),
-        Commands::Format => format::format(),
-        Commands::CheckFormat => format::check_format(),
+        Commands::Format { check } => {
+            if check {
+                format::check_format();
+            } else {
+                format::format()
+            }
+        }
         Commands::Clean => clean(),
         Commands::Bump {
             version,
             is_nightly,
         } => version::bump_version(version, is_nightly),
-        Commands::Clippy { ci } => {
-            if ci {
-                ci::clippy_ci();
-            } else {
-                clippy();
-            }
-        }
+        Commands::CiClippy => ci::clippy_ci(),
         Commands::CheckMsrv => version::check_msrv(),
     }
     let elapsed_time = begin_time.elapsed();

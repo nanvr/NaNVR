@@ -381,7 +381,9 @@ bool Controller::OnPoseUpdate(uint64_t targetTimestampNs, float predictionS, Ffi
         // Ring and pinky fingers are not tracked. Infer a more natural pose.
         if (m_currentThumbTouch) {
             vr_driver_input->UpdateScalarComponent(m_buttonHandles[NANVR_INPUT_FINGER_RING], 1, 0.0);
-            vr_driver_input->UpdateScalarComponent(m_buttonHandles[NANVR_INPUT_FINGER_PINKY], 1, 0.0);
+            vr_driver_input->UpdateScalarComponent(
+                m_buttonHandles[NANVR_INPUT_FINGER_PINKY], 1, 0.0
+            );
         } else {
             vr_driver_input->UpdateScalarComponent(
                 m_buttonHandles[NANVR_INPUT_FINGER_RING], m_gripValue, 0.0
