@@ -13,6 +13,8 @@ on:
 
 jobs:
   prepare_release:
+    permissions:
+        contents: write
     runs-on: windows-2022 # change to linux runner
     outputs:
       release_ref: ${{ steps.output_ref.outputs.release_ref }}
