@@ -17,8 +17,8 @@ assignees: ''
 <!-- If this is a regression, please do some bisection testing in the nightly releases history to find the first release that manifests the problem. -->
 
 ## General Troubleshooting
-- [ ] I carefully followed the instructions in the [README]() and successfully completed the setup wizard
-- [ ] I read the [NaNVR GitHub Wiki]()
+- [ ] I carefully followed the instructions in the [README](https://github.com/nanvr/NaNVR/blob/main/README.md) and successfully completed the setup wizard
+- [ ] I read the [NaNVR GitHub Wiki](https://github.com/nanvr/NaNVR/wiki)
 
 ## Environment
 
@@ -30,12 +30,10 @@ assignees: ''
 
 **GPU Driver Version**:
 
-**Audio**:
-
 ### Installation
 **NaNVR Version**:
 
-**NaNVR Settings File**:
+**Configuration File**:
 
 **SteamVR Version**:
 
