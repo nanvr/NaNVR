@@ -38,22 +38,22 @@ This is a linux-only fork of [ALVR](https://github.com/alvr-org/ALVR) and is inc
 
 -   802.11ac 5Ghz wireless or ethernet wired connection
     -   It is recommended to use 802.11ac 5Ghz for the headset and ethernet for PC
-    -   You need to connect both the PC and the headset to same router (or use a routed connection as described [here](https://github.com/nanvr/NaNVR/wiki/ALVR-v14-and-Above))
+    -   You need to connect both the PC and the headset to same router
 
 ## Install
 
-Follow the installation guide [here](https://github.com/nanvr/NaNVR/wiki/Installation-guide).
+Follow the installation guide [here](wiki/Installation-guide).
 
 ## Troubleshooting
 
--   Please check the [Troubleshooting](https://github.com/nanvr/NaNVR/wiki/Troubleshooting) page, and also [Linux Troubleshooting](https://github.com/nanvr/NaNVR/wiki/Linux-Troubleshooting) if applicable.
--   Configuration recommendations and information may be found [here](https://github.com/nanvr/NaNVR/wiki/Information-and-Recommendations)
+-   Please check the [Troubleshooting](wiki/Troubleshooting) page.
+-   Configuration recommendations and information may be found [here](wiki/Information-and-Recommendations)
 
 ## Uninstall (TODO)
 
 ## Build from source
 
-You can follow the guide [here](https://github.com/nanvr/NaNVR/wiki/Building-From-Source).
+You can follow the guide [here](wiki/Building-From-Source).
 
 ## License
 
