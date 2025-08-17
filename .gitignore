@@ -66,7 +66,7 @@ node_modules
 # flatpak
 .flatpak*
 
-ALVR-Launcher
+NaNVR-Launcher
 
 #allows adding CMake files for some IDEs to parse C++ files correctly
 CMakeLists.txt

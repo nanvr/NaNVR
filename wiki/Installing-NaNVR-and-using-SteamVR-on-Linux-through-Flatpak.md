@@ -8,7 +8,7 @@
 
 4. Any scripts that affect the host will run within the sandbox
 
-5. Sometimes, a new instance of Steam will launch when launching the dashboard. To fix this, close both ALVR and Steam then launch Steam. As soon as Steam opens to the storefront, launch the ALVR dashboard.
+5. Sometimes, a new instance of Steam will launch when launching the dashboard. To fix this, close both NaNVR and Steam then launch Steam. As soon as Steam opens to the storefront, launch the NaNVR dashboard.
 
 6. User must setup xdg shortcut themselves - see below. Without an xdg entry the launcher has to be run from terminal.
 
@@ -59,7 +59,7 @@ On user installation of steam flatpak: `flatpak override --user --filesystem="xd
 
 On system installation of steam flatpak: `flatpak override --filesystem="xdg-run/pipewire-0" com.valvesoftware.Steam`
 
-Press enter to apply it and restart SteamVR (and close Flatpak Steam) from ALVR to apply the fix.
+Press enter to apply it and restart SteamVR (and close Flatpak Steam) from NaNVR to apply the fix.
 
 #### Using Flatseal
 GUI app for managing Flatpak application permissions: [Flathub](https://flathub.org/apps/com.github.tchx84.Flatseal)
@@ -71,10 +71,10 @@ You should also see some other permissions there `xdg-music:ro`, `xdg-pictures:r
 
 ## Install
 
-Download `com.valvesoftware.Steam.Utility.alvr.flatpak` file from one of the latest [nightly](https://github.com/alvr-org/ALVR-nightly/releases) that contains flatpak bundle and install like so:
+Download `com.valvesoftware.Steam.Utility.nanvr.flatpak` file from one of the latest [nightly](https://github.com/nanvr/NaNVR-nightly/releases) that contains flatpak bundle and install like so:
 
 ```sh
-flatpak install --user com.valvesoftware.Steam.Utility.alvr.flatpak
+flatpak install --user com.valvesoftware.Steam.Utility.nanvr.flatpak
 ```
 
 ## Notes
@@ -86,17 +86,17 @@ It's recommended that user sets up an xdg shortcut - but the launcher can also b
 flatpak run --command=launcher com.valvesoftware.Steam
 ```
 
-An icon and desktop file named `com.valvesoftware.Steam.Utility.alvr.desktop` is supplied within the `alvr/xtask/flatpak` directory. Move this to where other desktop files are located on your system in order to run the dashboard without the terminal.
+An icon and desktop file named `com.valvesoftware.Steam.Utility.nanvr.desktop` is supplied within the `nanvr/xtask/flatpak` directory. Move this to where other desktop files are located on your system in order to run the dashboard without the terminal.
 
 ```sh
 # systemwide shortcut
-# sudo cp com.valvesoftware.Steam.Utility.alvr.desktop /var/lib/flatpak/exports/share/applications/ 
+# sudo cp com.valvesoftware.Steam.Utility.nanvr.desktop /var/lib/flatpak/exports/share/applications/ 
 
 # users local folder
-cp com.valvesoftware.Steam.Utility.alvr.desktop $HOME/.local/share/flatpak/exports/share/applications/
+cp com.valvesoftware.Steam.Utility.nanvr.desktop $HOME/.local/share/flatpak/exports/share/applications/
 
 # install icon as well
-xdg-icon-resource install --size 256 alvr_icon.png application-alvr-launcher
+xdg-icon-resource install --size 256 alvr_icon.png application-nanvr-launcher
 ```
 
 The shortcut may not appear until desktop session is refreshed (e.g. log off then back on)
@@ -108,34 +108,8 @@ Convenience script is provided in git: run_with_adb_keys.sh
 It's likely one the keys are exposed to the flatpak in the default location it will work without needing more changes.
 ```
 export ADB_VENDOR_KEYS=~/.android/adbkey.pub
-flatpak override --user --filesystem=~/.android com.valvesoftware.Steam.Utility.alvr
+flatpak override --user --filesystem=~/.android com.valvesoftware.Steam.Utility.nanvr
 flatpak run --env=ADB_VENDOR_KEYS=$ADB_VENDOR_KEYS --command=launcher com.valvesoftware.Steam
-```
-
-### Wayland variable causes steamvr error:
-Make sure the QT_QPA_PLATFORM var allows x11 option - or steamvr freaks out. Launch from terminal to see errors.
-This can be a problem if you have modified this variable globally to force usage of wayland for some program like GameScope. 
-You can fix this by setting the variable passed to steamvr
-Example custom launch options for steamvr - including both QT_QPA_PLATFORM and vrmonitor fixes:
-
-```
-QT_QPA_PLATFORM=xcb ~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%
-```
-
-### Hybrid graphics 
-If using desktop it's recommended to disable igpu - makes things simpler. 
-If using laptop then must pass extra options to ensure dgpu is used. These options are in addition to the others already mentioned.
-
-#### Amd/Intel integrated gpu + Amd/Intel discrete gpu
-Put DRI_PRIME=1 %command% into SteamVR's commandline options and in those of all VR games you intend to play with ALVR.
-```
-DRI_PRIME=1 QT_QPA_PLATFORM=xcb ~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%
-```
-
-#### Amd/Intel integrated gpu + Nvidia discrete gpu
-Put __NV_PRIME_RENDER_OFFLOAD=1 __VK_LAYER_NV_optimus=NVIDIA_only __GLX_VENDOR_LIBRARY_NAME=nvidia %command% into SteamVR's commandline options and in those of all VR games you intend to play with ALVR. Again - in addition to other options.
-```
-__NV_PRIME_RENDER_OFFLOAD=1 __VK_LAYER_NV_optimus=NVIDIA_only __GLX_VENDOR_LIBRARY_NAME=nvidia QT_QPA_PLATFORM=xcb ~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%
 ```
 
 ### Other Applications

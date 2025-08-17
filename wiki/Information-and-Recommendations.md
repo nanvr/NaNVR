@@ -1,8 +1,8 @@
 ## PC
 
-- A high-end PC is a requirement; ALVR is not a cheap alternative to a PCVR HMD
-- ALVR resolution configuration and SteamVR multi-sampling may be used to influence quality in favor of performance or vice-versa.
-- Frequent dropped frames can cause a poor experience on ALVR; this can be verified using a tool such as [OVR Advanced Settings](https://github.com/OpenVR-Advanced-Settings/OpenVR-AdvancedSettings).
+- A high-end PC is a requirement; NaNVR is not a cheap alternative to a PCVR HMD
+- NaNVR resolution configuration and SteamVR multi-sampling may be used to influence quality in favor of performance or vice-versa.
+- Frequent dropped frames can cause a poor experience on NaNVR;
 - Higher bit-rates will cause higher latency.
 - Ensure all relevant software is up to date - especially graphics and network drivers.
 - A good starting point is 100% resolution (`Very low` resolution preset) and 30mbit constant bitrate. In this config it should be very smooth with almost no lag or packet loss; packet loss seen at this point is likely a result of network issues.
@@ -48,7 +48,6 @@
 - Ideally the headset and streamer should exist on the same logical (layer 2) network and subnet - this allows for no routing overhead, and the correct function of device discovery via [mDNS](https://en.wikipedia.org/wiki/Multicast_DNS)
 - Twisted pair (normal copper ethernet cables) should never be run alongside power cables - this can cause signal noise and result in frame loss and lowered auto-negotiation speeds
 - High quality CAT5E or higher (ideally CAT6A or CAT7) gigabit+ cabling should be used for modern networks
-- In some cases firewall, anti-virus, malware, or EDR (enhanced detection and response) software may interfere with network traffic - Windows Defender and Sophos Endpoint Protection are reported to work without issue
 - Pause frames should be disabled where possible, as these introduce additional latency and buffering
 
 ***
@@ -62,7 +61,7 @@ Some points came from [FingrMastr](https://github.com/FingrMastr)
 
 ### Encoder requirements
 
-ALVR uses FFmpeg for all encoders, so you will need to make sure the encoder of your choice works with FFmpeg.
+NaNVR uses FFmpeg and x264 for encoding, so you will need to make sure the encoder of your choice works with FFmpeg.
 Always consult Log tab in dashboard, it will tell you the reason why an encoder failed to initialize.
 
 ### VAAPI (AMD/Intel GPUs)
@@ -122,4 +121,4 @@ ffmpeg -f lavfi -i testsrc -t 30 -vf 'format=nv12,hwupload' -c:v hevc_nvenc nven
 ### Software (any GPUs)
 
 Software encoder is mainly used as a fallback and as such should work on all GPUs without any requirements.
-Only H264 encoding is currently supported.
+Only x264 encoding is currently supported.

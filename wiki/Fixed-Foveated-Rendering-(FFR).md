@@ -6,13 +6,13 @@ But it has one drawback: You need to track the movement of the eyes. While there
 
 That's why oculus is using Fixed Foveated rendering. There is some research that shows, that if you assume that the user looks at the center of the screen, some parts of the image are more important than others ([Oculus](https://developer.oculus.com/documentation/mobilesdk/latest/concepts/mobile-ffr/)). Many games on the Quest use this to improve rendering performance.
 
-## FFR in ALVR
+## FFR in NaNVR
 
-That's not how ALVR is using it :P 
+That's not how NaNVR is using it :P 
 
 We don't have any influence on how games get rendered, we only get the final rendered image that should be displayed.
 
-What ALVR normally does is: 
+What NaNVR normally does is: 
 
 - takes that image
 - encodes it as a video with the resolution you set at the video tab 

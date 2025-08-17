@@ -1,49 +1,41 @@
 #### Start here
 
-* [Installation guide](https://github.com/alvr-org/ALVR/wiki/Installation-guide)
+* [Installation guide](Installation-guide.md)
 
-* [Hand tracking controller bindings](https://github.com/alvr-org/ALVR/wiki/Hand-tracking-controller-bindings)
-
-* [Other resources](https://github.com/alvr-org/ALVR/wiki/Other-resources)
+* [Hand tracking controller bindings](Hand-tracking-controller-bindings.md)
 
 ***
 
 #### Configuration
 
-* [Settings tutorial](https://github.com/alvr-org/ALVR/wiki/Settings-tutorial)
+* [Settings tutorial](Settings-tutorial.md)
 
-* [Information and Recommendations](https://github.com/alvr-org/ALVR/wiki/Information-and-Recommendations)
+* [Information and Recommendations](Information-and-Recommendations.md)
 
-* [ALVR headset and streamer on separate networks](https://github.com/alvr-org/ALVR/wiki/Headset-and-ALVR-streamer-on-separate-networks)
+* [Headset and streamer on separate networks](Headset-and-NaNVR-streamer-on-separate-networks)
 
-* [Fixed Foveated Rendering (FFR)](https://github.com/alvr-org/ALVR/wiki/Fixed-Foveated-Rendering-(FFR))
+* [Fixed Foveated Rendering (FFR)](Fixed-Foveated-Rendering-(FFR).md)
 
-* [ALVR wired setup (ALVR over USB)](https://github.com/alvr-org/ALVR/wiki/ALVR-wired-setup-(ALVR-over-USB))
+* [NaNVR over USB](NaNVR-over-USB.md)
 
 ***
 
 #### Troubleshooting
 
-* [Troubleshooting](https://github.com/alvr-org/ALVR/wiki/Troubleshooting)
+* [Troubleshooting](Troubleshooting.md)
 
-* [Linux Troubleshooting](https://github.com/alvr-org/ALVR/wiki/Linux-Troubleshooting)
+* [Checklist before posting a new Issue](Checklist.md)
 
-* [ALVR Checklist before posting a new Issue](https://github.com/alvr-org/ALVR/wiki/ALVR-Checklist)
+* [Controller latency](Controller-latency.md)
 
-* [Controller latency](https://github.com/alvr-org/ALVR/wiki/Controller-latency)
-
-* [My game is not working properly! Help](https://github.com/alvr-org/ALVR/wiki/My-game-is-not-working-properly!-Help!)
-
-* [Hardware Video Encoding Testing](https://github.com/alvr-org/ALVR/wiki/FFmpeg-Hardware-Encoding-Testing)
+* [My game is not working properly! Help](My-game-is-not-working-properly!-Help!.md)
 
 ***
 
 #### Development
 
-* [Roadmap](https://github.com/alvr-org/ALVR/wiki/Roadmap)
+* [Roadmap](Roadmap.md)
 
-* [Building From Source](https://github.com/alvr-org/ALVR/wiki/Building-From-Source)
+* [Building From Source](Building-From-Source.md)
 
-* [How ALVR works](https://github.com/alvr-org/ALVR/wiki/How-ALVR-works)
-
-* [Real time video upscaling experiments](https://github.com/alvr-org/ALVR/wiki/Real-time-video-upscaling-experiments)
+* todo: update [How ALVR works](https://github.com/alvr-org/ALVR/wiki/How-ALVR-works) 

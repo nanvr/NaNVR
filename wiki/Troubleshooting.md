@@ -1,198 +1,89 @@
-## If you're looking for Linux troubleshooting, please check [here](https://github.com/alvr-org/ALVR/wiki/Linux-Troubleshooting) first, and only then this page.
-
-For ALVR 20.0.0 and later
+Troubleshooting
 ===
 
-First off, please make sure to carefully read the [Installation guide](https://github.com/alvr-org/ALVR/wiki/Installation-guide) and [Usage](https://github.com/alvr-org/ALVR/wiki/Usage) pages.
+### Hyprland/Sway/Wlroots Qt fix (todo: move to dashboard)
 
-The first thing to try is to delete the file `session.json` located in the ALVR installation folder on the PC. This resets everything to default. If it doesn't work, try reinstalling ALVR.
+If you're on hyprland, sway, or other wlroots-based wayland compositor, you might have to prepend `QT_QPA_PLATFORM=xcb` before commandline, which results in full commandline for steamvr being something like this:
+`QT_QPA_PLATFORM=xcb ~/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%`.
 
-Keep in mind that sometimes a restart of ALVR/SteamVR/PC/Headset will be enough to solve some problems.
+Related issue:
+[[BUG] No SteamVR UI on wlroots-based wayland compositors (sway, hyprland, ...) with workaround](https://github.com/ValveSoftware/SteamVR-for-Linux/issues/637).
 
-Having trouble getting ALVR to work?
----
+## Nvidia driver version requirements
 
-[I'm having trouble starting ALVR.](#trouble-starting-alvr)
+Application requires at least driver version 535 and CUDA version 12.1. If this is not the case SteamVR or the encoder might not work.
 
-[ALVR starts fine, but says X error.](#alvr-starts-fine-but)
+### Fix
 
-[ALVR starts fine and doesn't show any error, but it doesn't see (or connect to) my headset.](#alvr-cant-see-my-headset)
+Install at least the required versions of the driver and ensure you have CUDA installed with at least version 12.1.
 
-If you need more help, come to our [Discord](https://discord.gg/KbKk3UM) and ask in the #help channel. When asking for help, please describe the issue, if you're getting an error message, copy it, and tell us what you already tried to fix it.
+If an error saying CUDA was not detected persists, try using the latest nanvr nightly release.
 
-Trouble starting ALVR
-===
+## Using only integrated graphics
 
-ALVR needs a working graphics driver to be installed in order to work.
+Beware that using **only** integrated graphics for running application is highly inadvisable as in most cases it will lead to very poor performance (even on more powerful devices like Steam Deck, it's still very slow).
+Don't expect things to work perfectly in this case too, as some older integrated graphics simply might not have the best vulkan support and might fail to work at all. 
 
-**On linux**, you also need to make sure you have either `vaapi` on AMD or `cuda` on NVIDIA for hardware encoders to work.
+## Hybrid graphics advices (todo: check if needs more info)
 
-ALVR starts launching, but gets stuck on "ALVR is not responding..."
-===
+### General advise
 
-With ALVR versions >= 20.0, some antivirus software can prevent ALVR from launching SteamVR. Try disabling any antivirus other than Windows Defender (McAfee, Norton, etc.), reboot, then try again. If the issue persists, make sure you don't have an instance of ALVR or SteamVR running in the background (check in Task Manager). If you continue having issues, hop in the [ALVR Discord server](https://discord.gg/KbKk3UM), and we'll do our best to help you get it sorted out.
+If you have PC and can disable your integrated gpu from BIOS/UEFI, it's highly advised to do so to avoid multiple problems of handling hybrid graphics.
+If you're on laptop and it doesn't allow disabling integrated graphics (in most cases) you have to resort to methods bellow.
 
-ALVR starts fine, but
-===
+### Amd/Intel integrated gpu + Amd/Intel discrete gpu
 
-This section has some advice for when ALVR shows an error (or sometimes warning) pop-up. This could be either a yellow pop-up in the setup window (`ALVR Dashboard.exe`) or a separate pop-up when you connect with a headset.
+Put `DRI_PRIME=1 ~/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%` (adjust vrmonitor path to your distro) into SteamVR's commandline options and in those of all VR games you intend to play with NaNVR.
 
-[WARN] clientFoundInvalid
----
+### Amd/Intel integrated gpu + Nvidia discrete gpu
 
-If you get a warning pop-up inside the `ALVR Dashboard.exe` window saying `clientFoundInvalid`, make sure the version of ALVR you installed on your headset is compatible with the version you're trying to run on your PC.
+Put `__NV_PRIME_RENDER_OFFLOAD=1 __VK_LAYER_NV_optimus=NVIDIA_only __GLX_VENDOR_LIBRARY_NAME=nvidia ~/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%` (adjust vrmonitor path to your distro) into SteamVR's commandline options and in those of all VR games you intend to play.
 
-The latest release can be found [here](https://github.com/alvr-org/ALVR/releases/latest) and contains both the `alvr_client.apk` file for your headset and the `alvr_streamer_windows.zip` archive with the application for your PC.
+If this results in errors such as `error in encoder thread: Failed to initialize vulkan frame context: Invalid argument`, then try this instead:
 
-The version of ALVR available on the SideQuest store is compatible with the latest release on GitHub (the previous link). Keep in mind that the version on SideQuest might take us a while to update after a new version is released on GitHub.
+`__NV_PRIME_RENDER_OFFLOAD=1 __VK_LAYER_NV_optimus=NVIDIA_only __GLX_VENDOR_LIBRARY_NAME=nvidia VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json  ~/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%`
 
-Failed to initialize CEncoder
----
+- Again, adjust vrmonitor path to your distro
+- Go to `/usr/share/vulkan/icd.d` and make sure `nvidia_icd.json` exists. It may also be under the name `nvidia_icd.x86_64.json`, in which case you should adjust `VK_ICD_FILENAMES` accordingly.
 
-ALVR currently needs a recent AMD or Nvidia GPU to run, since it utilizes hardware video encoding (see [requirements](https://github.com/alvr-org/ALVR#requirements)). If you get an error saying something like
+### SteamVR Dashboard not rendering in VR on Nvidia discrete GPU
+If you encounter issues with the SteamVR dashboard not rendering in VR you may need to run the entire steam client itself via PRIME render offload. First close the steam client completey if you have it open already, you can do so by clicking the Steam dropdown in the top left and choosing exit. Then from a terminal run: `__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia steam-runtime`
 
-```
-Failed to initialize CEncoder. All VideoEncoder are not available. VCE: AMF Error 1. g_AMFFactory.Init(), NVENC: NvEnc NvEncoderD3D11 failed. Code=1 NvEncoder::LoadNvEncApi : NVENC library file is not found. Please ensure NV driver is installed at c:\src\alvr\alvr_server\nvencoder.cpp:70
-```
+## Wayland
 
-and you have up-to-date GPU drivers, then your graphics card isn't supported. If you're using a laptop with a powerful enough discrete GPU, you _might_ be able to get ALVR to work by forcing SteamVR to use it in either Windows settings, or the Nvidia control panel.
+When using old Gnome (< 47 version) under Wayland you might need to put `WAYLAND_DISPLAY='' ~/.local/share/Steam/steamapps/common/SteamVR/bin/vrmonitor.sh %command%` (adjust vrmonitor path to your distro) into the SteamVR commandline options to force XWayland on SteamVR. This fixes issue with drm leasing not being available.
 
-If you have a compatible GPU, you're most likely seeing a different error after either `VCE:` or `NVENC:` than above. In that case, try using a different video codec in ALVR settings. You can also try lowering your video resolution setting.
+## The view shakes
 
-Failed to start audio capture
----
+SlimeVR related, might be fixed in future updates of NaNVR
 
-![Failed to start audio capture](images/ALVR-audio-crash.png)
+### Fix
 
-This error can show up when connecting your headset, when SteamVR gets started. Make sure the audio device you have selected in ALVR settings isn't disabled, it should be the device you usually use for games (speakers/headphones). ALVR does not create its own audio device.
+Start the SlimeVR Server only after you connected and got an image to headset at least once.
 
-You can see if you have an "enable audio enhancements" option on your sound device in Windows settings and if so, make sure it's disabled.
+## No audio or microphone (todo: add check on nanvr side to notify user)
 
-ALVR can't see my headset
-===
+Even though audio or microphone are enabled in presets, still can't hear audio or no one can hear me
 
-Here is some advice for issues that can come up even though you don't see any error popup from ALVR.
+### Fix
 
-ALVR on the headset stuck on `Searching for streamer...`
----
+Make sure you select `NaNVR Audio` and `NaNVR Microphone` in device list as default **after** connecting headset. As soon as headset disconnected, devices will be removed. If you set it as default, they will be automatically chosen whenever they show up and you don't need to do it manually ever again.
+If you don't appear to have audio devices, or have pipewire errors in logs, check if you have `pipewire` installed and it's at least version `0.3.49` by using command `pipewire --version`
+For older (<=22.04 or debian <=11) ubuntu or debian based distributions you can check [pipewire-upstream](https://github.com/pipewire-debian/pipewire-debian) page for installing newer pipewire version
 
-This issue can have multiple causes. It is likely that the issue is with the PC ALVR application. See below for more specific issues.
+## OVR Advanced Settings
 
-ALVR device list is empty
----
+Disable the OVR Advanced Settings driver and don't use it with NaNVR.
+It's incompatible and will produce ladder-like latency graph with very bad shifting vision.
 
-![Empty ALVR device list](images/ALVRexe-no-devices.png)
 
-Check that the PC app and the headset app run on the latest version of ALVR. If your version is v2.3.1 or v2.4.0-alpha5 then you downloaded ALVR from the wrong link. The correct link is <https://github.com/alvr-org/ALVR>.
+## Bindings not working/high cpu usage due to bindings ui
 
-Make sure ALVR is running both on the PC and on the headset. To be visible in the device list, ALVR on the headset sends broadcast packets which the PC application listens for. These can be blocked by your firewall or possibly your router, if both headset and PC are connected wirelessly, having AP isolation enabled on the router will cause this.
+Steamvr can't properly update bindings, open menus, and possibly eats too much cpu.
 
-To fix this, you can try the following:
+This issue is caused by SteamVR's webserver spamming requests that stall the chromium ui and causes it to use a lot of cpu.
 
-* Ping the headset to check it's reachable from the PC - you can do this by opening CMD and typing `ping <headset IP>` without "<>" (you can find the headset's IP in the top left corner of SideQuest) - if ping fails, check that both PC and headset are connected to the same network
-* You can also try disabling your firewall for testing, but you shouldn't leave it disabled to use ALVR
-* Open ports 9943 and 9944 on your firewall
-* Disable the PMF (Protected Management Frames) setting on your Router
+### Fix
 
-If pinging works but you still don't see the device on the streamer app, then headset and PC might be on separate subnets. To solve this you can add the device manually.
-In the Devices tab press `Add device manually`. Fill in the fields with a name for your headset (you can use the name you want), the hostname (you can read it in the welcome screen in your headset when you open the ALVR app), the IP of the headset and then press `Save`.
-
-SteamVR says "headset not detected"
----
-
-![SteamVR headset not detected](images/SteamVR-headset-not-detected.png)
-
-This message means that the ALVR SteamVR driver isn't loading properly when SteamVR starts.
-
-On linux double-check if you have software and hardware encoders installed, without them driver won't load.
-
-Check that SteamVR isn't blocking ALVR (see SteamVR settings, enable advanced settings and check `Startup / Shutdown -> Manage Add-ons`).
-
-![SteamVR add-ons](images/SteamVR-add-ons.png)
-
-If you're still getting this message (or otherwise not getting a headset icon in the SteamVR window), a SteamVR log (vrserver.txt) will have some information on why the driver isn't loading. You can find it where you installed Steam, in `Steam\logs\vrserver.txt`.
-
-### Some lines to look for and tips for them
-
-`Unable to load driver alvr_server because of error VRInitError_Init_FileNotFound(103). Skipping.` - This usually means a library that ALVR needs is missing. Make sure you followed installation instructions carefully, installed the latest Visual C++ Redistributable x64 package and no files are missing where you extracted ALVR (especially in the bin\win64 directory).
-
-`Skipping duplicate external driver alvr_server` - This line means another ALVR driver is registered. Go to the installation tab in ALVR and remove all drivers.
-
-`Skipping external driver X:\path\to\your\alvr_streamer_windows because it is not a directory` - This can happen if you put ALVR in a OneDrive (or a similar service) directory or the path to ALVR contains characters not in UTF-8. Try putting ALVR elsewhere, preferably so that the path to ALVR contains only ASCII characters.
-
-If you have trouble looking through the logs, none of the tips work, or don't apply to you, feel free to ask on our [Discord](https://discord.gg/KbKk3UM) in the #help channel (you may be asked to post the log there).
-
-ALVR sees the headset, SteamVR shows headset icon
----
-
-![SteamVR waiting...](images/SteamVR-waiting.png)
-
-This is a situation where you have ALVR open on both headset and PC, you can see the headset in the device list and trust it. ALVR then starts SteamVR automatically when you try connecting and SteamVR shows an icon for the headset (and controllers).
-
-First make sure that SteamVR (more specifically, vrserver.exe) is allowed incoming connections (UDP, port 9944) in your firewall. You can also try disabling your firewall for testing, but you keep it disabled to use ALVR.
-
-You can try restarting ALVR on both the headset and the PC. On the headset, when connecting, you should see the view lagging behind when you turn your head (it drops below 1 fps), this means the headset is getting a response from the streamer when connecting and is waiting for the video stream to start. If you get no lag in the headset, response from the PC isn't reaching the headset.
-
-## Common performance-related problems
-
-### Overloaded encoder
-
-![latency graph of overloaded encoder](images/latency-graphs/overloaded-encoder.png)
-
-Symptoms: stuttery playback on the headset, streamer FPS is stable but below the target refresh rate.
-
-Solution: increase foveation settings or decrease refresh rate.
-
-### Overloaded decoder
-
-![latency graph of overloaded decoder](images/latency-graphs/overloaded-decoder.png)
-
-Symptoms: laggy/frozen controllers, erroneous head tracking, image flipped upside-down, blinking solid colour.
-
-Solution: reduce bitrate.
-
-### Overloaded network
-
-![latency graph of overloaded network](images/latency-graphs/overloaded-network.png)
-
-Symptoms: stream freezes, image is glitchy.
-
-Solution: check that HMD is using 5G frequency and that no other device is connected to the 5G band on your AP, reduce bitrate or use a cable.
-
-### Overloaded streamer
-
-![latency graph of overloaded streamer](images/latency-graphs/overloaded-streamer.png)
-
-Symptoms: stuttery playback on the headset, streamer FPS dips or fluctuates below the target refresh rate.
-
-Solution:
-
-* Decrease the graphics settings in the game
-* If possible, use the game's native upscaling solution (FSR/NIS/XeSS/DLSS…)
-* Decrease the target refresh rate in ALVR
-* Decrease render resolution in SteamVR overlay or ALVR video settings. (This will severely degrade image quality.)
-
-### Micro-stuttering
-
-![latency graph of headset stuttering](images/latency-graphs/not-enough-buffering.png)
-
-Symptoms: image is not always smooth especially in high motion or fast scenes.
-
-Solution: increase maxBufferingFrames.
-
-
-### Possible temporary fix for Meta framerate scaling for throttling feature
-
-#### Problem  
-The current version of ALVR does not support Meta's framerate scaling for throttling feature. This can cause issues where the framerate between the headset and the streamer application does not align, potentially leading to stuttering or throttling. A future update to ALVR is expected to address this issue, but a workaround is available in the meantime.
-
-#### Temporary Fix  
-1. **Reboot Your Headset**  
-   - Start by rebooting your VR headset. This may resolve the issue without further adjustments.
-
-2. **Manually Set the Framerate**  
-   - Use the **SideQuest Desktop application** to manually adjust the framerate of the ALVR Android client on your headset to match the framerate set in the ALVR streamer application.  
-     - Example: If the ALVR streamer is configured to 90Hz, set the headset's refresh rate to 90Hz in SideQuest.
-     - for more information see issue [#2537] (https://github.com/alvr-org/ALVR/issues/2537).
-
-This adjustment bypasses the framerate scaling for throttling feature, ensuring smoother performance.
+Apply the following patch: `https://github.com/alvr-org/ALVR-Distrobox-Linux-Guide/blob/main/patch_bindings_spam.sh`
+Assuming default path for Arch, Fedora - one-liner: `curl -s https://raw.githubusercontent.com/alvr-org/ALVR-Distrobox-Linux-Guide/main/patch_bindings_spam.sh | sh -s ~/.steam/steam/steamapps/common/SteamVR`

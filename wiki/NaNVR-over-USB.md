@@ -1,22 +1,22 @@
-## ALVR native wired mode support
-As of v20.12 ALVR supports wired connections directly through the dashboard.
+## Native wired mode support
+NaNVR supports wired connections directly through the dashboard.
 Just enable the "Wired Connection" toggle on the Devices screen, plug in your headset
 and accept the "Allow USB debugging?" popup displayed by the headset.
 
 Note that your headset will need to have Developer Mode and USB Debugging enabled to use this feature.
 
 For Quest headsets see [here](https://developers.meta.com/horizon/documentation/native/android/mobile-device-setup/) for instructions.
-The last step about installing ADB should be skipped, as ALVR downloads a copy of ADB on it's own and uses that.
+The last step about installing ADB should be skipped, as dashboard downloads a copy of ADB on it's own and uses that.
 
 If you have successfully followed all those steps and it still isn't connecting,
 ensure that the setting "Connection -> Wired Client Type" matches where you installed the client from (for the launcher also use the "Github" option).
 
-## The DEPRECATED (and clunky) way:
-The following sections list the old and deprecated way to get a wired connection and is only kept as reference.
+## Manual way
+The following sections list manual way of connecting headset via cable.
 
-This has exactly the same requirements as the native wired mode, but requires additional software and is more complex to setup, so native mode should be preferred.
+Usually you would want to use native wired support, but if for some reason it doesn't work for you, you can refer to this method.
 
-## ALVR Streamer (PC) Configuration
+## Streamer (PC) Configuration
 
 * **Switch the connection streaming protocol to TCP** in Settings > Connection.
 * If your headset is detected, click "Trust." Click "Edit", "Add new" and change the IP address to `127.0.0.1`.
@@ -40,7 +40,6 @@ The following programs serve to wrap and simplify the process of doing manual AD
   
   * Easy to use
   * Downloads ADB for you
-  * Cross-platform (Windows & Linux)
 
 * [**Python Script**](https://gist.github.com/Bad-At-Usernames/684784f42cbb69e22688a21173ec263d)
   

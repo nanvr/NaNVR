@@ -16,12 +16,8 @@
 
 ## Software settings
 
-* [ ] I have the latest Windows 10 updates
-* [ ] I have a recent version of SteamVR
+* [ ] I have a latest version of SteamVR
 
 ## Troubleshooting
 
-* [ ] The firewall settings where successfully applied with the setup of ALVR
-* [ ] I did not change the network settings since the installation of ALVR (Private/Public/Work)
-* [ ] I did not move the installation folder of ALVR since the setup
-* [ ] The path to the folder of ALVR does not contain any non latin characters or accents (ツ Л Ö ...)
+* [ ] The firewall settings where successfully applied with the setup wizard

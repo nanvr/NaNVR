@@ -1,4 +1,4 @@
-ALVR can be built on Windows and Linux. The following instructions are for both OSes.
+NaNVR can be built only on Linux.
 
 # Common Prerequisites
 
@@ -6,16 +6,14 @@ Preferred IDE (optional): Visual Studio Code with rust-analyzer extension
 
 You need to install [rustup](https://www.rust-lang.org/tools/install).
 
-On Windows you also need [Chocolatey](https://chocolatey.org/install).
-
-To clone the repository use `git clone --recurse-submodules https://github.com/alvr-org/ALVR.git`.
+To clone the repository use `git clone --recurse-submodules https://github.com/nanvr/NaNVR.git`.
 If you previously cloned the repo without submodules, simply run `git submodule update --init --checkout --recursive` in it.
 
 # Streamer Building
 
 First you need to gather some additional resources in preparation for the build.  
 
-If you are on Linux, install these additional packages:
+Install these additional packages:
 
 * **Arch**
   
@@ -24,8 +22,6 @@ If you are on Linux, install these additional packages:
   ```bash
   sudo pacman -S clang curl nasm pkgconf yasm vulkan-headers libva-mesa-driver unzip ffmpeg libpipewire
   ```
-  
-  * The [`alvr-git`](https://aur.archlinux.org/packages/alvr-git) [AUR package](https://wiki.archlinux.org/title/Arch_User_Repository) may also be used to do this automatically.
 
 * **Gentoo**
   
@@ -49,7 +45,7 @@ If you are on Linux, install these additional packages:
   sudo dnf install nasm yasm libdrm-devel vulkan-headers pipewire-jack-audio-connection-kit-devel atk-devel gdk-pixbuf2-devel cairo-devel rust-gdk0.15-devel x264-devel vulkan-devel libunwind-devel clang openssl-devel alsa-lib-devel libva-devel pipewire-devel git
   ```
   
-  If you are using Nvidia, see [Fedora cuda installation](https://github.com/alvr-org/ALVR/wiki/Building-From-Source#fedora-cuda-installation)
+  If you are using Nvidia, see [Fedora cuda installation](Building-From-Source.md#fedora-cuda-installation)
 
 Move to the root directory of the project, then run this command (paying attention to the bullet points below):
 
@@ -65,13 +61,13 @@ Next up is the proper build of the streamer. Run the following:
 cargo xtask build-streamer --release
 ```
 
-You can find the resulting package in `build/alvr_streamer_[your platform]`
+You can find the resulting package in `build/nanvr_streamer_[your platform]`
 
 If you want to edit and rebuild the code, you can skip the `prepare-deps` command and run only the `build-streamer` command.
 
 ## Fedora CUDA installation
 
-If you are here for CUDA installation on Fedora you're at the right place! Else continue down to [Android App Building](https://github.com/alvr-org/ALVR/wiki/Building-From-Source#android-app-building)
+If you are here for CUDA installation on Fedora you're at the right place! Else continue down to [Android App Building](Building-From-Source.md#android-app-building)
 
 ### 1. Install Nvidia drivers and Fedora CUDA driver
 
@@ -90,7 +86,7 @@ Wait until ```modinfo -F version nvidia``` doesn't report ```"ERROR: Module nvid
 
 ### 2. Install Nvidia's CUDA
 
-In the previous step, we installed Fedora's CUDA that doesn't work with ALVR, installing Nvidia's CUDA works and creates directories instead
+In the previous step, we installed Fedora's CUDA that doesn't work with NaNVR, installing Nvidia's CUDA works and creates directories instead
 
 ```bash
 sudo dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/fedora37/x86_64/cuda-fedora37.repo
@@ -139,12 +135,12 @@ brew install gcc@11
 ### 4. Modify dependencies.rs to use correct cuda path and gcc version
 
 Because CURA installs as a symlink by default, we need to change the dependencies.rs to use the directory
-From the ALVR directory edit the ./alvr/xtask/src/dependencies.rs, and change two lines:
+From the NaNVR directory edit the ./nanvr/xtask/src/dependencies.rs, and change two lines:
 
 * Line 159, change ```cuda``` -> ```cuda-12.3``` (or whatever version you have)
 * Line 179, replace that line with ```--nvccflags=\"-ccbin /home/linuxbrew/.linuxbrew/bin/g++-11 -gencode arch=compute_52,code=sm_52 -O2\"``` (Change homebrew path if needed, default is used)
 
-You should be good to go! Refer to [Streamer Building](https://github.com/alvr-org/ALVR/wiki/Building-From-Source#streamer-building) for the commands to build ALVR
+You should be good to go! Refer to [Streamer Building](Building-From-Source.md#streamer-building) for the commands to build application
 
 # Android App Building
 
@@ -156,7 +152,7 @@ For the app you need install:
 * Android SDK Platform-Tools 29 (Android 10)
 * Latest Android NDK (currently v25.1.8937393)
 
-On Linux, the specific package names for the android tools can differ from distro to distro, see up on the wiki for more information:
+Specific package names for the android tools can differ from distro to distro, see up on the wiki for more information:
 
 * Gentoo:
   * <https://wiki.gentoo.org/wiki/Android>
@@ -188,17 +184,10 @@ For Debian, it requires to have the `non-free` repository to be enabled:
   
 ## 2. Setting environment variables
 
-For Windows, set the environment variables:
+Correct directories for the environment variables can greatly differ depending on the type of install. See the wiki page of your distro for more information:
 
-* `JAVA_HOME`:
-  * Example: `C:\Program Files\Android\Android Studio\jre`
-* `ANDROID_HOME`:
-  * Example: `%LOCALAPPDATA%\Android\Sdk`
-* `ANDROID_NDK_HOME`:
-  * Example: `%LOCALAPPDATA%\Android\Sdk\ndk\25.1.8937393`
-
-For Linux, the correct directories for the environment variables can greatly differ depending on the type of install. See the wiki page of your distro for more information:
-
+* Arch:
+  * <https://wiki.archlinux.org/title/Android#App_development>
 * Gentoo:
   * <https://wiki.gentoo.org/wiki/Android>
 * Ubuntu:
@@ -227,15 +216,6 @@ cargo xtask prepare-deps --platform android
 
 Before building the app, Android has to have us to agree to the licenses otherwise building the app will halt and fail. To accept the agreements, follow the instructions for your corresponding OS:
 
-* Windows:
-  
-  ```shell
-  cd "%ANDROID_SDK_ROOT%\tools\bin"
-  sdkmanager.bat --licenses
-  ```
-
-* Linux:
-  
   ```bash
   cd ~/AndroidSDK
   sdkmanager --licenses
@@ -247,50 +227,13 @@ Next up is the proper build of the app. Run the following:
 cargo xtask build-client --release
 ```
 
-The built APK will be in `build/alvr_client_quest`. You can then use adb or SideQuest to install it to your headset.
+The built APK will be in `build/nanvr_client_android`. You can then use adb or SideQuest to install it to your headset.
 
 To build and run:
 
 ```bash
-cd alvr/client_openxr
+cd nanvr/client_openxr
 cargo apk run
 ```
 
 You need the headset to be connected via USB and with the screen on to successfully launch the debugger and logcat.
-
-# Troubleshooting (Linux)
-
-On some distributions, Steam Native runs ALVR a little better. To get Steam Native on Ubuntu run it with:
-
-```bash
-env STEAM_RUNTIME=0 steam
-```
-
-On Arch Linux, you can also get all the required libraries by downloading the `steam-native-runtime` package from the multilib repository
-
-```bash
-sudo pacman -S steam-native-runtime
-```
-
-Dependencies might be missing then, so run:
-
-```bash
-cd ~/.steam/root/ubuntu12_32
-file * | grep ELF | cut -d: -f1 | LD_LIBRARY_PATH=. xargs ldd | grep 'not found' | sort | uniq
-```
-
-Some dependencies have to be fixed manually for example instead of forcing a downgrade to libffi version 6 (which could downgrade a bunch of the system) you can do a symlink instead (requires testing):
-
-```bash
-cd /lib/i386-linux-gnu
-ln -s libffi.so.7 libffi.so.6
-```
-
-and
-
-```bash
-cd /lib/x86_64-linux-gnu
-ln -s libffi.so.7 libffi.so.6
-```
-
-A few dependencies are distro controlled, you can attempt to import the package at your own risk perhaps needing the use of alien or some forced import commands, but its not recommended (turns your system into a dependency hybrid mess), nor supported!

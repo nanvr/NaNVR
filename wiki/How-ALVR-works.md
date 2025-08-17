@@ -1,3 +1,4 @@
+# TODO: Outdated page, needs major refactor
 This document details some technologies used by ALVR.
 
 If you have any doubt about what is (or isn't) written in here you can contact @zarik5, preferably on Discord.

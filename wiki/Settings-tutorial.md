@@ -1,11 +1,9 @@
-Applicable to ALVR v20.
-
 This tutorial will help you find optimal settings for your hardware and network
 as well as give you some pointers to troubleshoot common configuration issues.
 
 ## Prerequisites
 
-* You have installed the ALVR streamer on your PC, and the ALVR app on your HMD.
+* You have installed the NaNVR streamer on your PC, and the NaNVR app on your HMD.
 * You can launch up to the SteamVR void (or up to the SteamVR home) and are able to launch games.
 
 ## Step 1: choose resolution, refresh rate, codec
@@ -18,7 +16,7 @@ Next, choose a refresh rate. Obviously higher is better, but on weaker/older har
 A few notes on codec choices:
 
 * AV1 works only on latest gen gpus (Nvidia RTX 4xxx and AMD Radeon RX 7xxx) and on Quest 3 only.
-* HEVC/H.265 is usually best for bitrate cosntained scenarious.
+* HEVC/H.265 is usually best for bitrate constrained scenarious.
 * AVC/H.264 (with CAVLC) may save a few milliseconds of decode latency, but needs a much higher bitrate to reach similar image quality.
 * Software encoding (x264) can give good results on a beefy high core-count CPU and a very high bitrate. Will require playing with a USB3 cable. The only choice if you don't have a hardware encoder (eg, RX6500).
 
@@ -54,12 +52,7 @@ By that point, your latency graph and your playback should be smooth and consist
 ## Still not satisfied with image quality?
 
 * Tweak the color correction sliders, eg slightly increasing sharpening.
-* If using AMF, enable the pre-processor.
 * Use the quality encoder preset.
 * Try a lower refresh rate and start again from step 2.
 * Try a different codec and start again from step 2.
 * Try increasing foveation settings (allowing the encoder to use more bits for the center of the image).
-
-See also the
-[Troubleshooting](https://github.com/alvr-org/ALVR/wiki/Troubleshooting#common-performance-related-problems)
-page for more help.
