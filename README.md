@@ -46,7 +46,7 @@ Follow the installation guide [here](https://github.com/nanvr/NaNVR/wiki/Install
 
 ## Troubleshooting
 
--   Please check the [Troubleshooting](wiki/Troubleshooting) page
+-   Please check the [Troubleshooting](https://github.com/nanvr/NaNVR/wiki/Troubleshooting) page
 -   Configuration recommendations and information may be found [here](https://github.com/nanvr/NaNVR/wiki/Information-and-Recommendations)
 
 ## Uninstall (TODO)
