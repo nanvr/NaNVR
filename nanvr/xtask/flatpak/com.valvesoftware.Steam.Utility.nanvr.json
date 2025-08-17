@@ -37,8 +37,8 @@
         "mkdir -p /app/utils/nanvr/bin",
         "cd nanvr/launcher",
         "cargo xtask prepare-deps --platform linux",
-        "cargo xtask build-launcher --release",
-        "mv '/run/build/nanvr/build/nanvr_launcher_linux/NaNVR Launcher' /app/utils/nanvr/bin/nanvr_launcher",
+        "cargo xtask build-launcher --profile release",
+        "mv '/run/build/nanvr/build/nanvr_launcher/NaNVR Launcher' /app/utils/nanvr/bin/nanvr_launcher",
         " # get read-only errors from following lines - because this is an extension - so leave as comments until someone figures this out",
         " # install -D dashboard.ico /app/share/icons/launcher.ico",
         " # install -D com.valvesoftware.Steam.Utility.nanvr.desktop /app/share/applications/com.valvesoftware.Steam.Utility.nanvr.desktop"
