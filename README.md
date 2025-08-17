@@ -42,18 +42,18 @@ This is a linux-only fork of [ALVR](https://github.com/alvr-org/ALVR) and is inc
 
 ## Install
 
-Follow the installation guide [here](wiki/Installation-guide).
+Follow the installation guide [here](https://github.com/nanvr/NaNVR/wiki/Installation-guide).
 
 ## Troubleshooting
 
--   Please check the [Troubleshooting](wiki/Troubleshooting) page.
--   Configuration recommendations and information may be found [here](wiki/Information-and-Recommendations)
+-   Please check the [Troubleshooting](wiki/Troubleshooting) page
+-   Configuration recommendations and information may be found [here](https://github.com/nanvr/NaNVR/wiki/Information-and-Recommendations)
 
 ## Uninstall (TODO)
 
 ## Build from source
 
-You can follow the guide [here](wiki/Building-From-Source).
+You can follow the guide [here](https://github.com/nanvr/NaNVR/wiki/Building-From-Source).
 
 ## License
 
