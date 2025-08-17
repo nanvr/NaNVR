@@ -394,7 +394,7 @@ impl eframe::App for Launcher {
                     if ui
                         .add_enabled(
                             self.release_channels_info.is_some(),
-                            Button::new("Add version (TODO: DOESNT WORK WITHOUT RELEASE)"),
+                            Button::new("Add version"),
                         )
                         .clicked()
                     {
