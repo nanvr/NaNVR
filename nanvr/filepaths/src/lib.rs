@@ -1,5 +1,5 @@
 use std::{
-    env::consts::{DLL_EXTENSION, DLL_PREFIX, DLL_SUFFIX, EXE_SUFFIX, OS},
+    env::consts::{DLL_EXTENSION, DLL_PREFIX, DLL_SUFFIX, EXE_SUFFIX},
     path::{Path, PathBuf},
 };
 
@@ -53,7 +53,7 @@ pub fn build_dir() -> PathBuf {
 }
 
 pub fn streamer_build_dir() -> PathBuf {
-    build_dir().join(format!("{NANVR_LOW_NAME}_streamer_{OS}"))
+    build_dir().join(format!("{NANVR_LOW_NAME}_streamer"))
 }
 
 pub fn launcher_fname() -> String {
@@ -61,7 +61,7 @@ pub fn launcher_fname() -> String {
 }
 
 pub fn launcher_build_dir() -> PathBuf {
-    build_dir().join(format!("launcher_{OS}"))
+    build_dir().join(format!("{NANVR_LOW_NAME}_launcher"))
 }
 
 pub fn launcher_build_exe_path() -> PathBuf {
@@ -69,7 +69,7 @@ pub fn launcher_build_exe_path() -> PathBuf {
 }
 
 pub fn dashboard_fname() -> &'static str {
-    "dashboard"
+    formatcp!("{NANVR_LOW_NAME}_dashboard")
 }
 
 // Layout of the NaNVR installation. All paths are absolute
@@ -178,7 +178,8 @@ impl Layout {
     }
 
     pub fn dashboard_dir(&self) -> PathBuf {
-        self.static_resources_dir.join("dashboard")
+        self.static_resources_dir
+            .join(format!("{NANVR_LOW_NAME}_dashboard"))
     }
 
     pub fn presets_dir(&self) -> PathBuf {

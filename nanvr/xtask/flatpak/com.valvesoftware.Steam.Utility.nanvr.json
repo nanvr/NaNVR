@@ -13,9 +13,14 @@
   "build-extension": true,
   "build-options": {
     "append-path": "/usr/lib/sdk/llvm19/bin:/usr/lib/sdk/rust-stable/bin",
-    "build-args": [ "--share=network", "--filesystem=xdg-data" ],
+    "build-args": [
+      "--share=network",
+      "--filesystem=xdg-data"
+    ],
     "strip": true,
-    "env": { "RUST_BACKTRACE": "full" }
+    "env": {
+      "RUST_BACKTRACE": "full"
+    }
   },
   "finish-args": [
     "--share=ipc",
@@ -33,12 +38,17 @@
         "cd nanvr/launcher",
         "cargo xtask prepare-deps --platform linux",
         "cargo xtask build-launcher --release",
-        "mv '/run/build/nanvr/build/launcher_linux/NaNVR Launcher' /app/utils/nanvr/bin/launcher",
+        "mv '/run/build/nanvr/build/nanvr_launcher_linux/NaNVR Launcher' /app/utils/nanvr/bin/nanvr_launcher",
         " # get read-only errors from following lines - because this is an extension - so leave as comments until someone figures this out",
         " # install -D dashboard.ico /app/share/icons/launcher.ico",
         " # install -D com.valvesoftware.Steam.Utility.nanvr.desktop /app/share/applications/com.valvesoftware.Steam.Utility.nanvr.desktop"
       ],
-      "sources": [ { "type": "dir", "path": "../../../" } ]
+      "sources": [
+        {
+          "type": "dir",
+          "path": "../../../"
+        }
+      ]
     }
   ]
 }

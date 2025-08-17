@@ -354,8 +354,9 @@ pub fn get_installations() -> Vec<InstallationInfo> {
 pub fn launch_dashboard(version: &str) -> Result<()> {
     let installation_dir = installations_dir().join(version);
 
-    let dashboard_path =
-        installation_dir.join(format!("{NANVR_LOW_NAME}_streamer_linux/bin/dashboard"));
+    let dashboard_path = installation_dir.join(format!(
+        "{NANVR_LOW_NAME}_streamer_linux/bin/{NANVR_LOW_NAME}_dashboard"
+    ));
 
     Command::new(dashboard_path).spawn()?;
 

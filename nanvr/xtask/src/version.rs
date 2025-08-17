@@ -1,5 +1,6 @@
 use crate::command;
 
+use shared::NANVR_LOW_NAME;
 use std::fs;
 use xshell::{Shell, cmd};
 
@@ -64,10 +65,10 @@ pub fn check_msrv() {
 
     // todo: more paths?
     let paths = [
-        "nanvr/server_openvr",
-        "nanvr/dashboard",
-        "nanvr/launcher",
-        "nanvr/client_openxr",
+        format!("{NANVR_LOW_NAME}/{NANVR_LOW_NAME}_server_openvr"),
+        format!("{NANVR_LOW_NAME}/{NANVR_LOW_NAME}_dashboard"),
+        format!("{NANVR_LOW_NAME}/{NANVR_LOW_NAME}_launcher"),
+        format!("{NANVR_LOW_NAME}/{NANVR_LOW_NAME}_client_openxr"),
     ];
     for path in paths {
         cmd!(sh, "cargo msrv verify --path {path}").run().unwrap();

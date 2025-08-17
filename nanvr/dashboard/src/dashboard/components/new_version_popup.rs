@@ -3,7 +3,7 @@ use std::{path::PathBuf, process::Command};
 use eframe::egui::{self, Context, OpenUrl, Ui};
 use gui_shared::ModalButton;
 use net_packets::{PathValuePair, ServerRequest};
-use shared::{NANVR_GH_REPO_PATH, NANVR_NAME};
+use shared::{NANVR_GH_REPO_PATH, NANVR_LOW_NAME, NANVR_NAME};
 
 pub enum CloseAction {
     Close,
@@ -63,7 +63,7 @@ impl NewVersionPopup {
                             } else if ui.button("Download Launcher").clicked() {
                                 let base_url =
                                     format!("https://github.com/{NANVR_GH_REPO_PATH}/releases/latest/download/");
-                                let file = "launcher_linux.tar.gz";
+                                let file = format!("{NANVR_LOW_NAME}_launcher_linux.tar.gz");
 
                                 context.open_url(OpenUrl::new_tab(format!("{base_url}{file}")));
                             }
