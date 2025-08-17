@@ -80,7 +80,7 @@ jobs:
       - name: Run tests
         run: cargo test -p configuration
 
-  check-format:
+  format-check:
     runs-on: ubuntu-latest
     steps:
       - name: Install clang 20
@@ -93,4 +93,4 @@ jobs:
         with:
           components: rustfmt
 
-      - run: cargo xtask check-format
+      - run: cargo xtask format --check
