@@ -88,8 +88,8 @@ static int hooked_wl_proxy_add_listener(struct wl_proxy *proxy, void (**implemen
     if (compare_ptr(proxy, &fake_connector_id)) {
         LOG("LISTENER wp_drm_lease_connector_v1");
         auto listener = reinterpret_cast<struct wp_drm_lease_connector_v1_listener*>(implementation);
-        listener->name(data, &fake_connector_id, "ALVR_name");
-        listener->description(data, &fake_connector_id, "ALVR_description");
+        listener->name(data, &fake_connector_id, "NaNVR_name");
+        listener->description(data, &fake_connector_id, "NaNVR_description");
         listener->connector_id(data, &fake_connector_id, drm_connector_id);
         listener->done(data, &fake_connector_id);
         LOG("LISTENER done");
@@ -227,7 +227,7 @@ extern "C" drmModeConnectorPtr drmModeGetConnector(int fd, uint32_t connectorId)
 
 __attribute__((constructor)) static void lib_init()
 {
-    LOG("ALVR: drm-lease shim loaded");
+    LOG("NaNVR: drm-lease shim loaded");
 
     unsetenv("LD_PRELOAD");
 }

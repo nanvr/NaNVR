@@ -27,13 +27,13 @@ AVPixelFormat vk_format_to_av_format(vk::Format vk_fmt) {
 }
 }
 
-std::string alvr::AvException::makemsg(const std::string& msg, int averror) {
+std::string nanvr::AvException::makemsg(const std::string& msg, int averror) {
     char av_msg[AV_ERROR_MAX_STRING_SIZE];
     av_strerror(averror, av_msg, sizeof(av_msg));
     return msg + " " + av_msg;
 }
 
-alvr::VkContext::VkContext(
+nanvr::VkContext::VkContext(
     const uint8_t* deviceUUID, const std::vector<const char*>& requiredDeviceExtensions
 ) {
     std::vector<const char*> instance_extensions = {
@@ -74,7 +74,7 @@ alvr::VkContext::VkContext(
 
     VkApplicationInfo appInfo = {};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "ALVR";
+    appInfo.pApplicationName = "NaNVR";
     appInfo.apiVersion = VK_API_VERSION_1_2;
 
     VkInstanceCreateInfo instanceInfo = {};
@@ -252,13 +252,13 @@ alvr::VkContext::VkContext(
         throw AvException("failed to initialize ffmpeg", ret);
 }
 
-alvr::VkContext::~VkContext() {
+nanvr::VkContext::~VkContext() {
     av_buffer_unref(&ctx);
     vkDestroyDevice(device, nullptr);
     vkDestroyInstance(instance, nullptr);
 }
 
-alvr::VkFrameCtx::VkFrameCtx(VkContext& vkContext, vk::ImageCreateInfo image_create_info) {
+nanvr::VkFrameCtx::VkFrameCtx(VkContext& vkContext, vk::ImageCreateInfo image_create_info) {
     AVHWFramesContext* frames_ctx = NULL;
     int err = 0;
 
@@ -273,13 +273,13 @@ alvr::VkFrameCtx::VkFrameCtx(VkContext& vkContext, vk::ImageCreateInfo image_cre
     frames_ctx->initial_pool_size = 0;
     if ((err = av_hwframe_ctx_init(ctx)) < 0) {
         av_buffer_unref(&ctx);
-        throw alvr::AvException("Failed to initialize vulkan frame context:", err);
+        throw nanvr::AvException("Failed to initialize vulkan frame context:", err);
     }
 }
 
-alvr::VkFrameCtx::~VkFrameCtx() { av_buffer_unref(&ctx); }
+nanvr::VkFrameCtx::~VkFrameCtx() { av_buffer_unref(&ctx); }
 
-alvr::VkFrame::VkFrame(
+nanvr::VkFrame::VkFrame(
     const VkContext& vk_ctx,
     VkImage image,
     VkImageCreateInfo image_info,
@@ -328,7 +328,7 @@ alvr::VkFrame::VkFrame(
     vkCreateSemaphore(device, &semInfo, nullptr, &av_vkframe->sem[0]);
 }
 
-alvr::VkFrame::~VkFrame() {
+nanvr::VkFrame::~VkFrame() {
     free(av_drmframe);
     if (av_vkframe) {
         vkDestroySemaphore(device, av_vkframe->sem[0], nullptr);
@@ -337,7 +337,7 @@ alvr::VkFrame::~VkFrame() {
 }
 
 std::unique_ptr<AVFrame, std::function<void(AVFrame*)>>
-alvr::VkFrame::make_av_frame(VkFrameCtx& frame_ctx) {
+nanvr::VkFrame::make_av_frame(VkFrameCtx& frame_ctx) {
     std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> frame {
         av_frame_alloc(), [](AVFrame* p) { av_frame_free(&p); }
     };

@@ -51,7 +51,7 @@ void Info(const char* format, ...) {
 }
 
 void Debug(const char* format, ...) {
-#ifdef ALVR_DEBUG_LOG
+#ifdef NANVR_DEBUG_LOG
     va_list args;
     va_start(args, format);
     _log(format, args, LogDebug);

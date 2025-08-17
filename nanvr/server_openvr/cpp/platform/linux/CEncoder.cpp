@@ -141,7 +141,7 @@ void CEncoder::GetFds(int client, int (*received_fds)[6]) {
 void CEncoder::Run() {
     Info("CEncoder::Run\n");
     m_socketPath = getenv("XDG_RUNTIME_DIR");
-    m_socketPath += "/alvr-ipc";
+    m_socketPath += "/nanvr-ipc";
 
     int ret;
     // we don't really care about what happends with unlink, it's just incase we crashed before this
@@ -202,15 +202,15 @@ void CEncoder::Run() {
 
         av_log_set_callback(av_logfn);
 
-        alvr::VkContext vk_ctx(init.device_uuid.data(), {});
+        nanvr::VkContext vk_ctx(init.device_uuid.data(), {});
 
         FrameRender render(vk_ctx, init, m_fds);
         auto output = render.CreateOutput();
 
-        alvr::VkFrame frame(
+        nanvr::VkFrame frame(
             vk_ctx, output.image, output.imageInfo, output.size, output.memory, output.drm
         );
-        auto encode_pipeline = alvr::EncodePipeline::Create(
+        auto encode_pipeline = nanvr::EncodePipeline::Create(
             &render,
             vk_ctx,
             frame,
@@ -236,10 +236,10 @@ void CEncoder::Run() {
             if (m_captureFrame) {
                 m_captureFrame = false;
                 render.CaptureInputFrame(
-                    Settings::Instance().m_captureFrameDir + "/alvr_frame_input.ppm"
+                    Settings::Instance().m_captureFrameDir + "/nanvr_frame_input.ppm"
                 );
                 render.CaptureOutputFrame(
-                    Settings::Instance().m_captureFrameDir + "/alvr_frame_output.ppm"
+                    Settings::Instance().m_captureFrameDir + "/nanvr_frame_output.ppm"
                 );
             }
 
@@ -254,7 +254,7 @@ void CEncoder::Run() {
 
             static_assert(sizeof(frame_info.pose) == sizeof(vr::HmdMatrix34_t&));
 
-            alvr::FramePacket packet;
+            nanvr::FramePacket packet;
             if (!encode_pipeline->GetEncoded(packet)) {
                 Error("Failed to get encoded data!");
                 continue;

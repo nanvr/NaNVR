@@ -32,28 +32,28 @@ bool Controller::activate() {
     vr_driver_input->CreateScalarComponent(
         this->prop_container,
         "/input/finger/index",
-        &m_buttonHandles[ALVR_INPUT_FINGER_INDEX],
+        &m_buttonHandles[NANVR_INPUT_FINGER_INDEX],
         vr::VRScalarType_Absolute,
         vr::VRScalarUnits_NormalizedOneSided
     );
     vr_driver_input->CreateScalarComponent(
         this->prop_container,
         "/input/finger/middle",
-        &m_buttonHandles[ALVR_INPUT_FINGER_MIDDLE],
+        &m_buttonHandles[NANVR_INPUT_FINGER_MIDDLE],
         vr::VRScalarType_Absolute,
         vr::VRScalarUnits_NormalizedOneSided
     );
     vr_driver_input->CreateScalarComponent(
         this->prop_container,
         "/input/finger/ring",
-        &m_buttonHandles[ALVR_INPUT_FINGER_RING],
+        &m_buttonHandles[NANVR_INPUT_FINGER_RING],
         vr::VRScalarType_Absolute,
         vr::VRScalarUnits_NormalizedOneSided
     );
     vr_driver_input->CreateScalarComponent(
         this->prop_container,
         "/input/finger/pinky",
-        &m_buttonHandles[ALVR_INPUT_FINGER_PINKY],
+        &m_buttonHandles[NANVR_INPUT_FINGER_PINKY],
         vr::VRScalarType_Absolute,
         vr::VRScalarUnits_NormalizedOneSided
     );
@@ -146,7 +146,7 @@ void Controller::SetButton(uint64_t id, FfiButtonValue value) {
         return;
     }
 
-    for (auto id : ALVR_TO_STEAMVR_PATH_IDS[id]) {
+    for (auto id : NANVR_TO_STEAMVR_PATH_IDS[id]) {
         if (value.type == BUTTON_TYPE_BINARY) {
             vr::VRDriverInput()->UpdateBooleanComponent(
                 m_buttonHandles[id], (bool)value.binary, 0.0
@@ -330,16 +330,16 @@ bool Controller::OnPoseUpdate(uint64_t targetTimestampNs, float predictionS, Ffi
             * 0.67f;
 
         vr_driver_input->UpdateScalarComponent(
-            m_buttonHandles[ALVR_INPUT_FINGER_INDEX], rotIndex, 0.0
+            m_buttonHandles[NANVR_INPUT_FINGER_INDEX], rotIndex, 0.0
         );
         vr_driver_input->UpdateScalarComponent(
-            m_buttonHandles[ALVR_INPUT_FINGER_MIDDLE], rotMiddle, 0.0
+            m_buttonHandles[NANVR_INPUT_FINGER_MIDDLE], rotMiddle, 0.0
         );
         vr_driver_input->UpdateScalarComponent(
-            m_buttonHandles[ALVR_INPUT_FINGER_RING], rotRing, 0.0
+            m_buttonHandles[NANVR_INPUT_FINGER_RING], rotRing, 0.0
         );
         vr_driver_input->UpdateScalarComponent(
-            m_buttonHandles[ALVR_INPUT_FINGER_PINKY], rotPinky, 0.0
+            m_buttonHandles[NANVR_INPUT_FINGER_PINKY], rotPinky, 0.0
         );
     } else if (controllerMotion != nullptr) {
         if (m_lastThumbTouch != m_currentThumbTouch) {
@@ -371,23 +371,23 @@ bool Controller::OnPoseUpdate(uint64_t targetTimestampNs, float predictionS, Ffi
             indexCurl = 0.5 - m_indexTouchAnimationProgress * 0.5;
         }
         vr_driver_input->UpdateScalarComponent(
-            m_buttonHandles[ALVR_INPUT_FINGER_INDEX], indexCurl, 0.0
+            m_buttonHandles[NANVR_INPUT_FINGER_INDEX], indexCurl, 0.0
         );
 
         vr_driver_input->UpdateScalarComponent(
-            m_buttonHandles[ALVR_INPUT_FINGER_MIDDLE], m_gripValue, 0.0
+            m_buttonHandles[NANVR_INPUT_FINGER_MIDDLE], m_gripValue, 0.0
         );
 
         // Ring and pinky fingers are not tracked. Infer a more natural pose.
         if (m_currentThumbTouch) {
-            vr_driver_input->UpdateScalarComponent(m_buttonHandles[ALVR_INPUT_FINGER_RING], 1, 0.0);
-            vr_driver_input->UpdateScalarComponent(m_buttonHandles[ALVR_INPUT_FINGER_PINKY], 1, 0.0);
+            vr_driver_input->UpdateScalarComponent(m_buttonHandles[NANVR_INPUT_FINGER_RING], 1, 0.0);
+            vr_driver_input->UpdateScalarComponent(m_buttonHandles[NANVR_INPUT_FINGER_PINKY], 1, 0.0);
         } else {
             vr_driver_input->UpdateScalarComponent(
-                m_buttonHandles[ALVR_INPUT_FINGER_RING], m_gripValue, 0.0
+                m_buttonHandles[NANVR_INPUT_FINGER_RING], m_gripValue, 0.0
             );
             vr_driver_input->UpdateScalarComponent(
-                m_buttonHandles[ALVR_INPUT_FINGER_PINKY], m_gripValue, 0.0
+                m_buttonHandles[NANVR_INPUT_FINGER_PINKY], m_gripValue, 0.0
             );
         }
 

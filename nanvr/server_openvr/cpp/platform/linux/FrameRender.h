@@ -6,7 +6,7 @@
 
 class FrameRender : public Renderer {
 public:
-    explicit FrameRender(alvr::VkContext& ctx, init_packet& init, int fds[]);
+    explicit FrameRender(nanvr::VkContext& ctx, init_packet& init, int fds[]);
     ~FrameRender();
 
     Output CreateOutput();

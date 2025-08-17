@@ -13,13 +13,13 @@ extern "C" {
 
 namespace {
 
-const char* encoder(ALVR_CODEC codec) {
+const char* encoder(NANVR_CODEC codec) {
     switch (codec) {
-    case ALVR_CODEC_H264:
+    case NANVR_CODEC_H264:
         return "h264_nvenc";
-    case ALVR_CODEC_HEVC:
+    case NANVR_CODEC_HEVC:
         return "hevc_nvenc";
-    case ALVR_CODEC_AV1:
+    case NANVR_CODEC_AV1:
         return "av1_nvenc";
     }
     throw std::runtime_error("invalid codec " + std::to_string(codec));
@@ -50,7 +50,7 @@ void set_hwframe_ctx(AVCodecContext* ctx, AVBufferRef* hw_device_ctx) {
     frames_ctx->height = ctx->height;
     if ((err = av_hwframe_ctx_init(hw_frames_ref)) < 0) {
         av_buffer_unref(&hw_frames_ref);
-        throw alvr::AvException("Failed to initialize CUDA frame context:", err);
+        throw nanvr::AvException("Failed to initialize CUDA frame context:", err);
     }
     ctx->hw_frames_ctx = av_buffer_ref(hw_frames_ref);
     if (!ctx->hw_frames_ctx)
@@ -60,7 +60,7 @@ void set_hwframe_ctx(AVCodecContext* ctx, AVBufferRef* hw_device_ctx) {
 }
 
 } // namespace
-alvr::EncodePipelineNvEnc::EncodePipelineNvEnc(
+nanvr::EncodePipelineNvEnc::EncodePipelineNvEnc(
     Renderer* render,
     VkContext& vk_ctx,
     VkFrame& input_frame,
@@ -69,7 +69,7 @@ alvr::EncodePipelineNvEnc::EncodePipelineNvEnc(
     uint32_t height
 ) {
     r = render;
-    vk_frame_ctx = std::make_unique<alvr::VkFrameCtx>(vk_ctx, image_create_info);
+    vk_frame_ctx = std::make_unique<nanvr::VkFrameCtx>(vk_ctx, image_create_info);
 
     auto input_frame_ctx = (AVHWFramesContext*)vk_frame_ctx->ctx->data;
     assert(input_frame_ctx->sw_format == AV_PIX_FMT_BGRA);
@@ -79,12 +79,12 @@ alvr::EncodePipelineNvEnc::EncodePipelineNvEnc(
 
     err = av_hwdevice_ctx_create_derived(&hw_ctx, AV_HWDEVICE_TYPE_CUDA, vk_ctx.ctx, 0);
     if (err < 0) {
-        throw alvr::AvException("Failed to create a CUDA device:", err);
+        throw nanvr::AvException("Failed to create a CUDA device:", err);
     }
 
     const auto& settings = Settings::Instance();
 
-    auto codec_id = ALVR_CODEC(settings.m_codec);
+    auto codec_id = NANVR_CODEC(settings.m_codec);
     const char* encoder_name = encoder(codec_id);
     const AVCodec* codec = avcodec_find_encoder_by_name(encoder_name);
     if (codec == nullptr) {
@@ -97,41 +97,41 @@ alvr::EncodePipelineNvEnc::EncodePipelineNvEnc(
     }
 
     switch (codec_id) {
-    case ALVR_CODEC_H264:
+    case NANVR_CODEC_H264:
         switch (settings.m_entropyCoding) {
-        case ALVR_CABAC:
+        case NANVR_CABAC:
             av_opt_set(encoder_ctx->priv_data, "coder", "ac", 0);
             break;
-        case ALVR_CAVLC:
+        case NANVR_CAVLC:
             av_opt_set(encoder_ctx->priv_data, "coder", "vlc", 0);
             break;
         }
         break;
-    case ALVR_CODEC_HEVC:
+    case NANVR_CODEC_HEVC:
         break;
-    case ALVR_CODEC_AV1:
+    case NANVR_CODEC_AV1:
         break;
     }
 
     switch (settings.m_rateControlMode) {
-    case ALVR_CBR:
+    case NANVR_CBR:
         av_opt_set(encoder_ctx->priv_data, "rc", "cbr", 0);
         break;
-    case ALVR_VBR:
+    case NANVR_VBR:
         av_opt_set(encoder_ctx->priv_data, "rc", "vbr", 0);
         break;
     }
 
-    if (codec_id == ALVR_CODEC_H264) {
+    if (codec_id == NANVR_CODEC_H264) {
         switch (settings.m_h264Profile) {
-        case ALVR_H264_PROFILE_BASELINE:
+        case NANVR_H264_PROFILE_BASELINE:
             av_opt_set(encoder_ctx->priv_data, "profile", "baseline", 0);
             break;
-        case ALVR_H264_PROFILE_MAIN:
+        case NANVR_H264_PROFILE_MAIN:
             av_opt_set(encoder_ctx->priv_data, "profile", "main", 0);
             break;
         default:
-        case ALVR_H264_PROFILE_HIGH:
+        case NANVR_H264_PROFILE_HIGH:
             av_opt_set(encoder_ctx->priv_data, "profile", "high", 0);
             break;
         }
@@ -179,18 +179,18 @@ alvr::EncodePipelineNvEnc::EncodePipelineNvEnc(
 
     err = avcodec_open2(encoder_ctx, codec, NULL);
     if (err < 0) {
-        throw alvr::AvException("Cannot open video encoder codec:", err);
+        throw nanvr::AvException("Cannot open video encoder codec:", err);
     }
 
     hw_frame = av_frame_alloc();
 }
 
-alvr::EncodePipelineNvEnc::~EncodePipelineNvEnc() {
+nanvr::EncodePipelineNvEnc::~EncodePipelineNvEnc() {
     av_buffer_unref(&hw_ctx);
     av_frame_free(&hw_frame);
 }
 
-void alvr::EncodePipelineNvEnc::PushFrame(uint64_t targetTimestampNs, bool idr) {
+void nanvr::EncodePipelineNvEnc::PushFrame(uint64_t targetTimestampNs, bool idr) {
     AVVkFrame* vkf = reinterpret_cast<AVVkFrame*>(vk_frame->data[0]);
     vkf->sem_value[0]++;
 
@@ -213,18 +213,18 @@ void alvr::EncodePipelineNvEnc::PushFrame(uint64_t targetTimestampNs, bool idr) 
 
     int err = av_hwframe_get_buffer(encoder_ctx->hw_frames_ctx, hw_frame, 0);
     if (err < 0) {
-        throw alvr::AvException("Failed to allocate CUDA frame", err);
+        throw nanvr::AvException("Failed to allocate CUDA frame", err);
     }
     err = av_hwframe_transfer_data(hw_frame, vk_frame.get(), 0);
     if (err < 0) {
-        throw alvr::AvException("Failed to transfer Vulkan image to CUDA frame", err);
+        throw nanvr::AvException("Failed to transfer Vulkan image to CUDA frame", err);
     }
 
     hw_frame->pict_type = idr ? AV_PICTURE_TYPE_I : AV_PICTURE_TYPE_NONE;
     hw_frame->pts = targetTimestampNs;
 
     if ((err = avcodec_send_frame(encoder_ctx, hw_frame)) < 0) {
-        throw alvr::AvException("avcodec_send_frame failed:", err);
+        throw nanvr::AvException("avcodec_send_frame failed:", err);
     }
 
     av_frame_unref(hw_frame);

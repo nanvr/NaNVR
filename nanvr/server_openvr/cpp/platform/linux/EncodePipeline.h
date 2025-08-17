@@ -10,7 +10,7 @@ extern "C" struct AVPacket;
 
 class Renderer;
 
-namespace alvr {
+namespace nanvr {
 
 class VkFrame;
 class VkFrameCtx;

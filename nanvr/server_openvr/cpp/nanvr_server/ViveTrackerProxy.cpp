@@ -22,7 +22,7 @@ vr::EVRInitError ViveTrackerProxy::Activate(vr::TrackedDeviceIndex_t unObjectId)
 
     // Normally a vive tracker emulator would (logically) always set the tracking system to
     // "lighthouse" but in order to do space calibration with existing tools such as OpenVR Space
-    // calibrator and be able to calibrate to/from ALVR HMD (and the proxy tracker) space to/from a
+    // calibrator and be able to calibrate to/from NaNVR HMD (and the proxy tracker) space to/from a
     // native HMD/tracked device which is already using "lighthouse" as the tracking system the
     // proxy tracker needs to be in a different tracking system to treat them differently and
     // prevent those tools doing the same space transform to the proxy tracker.
@@ -106,7 +106,7 @@ vr::EVRInitError ViveTrackerProxy::Activate(vr::TrackedDeviceIndex_t unObjectId)
     );
     vr_properties->SetStringProperty(propertyContainer, vr::Prop_ResourceRoot_String, "htc");
     vr_properties->SetStringProperty(
-        propertyContainer, vr::Prop_RegisteredDeviceType_String, "ALVR/tracker/hmd_proxy"
+        propertyContainer, vr::Prop_RegisteredDeviceType_String, "NaNVR/tracker/hmd_proxy"
     );
     vr_properties->SetStringProperty(
         propertyContainer, vr::Prop_InputProfilePath_String, "{htc}/input/vive_tracker_profile.json"

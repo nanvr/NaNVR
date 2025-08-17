@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <fstream>
 
-FrameRender::FrameRender(alvr::VkContext& ctx, init_packet& init, int fds[])
+FrameRender::FrameRender(nanvr::VkContext& ctx, init_packet& init, int fds[])
     : Renderer(
           ctx.get_vk_instance(),
           ctx.get_vk_device(),

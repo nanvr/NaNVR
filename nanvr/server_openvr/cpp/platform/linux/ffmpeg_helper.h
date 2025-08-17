@@ -23,7 +23,7 @@ extern "C" {
 
 #include "Renderer.h"
 
-namespace alvr {
+namespace nanvr {
 
 // Utility class to build an exception from an ffmpeg return code.
 // Messages are rarely useful however.

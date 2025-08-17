@@ -77,7 +77,7 @@ void processH264Nals(unsigned char*& buf, int& len) {
         nalType = buf[prefixSize] & 0x1F;
     }
     if (nalType == H264_NAL_TYPE_SPS) {
-        sendHeaders(ALVR_CODEC_H264, buf, len, 2); // 2 headers SPS and PPS
+        sendHeaders(NANVR_CODEC_H264, buf, len, 2); // 2 headers SPS and PPS
     }
 }
 
@@ -92,7 +92,7 @@ void processHevcNals(unsigned char*& buf, int& len) {
         nalType = (buf[prefixSize] >> 1) & 0x3F;
     }
     if (nalType == HEVC_NAL_TYPE_VPS) {
-        sendHeaders(ALVR_CODEC_HEVC, buf, len, 3); // 3 headers VPS, SPS and PPS
+        sendHeaders(NANVR_CODEC_HEVC, buf, len, 3); // 3 headers VPS, SPS and PPS
     }
 }
 
@@ -105,11 +105,11 @@ void ParseFrameNals(
         return;
     }
 
-    if (codec == ALVR_CODEC_H264) {
+    if (codec == NANVR_CODEC_H264) {
         processH264Nals(buf, len);
-    } else if (codec == ALVR_CODEC_HEVC) {
+    } else if (codec == NANVR_CODEC_HEVC) {
         processHevcNals(buf, len);
-    } else if (codec == ALVR_CODEC_AV1 && !av1GotFrame) {
+    } else if (codec == NANVR_CODEC_AV1 && !av1GotFrame) {
         av1GotFrame = true;
         SetVideoConfigNals(0, 0, codec);
     }

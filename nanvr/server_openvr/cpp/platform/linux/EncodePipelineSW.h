@@ -6,7 +6,7 @@
 
 class FormatConverter;
 
-namespace alvr {
+namespace nanvr {
 
 class EncodePipelineSW : public EncodePipeline {
 public:

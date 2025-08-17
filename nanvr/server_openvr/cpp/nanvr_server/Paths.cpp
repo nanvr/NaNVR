@@ -37,7 +37,7 @@ uint64_t RIGHT_SQUEEZE_VALUE_ID;
 std::set<uint64_t> BODY_IDS;
 std::map<uint64_t, ButtonInfo> LEFT_CONTROLLER_BUTTON_MAPPING;
 std::map<uint64_t, ButtonInfo> RIGHT_CONTROLLER_BUTTON_MAPPING;
-std::map<uint64_t, std::vector<uint64_t>> ALVR_TO_STEAMVR_PATH_IDS;
+std::map<uint64_t, std::vector<uint64_t>> NANVR_TO_STEAMVR_PATH_IDS;
 
 void init_paths() {
     HEAD_ID = PathStringToHash("/user/head");
@@ -298,7 +298,7 @@ void init_paths() {
             for (auto path : info.second.steamvr_paths) {
                 ids.push_back(PathStringToHash(path));
             }
-            ALVR_TO_STEAMVR_PATH_IDS.insert({ info.first, ids });
+            NANVR_TO_STEAMVR_PATH_IDS.insert({ info.first, ids });
         }
     }
 }

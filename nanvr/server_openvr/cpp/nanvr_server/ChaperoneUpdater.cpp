@@ -4,13 +4,11 @@
 #include <memory>
 #include <mutex>
 
-#ifndef __APPLE__
 // Workaround symbol clash in openvr.h / openvr_driver.h
-namespace alvr_chaperone {
+namespace nanvr_chaperone {
 #include <openvr.h>
 }
-using namespace alvr_chaperone;
-#endif
+using namespace nanvr_chaperone;
 
 std::mutex chaperone_mutex;
 
@@ -19,7 +17,6 @@ bool isOpenvrInit = false;
 void InitOpenvrClient() {
     Debug("InitOpenvrClient");
 
-#ifndef __APPLE__
     std::unique_lock<std::mutex> lock(chaperone_mutex);
 
     if (isOpenvrInit) {
@@ -35,13 +32,11 @@ void InitOpenvrClient() {
         return;
     }
     isOpenvrInit = true;
-#endif
 }
 
 void ShutdownOpenvrClient() {
     Debug("ShutdownOpenvrClient");
 
-#ifndef __APPLE__
     std::unique_lock<std::mutex> lock(chaperone_mutex);
 
     if (!isOpenvrInit) {
@@ -50,7 +45,6 @@ void ShutdownOpenvrClient() {
 
     isOpenvrInit = false;
     vr::VR_Shutdown();
-#endif
 }
 
 bool IsOpenvrClientReady() { return isOpenvrInit; }
@@ -58,7 +52,6 @@ bool IsOpenvrClientReady() { return isOpenvrInit; }
 void _SetChaperoneArea(float areaWidth, float areaHeight) {
     Debug("SetChaperoneArea");
 
-#ifndef __APPLE__
     std::unique_lock<std::mutex> lock(chaperone_mutex);
 
     const vr::HmdMatrix34_t MATRIX_IDENTITY
@@ -95,11 +88,8 @@ void _SetChaperoneArea(float areaWidth, float areaHeight) {
             vr::k_pch_CollisionBounds_Section, vr::k_pch_CollisionBounds_FadeDistance_Float, 0.0f
         );
     }
-
-#endif
 }
 
-#ifdef __linux__
 std::unique_ptr<vr::HmdMatrix34_t> GetInvZeroPose() {
     Debug("GetInvZeroPose");
 
@@ -121,4 +111,3 @@ std::unique_ptr<vr::HmdMatrix34_t> GetInvZeroPose() {
     }
     return mat;
 }
-#endif

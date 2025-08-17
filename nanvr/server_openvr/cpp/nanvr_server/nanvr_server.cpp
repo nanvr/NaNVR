@@ -32,7 +32,7 @@ bool IsOpenvrClientReady();
 
 void _SetChaperoneArea(float areaWidth, float areaHeight);
 
-vr::EVREventType VendorEvent_ALVRDriverResync
+vr::EVREventType VendorEvent_NANVRDriverResync
     = (vr::EVREventType)(vr::VREvent_VendorSpecific_Reserved_Start + ((vr::EVREventType)0xC0));
 
 class DriverProvider : public vr::IServerTrackedDeviceProvider {
@@ -110,7 +110,7 @@ public:
                      || event.eventType == vr::VREvent_SeatedZeroPoseReset
                      || event.eventType == vr::VREvent_StandingZeroPoseReset
                      || event.eventType == vr::VREvent_SceneApplicationChanged
-                     || event.eventType == VendorEvent_ALVRDriverResync) {
+                     || event.eventType == VendorEvent_NANVRDriverResync) {
                 if (hmd && hmd->m_poseHistory) {
                     auto rawZeroPose = GetRawZeroPose();
                     if (rawZeroPose != nullptr) {
@@ -406,7 +406,7 @@ void SetTracking(
 void RequestDriverResync() {
     if (g_driver_provider.hmd) {
         vr::VRServerDriverHost()->VendorSpecificEvent(
-            g_driver_provider.hmd->object_id, VendorEvent_ALVRDriverResync, {}, 0
+            g_driver_provider.hmd->object_id, VendorEvent_NANVRDriverResync, {}, 0
         );
     }
 }

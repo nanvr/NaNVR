@@ -11,7 +11,7 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 }
 
-void alvr::EncodePipeline::SetParams(FfiDynamicEncoderParams params) {
+void nanvr::EncodePipeline::SetParams(FfiDynamicEncoderParams params) {
     if (params.updated) {
         encoder_ctx->bit_rate = params.bitrate_bps / params.framerate * 60.0;
         encoder_ctx->framerate = AVRational { 60, 1 };
@@ -21,7 +21,7 @@ void alvr::EncodePipeline::SetParams(FfiDynamicEncoderParams params) {
     }
 }
 
-std::unique_ptr<alvr::EncodePipeline> alvr::EncodePipeline::Create(
+std::unique_ptr<nanvr::EncodePipeline> nanvr::EncodePipeline::Create(
     Renderer* render,
     VkContext& vk_ctx,
     VkFrame& input_frame,
@@ -32,7 +32,7 @@ std::unique_ptr<alvr::EncodePipeline> alvr::EncodePipeline::Create(
     if (Settings::Instance().m_force_sw_encoding == false) {
         if (vk_ctx.nvidia) {
             try {
-                auto nvenc = std::make_unique<alvr::EncodePipelineNvEnc>(
+                auto nvenc = std::make_unique<nanvr::EncodePipelineNvEnc>(
                     render, vk_ctx, input_frame, image_create_info, width, height
                 );
                 Info("Using NvEnc encoder");
@@ -46,7 +46,7 @@ std::unique_ptr<alvr::EncodePipeline> alvr::EncodePipeline::Create(
             }
         } else {
             try {
-                auto vaapi = std::make_unique<alvr::EncodePipelineVAAPI>(
+                auto vaapi = std::make_unique<nanvr::EncodePipelineVAAPI>(
                     render, vk_ctx, input_frame, width, height
                 );
                 Info("Using VAAPI encoder");
@@ -60,14 +60,14 @@ std::unique_ptr<alvr::EncodePipeline> alvr::EncodePipeline::Create(
             }
         }
     }
-    auto sw = std::make_unique<alvr::EncodePipelineSW>(render, width, height);
+    auto sw = std::make_unique<nanvr::EncodePipelineSW>(render, width, height);
     Info("Using SW encoder");
     return sw;
 }
 
-alvr::EncodePipeline::~EncodePipeline() { avcodec_free_context(&encoder_ctx); }
+nanvr::EncodePipeline::~EncodePipeline() { avcodec_free_context(&encoder_ctx); }
 
-bool alvr::EncodePipeline::GetEncoded(FramePacket& packet) {
+bool nanvr::EncodePipeline::GetEncoded(FramePacket& packet) {
     av_packet_free(&encoder_packet);
     encoder_packet = av_packet_alloc();
     int err = avcodec_receive_packet(encoder_ctx, encoder_packet);
@@ -76,7 +76,7 @@ bool alvr::EncodePipeline::GetEncoded(FramePacket& packet) {
         if (err == AVERROR(EAGAIN)) {
             return false;
         }
-        throw alvr::AvException("failed to encode", err);
+        throw nanvr::AvException("failed to encode", err);
     }
     packet.data = encoder_packet->data;
     packet.size = encoder_packet->size;
@@ -85,4 +85,4 @@ bool alvr::EncodePipeline::GetEncoded(FramePacket& packet) {
     return true;
 }
 
-int alvr::EncodePipeline::GetCodec() { return Settings::Instance().m_codec; }
+int nanvr::EncodePipeline::GetCodec() { return Settings::Instance().m_codec; }

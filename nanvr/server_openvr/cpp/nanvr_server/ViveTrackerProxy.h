@@ -14,7 +14,7 @@ public:
     ViveTrackerProxy(const ViveTrackerProxy&) = delete;
     ViveTrackerProxy& operator=(const ViveTrackerProxy&) = delete;
 
-    constexpr inline const char* GetSerialNumber() const { return "ALVR HMD Tracker Proxy"; }
+    constexpr inline const char* GetSerialNumber() const { return "NaNVR HMD Tracker Proxy"; }
 
     virtual vr::EVRInitError Activate(vr::TrackedDeviceIndex_t unObjectId) override;
 

@@ -5,15 +5,15 @@
 
 #include <vector>
 
-static const char *alvr_display_name = "ALVR display";
+static const char *nanvr_display_name = "NaNVR display";
 
 const struct {
-} alvr_display;
-const VkDisplayKHR alvr_display_handle = (VkDisplayKHR_T *)&alvr_display;
+} nanvr_display;
+const VkDisplayKHR nanvr_display_handle = (VkDisplayKHR_T *)&nanvr_display;
 
 const struct {
-} alvr_display_mode;
-const VkDisplayModeKHR alvr_display_mode_handle = (VkDisplayModeKHR_T *)&alvr_display_mode;
+} nanvr_display_mode;
+const VkDisplayModeKHR nanvr_display_mode_handle = (VkDisplayModeKHR_T *)&nanvr_display_mode;
 
 extern "C" {
 
@@ -26,8 +26,8 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetPhysicalDeviceDisplayPropertiesKHR
     if (*pPropertyCount < 1) {
         return VK_INCOMPLETE;
     }
-    pProperties[0].display = alvr_display_handle;
-    pProperties[0].displayName = alvr_display_name;
+    pProperties[0].display = nanvr_display_handle;
+    pProperties[0].displayName = nanvr_display_name;
     pProperties[0].physicalDimensions = VkExtent2D{20, 20};
     pProperties[0].physicalResolution = VkExtent2D{Settings::Instance().m_renderWidth, Settings::Instance().m_renderHeight};
     pProperties[0].supportedTransforms = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
@@ -39,7 +39,7 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetPhysicalDeviceDisplayPropertiesKHR
 VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetDisplayModePropertiesKHR(
     VkPhysicalDevice device, VkDisplayKHR display, uint32_t *pPropertyCount,
     VkDisplayModePropertiesKHR *pProperties) {
-    if (display != alvr_display_handle) {
+    if (display != nanvr_display_handle) {
         *pPropertyCount = 0;
         return VK_ERROR_OUT_OF_HOST_MEMORY;
     }
@@ -50,7 +50,7 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetDisplayModePropertiesKHR(
     if (*pPropertyCount < 1) {
         return VK_INCOMPLETE;
     }
-    pProperties[0].displayMode = alvr_display_mode_handle;
+    pProperties[0].displayMode = nanvr_display_mode_handle;
     pProperties[0].parameters.visibleRegion = VkExtent2D{Settings::Instance().m_renderWidth, Settings::Instance().m_renderHeight};
     pProperties[0].parameters.refreshRate = Settings::Instance().m_refreshRate * 1000;
     return VK_SUCCESS;
@@ -65,7 +65,7 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetPhysicalDeviceDisplayPlaneProperti
     if (*pPropertyCount < 1) {
         return VK_INCOMPLETE;
     }
-    pProperties[0].currentDisplay = alvr_display_handle;
+    pProperties[0].currentDisplay = nanvr_display_handle;
     pProperties[0].currentStackIndex = 0;
     return VK_SUCCESS;
 }
@@ -73,7 +73,7 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetPhysicalDeviceDisplayPlaneProperti
 VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkAcquireXlibDisplayEXT(VkPhysicalDevice device,
                                                                  Display *dpy,
                                                                  VkDisplayKHR display) {
-    if (display != alvr_display_handle) {
+    if (display != nanvr_display_handle) {
         return VK_ERROR_OUT_OF_HOST_MEMORY;
     }
     return VK_SUCCESS;
@@ -83,14 +83,14 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetDrmDisplayEXT(VkPhysicalDevice phy
                                                             int32_t drmFd,
                                                             uint32_t connectorId,
                                                             VkDisplayKHR *display) {
-    *display = alvr_display_handle;
+    *display = nanvr_display_handle;
     return VK_SUCCESS;
 }
 
 VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkAcquireDrmDisplayEXT(VkPhysicalDevice physicalDevice,
                                                                 int32_t drmFd,
                                                                 VkDisplayKHR display) {
-    if (display != alvr_display_handle) {
+    if (display != nanvr_display_handle) {
         return VK_ERROR_INITIALIZATION_FAILED;
     }
     return VK_SUCCESS;
@@ -106,7 +106,7 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkGetDisplayPlaneSupportedDisplaysKHR(
         *pDisplayCount = 1;
         return VK_SUCCESS;
     }
-    pDisplays[0] = alvr_display_handle;
+    pDisplays[0] = nanvr_display_handle;
     return VK_SUCCESS;
 }
 
@@ -142,7 +142,7 @@ VKAPI_ATTR void VKAPI_CALL wsi_layer_vkDestroySurfaceKHR(VkInstance vkinstance,
 VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkRegisterDisplayEventEXT(
     VkDevice device, VkDisplayKHR display, const VkDisplayEventInfoEXT *pDisplayEventInfo,
     const VkAllocationCallbacks *pAllocator, VkFence *pFence) {
-    if (display != alvr_display_handle) {
+    if (display != nanvr_display_handle) {
         return VK_ERROR_OUT_OF_HOST_MEMORY;
     }
 
@@ -155,8 +155,8 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkRegisterDisplayEventEXT(
 VKAPI_ATTR void VKAPI_CALL wsi_layer_vkDestroyFence(VkDevice device, VkFence fence,
                                                     const VkAllocationCallbacks *pAllocator) {
     auto &instance = layer::device_private_data::get(device);
-    auto alvr_fence = instance.display->peek_vsync_fence();
-    if (fence == alvr_fence) {
+    auto nanvr_fence = instance.display->peek_vsync_fence();
+    if (fence == nanvr_fence) {
         return;
     }
     instance.disp.DestroyFence(device, fence, pAllocator);
@@ -166,9 +166,9 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkWaitForFences(VkDevice device, uint32
                                                          const VkFence *pFences, VkBool32 waitAll,
                                                          uint64_t timeout) {
     auto &instance = layer::device_private_data::get(device);
-    auto alvr_fence = instance.display->peek_vsync_fence();
+    auto nanvr_fence = instance.display->peek_vsync_fence();
     for (uint32_t i = 0; i < fenceCount; ++i) {
-        if (pFences[i] == alvr_fence) {
+        if (pFences[i] == nanvr_fence) {
             assert(fenceCount == 1); // only our fence
             return instance.display->wait_for_vsync(timeout) ? VK_SUCCESS : VK_TIMEOUT;
         }
@@ -179,8 +179,8 @@ VKAPI_ATTR VkResult VKAPI_CALL wsi_layer_vkWaitForFences(VkDevice device, uint32
 VKAPI_ATTR VkResult wsi_layer_vkGetFenceStatus(VkDevice device, VkFence fence)
 {
     auto &instance = layer::device_private_data::get(device);
-    auto alvr_fence = instance.display->peek_vsync_fence();
-    if (fence == alvr_fence) {
+    auto nanvr_fence = instance.display->peek_vsync_fence();
+    if (fence == nanvr_fence) {
         return instance.display->is_signaled() ? VK_SUCCESS : VK_NOT_READY;
     }
     return instance.disp.GetFenceStatus(device, fence);

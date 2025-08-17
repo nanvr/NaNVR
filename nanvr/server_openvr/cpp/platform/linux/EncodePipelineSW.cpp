@@ -31,7 +31,7 @@ void x264_log(void*, int level, const char* fmt, va_list args) {
 
 }
 
-alvr::EncodePipelineSW::EncodePipelineSW(Renderer* render, uint32_t width, uint32_t height) {
+nanvr::EncodePipelineSW::EncodePipelineSW(Renderer* render, uint32_t width, uint32_t height) {
     const auto& settings = Settings::Instance();
 
     x264_param_default_preset(&param, "ultrafast", "zerolatency");
@@ -40,7 +40,7 @@ alvr::EncodePipelineSW::EncodePipelineSW(Renderer* render, uint32_t width, uint3
     param.i_log_level = X264_LOG_INFO;
 
     param.b_aud = 0;
-    param.b_cabac = settings.m_entropyCoding == ALVR_CABAC;
+    param.b_cabac = settings.m_entropyCoding == NANVR_CABAC;
     param.b_sliced_threads = true;
     param.i_threads = settings.m_swThreadCount;
     param.i_width = width;
@@ -48,14 +48,14 @@ alvr::EncodePipelineSW::EncodePipelineSW(Renderer* render, uint32_t width, uint3
     param.rc.i_rc_method = X264_RC_ABR;
 
     switch (settings.m_h264Profile) {
-    case ALVR_H264_PROFILE_BASELINE:
+    case NANVR_H264_PROFILE_BASELINE:
         x264_param_apply_profile(&param, "baseline");
         break;
-    case ALVR_H264_PROFILE_MAIN:
+    case NANVR_H264_PROFILE_MAIN:
         x264_param_apply_profile(&param, "main");
         break;
     default:
-    case ALVR_H264_PROFILE_HIGH:
+    case NANVR_H264_PROFILE_HIGH:
         x264_param_apply_profile(&param, "high");
         break;
     }
@@ -85,7 +85,7 @@ alvr::EncodePipelineSW::EncodePipelineSW(Renderer* render, uint32_t width, uint3
     );
 }
 
-alvr::EncodePipelineSW::~EncodePipelineSW() {
+nanvr::EncodePipelineSW::~EncodePipelineSW() {
     if (rgbtoyuv) {
         delete rgbtoyuv;
     }
@@ -94,7 +94,7 @@ alvr::EncodePipelineSW::~EncodePipelineSW() {
     }
 }
 
-void alvr::EncodePipelineSW::PushFrame(uint64_t targetTimestampNs, bool idr) {
+void nanvr::EncodePipelineSW::PushFrame(uint64_t targetTimestampNs, bool idr) {
     rgbtoyuv->Convert(picture.img.plane, picture.img.i_stride);
     rgbtoyuv->Sync();
     timestamp.cpu = std::chrono::duration_cast<std::chrono::nanoseconds>(
@@ -113,7 +113,7 @@ void alvr::EncodePipelineSW::PushFrame(uint64_t targetTimestampNs, bool idr) {
     }
 }
 
-bool alvr::EncodePipelineSW::GetEncoded(FramePacket& packet) {
+bool nanvr::EncodePipelineSW::GetEncoded(FramePacket& packet) {
     if (!nal) {
         return false;
     }
@@ -124,7 +124,7 @@ bool alvr::EncodePipelineSW::GetEncoded(FramePacket& packet) {
     return packet.size > 0;
 }
 
-void alvr::EncodePipelineSW::SetParams(FfiDynamicEncoderParams params) {
+void nanvr::EncodePipelineSW::SetParams(FfiDynamicEncoderParams params) {
     if (!params.updated) {
         return;
     }
@@ -141,4 +141,4 @@ void alvr::EncodePipelineSW::SetParams(FfiDynamicEncoderParams params) {
     }
 }
 
-int alvr::EncodePipelineSW::GetCodec() { return ALVR_CODEC_H264; }
+int nanvr::EncodePipelineSW::GetCodec() { return NANVR_CODEC_H264; }

@@ -16,13 +16,13 @@ extern "C" {
 
 namespace {
 
-const char* encoder(ALVR_CODEC codec) {
+const char* encoder(NANVR_CODEC codec) {
     switch (codec) {
-    case ALVR_CODEC_H264:
+    case NANVR_CODEC_H264:
         return "h264_vaapi";
-    case ALVR_CODEC_HEVC:
+    case NANVR_CODEC_HEVC:
         return "hevc_vaapi";
-    case ALVR_CODEC_AV1:
+    case NANVR_CODEC_AV1:
         return "av1_vaapi";
     }
     throw std::runtime_error("invalid codec " + std::to_string(codec));
@@ -38,8 +38,8 @@ void set_hwframe_ctx(AVCodecContext* ctx, AVBufferRef* hw_device_ctx) {
     }
     frames_ctx = (AVHWFramesContext*)(hw_frames_ref->data);
     frames_ctx->format = AV_PIX_FMT_VAAPI;
-    frames_ctx->sw_format = (Settings::Instance().m_codec == ALVR_CODEC_HEVC
-                             || Settings::Instance().m_codec == ALVR_CODEC_AV1)
+    frames_ctx->sw_format = (Settings::Instance().m_codec == NANVR_CODEC_HEVC
+                             || Settings::Instance().m_codec == NANVR_CODEC_AV1)
             && Settings::Instance().m_use10bitEncoder
         ? AV_PIX_FMT_P010
         : AV_PIX_FMT_NV12;
@@ -48,7 +48,7 @@ void set_hwframe_ctx(AVCodecContext* ctx, AVBufferRef* hw_device_ctx) {
     frames_ctx->initial_pool_size = 3;
     if ((err = av_hwframe_ctx_init(hw_frames_ref)) < 0) {
         av_buffer_unref(&hw_frames_ref);
-        throw alvr::AvException("Failed to initialize VAAPI frame context:", err);
+        throw nanvr::AvException("Failed to initialize VAAPI frame context:", err);
     }
     ctx->hw_frames_ctx = av_buffer_ref(hw_frames_ref);
     if (!ctx->hw_frames_ctx)
@@ -59,7 +59,7 @@ void set_hwframe_ctx(AVCodecContext* ctx, AVBufferRef* hw_device_ctx) {
 
 // Map the vulkan frames to corresponding vaapi frames
 AVFrame*
-map_frame(AVBufferRef* hw_frames_ref, AVBufferRef* drm_device_ctx, alvr::VkFrame& input_frame) {
+map_frame(AVBufferRef* hw_frames_ref, AVBufferRef* drm_device_ctx, nanvr::VkFrame& input_frame) {
     auto frames_ctx = (AVHWFramesContext*)(hw_frames_ref->data);
 
     AVFrame* mapped_frame = av_frame_alloc();
@@ -79,7 +79,7 @@ map_frame(AVBufferRef* hw_frames_ref, AVBufferRef* drm_device_ctx, alvr::VkFrame
     int err;
     if ((err = av_hwframe_ctx_init(drm_frames_ref)) < 0) {
         av_buffer_unref(&drm_frames_ref);
-        throw alvr::AvException("Failed to initialize DRM frame context:", err);
+        throw nanvr::AvException("Failed to initialize DRM frame context:", err);
     }
 
     AVFrame* vk_frame = av_frame_alloc();
@@ -102,14 +102,14 @@ AVFrame* import_frame(AVBufferRef* hw_frames_ref, DrmImage& drm) {
     AVFrame* va_frame = av_frame_alloc();
     int err = av_hwframe_get_buffer(hw_frames_ref, va_frame, 0);
     if (err < 0) {
-        throw alvr::AvException("Failed to get hwframe buffer:", err);
+        throw nanvr::AvException("Failed to get hwframe buffer:", err);
     }
 
     AVFrame* mapped_frame = av_frame_alloc();
     mapped_frame->format = AV_PIX_FMT_DRM_PRIME;
     err = av_hwframe_map(mapped_frame, va_frame, AV_HWFRAME_MAP_WRITE);
     if (err < 0) {
-        throw alvr::AvException("Failed to export va frame:", err);
+        throw nanvr::AvException("Failed to export va frame:", err);
     }
 
     auto desc = reinterpret_cast<AVDRMFrameDescriptor*>(mapped_frame->data[0]);
@@ -127,7 +127,7 @@ AVFrame* import_frame(AVBufferRef* hw_frames_ref, DrmImage& drm) {
 
 }
 
-alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
+nanvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     Renderer* render, VkContext& vk_ctx, VkFrame& input_frame, uint32_t width, uint32_t height
 )
     : r(render) {
@@ -145,7 +145,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
         &hw_ctx, AV_HWDEVICE_TYPE_VAAPI, vk_ctx.devicePath.c_str(), NULL, 0
     );
     if (err < 0) {
-        throw alvr::AvException("Failed to create a VAAPI device:", err);
+        throw nanvr::AvException("Failed to create a VAAPI device:", err);
     }
 
     drm_ctx = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_DRM);
@@ -154,12 +154,12 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     drmctx->fd = -1;
     err = av_hwdevice_ctx_init(drm_ctx);
     if (err < 0) {
-        throw alvr::AvException("Failed to create DRM device:", err);
+        throw nanvr::AvException("Failed to create DRM device:", err);
     }
 
     const auto& settings = Settings::Instance();
 
-    auto codec_id = ALVR_CODEC(settings.m_codec);
+    auto codec_id = NANVR_CODEC(settings.m_codec);
     const char* encoder_name = encoder(codec_id);
     const AVCodec* codec = avcodec_find_encoder_by_name(encoder_name);
     if (codec == nullptr) {
@@ -174,45 +174,45 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     encoder_ctx->gop_size = INT_MAX;
 
     switch (codec_id) {
-    case ALVR_CODEC_H264:
+    case NANVR_CODEC_H264:
         switch (settings.m_h264Profile) {
-        case ALVR_H264_PROFILE_BASELINE:
+        case NANVR_H264_PROFILE_BASELINE:
             encoder_ctx->profile = FF_PROFILE_H264_BASELINE;
             break;
-        case ALVR_H264_PROFILE_MAIN:
+        case NANVR_H264_PROFILE_MAIN:
             encoder_ctx->profile = FF_PROFILE_H264_MAIN;
             break;
         default:
-        case ALVR_H264_PROFILE_HIGH:
+        case NANVR_H264_PROFILE_HIGH:
             encoder_ctx->profile = FF_PROFILE_H264_HIGH;
             break;
         }
 
         switch (settings.m_entropyCoding) {
-        case ALVR_CABAC:
+        case NANVR_CABAC:
             av_opt_set(encoder_ctx->priv_data, "coder", "ac", 0);
             break;
-        case ALVR_CAVLC:
+        case NANVR_CAVLC:
             av_opt_set(encoder_ctx->priv_data, "coder", "vlc", 0);
             break;
         }
 
         break;
-    case ALVR_CODEC_HEVC:
+    case NANVR_CODEC_HEVC:
         encoder_ctx->profile = Settings::Instance().m_use10bitEncoder ? FF_PROFILE_HEVC_MAIN_10
                                                                       : FF_PROFILE_HEVC_MAIN;
         encoder_ctx->gop_size = INT16_MAX;
         break;
-    case ALVR_CODEC_AV1:
+    case NANVR_CODEC_AV1:
         encoder_ctx->profile = FF_PROFILE_AV1_MAIN;
         break;
     }
 
     switch (settings.m_rateControlMode) {
-    case ALVR_VBR:
+    case NANVR_VBR:
         av_opt_set(encoder_ctx->priv_data, "rc_mode", "VBR", 0);
         break;
-    case ALVR_CBR:
+    case NANVR_CBR:
     default:
         av_opt_set(encoder_ctx->priv_data, "rc_mode", "CBR", 0);
         break;
@@ -240,7 +240,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
                                                            // by allocating more bits to smooth
                                                            // areas
     switch (settings.m_encoderQualityPreset) {
-    case ALVR_QUALITY:
+    case NANVR_QUALITY:
         if (vk_ctx.amd) {
             quality.preset_mode = PRESET_MODE_QUALITY;
             encoder_ctx->compression_level = quality.quality; // (QUALITY preset, no pre-encoding,
@@ -249,7 +249,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
             encoder_ctx->compression_level = 1;
         }
         break;
-    case ALVR_BALANCED:
+    case NANVR_BALANCED:
         if (vk_ctx.amd) {
             quality.preset_mode = PRESET_MODE_BALANCE;
             encoder_ctx->compression_level = quality.quality; // (BALANCE preset, no pre-encoding,
@@ -258,7 +258,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
             encoder_ctx->compression_level = 4;
         }
         break;
-    case ALVR_SPEED:
+    case NANVR_SPEED:
     default:
         if (vk_ctx.amd) {
             quality.preset_mode = PRESET_MODE_SPEED;
@@ -276,7 +276,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
 
     err = avcodec_open2(encoder_ctx, codec, NULL);
     if (err < 0) {
-        throw alvr::AvException("Cannot open video encoder codec:", err);
+        throw nanvr::AvException("Cannot open video encoder codec:", err);
     }
 
     AVBufferRef* hw_frames_ref;
@@ -291,11 +291,11 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     frames_ctx->initial_pool_size = 1;
     if ((err = av_hwframe_ctx_init(hw_frames_ref)) < 0) {
         av_buffer_unref(&hw_frames_ref);
-        throw alvr::AvException("Failed to initialize VAAPI frame context:", err);
+        throw nanvr::AvException("Failed to initialize VAAPI frame context:", err);
     }
 
     encoder_frame = av_frame_alloc();
-    if (vk_ctx.intel || getenv("ALVR_VAAPI_IMPORT_SURFACE")) {
+    if (vk_ctx.intel || getenv("NANVR_VAAPI_IMPORT_SURFACE")) {
         Info("Importing VA surface");
         DrmImage drm;
         mapped_frame = import_frame(hw_frames_ref, drm);
@@ -322,7 +322,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
              NULL,
              filter_graph
          ))) {
-        throw alvr::AvException("filter_in creation failed:", err);
+        throw nanvr::AvException("filter_in creation failed:", err);
     }
     AVBufferSrcParameters* par = av_buffersrc_parameters_alloc();
     memset(par, 0, sizeof(*par));
@@ -334,7 +334,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     if ((err = avfilter_graph_create_filter(
              &filter_out, avfilter_get_by_name("buffersink"), "out", NULL, NULL, filter_graph
          ))) {
-        throw alvr::AvException("filter_out creation failed:", err);
+        throw nanvr::AvException("filter_out creation failed:", err);
     }
 
     outputs->name = av_strdup("in");
@@ -348,8 +348,8 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     inputs->next = NULL;
 
     std::string filters = "scale_vaapi=out_range=full:format=";
-    if ((Settings::Instance().m_codec == ALVR_CODEC_HEVC
-         || Settings::Instance().m_codec == ALVR_CODEC_AV1)
+    if ((Settings::Instance().m_codec == NANVR_CODEC_HEVC
+         || Settings::Instance().m_codec == NANVR_CODEC_AV1)
         && Settings::Instance().m_use10bitEncoder) {
         filters += "p010";
     } else {
@@ -357,7 +357,7 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     }
     if ((err = avfilter_graph_parse_ptr(filter_graph, filters.c_str(), &inputs, &outputs, NULL))
         < 0) {
-        throw alvr::AvException("avfilter_graph_parse_ptr failed:", err);
+        throw nanvr::AvException("avfilter_graph_parse_ptr failed:", err);
     }
 
     avfilter_inout_free(&outputs);
@@ -368,11 +368,11 @@ alvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     }
 
     if ((err = avfilter_graph_config(filter_graph, NULL))) {
-        throw alvr::AvException("avfilter_graph_config failed:", err);
+        throw nanvr::AvException("avfilter_graph_config failed:", err);
     }
 }
 
-alvr::EncodePipelineVAAPI::~EncodePipelineVAAPI() {
+nanvr::EncodePipelineVAAPI::~EncodePipelineVAAPI() {
     // Commented because freeing it here causes a gpu reset, it should be cleaned up away
     // avcodec_free_context(&encoder_ctx);
     // avfilter_graph_free(&filter_graph);
@@ -382,7 +382,7 @@ alvr::EncodePipelineVAAPI::~EncodePipelineVAAPI() {
     // av_buffer_unref(&drm_ctx);
 }
 
-void alvr::EncodePipelineVAAPI::PushFrame(uint64_t targetTimestampNs, bool idr) {
+void nanvr::EncodePipelineVAAPI::PushFrame(uint64_t targetTimestampNs, bool idr) {
     r->Sync();
     timestamp.cpu = std::chrono::duration_cast<std::chrono::nanoseconds>(
                         std::chrono::steady_clock::now().time_since_epoch()
@@ -392,23 +392,23 @@ void alvr::EncodePipelineVAAPI::PushFrame(uint64_t targetTimestampNs, bool idr) 
         filter_in, mapped_frame, AV_BUFFERSRC_FLAG_PUSH | AV_BUFFERSRC_FLAG_KEEP_REF
     );
     if (err != 0) {
-        throw alvr::AvException("av_buffersrc_add_frame failed", err);
+        throw nanvr::AvException("av_buffersrc_add_frame failed", err);
     }
     err = av_buffersink_get_frame(filter_out, encoder_frame);
     if (err != 0) {
-        throw alvr::AvException("av_buffersink_get_frame failed", err);
+        throw nanvr::AvException("av_buffersink_get_frame failed", err);
     }
 
     encoder_frame->pict_type = idr ? AV_PICTURE_TYPE_I : AV_PICTURE_TYPE_NONE;
     encoder_frame->pts = targetTimestampNs;
 
     if ((err = avcodec_send_frame(encoder_ctx, encoder_frame)) < 0) {
-        throw alvr::AvException("avcodec_send_frame failed: ", err);
+        throw nanvr::AvException("avcodec_send_frame failed: ", err);
     }
     av_frame_unref(encoder_frame);
 }
 
-void alvr::EncodePipelineVAAPI::SetParams(FfiDynamicEncoderParams params) {
+void nanvr::EncodePipelineVAAPI::SetParams(FfiDynamicEncoderParams params) {
     if (!params.updated) {
         return;
     }

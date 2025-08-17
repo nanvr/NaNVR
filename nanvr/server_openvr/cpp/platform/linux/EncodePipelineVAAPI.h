@@ -10,7 +10,7 @@ extern "C" struct AVFrame;
 
 class Renderer;
 
-namespace alvr {
+namespace nanvr {
 
 #define PRESET_MODE_SPEED (0)
 #define PRESET_MODE_BALANCE (1)

@@ -10,7 +10,7 @@ extern "C" struct AVFrame;
 
 class Renderer;
 
-namespace alvr {
+namespace nanvr {
 
 class EncodePipelineNvEnc : public EncodePipeline {
 public:
@@ -28,7 +28,7 @@ public:
 
 private:
     Renderer* r = nullptr;
-    std::unique_ptr<alvr::VkFrameCtx> vk_frame_ctx;
+    std::unique_ptr<nanvr::VkFrameCtx> vk_frame_ctx;
     AVBufferRef* hw_ctx = nullptr;
     std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> vk_frame;
     AVFrame* hw_frame = nullptr;

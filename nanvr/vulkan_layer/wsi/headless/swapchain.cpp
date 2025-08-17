@@ -247,7 +247,7 @@ int swapchain::send_fds() {
 bool swapchain::try_connect() {
     Debug("swapchain::try_connect\n");
     m_socketPath = getenv("XDG_RUNTIME_DIR");
-    m_socketPath += "/alvr-ipc";
+    m_socketPath += "/nanvr-ipc";
 
     int ret;
     if (m_socket == -1) {
