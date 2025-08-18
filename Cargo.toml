@@ -7,7 +7,7 @@ version = "1.0.0-dev0"
 edition = "2024"
 rust-version = "1.88"
 authors = ["nanvr"]
-license = "MIT"
+license = "GPL-3.0"
 
 [workspace.dependencies]
 wired = { path = "nanvr/wired" }

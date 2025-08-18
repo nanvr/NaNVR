@@ -4,7 +4,7 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 authors = ["nanvr", "Valve Corporation"]
-license = "MIT"
+license.workspace = true
 
 [lib]
 crate-type = ["rlib", "cdylib"]
