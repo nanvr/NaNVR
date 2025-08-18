@@ -220,16 +220,16 @@ fn main() {
                 if matches!(platform, TargetBuildPlatform::Android) {
                     dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
                 } else {
-                    dependencies::linux::build_server_deps(enable_nvenc);
+                    dependencies::linux::clean_and_build_server_deps(enable_nvenc);
                 }
             } else {
-                dependencies::linux::build_server_deps(enable_nvenc);
+                dependencies::linux::clean_and_build_server_deps(enable_nvenc);
 
                 dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
             }
         }
         Commands::BuildServerDeps { enable_nvenc } => {
-            dependencies::linux::build_server_deps(enable_nvenc);
+            dependencies::linux::clean_and_build_server_deps(enable_nvenc);
         }
         Commands::BuildStreamer {
             keep_config,

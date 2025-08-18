@@ -195,7 +195,7 @@ pub fn build_streamer(
     .unwrap();
 
     sh.copy_file(
-        filepaths::workspace_dir().join("openvr/bin/linux64/libopenvr_api.so"),
+        filepaths::workspace_dir().join("thirdparty/openvr/bin/linux64/libopenvr_api.so"),
         build_layout.openvr_driver_lib_dir(),
     )
     .unwrap();

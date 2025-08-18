@@ -2,12 +2,12 @@ use std::{env, path::PathBuf};
 
 use shared::{NANVR_HIGH_NAME, NANVR_LOW_NAME};
 
-fn get_ffmpeg_path() -> PathBuf {
-    filepaths::deps_dir().join("linux/ffmpeg/nanvr_build")
+fn get_ffmpeg_build_path() -> PathBuf {
+    filepaths::workspace_dir().join("thirdparty/ffmpeg/nanvr_build")
 }
 
-fn get_linux_x264_path() -> PathBuf {
-    filepaths::deps_dir().join("linux/x264/nanvr_build")
+fn get_linux_x264_build_path() -> PathBuf {
+    filepaths::workspace_dir().join("thirdparty/x264/nanvr_build")
 }
 
 fn main() {
@@ -45,18 +45,18 @@ fn main() {
         .cpp(true)
         .std("c++17")
         .files(source_files_paths)
-        .include(filepaths::workspace_dir().join("openvr/headers"))
+        .include(filepaths::workspace_dir().join("thirdparty/openvr/headers"))
         .include("cpp");
 
     #[cfg(debug_assertions)]
     build.define(&format!("{NANVR_HIGH_NAME}_DEBUG_LOG"), None);
 
-    let ffmpeg_path = get_ffmpeg_path();
+    let ffmpeg_path = get_ffmpeg_build_path();
 
     assert!(ffmpeg_path.join("include").exists());
     build.include(ffmpeg_path.join("include"));
 
-    let x264_path = get_linux_x264_path();
+    let x264_path = get_linux_x264_build_path();
 
     assert!(x264_path.join("include").exists());
     build.include(x264_path.join("include"));
@@ -65,7 +65,7 @@ fn main() {
 
     build.compile("bindings");
 
-    let x264_path = get_linux_x264_path();
+    let x264_path = get_linux_x264_build_path();
     let x264_lib_path = x264_path.join("lib");
 
     println!(
@@ -93,7 +93,7 @@ fn main() {
         .unwrap();
 
     // ffmpeg
-    let ffmpeg_path = get_ffmpeg_path();
+    let ffmpeg_path = get_ffmpeg_build_path();
     let ffmpeg_lib_path = ffmpeg_path.join("lib");
 
     assert!(ffmpeg_lib_path.exists());
@@ -134,7 +134,7 @@ fn main() {
     println!(
         "cargo:rustc-link-search=native={}",
         filepaths::workspace_dir()
-            .join("openvr/lib/linux64")
+            .join("thirdparty/openvr/lib/linux64")
             .to_string_lossy()
     );
     println!("cargo:rustc-link-lib=openvr_api");

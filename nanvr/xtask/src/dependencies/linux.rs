@@ -1,9 +1,6 @@
 use xshell::{Shell, cmd};
 
-pub fn build_server_deps(enable_nvenc: bool) {
-    let deps_path = deps_path();
-    assert!(deps_path.exists(), "Please download dependencies first.");
-
+pub fn clean_and_build_server_deps(enable_nvenc: bool) {
     clean_deps();
 
     build_x264();
@@ -13,26 +10,21 @@ pub fn build_server_deps(enable_nvenc: bool) {
 fn clean_deps() {
     let sh = Shell::new().unwrap();
 
-    sh.remove_path(x264_path().join("nanvr_build")).ok();
-    sh.remove_path(ffmpeg_path().join("nanvr_build")).ok();
-    sh.remove_path(nvenc_headers_path().join("nanvr_build"))
-        .ok();
-}
-
-fn deps_path() -> std::path::PathBuf {
-    filepaths::deps_dir().join("linux")
+    // Clean submodule folders from previous build directories and patches
+    let ffmpeg_command = "for p in thirdparty/*; do (cd $p; git reset --hard; git clean -df); done";
+    cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
 }
 
 fn x264_path() -> std::path::PathBuf {
-    filepaths::workspace_dir().join("x264")
+    filepaths::workspace_dir().join("thirdparty/x264")
 }
 
 fn ffmpeg_path() -> std::path::PathBuf {
-    filepaths::workspace_dir().join("ffmpeg")
+    filepaths::workspace_dir().join("thirdparty/ffmpeg")
 }
 
 fn nvenc_headers_path() -> std::path::PathBuf {
-    filepaths::workspace_dir().join("nv-codec-headers")
+    filepaths::workspace_dir().join("thirdparty/nv-codec-headers")
 }
 
 fn build_x264() {
@@ -103,7 +95,7 @@ fn build_ffmpeg(enable_nvenc: bool) {
     let _env_vars = sh.push_env("LDSOFLAGS", config_vars);
 
     // Patches ffmpeg for workarounds and patches that have yet to be unstreamed
-    let ffmpeg_command = "for p in ../../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
+    let ffmpeg_command = "for p in ../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
     cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
 
     if enable_nvenc {

@@ -1,17 +1,17 @@
 [submodule "openvr"]
-	path = openvr
+	path = thirdparty/openvr
 	url = https://github.com/ValveSoftware/openvr.git
 	shallow = true
 [submodule "x264"]
-	path = x264
+	path = thirdparty/x264
 	url = https://code.videolan.org/videolan/x264.git
 	shallow = true
 [submodule "FFmpeg"]
-	path = FFmpeg
+	path = thirdparty/ffmpeg
 	url = https://code.ffmpeg.org/FFmpeg/FFmpeg.git
 	branch = release/6.0
 	shallow = true
 [submodule "nv-codec-headers"]
-	path = nv-codec-headers
+	path = thirdparty/nv-codec-headers
 	url = https://code.ffmpeg.org/FFmpeg/nv-codec-headers.git
 	shallow = true
