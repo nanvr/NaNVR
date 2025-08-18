@@ -32,5 +32,6 @@ sysinfo = "0.33"
 tungstenite = "0.26"
 ureq = { version = "3", features = ["json"] }
 wgpu = "24"
-libva = { package = "cros-libva", version = "0.0.7" }                                         # Latest that works on Ubuntu 22.04
+# Latest that works on Ubuntu 22.04
+libva = { package = "cros-libva", version = "0.0.7" }
 nvml-wrapper = "0.11.0"
