@@ -2,3 +2,7 @@
 	path = openvr
 	url = https://github.com/ValveSoftware/openvr.git
 	shallow = true
+[submodule "x264"]
+	path = x264
+	url = https://code.videolan.org/videolan/x264.git
+	shallow = true
