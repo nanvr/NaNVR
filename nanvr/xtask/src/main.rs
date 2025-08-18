@@ -24,8 +24,8 @@ struct Cli {
 }
 #[derive(Subcommand)]
 enum Commands {
-    /// Download and compile streamer or/and client external dependencies
-    BuildDeps {
+    /// Compile streamer or/and download client external dependencies
+    PrepareDeps {
         /// If not specified, prepares server and android dependencies at the same time
         #[arg(long, value_enum)]
         platform: Option<TargetBuildPlatform>,
@@ -211,7 +211,7 @@ fn main() {
 
     let begin_time = Instant::now();
     match cli.commands {
-        Commands::BuildDeps {
+        Commands::PrepareDeps {
             platform,
             all_targets,
             enable_nvenc,

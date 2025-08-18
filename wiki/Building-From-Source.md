@@ -61,7 +61,7 @@ Next up is the proper build of the streamer. Run the following:
 cargo xtask build-streamer --release
 ```
 
-You can find the resulting package in `build/nanvr_streamer_[your platform]`
+You can find the resulting package in `build/nanvr_streamer`
 
 If you want to edit and rebuild the code, you can skip the `build-server-deps` command and run only the `build-streamer` command.
 
