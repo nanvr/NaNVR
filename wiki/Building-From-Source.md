@@ -50,7 +50,7 @@ Install these additional packages:
 Move to the root directory of the project, then run this command (paying attention to the bullet points below):
 
 ```bash
-cargo xtask prepare-deps --platform linux
+cargo xtask build-server-deps
 ```
 
 * Use the `--nvenc` flag if you have a Nvidia GPU.
@@ -63,7 +63,7 @@ cargo xtask build-streamer --release
 
 You can find the resulting package in `build/nanvr_streamer_[your platform]`
 
-If you want to edit and rebuild the code, you can skip the `prepare-deps` command and run only the `build-streamer` command.
+If you want to edit and rebuild the code, you can skip the `build-server-deps` command and run only the `build-streamer` command.
 
 ## Fedora CUDA installation
 

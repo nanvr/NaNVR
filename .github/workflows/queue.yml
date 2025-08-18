@@ -28,10 +28,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install libfuse2 build-essential pkg-config nasm libva-dev libdrm-dev libvulkan-dev libx264-dev libx265-dev cmake libasound2-dev libjack-jackd2-dev libxrandr-dev libunwind-dev libgtk-3-dev libpipewire-0.3-dev libspa-0.2-dev
 
-      - name: Prepare deps
+      - name: Build deps
         env:
           RUST_BACKTRACE: 1
-        run:  cargo xtask prepare-deps --platform linux
+        run:  cargo xtask build-server-deps
 
       - run: cargo xtask ci-clippy
 
@@ -53,6 +53,6 @@ jobs:
       - name: Prepare deps
         env:
           RUST_BACKTRACE: 1
-        run:  cargo xtask prepare-deps --platform linux
+        run:  cargo xtask build-server-deps
 
       - run: cargo xtask check-msrv
