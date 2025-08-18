@@ -1,108 +1,30 @@
-use crate::command;
-
-use std::fs;
 use xshell::{Shell, cmd};
 
-pub fn prepare_server_deps(enable_nvenc: bool) {
-    let sh = Shell::new().unwrap();
-
-    let deps_path = deps_path();
-    sh.remove_path(&deps_path).ok();
-    sh.create_dir(&deps_path).unwrap();
-
-    download_x264_src();
-    download_ffmpeg_src();
-    if enable_nvenc {
-        download_nvidia_ffmpeg_deps();
-    }
+pub fn clean_and_build_server_deps(enable_nvenc: bool) {
+    clean_deps();
 
     build_x264();
     build_ffmpeg(enable_nvenc);
 }
 
-pub fn download_server_deps(enable_nvenc: bool) {
+fn clean_deps() {
     let sh = Shell::new().unwrap();
 
-    let deps_path = deps_path();
-    sh.remove_path(&deps_path).ok();
-    sh.create_dir(&deps_path).unwrap();
-
-    download_x264_src();
-    download_ffmpeg_src();
-    if enable_nvenc {
-        download_nvidia_ffmpeg_deps();
-    }
-}
-
-pub fn build_server_deps(enable_nvenc: bool) {
-    let deps_path = deps_path();
-    assert!(deps_path.exists(), "Please download dependencies first.");
-
-    build_x264();
-    build_ffmpeg(enable_nvenc);
-}
-
-fn deps_path() -> std::path::PathBuf {
-    filepaths::deps_dir().join("linux")
+    // Clean submodule folders from previous build directories and patches
+    let ffmpeg_command = "for p in thirdparty/*; do (cd $p; git reset --hard; git clean -df); done";
+    cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
 }
 
 fn x264_path() -> std::path::PathBuf {
-    deps_path().join("x264")
+    filepaths::workspace_dir().join("thirdparty/x264")
 }
 
 fn ffmpeg_path() -> std::path::PathBuf {
-    deps_path().join("ffmpeg")
+    filepaths::workspace_dir().join("thirdparty/ffmpeg")
 }
 
 fn nvenc_headers_path() -> std::path::PathBuf {
-    deps_path().join("nv-codec-headers")
-}
-
-fn download_x264_src() {
-    let deps_path = deps_path();
-    // x264 0.164
-    command::download_and_extract_tar(
-        "https://code.videolan.org/videolan/x264/-/archive/c196240409e4d7c01b47448d93b1f9683aaa7cf7/x264-c196240409e4d7c01b47448d93b1f9683aaa7cf7.tar.bz2",
-        &deps_path,
-    )
-    .unwrap();
-
-    fs::rename(
-        deps_path.join("x264-c196240409e4d7c01b47448d93b1f9683aaa7cf7"),
-        x264_path(),
-    )
-    .unwrap();
-}
-
-fn download_ffmpeg_src() {
-    let deps_path = deps_path();
-
-    command::download_and_extract_zip(
-        "https://codeload.github.com/FFmpeg/FFmpeg/zip/n6.0",
-        &deps_path,
-    )
-    .unwrap();
-
-    fs::rename(deps_path.join("FFmpeg-n6.0"), ffmpeg_path()).unwrap();
-}
-
-fn download_nvidia_ffmpeg_deps() {
-    let deps_path = deps_path();
-
-    let codec_header_version = "12.1.14.0";
-    let temp_download_dir = deps_path.join("dl_temp");
-    command::download_and_extract_zip(
-        &format!("https://github.com/FFmpeg/nv-codec-headers/archive/refs/tags/n{codec_header_version}.zip"),
-        &temp_download_dir
-    )
-    .unwrap();
-
-    fs::rename(
-        temp_download_dir.join(format!("nv-codec-headers-n{codec_header_version}")),
-        nvenc_headers_path(),
-    )
-    .unwrap();
-    fs::remove_dir_all(temp_download_dir).unwrap();
+    filepaths::workspace_dir().join("thirdparty/nv-codec-headers")
 }
 
 fn build_x264() {
@@ -173,7 +95,7 @@ fn build_ffmpeg(enable_nvenc: bool) {
     let _env_vars = sh.push_env("LDSOFLAGS", config_vars);
 
     // Patches ffmpeg for workarounds and patches that have yet to be unstreamed
-    let ffmpeg_command = "for p in ../../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
+    let ffmpeg_command = "for p in ../../nanvr/xtask/patches/*; do patch -p1 < $p; done";
     cmd!(sh, "bash -c {ffmpeg_command}").run().unwrap();
 
     if enable_nvenc {
@@ -187,7 +109,7 @@ fn build_ffmpeg(enable_nvenc: bool) {
            https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/#commonly-faced-issues-and-tips-to-resolve-them
         */
         let nvenc_headers_path = nvenc_headers_path();
-        let header_build_dir = nvenc_headers_path.join("build");
+        let header_build_dir = nvenc_headers_path.join("nanvr_build");
         sh.remove_path(&header_build_dir).ok();
         {
             let make_header_cmd = format!("make install PREFIX='{}'", header_build_dir.display());

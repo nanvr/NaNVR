@@ -55,8 +55,8 @@ dist
 .DS_Store
 .ccls-cache
 
-# dependencies installed by xtask
-deps
+# dependencies built by xtask
+**/nanvr_build
 
 # dependencies installed by node
 node_modules

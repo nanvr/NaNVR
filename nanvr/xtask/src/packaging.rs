@@ -50,7 +50,7 @@ pub fn include_licenses(root_path: &Path) {
 pub fn package_streamer(enable_nvenc: bool, root: Option<String>) {
     let sh = Shell::new().unwrap();
 
-    dependencies::linux::prepare_server_deps(enable_nvenc);
+    dependencies::linux::clean_and_build_server_deps(enable_nvenc);
 
     build::build_streamer(
         Profile::Distribution,
