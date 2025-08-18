@@ -25,19 +25,13 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     /// Download and compile streamer or/and client external dependencies
-    PrepareDeps {
+    BuildDeps {
         /// If not specified, prepares server and android dependencies at the same time
         #[arg(long, value_enum)]
         platform: Option<TargetBuildPlatform>,
         /// Build for all android supported ABI targets
         #[arg(long)]
         all_targets: bool,
-        /// Enables nvenc support on Linux
-        #[arg(long)]
-        enable_nvenc: bool,
-    },
-    /// Download streamer external dependencies
-    DownloadServerDeps {
         /// Enables nvenc support on Linux
         #[arg(long)]
         enable_nvenc: bool,
@@ -217,7 +211,7 @@ fn main() {
 
     let begin_time = Instant::now();
     match cli.commands {
-        Commands::PrepareDeps {
+        Commands::BuildDeps {
             platform,
             all_targets,
             enable_nvenc,
@@ -226,16 +220,13 @@ fn main() {
                 if matches!(platform, TargetBuildPlatform::Android) {
                     dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
                 } else {
-                    dependencies::linux::prepare_server_deps(enable_nvenc);
+                    dependencies::linux::build_server_deps(enable_nvenc);
                 }
             } else {
-                dependencies::linux::prepare_server_deps(enable_nvenc);
+                dependencies::linux::build_server_deps(enable_nvenc);
 
                 dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
             }
-        }
-        Commands::DownloadServerDeps { enable_nvenc } => {
-            dependencies::linux::download_server_deps(enable_nvenc);
         }
         Commands::BuildServerDeps { enable_nvenc } => {
             dependencies::linux::build_server_deps(enable_nvenc);

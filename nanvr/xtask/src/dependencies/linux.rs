@@ -1,45 +1,22 @@
-use crate::command;
-
-use std::fs;
 use xshell::{Shell, cmd};
-
-pub fn prepare_server_deps(enable_nvenc: bool) {
-    let sh = Shell::new().unwrap();
-
-    let deps_path = deps_path();
-    sh.remove_path(&deps_path).ok();
-    sh.create_dir(&deps_path).unwrap();
-
-    download_x264_src();
-    download_ffmpeg_src();
-    if enable_nvenc {
-        download_nvidia_ffmpeg_deps();
-    }
-
-    build_x264();
-    build_ffmpeg(enable_nvenc);
-}
-
-pub fn download_server_deps(enable_nvenc: bool) {
-    let sh = Shell::new().unwrap();
-
-    let deps_path = deps_path();
-    sh.remove_path(&deps_path).ok();
-    sh.create_dir(&deps_path).unwrap();
-
-    download_x264_src();
-    download_ffmpeg_src();
-    if enable_nvenc {
-        download_nvidia_ffmpeg_deps();
-    }
-}
 
 pub fn build_server_deps(enable_nvenc: bool) {
     let deps_path = deps_path();
     assert!(deps_path.exists(), "Please download dependencies first.");
 
+    clean_deps();
+
     build_x264();
     build_ffmpeg(enable_nvenc);
+}
+
+fn clean_deps() {
+    let sh = Shell::new().unwrap();
+
+    sh.remove_path(x264_path().join("nanvr_build")).ok();
+    sh.remove_path(ffmpeg_path().join("nanvr_build")).ok();
+    sh.remove_path(nvenc_headers_path().join("nanvr_build"))
+        .ok();
 }
 
 fn deps_path() -> std::path::PathBuf {
@@ -47,62 +24,15 @@ fn deps_path() -> std::path::PathBuf {
 }
 
 fn x264_path() -> std::path::PathBuf {
-    deps_path().join("x264")
+    filepaths::workspace_dir().join("x264")
 }
 
 fn ffmpeg_path() -> std::path::PathBuf {
-    deps_path().join("ffmpeg")
+    filepaths::workspace_dir().join("ffmpeg")
 }
 
 fn nvenc_headers_path() -> std::path::PathBuf {
-    deps_path().join("nv-codec-headers")
-}
-
-fn download_x264_src() {
-    let deps_path = deps_path();
-    // x264 0.164
-    command::download_and_extract_tar(
-        "https://code.videolan.org/videolan/x264/-/archive/c196240409e4d7c01b47448d93b1f9683aaa7cf7/x264-c196240409e4d7c01b47448d93b1f9683aaa7cf7.tar.bz2",
-        &deps_path,
-    )
-    .unwrap();
-
-    fs::rename(
-        deps_path.join("x264-c196240409e4d7c01b47448d93b1f9683aaa7cf7"),
-        x264_path(),
-    )
-    .unwrap();
-}
-
-fn download_ffmpeg_src() {
-    let deps_path = deps_path();
-
-    command::download_and_extract_zip(
-        "https://codeload.github.com/FFmpeg/FFmpeg/zip/n6.0",
-        &deps_path,
-    )
-    .unwrap();
-
-    fs::rename(deps_path.join("FFmpeg-n6.0"), ffmpeg_path()).unwrap();
-}
-
-fn download_nvidia_ffmpeg_deps() {
-    let deps_path = deps_path();
-
-    let codec_header_version = "12.1.14.0";
-    let temp_download_dir = deps_path.join("dl_temp");
-    command::download_and_extract_zip(
-        &format!("https://github.com/FFmpeg/nv-codec-headers/archive/refs/tags/n{codec_header_version}.zip"),
-        &temp_download_dir
-    )
-    .unwrap();
-
-    fs::rename(
-        temp_download_dir.join(format!("nv-codec-headers-n{codec_header_version}")),
-        nvenc_headers_path(),
-    )
-    .unwrap();
-    fs::remove_dir_all(temp_download_dir).unwrap();
+    filepaths::workspace_dir().join("nv-codec-headers")
 }
 
 fn build_x264() {
@@ -187,7 +117,7 @@ fn build_ffmpeg(enable_nvenc: bool) {
            https://docs.nvidia.com/video-technologies/video-codec-sdk/ffmpeg-with-nvidia-gpu/#commonly-faced-issues-and-tips-to-resolve-them
         */
         let nvenc_headers_path = nvenc_headers_path();
-        let header_build_dir = nvenc_headers_path.join("build");
+        let header_build_dir = nvenc_headers_path.join("nanvr_build");
         sh.remove_path(&header_build_dir).ok();
         {
             let make_header_cmd = format!("make install PREFIX='{}'", header_build_dir.display());
