@@ -8,10 +8,6 @@ use gui_shared::theme::{self, log_colors};
 use rand::seq::IndexedRandom;
 use shared::{LogEntry, LogSeverity};
 use std::time::Duration;
-
-#[cfg(target_arch = "wasm32")]
-use instant::Instant;
-#[cfg(not(target_arch = "wasm32"))]
 use std::time::Instant;
 
 const TIMEOUT: Duration = Duration::from_secs(5);

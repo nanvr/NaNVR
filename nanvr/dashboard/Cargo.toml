@@ -16,6 +16,7 @@ configuration.workspace = true
 net_sockets.workspace = true
 gui_shared.workspace = true
 sound.workspace = true
+server_io.workspace = true
 
 chrono = "0.4"
 eframe = "0.31"
@@ -27,12 +28,9 @@ serde_json = "1"
 settings-schema = { git = "https://github.com/alvr-org/settings-schema-rs", rev = "676185f" }
 statrs = "0.18"
 const_format = "0.2.34"
-
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-server_io.workspace = true
 sysinfo = "0.33"
 tungstenite = "0.26"
 ureq = { version = "3", features = ["json"] }
 wgpu = "24"
-libva = { package = "cros-libva", version = "0.0.7" } # Latest that works on Ubuntu 22.04
+libva = { package = "cros-libva", version = "0.0.7" }                                         # Latest that works on Ubuntu 22.04
 nvml-wrapper = "0.11.0"

@@ -6,12 +6,9 @@ use crate::dashboard::ServerRequest;
 use configuration::{SessionSettings, Settings};
 use eframe::egui::{self, Align, Frame, Grid, Layout, RichText, ScrollArea, Ui};
 use gui_shared::{DisplayString, theme};
-#[cfg(target_arch = "wasm32")]
-use instant::Instant;
 use serde_json as json;
 use settings_schema::SchemaNode;
 use std::time::Duration;
-#[cfg(not(target_arch = "wasm32"))]
 use std::time::Instant;
 
 const DATA_UPDATE_INTERVAL: Duration = Duration::from_secs(1);

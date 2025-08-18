@@ -1,28 +1,16 @@
 mod dashboard;
-
-#[cfg(not(target_arch = "wasm32"))]
 mod data_sources;
-#[cfg(target_arch = "wasm32")]
-mod data_sources_wasm;
-#[cfg(not(target_arch = "wasm32"))]
 mod logging_backend;
-#[cfg(not(target_arch = "wasm32"))]
 mod startup_checks;
-#[cfg(not(target_arch = "wasm32"))]
 mod steamvr_launcher;
 
-#[cfg(not(target_arch = "wasm32"))]
-use data_sources::DataSources;
-#[cfg(target_arch = "wasm32")]
-use data_sources_wasm::DataSources;
-
 use dashboard::Dashboard;
+use data_sources::DataSources;
 
 fn get_filesystem_layout() -> filepaths::Layout {
     filepaths::filesystem_layout_from_dashboard_exe(&std::env::current_exe().unwrap()).unwrap()
 }
 
-#[cfg(not(target_arch = "wasm32"))]
 fn main() {
     use eframe::{
         NativeOptions,
@@ -105,22 +93,4 @@ fn main() {
         },
     )
     .unwrap();
-}
-
-#[cfg(target_arch = "wasm32")]
-fn main() {
-    console_error_panic_hook::set_once();
-    wasm_logger::init(wasm_logger::Config::default());
-
-    wasm_bindgen_futures::spawn_local(async {
-        eframe::WebRunner::new()
-            .start("dashboard_canvas", eframe::WebOptions::default(), {
-                Box::new(move |creation_context| {
-                    let context = creation_context.egui_ctx.clone();
-                    Box::new(Dashboard::new(creation_context, DataSources::new(context)))
-                })
-            })
-            .await
-            .ok();
-    });
 }

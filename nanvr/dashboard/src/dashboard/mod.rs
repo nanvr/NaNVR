@@ -23,7 +23,6 @@ enum Tab {
     Devices,
     Statistics,
     Settings,
-    #[cfg(not(target_arch = "wasm32"))]
     Installation,
     Logs,
     Debug,
@@ -40,7 +39,6 @@ pub struct Dashboard {
     connections_tab: DevicesTab,
     statistics_tab: StatisticsTab,
     settings_tab: SettingsTab,
-    #[cfg(not(target_arch = "wasm32"))]
     installation_tab: components::InstallationTab,
     logs_tab: LogsTab,
     notification_bar: NotificationBar,
@@ -66,7 +64,6 @@ impl Dashboard {
                 (Tab::Devices, "🔌  Devices"),
                 (Tab::Statistics, "📈  Statistics"),
                 (Tab::Settings, "⚙  Settings"),
-                #[cfg(not(target_arch = "wasm32"))]
                 (Tab::Installation, "💾  Installation"),
                 (Tab::Logs, "📝  Logs"),
                 (Tab::Debug, "🐞  Debug"),
@@ -77,7 +74,6 @@ impl Dashboard {
             connections_tab: DevicesTab::new(),
             statistics_tab: StatisticsTab::new(),
             settings_tab: SettingsTab::new(),
-            #[cfg(not(target_arch = "wasm32"))]
             installation_tab: components::InstallationTab::new(),
             logs_tab: LogsTab::new(),
             notification_bar: NotificationBar::new(),
@@ -101,7 +97,6 @@ impl Dashboard {
 
         *server_restarting_lock = true;
 
-        #[cfg(not(target_arch = "wasm32"))]
         std::thread::spawn({
             let server_restarting = Arc::clone(&self.server_restarting);
             let condvar = Arc::clone(&self.server_restarting_condvar);
@@ -153,7 +148,6 @@ impl eframe::App for Dashboard {
                     self.session = Some(*session);
                 }
                 EventType::ServerRequestsSelfRestart => self.restart_steamvr(&mut requests),
-                #[cfg(not(target_arch = "wasm32"))]
                 EventType::DriversList(list) => self.installation_tab.update_drivers(list),
                 EventType::Adb(adb_event) => self
                     .connections_tab
@@ -227,7 +221,6 @@ impl eframe::App for Dashboard {
                         }
                     });
 
-                    #[cfg(not(target_arch = "wasm32"))]
                     ui.with_layout(
                         Layout::bottom_up(Align::Center).with_cross_justify(true),
                         |ui| {
@@ -280,7 +273,6 @@ impl eframe::App for Dashboard {
                             Tab::Settings => {
                                 requests.extend(self.settings_tab.ui(ui));
                             }
-                            #[cfg(not(target_arch = "wasm32"))]
                             Tab::Installation => {
                                 for request in self.installation_tab.ui(ui) {
                                     match request {
