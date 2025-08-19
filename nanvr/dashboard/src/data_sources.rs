@@ -59,7 +59,7 @@ pub fn clean_session() {
 
     if session_manager.session().server_version != *NANVR_VERSION {
         let mut session_ref = session_manager.session_mut();
-        session_ref.server_version = NANVR_VERSION.clone();
+        session_ref.server_version = NANVR_VERSION.to_owned();
         session_ref.client_connections.clear();
         session_ref.session_settings.extra.open_setup_wizard = true;
         session_ref
@@ -402,9 +402,7 @@ impl DataSources {
                         .header(format!("X-{NANVR_HIGH_NAME}"), "true")
                         .call()
                         .ok()
-                        .and_then(|r| {
-                            Version::from_str(&r.into_body().read_to_string().ok()?).ok()
-                        });
+                        .and_then(|r| r.into_body().read_to_string().ok());
 
                     let connected = if let Some(version) = maybe_server_version {
                         // We need exact match because we don't do session extrapolation at the

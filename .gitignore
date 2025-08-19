@@ -73,3 +73,5 @@ CMakeLists.txt
 cmake-build-debug/
 
 *.jks
+
+deps/

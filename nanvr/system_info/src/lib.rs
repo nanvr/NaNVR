@@ -10,9 +10,7 @@ use shared::NANVR_LOW_NAME;
 use shared::settings_schema::SettingsSchema;
 use std::fmt::{Display, Formatter};
 
-pub const PACKAGE_NAME_STORE: &str = formatcp!("{NANVR_LOW_NAME}.client");
-pub const PACKAGE_NAME_GITHUB_DEV: &str = formatcp!("{NANVR_LOW_NAME}.client.dev");
-pub const PACKAGE_NAME_GITHUB_STABLE: &str = formatcp!("{NANVR_LOW_NAME}.client.stable");
+pub const PACKAGE_NAME: &str = formatcp!("{NANVR_LOW_NAME}.client");
 
 // Platform of the device. It is used to match the VR runtime and enable features conditionally.
 #[derive(PartialEq, Eq, Clone, Copy)]
@@ -177,7 +175,6 @@ pub fn local_ip() -> std::net::IpAddr {
 
 #[derive(SettingsSchema, Serialize, Deserialize, Clone)]
 pub enum ClientFlavor {
-    Store,
     Github,
     Custom(String),
 }

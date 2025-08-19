@@ -67,7 +67,10 @@ fn main() {
     }
 
     eframe::run_native(
-        &format!("{NANVR_NAME} Dashboard (streamer v{})", *NANVR_VERSION),
+        &format!(
+            "{NANVR_NAME} Dashboard (streamer {})",
+            NANVR_VERSION.to_owned()
+        ),
         NativeOptions {
             viewport: ViewportBuilder::default()
                 .with_app_id(format!("{NANVR_LOW_NAME}.dashboard"))

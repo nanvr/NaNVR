@@ -9,7 +9,6 @@ use settings_schema::{NumberType, SchemaNode};
 use shared::{
     ConnectionState, NANVR_VERSION, ToAny,
     anyhow::{Result, bail},
-    semver::Version,
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -119,7 +118,7 @@ pub struct ClientConnectionConfig {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct SessionConfig {
-    pub server_version: Version,
+    pub server_version: String,
     pub openvr_config: OpenvrConfig,
     // The hashmap key is the hostname
     pub client_connections: HashMap<String, ClientConnectionConfig>,
@@ -129,7 +128,7 @@ pub struct SessionConfig {
 impl Default for SessionConfig {
     fn default() -> Self {
         Self {
-            server_version: NANVR_VERSION.clone(),
+            server_version: NANVR_VERSION.to_owned(),
             openvr_config: OpenvrConfig {
                 // avoid realistic resolutions, as on first start, on Linux, it
                 // could trigger direct mode on an existing monitor

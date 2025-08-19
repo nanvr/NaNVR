@@ -1917,11 +1917,7 @@ pub fn session_settings_default() -> SettingsDefault {
             },
             wired_client_type: ClientFlavorDefault {
                 Custom: format!("{NANVR_LOW_NAME}.client"),
-                variant: if shared::is_stable() {
-                    ClientFlavorDefaultVariant::Store
-                } else {
-                    ClientFlavorDefaultVariant::Github
-                },
+                variant: ClientFlavorDefaultVariant::Github,
             },
             wired_client_autolaunch: true,
             web_server_port: 8082,
@@ -2009,9 +2005,9 @@ pub fn session_settings_default() -> SettingsDefault {
                 linux_async_reprojection: false,
             },
             velocities_multiplier: 1.0,
-            open_setup_wizard: shared::is_stable() || shared::is_nightly(),
+            open_setup_wizard: true,
             new_version_popup: SwitchDefault {
-                enabled: shared::is_stable(),
+                enabled: false,
                 content: NewVersionPopupConfigDefault {
                     hide_while_version: NANVR_VERSION.to_string(),
                 },

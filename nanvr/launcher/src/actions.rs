@@ -1,12 +1,9 @@
 use crate::{
     InstallationInfo, Progress, ReleaseChannelsInfo, ReleaseInfo, UiMessage, WorkerMessage,
 };
-use anyhow::Context;
 use flate2::read::GzDecoder;
 use futures_util::StreamExt;
-use shared::{
-    NANVR_GH_REPO_PATH, NANVR_LOW_NAME, NANVR_NAME, ToAny, anyhow::Result, semver::Version,
-};
+use shared::{NANVR_GH_REPO_PATH, NANVR_LOW_NAME, NANVR_NAME, ToAny, anyhow::Result};
 use std::{
     env,
     fs::{self, File},
@@ -15,6 +12,7 @@ use std::{
     process::Command,
     sync::mpsc::{Receiver, Sender},
 };
+use system_info::PACKAGE_NAME;
 
 const APK_NAME: &str = "client.apk";
 
@@ -179,25 +177,12 @@ fn install_and_launch_apk(
         .find_map(|d| d.serial.clone())
         .ok_or(anyhow::anyhow!("Failed to find connected device"))?;
 
-    let v = if release.version.starts_with('v') {
-        release.version[1..].to_string()
-    } else {
-        release.version
-    };
-    let version = Version::parse(&v).context("Failed to parse release version")?;
-    let stable = version.pre.is_empty() && !version.build.contains("nightly");
-    let application_id = if stable {
-        system_info::PACKAGE_NAME_GITHUB_STABLE
-    } else {
-        system_info::PACKAGE_NAME_GITHUB_DEV
-    };
-
-    if wired::commands::is_package_installed(&adb_path, &device_serial, application_id)? {
+    if wired::commands::is_package_installed(&adb_path, &device_serial, PACKAGE_NAME)? {
         worker_message_sender.send(WorkerMessage::ProgressUpdate(Progress {
             message: "Uninstalling old APK".into(),
             progress: 0.0,
         }))?;
-        wired::commands::uninstall_package(&adb_path, &device_serial, application_id)?;
+        wired::commands::uninstall_package(&adb_path, &device_serial, PACKAGE_NAME)?;
     }
 
     worker_message_sender.send(WorkerMessage::ProgressUpdate(Progress {
@@ -206,7 +191,7 @@ fn install_and_launch_apk(
     }))?;
     wired::commands::install_package(&adb_path, &device_serial, &apk_path.to_string_lossy())?;
 
-    wired::commands::start_application(&adb_path, &device_serial, application_id)?;
+    wired::commands::start_application(&adb_path, &device_serial, PACKAGE_NAME)?;
 
     Ok(())
 }

@@ -26,7 +26,7 @@ libc = "0.2"
 ndk-context = "0.1"
 
 [package.metadata.android]
-package = "nanvr.client.dev"                # Changed for Meta Store
+package = "nanvr.client"                # Changed for Meta Store
 install_location = "auto"
 build_targets = ["aarch64-linux-android"]
 runtime_libs = "../../deps/android_openxr"

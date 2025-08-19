@@ -280,22 +280,16 @@ pub fn handshake_loop(ctx: Arc<ConnectionContext>, lifecycle_state: Arc<RwLock<L
             };
 
             let stream_port;
-            let client_type;
             let client_autolaunch;
             {
                 let session_manager_lock = SESSION_MANAGER.read();
                 let connection = &session_manager_lock.settings().connection;
                 stream_port = connection.stream_port;
-                client_type = connection.wired_client_type.clone();
                 client_autolaunch = connection.wired_client_autolaunch;
             }
 
-            let status = match wired_connection.setup(
-                CONTROL_PORT,
-                stream_port,
-                &client_type,
-                client_autolaunch,
-            ) {
+            let status = match wired_connection.setup(CONTROL_PORT, stream_port, client_autolaunch)
+            {
                 Ok(status) => status,
                 Err(e) => {
                     error!("{e:?}");
@@ -540,10 +534,10 @@ fn connection_pipeline(
             ClientListAction::SetDisplayName(display_name),
         );
 
-        if client_protocol_id != shared::protocol_id_u64() {
+        if client_protocol_id != shared::protocol_id() {
             warn!(
                 "Trusted client is incompatible! Expected protocol ID: {}, found: {}",
-                shared::protocol_id_u64(),
+                shared::protocol_id(),
                 client_protocol_id,
             );
 

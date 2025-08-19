@@ -7,7 +7,6 @@ use shared::{
     BodySkeleton, ConnectionState, DeviceMotion, LogEntry, LogSeverity, Pose, ViewParams,
     anyhow::Result,
     glam::{Quat, UVec2, Vec2},
-    semver::Version,
 };
 use std::{
     collections::HashSet,
@@ -63,7 +62,7 @@ impl VideoStreamingCapabilities {
 #[derive(Serialize, Deserialize)]
 pub enum ClientConnectionResult {
     ConnectionAccepted {
-        client_protocol_id: u64,
+        client_protocol_id: String,
         display_name: String,
         server_ip: IpAddr,
         streaming_capabilities: Option<VideoStreamingCapabilities>,
@@ -113,7 +112,7 @@ pub struct StreamConfigPacket {
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct StreamConfig {
-    pub server_version: Version,
+    pub server_version: String,
     pub settings: Settings,
     pub negotiated_config: NegotiatedStreamingConfig,
 }
