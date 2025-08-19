@@ -1,7 +1,7 @@
 use client_core::{ClientCapabilities, ClientCoreContext, ClientCoreEvent};
 use configuration::CodecType;
 use eframe::{
-    Frame, NativeOptions,
+    CreationContext, Frame, NativeOptions,
     egui::{CentralPanel, Context, RichText, Slider, ViewportBuilder},
 };
 use net_packets::{FaceData, TrackingData};
@@ -77,9 +77,11 @@ pub struct Window {
 
 impl Window {
     fn new(
+        creation_context: &CreationContext<'_>,
         input_sender: mpsc::Sender<WindowInput>,
         output_receiver: mpsc::Receiver<WindowOutput>,
     ) -> Self {
+        gui_shared::font::add_fonts(&creation_context.egui_ctx);
         Self {
             input: WindowInput::default(),
             input_sender,
@@ -313,7 +315,13 @@ fn main() {
             viewport: ViewportBuilder::default().with_inner_size((400.0, 400.0)),
             ..Default::default()
         },
-        Box::new(|_| Ok(Box::new(Window::new(input_sender, output_receiver)))),
+        Box::new(|creation_context| {
+            Ok(Box::new(Window::new(
+                creation_context,
+                input_sender,
+                output_receiver,
+            )))
+        }),
     )
     .ok();
 

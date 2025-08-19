@@ -1,4 +1,5 @@
 mod basic_components;
+pub mod font;
 pub mod theme;
 
 pub use basic_components::*;

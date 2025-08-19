@@ -17,9 +17,16 @@ net_sockets.workspace = true
 gui_shared.workspace = true
 sound.workspace = true
 server_io.workspace = true
+egui_fonts.workspace = true
 
 chrono = "0.4"
-eframe = "0.31"
+eframe = { version = "0.31", default-features = false, features = [
+    "accesskit",
+    "glow",
+    "wayland",                                      # Required for Linux support (including CI!)
+    "web_screen_reader",
+    "x11",
+] }
 env_logger = "0.11"
 ico = "0.4"
 rand = "0.9"

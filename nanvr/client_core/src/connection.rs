@@ -341,7 +341,7 @@ fn connection_pipeline(
     let game_audio_thread = if let Switch::Enabled(config) = settings.audio.game_audio {
         let device = sound::new_output(None).to_con()?;
         thread::spawn({
-            let ctx= Arc::clone(&ctx);
+            let ctx = Arc::clone(&ctx);
             move || {
                 while is_streaming(&ctx) {
                     shared::show_err(audio::play_audio_loop(

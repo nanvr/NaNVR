@@ -60,6 +60,7 @@ impl Launcher {
         ui_message_sender: Sender<UiMessage>,
     ) -> Self {
         gui_shared::theme::set_theme(&cc.egui_ctx);
+        gui_shared::font::add_fonts(&cc.egui_ctx);
 
         Self {
             worker_message_receiver,

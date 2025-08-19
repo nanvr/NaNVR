@@ -24,6 +24,7 @@ server_io = { path = "nanvr/server_io" }
 configuration = { path = "nanvr/configuration" }
 net_sockets = { path = "nanvr/net_sockets" }
 system_info = { path = "nanvr/system_info" }
+egui_fonts = { path = "nanvr/egui_fonts" }
 
 [profile.release]
 debug = "limited"

@@ -51,6 +51,7 @@ pub struct Dashboard {
 impl Dashboard {
     pub fn new(creation_context: &eframe::CreationContext<'_>, data_sources: DataSources) -> Self {
         gui_shared::theme::set_theme(&creation_context.egui_ctx);
+        gui_shared::font::add_fonts(&creation_context.egui_ctx);
 
         data_sources.request(ServerRequest::GetSession);
 

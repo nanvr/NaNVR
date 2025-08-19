@@ -11,7 +11,14 @@ shared.workspace = true
 client_core.workspace = true
 net_packets.workspace = true
 configuration.workspace = true
+gui_shared.workspace = true
 
-eframe = "0.31"
+eframe = { version = "0.31", default-features = false, features = [
+    "accesskit",
+    "glow",
+    "wayland",                                      # Required for Linux support (including CI!)
+    "web_screen_reader",
+    "x11",
+] }
 env_logger = "0.11"
 rand = "0.9"
