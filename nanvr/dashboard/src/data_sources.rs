@@ -5,9 +5,7 @@ use net_packets::ServerRequest;
 use server_io::ServerSessionManager;
 use shared::{
     NANVR_HIGH_NAME, NANVR_NAME, NANVR_VERSION, RelaxedAtomic, debug, error, info,
-    parking_lot::Mutex,
-    semver::{Version, VersionReq},
-    warn,
+    parking_lot::Mutex, warn,
 };
 use std::{
     io::ErrorKind,
@@ -157,7 +155,7 @@ impl DataSources {
                         .as_option()?
                         .hide_while_version;
 
-                    VersionReq::parse(&format!(">{version}")).unwrap()
+                    &format!(">{version}")
                 };
 
                 let request_agent: ureq::Agent = ureq::Agent::config_builder()
@@ -177,12 +175,7 @@ impl DataSources {
                         .get("tag_name")
                         .and_then(|v| Some(v.as_str()?.trim_start_matches("v")))?;
 
-                    let version = version_str.parse::<Version>().ok();
-
-                    if version
-                        .map(|v| version_requirement.matches(&v))
-                        .unwrap_or(false)
-                    {
+                    if version_requirement == version_str {
                         let message = version_data
                             .get("body")
                             .and_then(|v| v.as_str())

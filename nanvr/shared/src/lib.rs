@@ -14,7 +14,6 @@ pub use anyhow;
 pub use glam;
 pub use log;
 pub use parking_lot;
-pub use semver;
 pub use settings_schema;
 
 pub use average::*;

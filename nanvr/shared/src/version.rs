@@ -12,9 +12,6 @@ pub fn hash_string(string: &str) -> u64 {
     hasher.finish()
 }
 
-// Semver compatible versions will produce the same protocol ID. Protocol IDs are not ordered
-// As a convention, encode/decode the protocol ID bytes as little endian.
-// Only makor and
 pub fn protocol_id() -> String {
     NANVR_VERSION.to_string()
 }
