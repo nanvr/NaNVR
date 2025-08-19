@@ -1,4 +1,10 @@
-use egui::{epaint::{self, text::{FontInsert, InsertFontFamily}}, Context, FontData, FontFamily};
+use egui::{
+    Context, FontData, FontFamily,
+    epaint::{
+        self,
+        text::{FontInsert, InsertFontFamily},
+    },
+};
 use egui_fonts::{HACK_REGULAR, OPENMOJI_BLACK_GLYF, UBUNTU_LIGHT};
 
 pub fn add_fonts(ctx: &Context) {

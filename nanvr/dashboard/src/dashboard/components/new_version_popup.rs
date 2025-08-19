@@ -46,7 +46,7 @@ impl NewVersionPopup {
                     ui.add_space(10.0);
 
                     ui.vertical(|ui| {
-                        ui.heading(format!("{NANVR_NAME} v{}", self.version));
+                        ui.heading(format!("{NANVR_NAME} {}", self.version));
 
                         ui.horizontal(|ui| {
                             ui.spacing_mut().item_spacing.x = 5.0;

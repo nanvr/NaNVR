@@ -35,23 +35,12 @@ impl WelcomeSocket {
                             .get_property_val_str(net_sockets::MDNS_PROTOCOL_KEY)
                             .to_any()?;
                         let server_protocol = shared::protocol_id();
-                        let client_is_dev = client_protocol.contains("-dev");
-                        let server_is_dev = server_protocol.contains("-dev");
 
                         if client_protocol != server_protocol {
-                            let reason = if client_is_dev && server_is_dev {
-                                "Please use matching nightly versions."
-                            } else if client_is_dev {
-                                "Please use nightly server or stable client."
-                            } else if server_is_dev {
-                                "Please use stable server or nightly client."
-                            } else {
-                                "Please use matching stable versions."
-                            };
                             let protocols = format!(
                                 "Protocols: server={server_protocol}, client={client_protocol}"
                             );
-                            warn!("Found incompatible client {hostname}! {reason}\n{protocols}");
+                            warn!("Found incompatible client {hostname}! {protocols}");
                         }
 
                         clients.insert(hostname.into(), address);

@@ -3,7 +3,13 @@ use gui_shared::theme;
 use shared::{NANVR_NAME, NANVR_VERSION};
 
 pub fn about_tab_ui(ui: &mut Ui) {
-    ui.label(RichText::new(format!("{NANVR_NAME} streamer v{}", *NANVR_VERSION)).size(30.0));
+    ui.label(
+        RichText::new(format!(
+            "{NANVR_NAME} streamer {}",
+            NANVR_VERSION.to_owned()
+        ))
+        .size(30.0),
+    );
     ui.add_space(10.0);
     ui.hyperlink_to("Visit us on GitHub", "https://github.com/nanvr/NaNVR");
     ui.hyperlink_to(

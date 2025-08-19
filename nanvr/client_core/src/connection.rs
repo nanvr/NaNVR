@@ -72,8 +72,8 @@ pub struct ConnectionContext {
 
 fn set_hud_message(event_queue: &Mutex<VecDeque<ClientCoreEvent>>, message: &str) {
     let message = format!(
-        "{NANVR_NAME} v{}\nhostname: {}\nIP: {}\n\n{message}",
-        *NANVR_VERSION,
+        "{NANVR_NAME} {}\nhostname: {}\nIP: {}\n\n{message}",
+        NANVR_VERSION.to_owned(),
         Config::load().hostname,
         system_info::local_ip(),
     );
@@ -165,7 +165,7 @@ fn connection_pipeline(
     dbg_connection!("connection_pipeline: Send stream capabilities");
     proto_control_socket
         .send(&ClientConnectionResult::ConnectionAccepted {
-            client_protocol_id: shared::protocol_id_u64(),
+            client_protocol_id: shared::protocol_id(),
             display_name: system_info::platform().to_string(),
             server_ip,
             streaming_capabilities: Some(

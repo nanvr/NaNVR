@@ -4,9 +4,7 @@ mod parse;
 use shared::anyhow::Result;
 use shared::{NANVR_NAME, dbg_connection, error};
 use std::collections::HashSet;
-use system_info::{
-    ClientFlavor, PACKAGE_NAME_GITHUB_DEV, PACKAGE_NAME_GITHUB_STABLE, PACKAGE_NAME_STORE,
-};
+use system_info::PACKAGE_NAME;
 
 pub enum WiredConnectionStatus {
     Ready,
@@ -31,7 +29,6 @@ impl WiredConnection {
         &self,
         control_port: u16,
         stream_port: u16,
-        client_type: &ClientFlavor,
         client_autolaunch: bool,
     ) -> Result<WiredConnectionStatus> {
         let Some(device_serial) = commands::list_devices(&self.adb_path)?
@@ -58,8 +55,7 @@ impl WiredConnection {
             );
         }
 
-        let Some(process_name) = get_process_name(&self.adb_path, &device_serial, client_type)
-        else {
+        let Some(process_name) = get_process_name(&self.adb_path, &device_serial) else {
             return Ok(WiredConnectionStatus::NotReady(format!(
                 "No suitable {NANVR_NAME} client is installed"
             )));
@@ -95,40 +91,12 @@ impl Drop for WiredConnection {
     }
 }
 
-pub fn get_process_name(
-    adb_path: &str,
-    device_serial: &str,
-    flavor: &ClientFlavor,
-) -> Option<String> {
-    let fallbacks = match flavor {
-        ClientFlavor::Store => {
-            if shared::is_stable() {
-                vec![PACKAGE_NAME_STORE, PACKAGE_NAME_GITHUB_STABLE]
-            } else {
-                vec![PACKAGE_NAME_GITHUB_DEV]
-            }
-        }
-        ClientFlavor::Github => {
-            if shared::is_stable() {
-                vec![PACKAGE_NAME_GITHUB_STABLE, PACKAGE_NAME_STORE]
-            } else {
-                vec![PACKAGE_NAME_GITHUB_DEV]
-            }
-        }
-        ClientFlavor::Custom(name) => {
-            if shared::is_stable() {
-                vec![name, PACKAGE_NAME_STORE, PACKAGE_NAME_GITHUB_STABLE]
-            } else {
-                vec![name, PACKAGE_NAME_GITHUB_DEV]
-            }
-        }
-    };
-
-    fallbacks
-        .iter()
-        .find(|name| {
-            commands::is_package_installed(adb_path, device_serial, name)
-                .is_ok_and(|installed| installed)
-        })
-        .map(|name| (*name).to_string())
+pub fn get_process_name(adb_path: &str, device_serial: &str) -> Option<String> {
+    if commands::is_package_installed(adb_path, device_serial, PACKAGE_NAME)
+        .is_ok_and(|installed| installed)
+    {
+        Some(PACKAGE_NAME.to_owned())
+    } else {
+        None
+    }
 }

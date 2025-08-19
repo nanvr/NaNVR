@@ -16,7 +16,7 @@ gui_shared.workspace = true
 eframe = { version = "0.31", default-features = false, features = [
     "accesskit",
     "glow",
-    "wayland",                                      # Required for Linux support (including CI!)
+    "wayland",           # Required for Linux support (including CI!)
     "web_screen_reader",
     "x11",
 ] }
