@@ -281,15 +281,21 @@ pub fn handshake_loop(ctx: Arc<ConnectionContext>, lifecycle_state: Arc<RwLock<L
 
             let stream_port;
             let client_autolaunch;
+            let wired_client_type;
             {
                 let session_manager_lock = SESSION_MANAGER.read();
                 let connection = &session_manager_lock.settings().connection;
                 stream_port = connection.stream_port;
                 client_autolaunch = connection.wired_client_autolaunch;
+                wired_client_type = connection.wired_client_type.clone();
             }
 
-            let status = match wired_connection.setup(CONTROL_PORT, stream_port, client_autolaunch)
-            {
+            let status = match wired_connection.setup(
+                CONTROL_PORT,
+                stream_port,
+                client_autolaunch,
+                wired_client_type,
+            ) {
                 Ok(status) => status,
                 Err(e) => {
                     error!("{e:?}");

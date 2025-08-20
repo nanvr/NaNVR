@@ -4,7 +4,7 @@ mod parse;
 use shared::anyhow::Result;
 use shared::{NANVR_NAME, dbg_connection, error};
 use std::collections::HashSet;
-use system_info::PACKAGE_NAME;
+use system_info::{ClientFlavor, PACKAGE_NAME};
 
 pub enum WiredConnectionStatus {
     Ready,
@@ -30,6 +30,7 @@ impl WiredConnection {
         control_port: u16,
         stream_port: u16,
         client_autolaunch: bool,
+        wired_client_type: ClientFlavor,
     ) -> Result<WiredConnectionStatus> {
         let Some(device_serial) = commands::list_devices(&self.adb_path)?
             .into_iter()
@@ -55,7 +56,9 @@ impl WiredConnection {
             );
         }
 
-        let Some(process_name) = get_process_name(&self.adb_path, &device_serial) else {
+        let Some(process_name) =
+            get_process_name(&self.adb_path, &device_serial, &wired_client_type)
+        else {
             return Ok(WiredConnectionStatus::NotReady(format!(
                 "No suitable {NANVR_NAME} client is installed"
             )));
@@ -91,11 +94,23 @@ impl Drop for WiredConnection {
     }
 }
 
-pub fn get_process_name(adb_path: &str, device_serial: &str) -> Option<String> {
-    if commands::is_package_installed(adb_path, device_serial, PACKAGE_NAME)
+pub fn get_process_name(
+    adb_path: &str,
+    device_serial: &str,
+    client_flavor: &ClientFlavor,
+) -> Option<String> {
+    let package_name = if matches!(client_flavor, ClientFlavor::Github) {
+        PACKAGE_NAME
+    } else if let ClientFlavor::Custom(package) = client_flavor {
+        package
+    } else {
+        error!("Could not determine package name for wired");
+        return None;
+    };
+    if commands::is_package_installed(adb_path, device_serial, package_name)
         .is_ok_and(|installed| installed)
     {
-        Some(PACKAGE_NAME.to_owned())
+        Some(package_name.to_owned())
     } else {
         None
     }
