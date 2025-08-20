@@ -1920,7 +1920,7 @@ pub fn session_settings_default() -> SettingsDefault {
                 variant: ClientFlavorDefaultVariant::Github,
             },
             wired_client_autolaunch: true,
-            web_server_port: 8082,
+            web_server_port: 8083,
             stream_port: 9946,
             osc_local_port: 9942,
             dscp: OptionalDefault {

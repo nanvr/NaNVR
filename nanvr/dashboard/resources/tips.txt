@@ -18,7 +18,7 @@ You can enable tilt mode. Set "Position recentering mode" to "Local" and "Rotati
 If you often experience image glitching, you can trade that with stutter frames using "Avoid video glitching".
 You can run custom commands/programs at headset connection/disconnection using the "On connect/disconnect script".
 In case you want to report a bug, to get a log file, enable "Extra"->"Logging"->"Log to disk". The log will be inside "session_log.txt".
-For hacking purposes, you can enable "Log tracking", "Log button presses" and "Log haptics". You can get the data using a websocket at ws://localhost:8082/api/events
+For hacking purposes, you can enable "Log tracking", "Log button presses" and "Log haptics". You can get the data using a websocket at ws://localhost:8083/api/events
 In case you want to report a bug and share your log, you should enable "Extra"->"Logging"->"Prefer backtrace".
 You can quickly cycle through tips like this one by toggling "Show notification tip"
 If you want to use body trackers or other SteamVR drivers together with NaNVR, set "Driver launch action" to "Unregister NaNVR at shutdown"

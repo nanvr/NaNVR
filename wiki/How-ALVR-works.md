@@ -194,7 +194,7 @@ TODO: Add screenshots
 
 ### Driver communication
 
-The dashboard communicates with the driver in order to update its information and save configuration. This is done through a HTTP API, with base URL `http://localhost:8082`. These are the endpoints:
+The dashboard communicates with the driver in order to update its information and save configuration. This is done through a HTTP API, with base URL `http://localhost:8083`. These are the endpoints:
 
 * `/api/dashboard-request`: This is the main URL used by the dashboard to send messages and data to the server. The body contains the specific type and body of the request.
 * `/api/events`: This endpoint is upgraded to a websocket and is used for listening to events from the driver
