@@ -991,7 +991,7 @@ checksum = "b94f61472cee1439c0b966b47e3aca9ae07e45d070759512cd390ea2bebc6675"
 
 [[package]]
 name = "client_core"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "android_logger",
  "app_dirs2",
@@ -1014,7 +1014,7 @@ dependencies = [
 
 [[package]]
 name = "client_graphics"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "configuration",
  "glow",
@@ -1028,7 +1028,7 @@ dependencies = [
 
 [[package]]
 name = "client_openxr"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "android-activity",
  "client_core",
@@ -1045,7 +1045,7 @@ dependencies = [
 
 [[package]]
 name = "client_tester"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "client_core",
  "configuration",
@@ -1109,7 +1109,7 @@ dependencies = [
 
 [[package]]
 name = "configuration"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "bytemuck",
  "filepaths",
@@ -1407,7 +1407,7 @@ dependencies = [
 
 [[package]]
 name = "dashboard"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "chrono",
  "configuration",
@@ -1678,7 +1678,7 @@ dependencies = [
 
 [[package]]
 name = "egui_fonts"
-version = "1.0.1"
+version = "1.0.2"
 
 [[package]]
 name = "egui_glow"
@@ -1864,7 +1864,7 @@ dependencies = [
 
 [[package]]
 name = "events"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "configuration",
  "net_packets",
@@ -1915,7 +1915,7 @@ dependencies = [
 
 [[package]]
 name = "filepaths"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "const_format",
  "dirs",
@@ -2353,7 +2353,7 @@ dependencies = [
 
 [[package]]
 name = "gui_shared"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "egui",
  "egui_fonts",
@@ -2991,7 +2991,7 @@ checksum = "e2db585e1d738fc771bf08a151420d3ed193d9d895a36df7f6f8a9456b911ddc"
 
 [[package]]
 name = "launcher"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "anyhow",
  "eframe",
@@ -3420,7 +3420,7 @@ dependencies = [
 
 [[package]]
 name = "net_packets"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "configuration",
  "serde",
@@ -3430,7 +3430,7 @@ dependencies = [
 
 [[package]]
 name = "net_sockets"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "bincode",
  "configuration",
@@ -4967,7 +4967,7 @@ dependencies = [
 
 [[package]]
 name = "server_core"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "ash",
  "bytes",
@@ -5001,7 +5001,7 @@ dependencies = [
 
 [[package]]
 name = "server_io"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "configuration",
  "dirs",
@@ -5016,7 +5016,7 @@ dependencies = [
 
 [[package]]
 name = "server_openvr"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "bindgen 0.71.1",
  "cc",
@@ -5075,7 +5075,7 @@ dependencies = [
 
 [[package]]
 name = "shared"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "anyhow",
  "backtrace",
@@ -5203,7 +5203,7 @@ dependencies = [
 
 [[package]]
 name = "sound"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "configuration",
  "cpal",
@@ -5536,7 +5536,7 @@ dependencies = [
 
 [[package]]
 name = "system_info"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "const_format",
  "jni",
@@ -6139,7 +6139,7 @@ checksum = "051eb1abcf10076295e815102942cc58f9d5e3b4560e46e53c21e8ff6f3af7b1"
 
 [[package]]
 name = "vrcompositor_wrapper"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "exec",
  "filepaths",
@@ -6149,7 +6149,7 @@ dependencies = [
 
 [[package]]
 name = "vulkan_layer"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "bindgen 0.71.1",
  "cc",
@@ -7050,7 +7050,7 @@ dependencies = [
 
 [[package]]
 name = "wired"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "anyhow",
  "filepaths",
@@ -7206,7 +7206,7 @@ checksum = "32ac00cd3f8ec9c1d33fb3e7958a82df6989c42d747bd326c822b1d625283547"
 
 [[package]]
 name = "xtask"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "clap",
  "cmd-exists",

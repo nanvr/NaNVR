@@ -3,7 +3,7 @@ resolver = "2"
 members = ["nanvr/*"]
 
 [workspace.package]
-version = "1.0.1"
+version = "1.0.2"
 edition = "2024"
 rust-version = "1.88"
 authors = ["nanvr"]
