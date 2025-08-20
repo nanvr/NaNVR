@@ -43,7 +43,8 @@ fn main() {
     let mut build = cc::Build::new();
     build
         .cpp(true)
-        .std("c++17")
+        .std("c++20")
+        .flag_if_supported("-fdiagnostics-color=always")
         .files(source_files_paths)
         .include(filepaths::workspace_dir().join("thirdparty/openvr/headers"))
         .include("cpp");
