@@ -57,34 +57,34 @@ ufw_cfg() {
 }
 
 iptables_cfg() {
-    first_port_match_count=$(iptables -S | grep -c '9943')
-    second_port_match_count=$(iptables -S | grep -c '9944')
+    first_port_match_count=$(iptables -S | grep -c '9945')
+    second_port_match_count=$(iptables -S | grep -c '9946')
     if [ "${1}" == 'add' ]; then
         if [ "$first_port_match_count" == "0" ] || [ "$second_port_match_count" == "0" ]; then
             if [ ! -d '/etc/iptables' ]; then
                 mkdir '/etc/iptables'
             fi
 
-            iptables -I OUTPUT -p tcp --sport 9943 -j ACCEPT
-            iptables -I INPUT -p tcp --dport 9943 -j ACCEPT
-            iptables -I OUTPUT -p udp --sport 9943 -j ACCEPT
-            iptables -I INPUT -p udp --dport 9943 -j ACCEPT
-            iptables -I OUTPUT -p tcp --sport 9944 -j ACCEPT
-            iptables -I INPUT -p tcp --dport 9944 -j ACCEPT
-            iptables -I OUTPUT -p udp --sport 9944 -j ACCEPT
-            iptables -I INPUT -p udp --dport 9944 -j ACCEPT
+            iptables -I OUTPUT -p tcp --sport 9945 -j ACCEPT
+            iptables -I INPUT -p tcp --dport 9945 -j ACCEPT
+            iptables -I OUTPUT -p udp --sport 9945 -j ACCEPT
+            iptables -I INPUT -p udp --dport 9945 -j ACCEPT
+            iptables -I OUTPUT -p tcp --sport 9946 -j ACCEPT
+            iptables -I INPUT -p tcp --dport 9946 -j ACCEPT
+            iptables -I OUTPUT -p udp --sport 9946 -j ACCEPT
+            iptables -I INPUT -p udp --dport 9946 -j ACCEPT
             iptables-save >/etc/iptables/rules.v4
         fi
     elif [ "${1}" == 'remove' ]; then
         if [ "$first_port_match_count" == "4" ] || [ "$second_port_match_count" == "4" ]; then
-            iptables -D OUTPUT -p tcp --sport 9943 -j ACCEPT
-            iptables -D INPUT -p tcp --dport 9943 -j ACCEPT
-            iptables -D OUTPUT -p udp --sport 9943 -j ACCEPT
-            iptables -D INPUT -p udp --dport 9943 -j ACCEPT
-            iptables -D OUTPUT -p tcp --sport 9944 -j ACCEPT
-            iptables -D INPUT -p tcp --dport 9944 -j ACCEPT
-            iptables -D OUTPUT -p udp --sport 9944 -j ACCEPT
-            iptables -D INPUT -p udp --dport 9944 -j ACCEPT
+            iptables -D OUTPUT -p tcp --sport 9945 -j ACCEPT
+            iptables -D INPUT -p tcp --dport 9945 -j ACCEPT
+            iptables -D OUTPUT -p udp --sport 9945 -j ACCEPT
+            iptables -D INPUT -p udp --dport 9945 -j ACCEPT
+            iptables -D OUTPUT -p tcp --sport 9946 -j ACCEPT
+            iptables -D INPUT -p tcp --dport 9946 -j ACCEPT
+            iptables -D OUTPUT -p udp --sport 9946 -j ACCEPT
+            iptables -D INPUT -p udp --dport 9946 -j ACCEPT
             iptables-save >/etc/iptables/rules.v4
         fi
     else

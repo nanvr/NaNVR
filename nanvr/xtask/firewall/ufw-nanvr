@@ -1,4 +1,4 @@
 [nanvr]
 title=NaNVR
 description=Stream VR games from your PC to your headset via Wi-Fi
-ports=9943:9944/tcp|9943:9944/udp
+ports=9945:9946/tcp|9945:9946/udp

@@ -6,6 +6,7 @@ fn main() {
     } else {
         get_git_hash()
     };
+    println!("cargo:rerun-if-changed=.git/HEAD");
     println!("cargo:rustc-env=BUILD_ID={build_id}");
 }
 
