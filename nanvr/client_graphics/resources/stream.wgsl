@@ -1,18 +1,17 @@
-// todo: use expression directly when supported in naga
-const DIV12: f32 = 0.0773993808;// 1.0 / 12.92
-const DIV1: f32 = 0.94786729857; // 1.0 / 1.055
+const DIV12: f32 = 1.0 / 12.92;
+const DIV1: f32 = 1.0 / 1.055;
 const THRESHOLD: f32 = 0.04045;
 const GAMMA: vec3f = vec3f(2.4);
 
-override ENABLE_SRGB_CORRECTION: bool;
+override ENABLE_SRGB_CORRECTION: f32;
 override ENCODING_GAMMA: f32;
 
-override ENABLE_UPSCALING: bool = false;
-override UPSCALE_USE_EDGE_DIRECTION: bool = true;
-override UPSCALE_EDGE_THRESHOLD: f32 = 4.0/255.0;
+override ENABLE_UPSCALING: f32 = 0.0;
+override UPSCALE_USE_EDGE_DIRECTION: f32 = 1.0;
+override UPSCALE_EDGE_THRESHOLD: f32 = 4.0 / 255.0;
 override UPSCALE_EDGE_SHARPNESS: f32 = 2.0;
 
-override ENABLE_FFE: bool = false;
+override ENABLE_FFE: f32 = 0.0;
 
 override VIEW_WIDTH_RATIO: f32 = 0.0;
 override VIEW_HEIGHT_RATIO: f32 = 0.0;
@@ -75,7 +74,7 @@ fn fragment_main(@location(0) uv: vec2f) -> @location(0) vec4f {
     var corrected_uv = uv;
     // tell upscaler to target a lower resolution for the edges
     var upscale_source_resolution = 1.0;
-    if ENABLE_FFE {
+    if ENABLE_FFE == 1.0 {
         let view_size_ratio = vec2f(VIEW_WIDTH_RATIO, VIEW_HEIGHT_RATIO);
         let edge_ratio = vec2f(EDGE_X_RATIO, EDGE_Y_RATIO);
 
@@ -127,13 +126,13 @@ fn fragment_main(@location(0) uv: vec2f) -> @location(0) vec4f {
     }
 
     var color: vec3f;
-    if ENABLE_UPSCALING {
+    if ENABLE_UPSCALING == 1.0 {
         color = sgsr(vec4f(corrected_uv.x, corrected_uv.y, 0.0, 0.0), upscale_source_resolution).xyz;
     } else {
         color = textureSample(stream_texture, stream_sampler, corrected_uv).rgb;
     }
 
-    if ENABLE_SRGB_CORRECTION {
+    if ENABLE_SRGB_CORRECTION == 1.0 {
         let condition = vec3f(f32(color.r < THRESHOLD), f32(color.g < THRESHOLD), f32(color.b < THRESHOLD));
         let lowValues = color * DIV12;
         let highValues = pow((color + vec3f(0.055)) * DIV1, GAMMA);
@@ -218,8 +217,7 @@ fn rgb_to_hsv(rgb: vec3f) -> vec3f {
 //
 //============================================================================================================
 
-fn fastLanczos2(x: f32) -> f32
-{
+fn fastLanczos2(x: f32) -> f32 {
     var wA: f32 = x - 4.0;
     let wB: f32 = x * wA - wA;
     wA *= wA;
@@ -242,8 +240,7 @@ fn weightYned(dx: f32, dy: f32, c: f32, data: f32) -> vec2f {
     return vec2f(w, w * c);
 }
 
-fn edgeDirection(left: vec4f, right: vec4f) -> vec2f
-{
+fn edgeDirection(left: vec4f, right: vec4f) -> vec2f {
     var dir: vec2f;
     let RxLz: f32 = (right.x + (-left.z));
     let RwLy: f32 = (right.w + (-left.y));
@@ -259,7 +256,7 @@ fn edgeDirection(left: vec4f, right: vec4f) -> vec2f
 fn sgsr(in_TEXCOORD0: vec4f, source_resolution_multiplier: f32) -> vec4f {
     // https://github.com/SnapdragonStudios/snapdragon-gsr/issues/2
     let dim = vec2f(textureDimensions(stream_texture)) * source_resolution_multiplier;
-    let viewport_info = vec4f(1/dim.x, 1/dim.y, dim.x, dim.y);
+    let viewport_info = vec4f(1 / dim.x, 1 / dim.y, dim.x, dim.y);
 
     var color: vec4f;
     let texSample = textureSampleLevel(stream_texture, stream_sampler, in_TEXCOORD0.xy, 0.0);
@@ -299,7 +296,7 @@ fn sgsr(in_TEXCOORD0: vec4f, source_resolution_multiplier: f32) -> vec4f {
         let stdA: f32 = (sumMean * sumMean);
 
         var aWY: vec2f;
-        if UPSCALE_USE_EDGE_DIRECTION {
+        if UPSCALE_USE_EDGE_DIRECTION == 1.0 {
             let data = vec3f(stdA, edgeDirection(left, right));
             aWY = weightY(pl.x, pl.y + 1.0, upDown.x, data);
             aWY += weightY(pl.x - 1.0, pl.y + 1.0, upDown.y, data);

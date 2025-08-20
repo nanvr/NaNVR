@@ -443,6 +443,7 @@ impl LobbyRenderer {
                         load: LoadOp::Clear(clear_color),
                         store: StoreOp::Store,
                     },
+                    depth_slice: None,
                 })],
                 ..Default::default()
             });

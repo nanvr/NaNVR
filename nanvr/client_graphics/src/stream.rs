@@ -97,14 +97,11 @@ impl StreamRenderer {
 
         let shader_module = device.create_shader_module(include_wgsl!("../resources/stream.wgsl"));
 
-        let mut constants = HashMap::new();
+        let mut constants= Vec::new();
 
         constants.extend([
-            (
-                "ENABLE_SRGB_CORRECTION".into(),
-                enable_srgb_correction.into(),
-            ),
-            ("ENCODING_GAMMA".into(), encoding_gamma.into()),
+            ("ENABLE_SRGB_CORRECTION", enable_srgb_correction.into()),
+            ("ENCODING_GAMMA", encoding_gamma.into()),
         ]);
 
         let staging_resolution = if let Some(foveated_encoding) = foveated_encoding {
@@ -119,19 +116,16 @@ impl StreamRenderer {
 
         if let Some(upscaling) = upscaling {
             constants.extend([
-                ("ENABLE_UPSCALING".into(), true.into()),
+                ("ENABLE_UPSCALING", true.into()),
                 (
-                    "UPSCALE_USE_EDGE_DIRECTION".into(),
+                    "UPSCALE_USE_EDGE_DIRECTION",
                     upscaling.edge_direction.into(),
                 ),
                 (
-                    "UPSCALE_EDGE_THRESHOLD".into(),
+                    "UPSCALE_EDGE_THRESHOLD",
                     (upscaling.edge_threshold / 255.0).into(),
                 ),
-                (
-                    "UPSCALE_EDGE_SHARPNESS".into(),
-                    upscaling.edge_sharpness.into(),
-                ),
+                ("UPSCALE_EDGE_SHARPNESS", upscaling.edge_sharpness.into()),
             ]);
         };
 
@@ -190,12 +184,11 @@ impl StreamRenderer {
             let staging_texture = super::create_texture(device, staging_resolution, target_format);
 
             let staging_texture_gl = unsafe {
-                staging_texture.as_hal::<api::Gles, _, _>(|tex| {
-                    let gles::TextureInner::Texture { raw, .. } = tex.unwrap().inner else {
-                        panic!("invalid texture type");
-                    };
-                    raw
-                })
+                let tex = staging_texture.as_hal::<api::Gles>();
+                let gles::TextureInner::Texture { raw, .. } = tex.unwrap().inner else {
+                    panic!("invalid texture type");
+                };
+                raw
             };
 
             let bind_group = device.create_bind_group(&BindGroupDescriptor {
@@ -263,7 +256,7 @@ impl StreamRenderer {
             .create_command_encoder(&Default::default());
 
         for (view_idx, view_params) in view_params.iter().enumerate() {
-            let mut render_pass = encoder.begin_render_pass(&RenderPassDescriptor {
+            let mut render_pass: RenderPass<'_> = encoder.begin_render_pass(&RenderPassDescriptor {
                 label: None,
                 color_attachments: &[Some(RenderPassColorAttachment {
                     view: &self.views_objects[view_idx].render_target
@@ -273,6 +266,7 @@ impl StreamRenderer {
                         load: LoadOp::Clear(Color::BLACK),
                         store: StoreOp::Store,
                     },
+                    depth_slice: None,
                 })],
                 ..Default::default()
             });
@@ -443,7 +437,7 @@ fn set_passthrough_push_constants(render_pass: &mut RenderPass, config: Option<&
 pub fn foveated_encoding_shader_constants(
     expanded_view_resolution: UVec2,
     config: FoveatedEncodingConfig,
-) -> (UVec2, HashMap<String, f64>) {
+) -> (UVec2, HashMap<&'static str, f64>) {
     let view_resolution = expanded_view_resolution.as_vec2();
 
     let center_size = glam::vec2(config.center_size_x, config.center_size_y);
@@ -514,7 +508,7 @@ pub fn foveated_encoding_shader_constants(
         ("C_RIGHT_Y", c_right.y),
     ]
     .iter()
-    .map(|(k, v)| ((*k).to_string(), *v as f64))
+    .map(|(k, v)| (*k, *v as f64))
     .collect();
 
     (optimized_view_resolution_aligned.as_uvec2(), constants)
