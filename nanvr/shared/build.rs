@@ -1,10 +1,13 @@
 use std::process::Command;
 
 fn main() {
-    let build_id = if let Ok(release) = std::env::var("NAMED_RELEASE") {
+    let build_id = if let Some(release) = option_env!("NAMED_RELEASE") {
+        if release.is_empty() {
+            panic!("Release variable was defined, but is empty!")
+        }
         release
     } else {
-        get_git_hash()
+        &get_git_hash()
     };
     println!("cargo:rerun-if-changed=.git/HEAD");
     println!("cargo:rustc-env=BUILD_ID={build_id}");
