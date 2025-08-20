@@ -307,6 +307,7 @@ pub fn handshake_loop(ctx: Arc<ConnectionContext>, lifecycle_state: Arc<RwLock<L
             #[cfg_attr(not(debug_assertions), expect(unused_variables))]
             if let WiredConnectionStatus::NotReady(s) = status {
                 dbg_connection!("handshake_loop: Wired connection not ready: {s}");
+                info!("Wired connection is not ready: {s}");
                 thread::sleep(RETRY_CONNECT_MIN_INTERVAL);
                 continue;
             }
