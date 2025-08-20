@@ -17,13 +17,14 @@ Install these additional packages:
 
 * **Arch**
   
-  Note: At time of writing Arch gcc is too new to be compatible with nvcc. This means there is no neat way to compile an nvidia compatible build. Recommended workarounds are to build in some kind of containerised environment. This has been done successfully with both nixos and flatpak - but are not documented yet.
+  Note: At time of writing Arch gcc is too new to be compatible with NVIDIA's nvcc. This means there is no neat way to compile an nvidia compatible build. For now, you can set this environment variable for build:
+  `export NVCC_APPEND_FLAGS+='-std=c++14'`
 
   ```bash
   sudo pacman -S clang curl nasm pkgconf yasm vulkan-headers libva-mesa-driver unzip ffmpeg libpipewire
   ```
 
-* **Gentoo**
+* **Gentoo** (fixme: outdated, ffmpeg shouldn't be required anymore)
   
   * `media-video/ffmpeg >= 4.4 [encode libdrm vulkan vaapi]`
   * `sys-libs/libunwind`
@@ -53,7 +54,7 @@ Move to the root directory of the project, then run this command (paying attenti
 cargo xtask build-server-deps
 ```
 
-* Use the `--nvenc` flag if you have a Nvidia GPU.
+* Use the `--enable-nvenc` flag if you have a Nvidia GPU.
 
 Next up is the proper build of the streamer. Run the following:
 

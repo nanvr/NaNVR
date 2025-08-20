@@ -13,7 +13,7 @@
 6. User must setup xdg shortcut themselves - see below. Without an xdg entry the launcher has to be run from terminal.
 
 ```sh
-flatpak run --command=launcher com.valvesoftware.Steam
+flatpak run --command=nanvr_launcher com.valvesoftware.Steam
 ```
 
 8. This does seem to work with both steam flatpak and native steam - it calls via xdg-open. But it is not recommended to have both versions of steam installed as this creates ambiguity.
@@ -83,7 +83,7 @@ flatpak install --user com.valvesoftware.Steam.Utility.nanvr.flatpak
 
 It's recommended that user sets up an xdg shortcut - but the launcher can also be run from terminal via the following command:
 ```sh
-flatpak run --command=launcher com.valvesoftware.Steam
+flatpak run --command=nanvr_launcher com.valvesoftware.Steam
 ```
 
 An icon and desktop file named `com.valvesoftware.Steam.Utility.nanvr.desktop` is supplied within the `nanvr/xtask/flatpak` directory. Move this to where other desktop files are located on your system in order to run the dashboard without the terminal.
@@ -109,7 +109,7 @@ It's likely one the keys are exposed to the flatpak in the default location it w
 ```
 export ADB_VENDOR_KEYS=~/.android/adbkey.pub
 flatpak override --user --filesystem=~/.android com.valvesoftware.Steam.Utility.nanvr
-flatpak run --env=ADB_VENDOR_KEYS=$ADB_VENDOR_KEYS --command=launcher com.valvesoftware.Steam
+flatpak run --env=ADB_VENDOR_KEYS=$ADB_VENDOR_KEYS --command=nanvr_launcher com.valvesoftware.Steam
 ```
 
 ### Other Applications

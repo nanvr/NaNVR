@@ -4,8 +4,8 @@ Launcher will allow you to manage old, current and new installations of NaNVR st
 
 ### Installation
 
-* Download `launcher_linux.tar.gz` from the release [download page](https://github.com/nanvr/NaNVR/releases/latest) and extract into path without root rights.
-* Run `launcher_linux/NaNVR Launcher`
+* Download `nanvr_launcher.tar.gz` from the release [download page](https://github.com/nanvr/NaNVR/releases/latest) and extract into path without root rights.
+* Run `nanvr_launcher/NaNVR Launcher`
 * Press `Add version` button
 * For default installation keep channel and version as is and press `Install`
 * Wait until it finishes downloading, installing (depends on your connection)
