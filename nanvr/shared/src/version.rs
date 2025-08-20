@@ -3,7 +3,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-pub static NANVR_VERSION: &str = env!("BUILD_GIT_HASH");
+pub static NANVR_VERSION: &str = env!("BUILD_ID");
 
 // Consistent across architectures, might not be consistent across different compiler versions.
 pub fn hash_string(string: &str) -> u64 {

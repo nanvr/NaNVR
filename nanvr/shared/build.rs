@@ -1,8 +1,12 @@
 use std::process::Command;
 
 fn main() {
-    let git_hash = get_git_hash();
-    println!("cargo:rustc-env=BUILD_GIT_HASH={git_hash}");
+    let build_id = if let Ok(release) = std::env::var("NAMED_RELEASE") {
+        release
+    } else {
+        get_git_hash()
+    };
+    println!("cargo:rustc-env=BUILD_ID={build_id}");
 }
 
 fn get_git_hash() -> String {
