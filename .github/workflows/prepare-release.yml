@@ -93,6 +93,7 @@ jobs:
         id: build
         env:
           RUST_BACKTRACE: 1
+          NAMED_RELEASE: ${{ steps.change_version.outputs.version_tag }}
         run: |
           cargo xtask package-streamer --enable-nvenc
           cargo xtask package-launcher
@@ -137,6 +138,8 @@ jobs:
 
       - name: Build and package flatpak (.flatpak)
         id: build_flatpak
+        env:
+          NAMED_RELEASE: ${{ steps.change_version.outputs.version_tag }}
         run: |
           sudo flatpak-builder --repo=.flatpak-repo --install-deps-from=flathub --force-clean --default-branch=stable --arch=x86_64 .flatpak-build-dir nanvr/xtask/flatpak/com.valvesoftware.Steam.Utility.nanvr.json
           flatpak build-bundle .flatpak-repo com.valvesoftware.Steam.Utility.nanvr.flatpak com.valvesoftware.Steam.Utility.nanvr stable --runtime
@@ -184,6 +187,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          NAMED_RELEASE: ${{ steps.change_version.outputs.version_tag }}
         run: cargo xtask package-client
 
       - name: Sign APK

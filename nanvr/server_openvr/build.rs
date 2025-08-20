@@ -6,7 +6,7 @@ fn get_ffmpeg_build_path() -> PathBuf {
     filepaths::workspace_dir().join("thirdparty/ffmpeg/nanvr_build")
 }
 
-fn get_linux_x264_build_path() -> PathBuf {
+fn get_x264_build_path() -> PathBuf {
     filepaths::workspace_dir().join("thirdparty/x264/nanvr_build")
 }
 
@@ -56,7 +56,7 @@ fn main() {
     assert!(ffmpeg_path.join("include").exists());
     build.include(ffmpeg_path.join("include"));
 
-    let x264_path = get_linux_x264_build_path();
+    let x264_path = get_x264_build_path();
 
     assert!(x264_path.join("include").exists());
     build.include(x264_path.join("include"));
@@ -65,7 +65,7 @@ fn main() {
 
     build.compile("bindings");
 
-    let x264_path = get_linux_x264_build_path();
+    let x264_path = get_x264_build_path();
     let x264_lib_path = x264_path.join("lib");
 
     println!(

@@ -237,7 +237,7 @@ async fn install_server(
         progress: 0.0,
     }))?;
 
-    let file_name = &format!("{NANVR_LOW_NAME}_streamer_linux.tar.gz");
+    let file_name = &format!("{NANVR_LOW_NAME}_streamer.tar.gz");
 
     let url = release_info
         .assets
@@ -340,7 +340,7 @@ pub fn launch_dashboard(version: &str) -> Result<()> {
     let installation_dir = installations_dir().join(version);
 
     let dashboard_path = installation_dir.join(format!(
-        "{NANVR_LOW_NAME}_streamer_linux/bin/{NANVR_LOW_NAME}_dashboard"
+        "{NANVR_LOW_NAME}_streamer/bin/{NANVR_LOW_NAME}_dashboard"
     ));
 
     Command::new(dashboard_path).spawn()?;

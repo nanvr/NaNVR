@@ -20,7 +20,10 @@
     "strip": true,
     "env": {
       "RUST_BACKTRACE": "full"
-    }
+    },
+    "secret-env": [
+      "NAMED_RELEASE"
+    ]
   },
   "finish-args": [
     "--share=ipc",

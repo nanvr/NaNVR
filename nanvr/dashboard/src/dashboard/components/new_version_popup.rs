@@ -63,7 +63,7 @@ impl NewVersionPopup {
                             } else if ui.button("Download Launcher").clicked() {
                                 let base_url =
                                     format!("https://github.com/{NANVR_GH_REPO_PATH}/releases/latest/download/");
-                                let file = format!("{NANVR_LOW_NAME}_launcher_linux.tar.gz");
+                                let file = format!("{NANVR_LOW_NAME}_launcher.tar.gz");
 
                                 context.open_url(OpenUrl::new_tab(format!("{base_url}{file}")));
                             }
