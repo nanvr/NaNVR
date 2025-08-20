@@ -247,7 +247,7 @@ ALVR uses a custom protocol for client-driver communication. ALVR supports UDP a
 
 Usually the first step to establish a connection is discovery. When the server discovers a client it shows it in the "New devices" section in the Devices tab. The user can then trust the client and the connection is established.
 
-ALVR uses a UDP socket at 9943 for discovery. The client broadcasts a packet and waits for the driver to respond. It's the client that broadcasts and it's the driver that then asks for a connection: this is because of the balance in responsibility of the two peers. The client becomes the portal though a PC, that can contain sensitive data. For this reason the server has to trust the client before initiating the connection.
+ALVR uses a UDP socket at 9945 for discovery. The client broadcasts a packet and waits for the driver to respond. It's the client that broadcasts and it's the driver that then asks for a connection: this is because of the balance in responsibility of the two peers. The client becomes the portal though a PC, that can contain sensitive data. For this reason the server has to trust the client before initiating the connection.
 
 This is the layout of the discovery packet
 

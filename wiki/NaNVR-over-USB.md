@@ -58,8 +58,8 @@ The following programs serve to wrap and simplify the process of doing manual AD
 * Ensure SideQuest is running, and the headset has authorized the USB connection to the PC
 * Open the 'Run ADB Commands' menu in SideQuest (top-right, box with an arrow inside it)
 * Click 'Custom Command' and run these adb commands:
-  * `adb forward tcp:9943 tcp:9943`
-  * `adb forward tcp:9944 tcp:9944`
+  * `adb forward tcp:9945 tcp:9945`
+  * `adb forward tcp:9946 tcp:9946`
   * These commands will need to be run every time you (re)connect your headset.
 * Keep SideQuest opened until you want to close the connection.
 

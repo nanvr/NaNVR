@@ -3,7 +3,7 @@ Here are explained two methods to connect PC and headset remotely, port-forwardi
 ## Important notes on security
 
 * NaNVR protocol does not have any encryption or authentication (apart from NaNVR device IP address shown in NaNVR streamer and the requirement to add devices on NaNVR streamer).
-* It is recommended to run NaNVR via encrypted tunnel (VPN) over the internet. In case VPN is not an option, access to NaNVR streamer (UDP ports 9943 and 9944) should be restricted by Firewall (only connections from known IP addresses of NaNVR devices should be allowed) and NaNVR streamer should not be left running unattended.
+* It is recommended to run NaNVR via encrypted tunnel (VPN) over the internet. In case VPN is not an option, access to NaNVR streamer (UDP ports 9945 and 9946) should be restricted by Firewall (only connections from known IP addresses of NaNVR devices should be allowed) and NaNVR streamer should not be left running unattended.
 * **Warning!** SteamVR allows to control desktop from VR headset (i.e. a **malicious NaNVR device could take over the PC**).
 * As the license states NaNVR IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND (see the file `LICENSE` in this GitHub repository for legal text/definition). You are on your own (especially if you run NaNVR over the Internet without VPN).
 
@@ -14,7 +14,7 @@ Port-forwarding allows to connect devices that are behind different NATs, i.e. l
 **IMPORTANT**: NaNVR does not use end-to-end encryption of the stream data. By using this method you need to be aware that the connection is vulnerable to "Man In The Middle" attacks.
 
 1. Take note of the public IP of your headset. You can use the online tool [WhatIsMyIP](https://www.whatismyip.com/).
-2. Inside your router web interface or app, add a port-forwarding rule for your headset. You need to specify the ports 9943 and 9944 for both TCP and UDP.
+2. Inside your router web interface or app, add a port-forwarding rule for your headset. You need to specify the ports 9945 and 9946 for both TCP and UDP.
 3. Connect to the remote PC and open NaNVR. In the Devices tab press `Add device manually`. Fill in the fields with a name for your headset (you can use the name you want), the hostname (you can read it in the welcome screen in your headset when you open the NaNVR app), the remote IP of the headset (that is the IP you got on step 1.) and then press `Save`.
 
 You can now use NaNVR to connect to your remote PC.
