@@ -30,7 +30,3 @@ pub fn download_and_extract_zip(url: &str, destination: &Path) -> Result<(), xsh
 
     unzip(&sh, &zip_file, destination)
 }
-
-pub fn date_utc_yyyymmdd(sh: &Shell) -> Result<String, xshell::Error> {
-    cmd!(sh, "date -u +%Y.%m.%d").read()
-}

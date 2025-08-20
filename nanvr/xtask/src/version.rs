@@ -1,5 +1,3 @@
-use crate::command;
-
 use shared::NANVR_LOW_NAME;
 use std::fs;
 use xshell::{Shell, cmd};
@@ -36,17 +34,8 @@ fn bump_cargo_version(new_version: &str) {
     fs::write(manifest_path, manifest).unwrap();
 }
 
-pub fn bump_version(maybe_version: Option<String>, is_nightly: bool) {
-    let sh = Shell::new().unwrap();
-
-    let mut version = maybe_version.unwrap_or_else(version);
-
-    if is_nightly {
-        version = format!(
-            "{version}+nightly.{}",
-            command::date_utc_yyyymmdd(&sh).unwrap()
-        );
-    }
+pub fn bump_version(maybe_version: Option<String>) {
+    let version = maybe_version.unwrap_or_else(version);
 
     bump_cargo_version(&version);
 

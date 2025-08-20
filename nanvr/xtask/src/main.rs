@@ -145,13 +145,10 @@ enum Commands {
     /// Removes all build artifacts and dependencies
     Clean,
     /// Bump streamer and client package versions
-    Bump {
+    ChangeVersion {
         /// Bump version
         #[arg(long)]
         version: Option<String>,
-        /// Append nightly tag to versions
-        #[arg(long)]
-        is_nightly: bool,
     },
     /// Show warnings for selected clippy lints
     CiClippy,
@@ -288,10 +285,7 @@ fn main() {
             }
         }
         Commands::Clean => clean(),
-        Commands::Bump {
-            version,
-            is_nightly,
-        } => version::bump_version(version, is_nightly),
+        Commands::ChangeVersion { version } => version::bump_version(version),
         Commands::CiClippy => ci::clippy_ci(),
         Commands::CheckMsrv => version::check_msrv(),
     }

@@ -30,14 +30,14 @@ jobs:
         with:
           toolchain: stable
 
-      - name: Bump version
-        id: bump_version
+      - name: Change version
+        id: change_version
         env:
           RUST_BACKTRACE: 1
         run: |
           $versionarg = "${{ github.event.inputs.version }}"
           $versionarg = If ($versionarg.Length -gt 0) { "--version $versionarg" } else { "" }
-          $out = cargo xtask bump $versionarg.split()
+          $out = cargo xtask change-version $versionarg.split()
           echo $out
           cargo update -p shared
           echo "::set-output name=version_tag::$(echo $out | sls -CaseSensitive -Pattern '^v.*$')"
@@ -45,7 +45,7 @@ jobs:
       - name: Push changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "[Auto] Bump version"
+          commit_message: "[Auto] Change version"
 
       - name: Output ref for later checkouts
         id: output_ref
@@ -57,8 +57,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.bump_version.outputs.version_tag }}
-          release_name: NaNVR ${{ steps.bump_version.outputs.version_tag }}
+          tag_name: ${{ steps.change_version.outputs.version_tag }}
+          release_name: NaNVR ${{ steps.change_version.outputs.version_tag }}
           draft: true
           prerelease: false
           commitish: ${{ steps.output_ref.outputs.release_ref }}
