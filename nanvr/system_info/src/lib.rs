@@ -36,7 +36,6 @@ pub enum Platform {
     PlayForDreamMR,
     Lynx,
     AndroidUnknown,
-    AppleHeadset,
     LinuxPc,
     Unknown,
 }
@@ -103,7 +102,6 @@ impl Display for Platform {
             Platform::PlayForDreamMR => "Play For Dream MR",
             Platform::Lynx => "Lynx Headset",
             Platform::AndroidUnknown => "Android (unknown)",
-            Platform::AppleHeadset => "Apple Headset",
             Platform::LinuxPc => "Linux PC",
             Platform::Unknown => "Unknown",
         };
@@ -152,15 +150,11 @@ pub fn platform() -> Platform {
             _ => Platform::AndroidUnknown,
         }
     }
-    #[cfg(target_os = "ios")]
-    {
-        Platform::AppleHeadset
-    }
     #[cfg(target_os = "linux")]
     {
         Platform::LinuxPc
     }
-    #[cfg(not(any(target_os = "android", target_os = "ios", target_os = "linux",)))]
+    #[cfg(not(any(target_os = "android", target_os = "linux",)))]
     {
         Platform::Unknown
     }

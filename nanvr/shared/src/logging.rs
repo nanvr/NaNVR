@@ -195,7 +195,7 @@ pub fn set_panic_hook() {
 
         log::error!("{NANVR_NAME} panicked: {err_str}");
 
-        #[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
+        #[cfg(not(target_os = "android"))]
         std::thread::spawn({
             let panic_str = panic_info.to_string();
             move || {
@@ -212,7 +212,7 @@ pub fn set_panic_hook() {
 pub fn show_w<W: Display + Send + 'static>(w: W) {
     log::warn!("{w}");
 
-    #[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
+    #[cfg(not(target_os = "android"))]
     std::thread::spawn(move || {
         rfd::MessageDialog::new()
             .set_title(format!("{NANVR_NAME} warning"))
@@ -230,7 +230,7 @@ pub fn show_warn<T, E: Display + Send + 'static>(res: Result<T, E>) -> Option<T>
 fn show_e_block<E: Display>(e: E, blocking: bool) {
     log::error!("{e}");
 
-    #[cfg(all(not(target_os = "android"), not(target_os = "ios")))]
+    #[cfg(not(target_os = "android"))]
     {
         use parking_lot::Mutex;
 
