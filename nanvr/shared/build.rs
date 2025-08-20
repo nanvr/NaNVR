@@ -11,10 +11,8 @@ fn main() {
 
 fn get_git_hash() -> String {
     let output = Command::new("git")
-        .args(["rev-parse", "HEAD"])
+        .args(["rev-parse", "--short=8", "HEAD"])
         .output()
         .unwrap();
-    let mut git_hash = String::from_utf8(output.stdout).unwrap();
-    git_hash.truncate(8);
-    git_hash
+    String::from_utf8(output.stdout).unwrap()
 }
