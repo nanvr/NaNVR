@@ -97,7 +97,7 @@ impl StreamRenderer {
 
         let shader_module = device.create_shader_module(include_wgsl!("../resources/stream.wgsl"));
 
-        let mut constants= Vec::new();
+        let mut constants = Vec::new();
 
         constants.extend([
             ("ENABLE_SRGB_CORRECTION", enable_srgb_correction.into()),
@@ -256,20 +256,21 @@ impl StreamRenderer {
             .create_command_encoder(&Default::default());
 
         for (view_idx, view_params) in view_params.iter().enumerate() {
-            let mut render_pass: RenderPass<'_> = encoder.begin_render_pass(&RenderPassDescriptor {
-                label: None,
-                color_attachments: &[Some(RenderPassColorAttachment {
-                    view: &self.views_objects[view_idx].render_target
-                        [view_params.swapchain_index as usize],
-                    resolve_target: None,
-                    ops: wgpu::Operations {
-                        load: LoadOp::Clear(Color::BLACK),
-                        store: StoreOp::Store,
-                    },
-                    depth_slice: None,
-                })],
-                ..Default::default()
-            });
+            let mut render_pass: RenderPass<'_> =
+                encoder.begin_render_pass(&RenderPassDescriptor {
+                    label: None,
+                    color_attachments: &[Some(RenderPassColorAttachment {
+                        view: &self.views_objects[view_idx].render_target
+                            [view_params.swapchain_index as usize],
+                        resolve_target: None,
+                        ops: wgpu::Operations {
+                            load: LoadOp::Clear(Color::BLACK),
+                            store: StoreOp::Store,
+                        },
+                        depth_slice: None,
+                    })],
+                    ..Default::default()
+                });
 
             let input_fov = view_params.input_view_params.fov;
 
