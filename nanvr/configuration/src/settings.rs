@@ -6,7 +6,7 @@ use settings_schema::{
 };
 use shared::{
     DebugGroupsConfig, DebugGroupsConfigDefault, LogSeverity, LogSeverityDefault,
-    LogSeverityDefaultVariant, NANVR_LOW_NAME, NANVR_NAME, NANVR_VERSION,
+    LogSeverityDefaultVariant, NANVR_LOW_NAME, NANVR_NAME, NANVR_VERSION, NANVR_WEBSERVER_PORT,
 };
 use system_info::{ClientFlavor, ClientFlavorDefault, ClientFlavorDefaultVariant};
 
@@ -1920,7 +1920,7 @@ pub fn session_settings_default() -> SettingsDefault {
                 variant: ClientFlavorDefaultVariant::Github,
             },
             wired_client_autolaunch: true,
-            web_server_port: 8083,
+            web_server_port: NANVR_WEBSERVER_PORT,
             stream_port: 9946,
             osc_local_port: 9947,
             dscp: OptionalDefault {

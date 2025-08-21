@@ -19,7 +19,7 @@ filepaths = { path = "nanvr/filepaths" }
 client_graphics = { path = "nanvr/client_graphics" }
 gui_shared = { path = "nanvr/gui_shared" }
 net_packets = { path = "nanvr/net_packets" }
-server_core = { path = "nanvr/server_core"}
+server_core = { path = "nanvr/server_core" }
 server_io = { path = "nanvr/server_io" }
 configuration = { path = "nanvr/configuration" }
 net_sockets = { path = "nanvr/net_sockets" }

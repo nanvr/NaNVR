@@ -25,11 +25,11 @@ pub use logging::*;
 pub use primitives::*;
 pub use version::*;
 
-// todo: temp progress, rename later
 pub const NANVR_NAME: &str = "NaNVR";
 pub const NANVR_HIGH_NAME: &str = "NANVR";
 pub const NANVR_LOW_NAME: &str = "nanvr";
 pub const NANVR_GH_REPO_PATH: &str = "nanvr/NaNVR";
+pub const NANVR_WEBSERVER_PORT: u16 = 8083;
 
 // Simple wrapper for AtomicBool when using Ordering::Relaxed. Deref cannot be implemented (cannot
 // return local reference)
