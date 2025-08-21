@@ -8,10 +8,7 @@ mod version;
 
 use crate::build::Profile;
 use clap::{Args, Parser, Subcommand, ValueEnum};
-use dependencies::OpenXRLoadersSelection;
-
 use filepaths::Layout;
-use packaging::ReleaseFlavor;
 use std::{fs, time::Instant};
 use xshell::{Shell, cmd};
 
@@ -123,10 +120,7 @@ enum Commands {
     /// Build launcher with distribution profile, make archive
     PackageLauncher,
     /// Build client with distribution profile
-    PackageClient {
-        #[arg(long, value_enum, default_value_t = ReleaseFlavor::GitHub)]
-        package_flavor: ReleaseFlavor,
-    },
+    PackageClient,
     /// Build client library then zip it
     PackageClientLib {
         /// Configure linking to libc++_shared with build-client-lib
@@ -215,14 +209,14 @@ fn main() {
         } => {
             if let Some(platform) = platform {
                 if matches!(platform, TargetBuildPlatform::Android) {
-                    dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
+                    dependencies::android::build_deps(all_targets);
                 } else {
                     dependencies::linux::clean_and_build_server_deps(enable_nvenc);
                 }
             } else {
                 dependencies::linux::clean_and_build_server_deps(enable_nvenc);
 
-                dependencies::android::build_deps(all_targets, &OpenXRLoadersSelection::All);
+                dependencies::android::build_deps(all_targets);
             }
         }
         Commands::BuildServerDeps { enable_nvenc } => {
@@ -270,8 +264,8 @@ fn main() {
             packaging::package_streamer(enable_nvenc, root);
         }
         Commands::PackageLauncher => packaging::package_launcher(),
-        Commands::PackageClient { package_flavor } => {
-            packaging::package_client_openxr(package_flavor);
+        Commands::PackageClient => {
+            packaging::package_client_openxr();
         }
         Commands::PackageClientLib {
             link_stdcpp,

@@ -1,22 +1,13 @@
 use crate::{
     build::{self, Profile},
     command,
-    dependencies::{self, OpenXRLoadersSelection},
+    dependencies::{self},
 };
 
-use clap::ValueEnum;
 use shared::NANVR_HIGH_NAME;
 use shared::NANVR_LOW_NAME;
 use std::{fs, path::Path};
 use xshell::{Shell, cmd};
-
-#[derive(Clone, Copy, Default, ValueEnum)]
-pub enum ReleaseFlavor {
-    #[default]
-    GitHub,
-    MetaStore,
-    PicoStore,
-}
 
 pub fn include_licenses(root_path: &Path) {
     let sh = Shell::new().unwrap();
@@ -85,36 +76,10 @@ pub fn package_launcher() {
     command::targz(&sh, &filepaths::launcher_build_dir()).unwrap();
 }
 
-pub fn replace_client_openxr_manifest(from_pattern: &str, to: &str) {
-    let manifest_path = filepaths::crate_dir("client_openxr").join("Cargo.toml");
-    let manifest_string = fs::read_to_string(&manifest_path)
-        .unwrap()
-        .replace(from_pattern, to);
-
-    fs::write(manifest_path, manifest_string).unwrap();
-}
-
-pub fn package_client_openxr(flavor: ReleaseFlavor) {
+pub fn package_client_openxr() {
     fs::remove_dir_all(filepaths::deps_dir().join("android_openxr")).ok();
 
-    let openxr_selection = match flavor {
-        ReleaseFlavor::GitHub => OpenXRLoadersSelection::All,
-        ReleaseFlavor::MetaStore => OpenXRLoadersSelection::OnlyGeneric,
-        ReleaseFlavor::PicoStore => OpenXRLoadersSelection::OnlyPico,
-    };
-
-    dependencies::android::build_deps(false, &openxr_selection);
-
-    if !matches!(flavor, ReleaseFlavor::GitHub) {
-        replace_client_openxr_manifest(
-            &format!(r#"package = "{NANVR_LOW_NAME}.client.stable""#),
-            &format!(r#"package = "{NANVR_LOW_NAME}.client""#),
-        );
-    }
-
-    if matches!(flavor, ReleaseFlavor::MetaStore) {
-        replace_client_openxr_manifest(r#"value = "all""#, r#"value = "quest2|questpro|quest3""#);
-    }
+    dependencies::android::build_deps(false);
 
     build::build_android_client(Profile::Distribution);
 }

@@ -1,9 +1,9 @@
-use crate::{command, dependencies::OpenXRLoadersSelection};
+use crate::command;
 
 use std::fs;
 use xshell::{Shell, cmd};
 
-pub fn build_deps(all_targets: bool, openxr_loaders_selection: &OpenXRLoadersSelection) {
+pub fn build_deps(all_targets: bool) {
     let sh = Shell::new().unwrap();
 
     cmd!(sh, "rustup target add aarch64-linux-android")
@@ -31,12 +31,12 @@ pub fn build_deps(all_targets: bool, openxr_loaders_selection: &OpenXRLoadersSel
     .run()
     .unwrap();
 
-    get_android_openxr_loaders(openxr_loaders_selection);
+    get_android_openxr_loaders();
 }
 
-fn get_android_openxr_loaders(selection: &OpenXRLoadersSelection) {
+fn get_android_openxr_loaders() {
     fn get_openxr_loader(name: &str, url: &str, source_dir: &str) {
-        let sh = Shell::new().unwrap();
+        let sh: Shell = Shell::new().unwrap();
         let temp_dir = filepaths::build_dir().join("temp_download");
         sh.remove_path(&temp_dir).ok();
         sh.create_dir(&temp_dir).unwrap();
@@ -61,19 +61,11 @@ fn get_android_openxr_loaders(selection: &OpenXRLoadersSelection) {
         "prefab/modules/openxr_loader/libs/android.arm64-v8a",
     );
 
-    if matches!(selection, OpenXRLoadersSelection::OnlyGeneric) {
-        return;
-    }
-
     get_openxr_loader(
         "_pico_old",
         "https://sdk.picovr.com/developer-platform/sdk/PICO_OpenXR_SDK_220.zip",
         "libs/android.arm64-v8a",
     );
-
-    if matches!(selection, OpenXRLoadersSelection::OnlyPico) {
-        return;
-    }
 
     get_openxr_loader(
         "_quest1",
