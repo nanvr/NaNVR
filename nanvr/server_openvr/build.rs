@@ -11,13 +11,9 @@ fn get_x264_build_path() -> PathBuf {
 }
 
 fn main() {
-    let platform_name = env::var("CARGO_CFG_TARGET_OS").unwrap();
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-    let platform_subpath = match platform_name.as_str() {
-        "linux" => "cpp/platform/linux",
-        _ => panic!(),
-    };
+    let platform_subpath = "cpp/platform/linux";
 
     let common_iter = walkdir::WalkDir::new("cpp")
         .into_iter()
@@ -39,6 +35,8 @@ fn main() {
             })
             .is_some()
     });
+
+    println!("cargo:rerun-if-changed=cpp");
 
     let mut build = cc::Build::new();
     build
@@ -144,8 +142,4 @@ fn main() {
 
     // fail build if there are undefined symbols in final library
     println!("cargo:rustc-cdylib-link-arg=-Wl,--no-undefined");
-
-    for path in cpp_paths {
-        println!("cargo:rerun-if-changed={}", path.to_string_lossy());
-    }
 }
