@@ -14,7 +14,8 @@ fn main() {
     println!("cargo:rustc-env=BUILD_ID={build_id}");
 
     let git2 = Git2Builder::default()
-        .commit_timestamp(true)
+        .commit_timestamp(true) // todo: might not be required
+        //                                           also VERGEN_GIT_SHA contains commit sha
         .build()
         .unwrap();
     Emitter::default()
