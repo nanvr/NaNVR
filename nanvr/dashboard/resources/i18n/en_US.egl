@@ -1,0 +1,3 @@
+killing-other-dashboard = Killing other dashboard process with path {path}
+fail-to-unblock-driver = Failed to unblock NaNVR driver
+steamvr-is-dead-launch = SteamVR is dead. Launching...

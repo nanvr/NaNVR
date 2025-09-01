@@ -18,6 +18,7 @@ pub fn get_registered_drivers() -> Result<Vec<PathBuf>> {
     ))
 }
 
+// todo: separate registration and un-registration
 pub fn driver_registration(driver_paths: &[PathBuf], register: bool) -> Result<()> {
     let mut openvr_paths_json = openvrpaths::load_openvr_paths_json()?;
     let paths_json_ref = openvr_paths_json.get_mut("external_drivers").to_any()?;
