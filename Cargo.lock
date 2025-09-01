@@ -1416,6 +1416,7 @@ dependencies = [
  "const_format",
  "cros-libva",
  "eframe",
+ "egui-i18n",
  "egui_fonts",
  "env_logger",
  "events",
@@ -1667,6 +1668,15 @@ dependencies = [
  "log",
  "nohash-hasher",
  "profiling",
+]
+
+[[package]]
+name = "egui-i18n"
+version = "0.1.2"
+source = "git+https://github.com/fewensa/egui-i18n#73e967fa2fbd3af7d96bb2dd776253df0426c08b"
+dependencies = [
+ "log",
+ "once_cell",
 ]
 
 [[package]]

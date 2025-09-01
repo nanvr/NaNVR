@@ -19,7 +19,6 @@ sound.workspace = true
 server_io.workspace = true
 egui_fonts.workspace = true
 
-chrono = "0.4"
 eframe = { version = "0.31", default-features = false, features = [
     "accesskit",
     "glow",
@@ -27,18 +26,21 @@ eframe = { version = "0.31", default-features = false, features = [
     "web_screen_reader",
     "x11",
 ] }
+egui-i18n = { git = "https://github.com/fewensa/egui-i18n" }
+settings-schema = { git = "https://github.com/alvr-org/settings-schema-rs", rev = "676185f" }
+wgpu = "24"
+
+chrono = "0.4"
 env_logger = "0.11"
 ico = "0.4"
 rand = "0.9"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-settings-schema = { git = "https://github.com/alvr-org/settings-schema-rs", rev = "676185f" }
 statrs = "0.18"
 const_format = "0.2.34"
 sysinfo = "0.33"
 tungstenite = "0.26"
 ureq = { version = "3", features = ["json"] }
-wgpu = "24"
 # Latest that works on Ubuntu 22.04
 libva = { package = "cros-libva", version = "0.0.7" }
 nvml-wrapper = "0.11.0"
