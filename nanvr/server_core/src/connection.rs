@@ -69,16 +69,18 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
     let old_config = session.openvr_config.clone();
     let settings = session.to_settings();
 
-    let mut controller_is_tracker = false;
-    let mut controller_profile = 0;
-    let mut use_separate_hand_trackers = false;
-    let controllers_enabled = if let Switch::Enabled(config) = settings.headset.controllers {
-        controller_is_tracker =
+    let (
+        controllers_enabled,
+        controller_is_tracker,
+        controller_profile,
+        use_separate_hand_trackers,
+    ) = if let Switch::Enabled(config) = settings.headset.controllers {
+        let controller_is_tracker =
             matches!(config.emulation_mode, ControllersEmulationMode::ViveTracker);
         // These numbers don't mean anything, they're just for triggering SteamVR resets.
         // Gaps are included in the numbering to make adding other controllers
         // a bit easier though.
-        controller_profile = match config.emulation_mode {
+        let controller_profile = match config.emulation_mode {
             ControllersEmulationMode::RiftSTouch => 0,
             ControllersEmulationMode::Quest2Touch => 1,
             ControllersEmulationMode::Quest3Plus => 2,
@@ -89,14 +91,19 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
             ControllersEmulationMode::ViveTracker => 41,
             ControllersEmulationMode::Custom { .. } => 500,
         };
-        use_separate_hand_trackers = config
+        let use_separate_hand_trackers = config
             .hand_skeleton
             .as_option()
             .is_some_and(|c| c.steamvr_input_2_0);
 
-        true
+        (
+            true,
+            controller_is_tracker,
+            controller_profile,
+            use_separate_hand_trackers,
+        )
     } else {
-        false
+        (false, false, 0, false)
     };
 
     let body_tracking_vive_enabled =
@@ -114,41 +121,40 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
         .map(|c| c.sources.meta.prefer_full_body)
         .unwrap_or(false);
 
-    let mut foveation_center_size_x = 0.0;
-    let mut foveation_center_size_y = 0.0;
-    let mut foveation_center_shift_x = 0.0;
-    let mut foveation_center_shift_y = 0.0;
-    let mut foveation_edge_ratio_x = 0.0;
-    let mut foveation_edge_ratio_y = 0.0;
-    let enable_foveated_encoding = if let Switch::Enabled(config) = settings.video.foveated_encoding
-    {
-        foveation_center_size_x = config.center_size_x;
-        foveation_center_size_y = config.center_size_y;
-        foveation_center_shift_x = config.center_shift_x;
-        foveation_center_shift_y = config.center_shift_y;
-        foveation_edge_ratio_x = config.edge_ratio_x;
-        foveation_edge_ratio_y = config.edge_ratio_y;
-
-        true
+    let (
+        enable_foveated_encoding,
+        foveation_center_size_x,
+        foveation_center_size_y,
+        foveation_center_shift_x,
+        foveation_center_shift_y,
+        foveation_edge_ratio_x,
+        foveation_edge_ratio_y,
+    ) = if let Switch::Enabled(config) = settings.video.foveated_encoding {
+        (
+            true,
+            config.center_size_x,
+            config.center_size_y,
+            config.center_shift_x,
+            config.center_shift_y,
+            config.edge_ratio_x,
+            config.edge_ratio_y,
+        )
     } else {
-        false
+        (false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     };
-
-    let mut brightness = 0.0;
-    let mut contrast = 0.0;
-    let mut saturation = 0.0;
-    let mut gamma = 0.0;
-    let mut sharpening = 0.0;
-    let enable_color_correction = if let Switch::Enabled(config) = settings.video.color_correction {
-        brightness = config.brightness;
-        contrast = config.contrast;
-        saturation = config.saturation;
-        gamma = config.gamma;
-        sharpening = config.sharpening;
-        true
-    } else {
-        false
-    };
+    let (enable_color_correction, brightness, contrast, saturation, gamma, sharpening) =
+        if let Switch::Enabled(config) = settings.video.color_correction {
+            (
+                true,
+                config.brightness,
+                config.contrast,
+                config.saturation,
+                config.gamma,
+                config.sharpening,
+            )
+        } else {
+            (false, 0.0, 0.0, 0.0, 0.0, 0.0)
+        };
 
     let nvenc_overrides = settings.video.encoder_config.nvenc;
     let hdr_controls = settings.video.encoder_config.hdr;
