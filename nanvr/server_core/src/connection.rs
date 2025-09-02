@@ -23,7 +23,8 @@ use net_sockets::{
 };
 use shared::{
     AnyhowToCon, BUTTON_INFO, CONTROLLER_PROFILE_INFO, ConResult, ConnectionError, ConnectionState,
-    LifecycleState, QUEST_CONTROLLER_PROFILE_PATH, con_bail, dbg_connection, debug, error,
+    LifecycleState, NANVR_NAME, QUEST_CONTROLLER_PROFILE_PATH, con_bail, dbg_connection, debug,
+    error,
     glam::{UVec2, Vec2},
     info,
     parking_lot::{Condvar, Mutex, RwLock},
@@ -543,7 +544,7 @@ fn connection_pipeline(
 
         if client_protocol_id != shared::protocol_id() {
             warn!(
-                "Trusted client is incompatible! Expected protocol ID: {}, found: {}",
+                "Trusted headset is incompatible with {NANVR_NAME}! Expected version: {}, found: {}",
                 shared::protocol_id(),
                 client_protocol_id,
             );
@@ -553,12 +554,12 @@ fn connection_pipeline(
 
         streaming_capabilities
     } else {
-        debug!("Found client in standby. Retrying");
+        debug!("Found headset in standby. Retrying");
         return Ok(());
     };
 
     let Some(streaming_caps) = maybe_streaming_caps else {
-        con_bail!("Only streaming clients are supported for now");
+        con_bail!("Only streaming headsets are supported for now");
     };
 
     dbg_connection!("connection_pipeline: setting up negotiated streaming config");
@@ -616,7 +617,7 @@ fn connection_pipeline(
         .refresh_rates
         .contains(&initial_settings.video.preferred_fps)
     {
-        warn!("Chosen refresh rate not supported. Using {fps}Hz");
+        warn!("Chosen refresh rate not supported by the headset. Using {fps}Hz");
     }
 
     let enable_foveated_encoding =
@@ -624,7 +625,7 @@ fn connection_pipeline(
             let enable = streaming_caps.foveated_encoding || config.force_enable;
 
             if !enable {
-                warn!("Foveated encoding is not supported by the client.");
+                warn!("Foveated encoding is not supported by the headset");
             }
 
             enable
