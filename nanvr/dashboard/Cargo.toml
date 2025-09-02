@@ -28,7 +28,7 @@ eframe = { version = "0.31", default-features = false, features = [
 ] }
 egui-i18n = { git = "https://github.com/fewensa/egui-i18n" }
 settings-schema = { git = "https://github.com/alvr-org/settings-schema-rs", rev = "676185f" }
-wgpu = "24"
+wgpu = "26"
 
 chrono = "0.4"
 env_logger = "0.11"
