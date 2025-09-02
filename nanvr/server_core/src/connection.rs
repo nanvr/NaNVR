@@ -674,17 +674,12 @@ fn connection_pipeline(
         .unwrap_or(streaming_caps.preferred_encoding_gamma);
 
     let codec = if initial_settings.video.preferred_codec == CodecType::AV1 {
-        let codec = if streaming_caps.encoder_av1 {
+        if streaming_caps.encoder_av1 {
             CodecType::AV1
         } else {
-            CodecType::Hevc
-        };
-
-        if codec != CodecType::AV1 {
-            warn!("AV1 encoding is not supported by the client.");
+            warn!("AV1 encoding is not supported by your headset, using h264 instead");
+            CodecType::H264
         }
-
-        codec
     } else {
         initial_settings.video.preferred_codec
     };
