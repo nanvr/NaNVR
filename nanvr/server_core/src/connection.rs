@@ -634,17 +634,12 @@ fn connection_pipeline(
 
     let encoder_profile = if initial_settings.video.encoder_config.h264_profile == H264Profile::High
     {
-        let profile = if streaming_caps.encoder_high_profile {
+        if streaming_caps.encoder_high_profile {
             H264Profile::High
         } else {
+            warn!("High h264 profile encoding is not supported by the headset, using Main instead");
             H264Profile::Main
-        };
-
-        if profile != H264Profile::High {
-            warn!("High profile encoding is not supported by the client.");
         }
-
-        profile
     } else {
         initial_settings.video.encoder_config.h264_profile
     };
