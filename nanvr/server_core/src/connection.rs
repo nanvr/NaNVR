@@ -651,7 +651,7 @@ fn connection_pipeline(
         .unwrap_or(streaming_caps.prefer_10bit);
 
     if enable_10_bits_encoding && !streaming_caps.encoder_10_bits {
-        warn!("10 bits encoding is not supported by the client.");
+        warn!("10 bits encoding is not supported by the headset");
         enable_10_bits_encoding = false
     }
 
