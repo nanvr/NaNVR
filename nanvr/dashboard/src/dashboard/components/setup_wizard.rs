@@ -13,23 +13,19 @@ pub enum SetupWizardRequest {
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Page {
     Welcome = 0,
-    ResetSettings = 1,
-    HardwareRequirements = 2,
-    SoftwareRequirements = 3,
-    Firewall = 4,
-    Recommendations = 5,
-    Finished = 6,
+    ResetSettings,
+    Firewall,
+    Recommendations,
+    Finished,
 }
 
 fn index_to_page(index: usize) -> Page {
     match index {
         0 => Page::Welcome,
         1 => Page::ResetSettings,
-        2 => Page::HardwareRequirements,
-        3 => Page::SoftwareRequirements,
-        4 => Page::Firewall,
-        5 => Page::Recommendations,
-        6 => Page::Finished,
+        2 => Page::Firewall,
+        3 => Page::Recommendations,
+        4 => Page::Finished,
         _ => panic!("Invalid page index"),
     }
 }
@@ -95,7 +91,7 @@ impl SetupWizard {
                 ui,
                 "Reset settings",
                 &format!(
-                    "It is recommended to reset your settings everytime you update {NANVR_NAME}."
+                    "It is recommended to reset your settings every time you update {NANVR_NAME}."
                 ),
                 |ui| {
                     if ui.button("Reset settings").clicked() {
@@ -104,22 +100,6 @@ impl SetupWizard {
                         ));
                     }
                 },
-            ),
-            Page::HardwareRequirements => page_content(
-                ui,
-                "Hardware requirements",
-                &format!(
-                    r"{NANVR_NAME} requires a dedicated and recent graphics card. Low-end Intel integrated graphics may fail to work.
-Make sure you have at least one output audio device."
-                ),
-                |_| (),
-            ),
-            Page::SoftwareRequirements => page_content(
-                ui,
-                "Software requirements",
-                r"You need the PipeWire (0.3.49+ version) audio system to be able to stream audio and use microphone.",
-                #[allow(unused_variables)]
-                |ui| {},
             ),
             Page::Firewall => page_content(
                 ui,
