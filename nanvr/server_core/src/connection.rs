@@ -711,18 +711,21 @@ fn connection_pipeline(
     let (mut control_sender, mut control_receiver) =
         proto_socket.split(STREAMING_RECV_TIMEOUT).to_con()?;
 
-    let mut new_openvr_config = contruct_openvr_config(session_manager_lock.session());
-    new_openvr_config.eye_resolution_width = stream_view_resolution.x;
-    new_openvr_config.eye_resolution_height = stream_view_resolution.y;
-    new_openvr_config.target_eye_resolution_width = target_view_resolution.x;
-    new_openvr_config.target_eye_resolution_height = target_view_resolution.y;
-    new_openvr_config.refresh_rate = fps as _;
-    new_openvr_config.enable_foveated_encoding = enable_foveated_encoding;
-    new_openvr_config.h264_profile = encoder_profile as _;
-    new_openvr_config.use_10bit_encoder = enable_10_bits_encoding;
-    new_openvr_config.enable_hdr = enable_hdr;
-    new_openvr_config.encoding_gamma = encoding_gamma;
-    new_openvr_config.codec = codec as _;
+    let new_openvr_config = {
+        let mut config = contruct_openvr_config(session_manager_lock.session());
+        config.eye_resolution_width = stream_view_resolution.x;
+        config.eye_resolution_height = stream_view_resolution.y;
+        config.target_eye_resolution_width = target_view_resolution.x;
+        config.target_eye_resolution_height = target_view_resolution.y;
+        config.refresh_rate = fps as _;
+        config.enable_foveated_encoding = enable_foveated_encoding;
+        config.h264_profile = encoder_profile as _;
+        config.use_10bit_encoder = enable_10_bits_encoding;
+        config.enable_hdr = enable_hdr;
+        config.encoding_gamma = encoding_gamma;
+        config.codec = codec as _;
+        config
+    };
 
     if session_manager_lock.session().openvr_config != new_openvr_config {
         session_manager_lock.session_mut().openvr_config = new_openvr_config;
