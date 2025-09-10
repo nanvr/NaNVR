@@ -6,9 +6,17 @@ mod steamvr_launcher;
 
 use dashboard::Dashboard;
 use data_sources::DataSources;
+use egui_i18n::tr;
 
 fn get_filesystem_layout() -> filepaths::Layout {
     filepaths::filesystem_layout_from_dashboard_exe(&std::env::current_exe().unwrap()).unwrap()
+}
+
+fn init_i18n() {
+    let en_us = String::from_utf8_lossy(include_bytes!("../resources/i18n/en_US.egl"));
+    egui_i18n::load_translations_from_text("en_US", en_us).unwrap();
+    egui_i18n::set_language("en_US");
+    egui_i18n::set_fallback("en_US");
 }
 
 fn main() {
@@ -35,8 +43,8 @@ fn main() {
             && other_path != self_path
         {
             info!(
-                "Killing other dashboard process with path {}",
-                other_path.display()
+                "{}",
+                tr!("killing-other-dashboard", {path: other_path.display()})
             );
             proc.kill();
         }
@@ -65,6 +73,8 @@ fn main() {
     {
         unsafe { env::set_var("WINIT_X11_SCALE_FACTOR", "1") };
     }
+
+    init_i18n();
 
     eframe::run_native(
         &format!(

@@ -176,8 +176,8 @@ fn encoder_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
                 vaapi::encoder_check()
             }
             _ => shared::show_e(
-                "Couldn't determine gpu for hardware encoding. \
-            You will likely fallback to software encoding.",
+                "Couldn't determine GPU for hardware encoding. \
+You will fallback to Software (CPU) encoding.",
             ),
         }
     }

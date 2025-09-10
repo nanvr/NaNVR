@@ -184,16 +184,13 @@ impl eframe::App for Dashboard {
                         SetupWizardRequest::ServerRequest(request) => {
                             requests.push(request);
                         }
-                        SetupWizardRequest::Close { finished } => {
-                            if finished {
-                                requests.push(ServerRequest::SetValues(vec![PathValuePair {
-                                    path: net_packets::parse_path(
-                                        "session_settings.extra.open_setup_wizard",
-                                    ),
-                                    value: serde_json::Value::Bool(false),
-                                }]))
-                            }
-
+                        SetupWizardRequest::Close => {
+                            requests.push(ServerRequest::SetValues(vec![PathValuePair {
+                                path: net_packets::parse_path(
+                                    "session_settings.extra.open_setup_wizard",
+                                ),
+                                value: serde_json::Value::Bool(false),
+                            }]));
                             self.setup_wizard_open = false;
                         }
                     }

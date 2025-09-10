@@ -1,10 +1,11 @@
-use libva::{Display, VAEntrypoint, VAProfile};
-use shared::{NANVR_GH_REPO_PATH, error, info};
+use libva::{VAEntrypoint, VAProfile};
+use shared::{error, info};
 
 pub fn encoder_check() {
-    if let Some(libva_display) = Display::open() {
+    if let Some(libva_display) = libva::Display::open() {
         if let Ok(vendor_string) = libva_display.query_vendor_string() {
-            info!("GPU Encoder vendor: {}", vendor_string);
+            info!("Dashboard (System) GPU Encoder: {}", vendor_string);
+            info!("Note that, this GPU Encoder may differ from the one used by SteamVR");
         }
         probe_libva_encoder_profile(&libva_display, VAProfile::VAProfileH264Main, "H264", true);
         probe_libva_encoder_profile(&libva_display, VAProfile::VAProfileHEVCMain, "HEVC", true);
@@ -15,19 +16,15 @@ pub fn encoder_check() {
             false,
         );
     } else {
-        shared::show_e(format!(
-            "Couldn't find VA-API runtime on system, \
-                        you unlikely to have hardware encoding. \
-                        Please install VA-API runtime for your distribution \
-                        and make sure it works (Manjaro, Fedora affected). \
-                        For detailed advice, check wiki: \
-                        https://github.com/{NANVR_GH_REPO_PATH}/wiki/Linux-Troubleshooting#failed-to-create-vaapi-encoder",
-        ));
+        shared::show_e(
+            "Couldn't find encoder (VA-API) runtime on system. \
+Please install encoder (VA-API) runtime for your distribution in order for hardware encoding to work.",
+        );
     }
 }
 
 fn probe_libva_encoder_profile(
-    libva_display: &std::rc::Rc<Display>,
+    libva_display: &std::rc::Rc<libva::Display>,
     profile_type: VAProfile::Type,
     profile_name: &str,
     is_critical: bool,
@@ -45,11 +42,11 @@ fn probe_libva_encoder_profile(
     }
     if !message.is_empty() {
         if is_critical {
-            error!("{} Your gpu may not suport encoding with this.", message);
+            error!("{} Your gpu does not suport encoding with this.", message);
         } else {
             info!(
                 "{}
-                Your gpu may not suport encoding with this. \
+                Your gpu does not suport encoding with this. \
             If you're not using this encoder, ignore this message.",
                 message
             );

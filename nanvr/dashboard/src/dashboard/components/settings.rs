@@ -21,15 +21,7 @@ struct TopLevelEntry {
 
 pub struct SettingsTab {
     selected_top_tab_id: String,
-    resolution_preset: PresetControl,
-    framerate_preset: PresetControl,
-    encoder_preset: PresetControl,
-    foveation_preset: PresetControl,
-    codec_preset: PresetControl,
-    game_audio_preset: PresetControl,
-    microphone_preset: PresetControl,
-    hand_tracking_interaction_preset: PresetControl,
-    eye_face_tracking_preset: PresetControl,
+    presets: Vec<PresetControl>,
     top_level_entries: Vec<TopLevelEntry>,
     session_settings_json: Option<json::Value>,
     last_update_instant: Instant,
@@ -66,17 +58,17 @@ impl SettingsTab {
 
         Self {
             selected_top_tab_id: "presets".into(),
-            resolution_preset: PresetControl::new(builtin_schema::resolution_schema()),
-            framerate_preset: PresetControl::new(builtin_schema::framerate_schema()),
-            encoder_preset: PresetControl::new(builtin_schema::encoder_preset_schema()),
-            foveation_preset: PresetControl::new(builtin_schema::foveation_preset_schema()),
-            codec_preset: PresetControl::new(builtin_schema::codec_preset_schema()),
-            game_audio_preset: PresetControl::new(builtin_schema::game_audio_schema()),
-            microphone_preset: PresetControl::new(builtin_schema::microphone_schema()),
-            hand_tracking_interaction_preset: PresetControl::new(
-                builtin_schema::hand_tracking_interaction_schema(),
-            ),
-            eye_face_tracking_preset: PresetControl::new(builtin_schema::eye_face_tracking_schema()),
+            presets: vec![
+                PresetControl::new(builtin_schema::resolution_schema()),
+                PresetControl::new(builtin_schema::framerate_schema()),
+                PresetControl::new(builtin_schema::encoder_preset_schema()),
+                PresetControl::new(builtin_schema::foveation_preset_schema()),
+                PresetControl::new(builtin_schema::codec_preset_schema()),
+                PresetControl::new(builtin_schema::game_audio_schema()),
+                PresetControl::new(builtin_schema::microphone_schema()),
+                PresetControl::new(builtin_schema::hand_tracking_interaction_schema()),
+                PresetControl::new(builtin_schema::eye_face_tracking_schema()),
+            ],
             top_level_entries,
             session_settings_json: None,
             last_update_instant: Instant::now(),
@@ -86,22 +78,9 @@ impl SettingsTab {
     pub fn update_session(&mut self, session_settings: &SessionSettings) {
         let settings_json = json::to_value(session_settings).unwrap();
 
-        self.resolution_preset
-            .update_session_settings(&settings_json);
-        self.framerate_preset
-            .update_session_settings(&settings_json);
-        self.encoder_preset.update_session_settings(&settings_json);
-        self.foveation_preset
-            .update_session_settings(&settings_json);
-        self.codec_preset.update_session_settings(&settings_json);
-        self.game_audio_preset
-            .update_session_settings(&settings_json);
-        self.microphone_preset
-            .update_session_settings(&settings_json);
-        self.hand_tracking_interaction_preset
-            .update_session_settings(&settings_json);
-        self.eye_face_tracking_preset
-            .update_session_settings(&settings_json);
+        for preset in &mut self.presets {
+            preset.update_session_settings(&settings_json);
+        }
 
         self.session_settings_json = Some(settings_json);
     }
@@ -150,32 +129,10 @@ impl SettingsTab {
                         .num_columns(2)
                         .min_col_width(MIN_COLUMN_SIZE)
                         .show(ui, |ui| {
-                            path_value_pairs.extend(self.resolution_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.framerate_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.encoder_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.foveation_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.codec_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.game_audio_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.microphone_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.hand_tracking_interaction_preset.ui(ui));
-                            ui.end_row();
-
-                            path_value_pairs.extend(self.eye_face_tracking_preset.ui(ui));
-                            ui.end_row();
+                            for preset in &mut self.presets {
+                                path_value_pairs.extend(preset.ui(ui));
+                                ui.end_row();
+                            }
                         })
                 });
         } else {

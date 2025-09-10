@@ -5,7 +5,7 @@ pub fn encoder_check() {
     match Nvml::init() {
         Ok(nvml) => {
             let device_count = nvml.device_count().unwrap();
-            debug!("nvml device count: {}", device_count);
+            debug!("nvml device count: {device_count}");
             // fixme: on multi-gpu nvidia system will do it twice,
             for index in 0..device_count {
                 match nvml.device_by_index(index) {
@@ -16,7 +16,7 @@ pub fn encoder_check() {
                         // todo: probe for AV1 when will be available in nvml-wrapper
                     }
                     Err(e) => {
-                        error!("Failed to acquire NVML device with error: {}", e)
+                        error!("Failed to acquire NVML device with error: {e}")
                     }
                 }
             }
@@ -28,15 +28,15 @@ pub fn encoder_check() {
 fn probe_nvenc_encoder_profile(device: &Device, encoder_type: EncoderType, profile_name: &str) {
     match device.encoder_capacity(encoder_type) {
         Ok(_) => {
-            info!("GPU supports {} profile.", profile_name);
+            info!("GPU supports {profile_name} profile.");
         }
         Err(e) => {
             if matches!(e, NvmlError::NotSupported) {
                 shared::show_e(format!(
-                    "Your NVIDIA gpu doesn't support {profile_name}. Please make sure CUDA is installed properly. Error: {e}"
+                    "Your GPU doesn't support {profile_name} encoder. Error: {e}"
                 ))
             } else {
-                error!("{}", e)
+                error!("Unhandled error: {e}")
             }
         }
     }

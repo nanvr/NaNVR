@@ -1,6 +1,7 @@
 use crate::data_sources;
 
 use const_format::formatcp;
+use egui_i18n::tr;
 use serde_json::{self, json};
 use shared::{
     NANVR_LOW_NAME, NANVR_NAME,
@@ -64,7 +65,7 @@ impl Launcher {
         server_io::driver_registration(&[nanvr_driver_dir], true).ok();
 
         if let Err(err) = unblock_nanvr_driver() {
-            warn!("Failed to unblock {NANVR_NAME} driver: {:?}", err);
+            warn!("{}: {:?}", tr!("fail-to-unblock-driver"), err);
         }
 
         let vrcompositor_wrap_result = maybe_wrap_vrcompositor_launcher();
@@ -74,7 +75,7 @@ impl Launcher {
         }
 
         if !is_steamvr_running() {
-            debug!("SteamVR is dead. Launching...");
+            debug!("{}", tr!("steamvr-is-dead-launch"));
 
             start_steamvr();
         }

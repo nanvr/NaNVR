@@ -23,7 +23,8 @@ use net_sockets::{
 };
 use shared::{
     AnyhowToCon, BUTTON_INFO, CONTROLLER_PROFILE_INFO, ConResult, ConnectionError, ConnectionState,
-    LifecycleState, QUEST_CONTROLLER_PROFILE_PATH, con_bail, dbg_connection, debug, error,
+    LifecycleState, NANVR_NAME, QUEST_CONTROLLER_PROFILE_PATH, con_bail, dbg_connection, debug,
+    error,
     glam::{UVec2, Vec2},
     info,
     parking_lot::{Condvar, Mutex, RwLock},
@@ -68,16 +69,18 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
     let old_config = session.openvr_config.clone();
     let settings = session.to_settings();
 
-    let mut controller_is_tracker = false;
-    let mut controller_profile = 0;
-    let mut use_separate_hand_trackers = false;
-    let controllers_enabled = if let Switch::Enabled(config) = settings.headset.controllers {
-        controller_is_tracker =
+    let (
+        controllers_enabled,
+        controller_is_tracker,
+        controller_profile,
+        use_separate_hand_trackers,
+    ) = if let Switch::Enabled(config) = settings.headset.controllers {
+        let controller_is_tracker =
             matches!(config.emulation_mode, ControllersEmulationMode::ViveTracker);
         // These numbers don't mean anything, they're just for triggering SteamVR resets.
         // Gaps are included in the numbering to make adding other controllers
         // a bit easier though.
-        controller_profile = match config.emulation_mode {
+        let controller_profile = match config.emulation_mode {
             ControllersEmulationMode::RiftSTouch => 0,
             ControllersEmulationMode::Quest2Touch => 1,
             ControllersEmulationMode::Quest3Plus => 2,
@@ -88,14 +91,19 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
             ControllersEmulationMode::ViveTracker => 41,
             ControllersEmulationMode::Custom { .. } => 500,
         };
-        use_separate_hand_trackers = config
+        let use_separate_hand_trackers = config
             .hand_skeleton
             .as_option()
             .is_some_and(|c| c.steamvr_input_2_0);
 
-        true
+        (
+            true,
+            controller_is_tracker,
+            controller_profile,
+            use_separate_hand_trackers,
+        )
     } else {
-        false
+        (false, false, 0, false)
     };
 
     let body_tracking_vive_enabled =
@@ -113,41 +121,40 @@ pub fn contruct_openvr_config(session: &SessionConfig) -> OpenvrConfig {
         .map(|c| c.sources.meta.prefer_full_body)
         .unwrap_or(false);
 
-    let mut foveation_center_size_x = 0.0;
-    let mut foveation_center_size_y = 0.0;
-    let mut foveation_center_shift_x = 0.0;
-    let mut foveation_center_shift_y = 0.0;
-    let mut foveation_edge_ratio_x = 0.0;
-    let mut foveation_edge_ratio_y = 0.0;
-    let enable_foveated_encoding = if let Switch::Enabled(config) = settings.video.foveated_encoding
-    {
-        foveation_center_size_x = config.center_size_x;
-        foveation_center_size_y = config.center_size_y;
-        foveation_center_shift_x = config.center_shift_x;
-        foveation_center_shift_y = config.center_shift_y;
-        foveation_edge_ratio_x = config.edge_ratio_x;
-        foveation_edge_ratio_y = config.edge_ratio_y;
-
-        true
+    let (
+        enable_foveated_encoding,
+        foveation_center_size_x,
+        foveation_center_size_y,
+        foveation_center_shift_x,
+        foveation_center_shift_y,
+        foveation_edge_ratio_x,
+        foveation_edge_ratio_y,
+    ) = if let Switch::Enabled(config) = settings.video.foveated_encoding {
+        (
+            true,
+            config.center_size_x,
+            config.center_size_y,
+            config.center_shift_x,
+            config.center_shift_y,
+            config.edge_ratio_x,
+            config.edge_ratio_y,
+        )
     } else {
-        false
+        (false, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     };
-
-    let mut brightness = 0.0;
-    let mut contrast = 0.0;
-    let mut saturation = 0.0;
-    let mut gamma = 0.0;
-    let mut sharpening = 0.0;
-    let enable_color_correction = if let Switch::Enabled(config) = settings.video.color_correction {
-        brightness = config.brightness;
-        contrast = config.contrast;
-        saturation = config.saturation;
-        gamma = config.gamma;
-        sharpening = config.sharpening;
-        true
-    } else {
-        false
-    };
+    let (enable_color_correction, brightness, contrast, saturation, gamma, sharpening) =
+        if let Switch::Enabled(config) = settings.video.color_correction {
+            (
+                true,
+                config.brightness,
+                config.contrast,
+                config.saturation,
+                config.gamma,
+                config.sharpening,
+            )
+        } else {
+            (false, 0.0, 0.0, 0.0, 0.0, 0.0)
+        };
 
     let nvenc_overrides = settings.video.encoder_config.nvenc;
     let hdr_controls = settings.video.encoder_config.hdr;
@@ -543,7 +550,7 @@ fn connection_pipeline(
 
         if client_protocol_id != shared::protocol_id() {
             warn!(
-                "Trusted client is incompatible! Expected protocol ID: {}, found: {}",
+                "Trusted headset is incompatible with {NANVR_NAME}! Expected version: {}, found: {}",
                 shared::protocol_id(),
                 client_protocol_id,
             );
@@ -553,12 +560,12 @@ fn connection_pipeline(
 
         streaming_capabilities
     } else {
-        debug!("Found client in standby. Retrying");
+        debug!("Found headset in standby. Retrying");
         return Ok(());
     };
 
     let Some(streaming_caps) = maybe_streaming_caps else {
-        con_bail!("Only streaming clients are supported for now");
+        con_bail!("Only streaming headsets are supported for now");
     };
 
     dbg_connection!("connection_pipeline: setting up negotiated streaming config");
@@ -616,7 +623,7 @@ fn connection_pipeline(
         .refresh_rates
         .contains(&initial_settings.video.preferred_fps)
     {
-        warn!("Chosen refresh rate not supported. Using {fps}Hz");
+        warn!("Chosen refresh rate not supported by the headset. Using {fps}Hz");
     }
 
     let enable_foveated_encoding =
@@ -624,7 +631,7 @@ fn connection_pipeline(
             let enable = streaming_caps.foveated_encoding || config.force_enable;
 
             if !enable {
-                warn!("Foveated encoding is not supported by the client.");
+                warn!("Foveated encoding is not supported by the headset");
             }
 
             enable
@@ -634,17 +641,12 @@ fn connection_pipeline(
 
     let encoder_profile = if initial_settings.video.encoder_config.h264_profile == H264Profile::High
     {
-        let profile = if streaming_caps.encoder_high_profile {
+        if streaming_caps.encoder_high_profile {
             H264Profile::High
         } else {
+            warn!("High h264 profile encoding is not supported by the headset, using Main instead");
             H264Profile::Main
-        };
-
-        if profile != H264Profile::High {
-            warn!("High profile encoding is not supported by the client.");
         }
-
-        profile
     } else {
         initial_settings.video.encoder_config.h264_profile
     };
@@ -656,7 +658,7 @@ fn connection_pipeline(
         .unwrap_or(streaming_caps.prefer_10bit);
 
     if enable_10_bits_encoding && !streaming_caps.encoder_10_bits {
-        warn!("10 bits encoding is not supported by the client.");
+        warn!("10 bits encoding is not supported by the headset");
         enable_10_bits_encoding = false
     }
 
@@ -674,17 +676,12 @@ fn connection_pipeline(
         .unwrap_or(streaming_caps.preferred_encoding_gamma);
 
     let codec = if initial_settings.video.preferred_codec == CodecType::AV1 {
-        let codec = if streaming_caps.encoder_av1 {
+        if streaming_caps.encoder_av1 {
             CodecType::AV1
         } else {
-            CodecType::Hevc
-        };
-
-        if codec != CodecType::AV1 {
-            warn!("AV1 encoding is not supported by the client.");
+            warn!("AV1 encoding is not supported by your headset, using h264 instead");
+            CodecType::H264
         }
-
-        codec
     } else {
         initial_settings.video.preferred_codec
     };
@@ -714,18 +711,21 @@ fn connection_pipeline(
     let (mut control_sender, mut control_receiver) =
         proto_socket.split(STREAMING_RECV_TIMEOUT).to_con()?;
 
-    let mut new_openvr_config = contruct_openvr_config(session_manager_lock.session());
-    new_openvr_config.eye_resolution_width = stream_view_resolution.x;
-    new_openvr_config.eye_resolution_height = stream_view_resolution.y;
-    new_openvr_config.target_eye_resolution_width = target_view_resolution.x;
-    new_openvr_config.target_eye_resolution_height = target_view_resolution.y;
-    new_openvr_config.refresh_rate = fps as _;
-    new_openvr_config.enable_foveated_encoding = enable_foveated_encoding;
-    new_openvr_config.h264_profile = encoder_profile as _;
-    new_openvr_config.use_10bit_encoder = enable_10_bits_encoding;
-    new_openvr_config.enable_hdr = enable_hdr;
-    new_openvr_config.encoding_gamma = encoding_gamma;
-    new_openvr_config.codec = codec as _;
+    let new_openvr_config = {
+        let mut config = contruct_openvr_config(session_manager_lock.session());
+        config.eye_resolution_width = stream_view_resolution.x;
+        config.eye_resolution_height = stream_view_resolution.y;
+        config.target_eye_resolution_width = target_view_resolution.x;
+        config.target_eye_resolution_height = target_view_resolution.y;
+        config.refresh_rate = fps as _;
+        config.enable_foveated_encoding = enable_foveated_encoding;
+        config.h264_profile = encoder_profile as _;
+        config.use_10bit_encoder = enable_10_bits_encoding;
+        config.enable_hdr = enable_hdr;
+        config.encoding_gamma = encoding_gamma;
+        config.codec = codec as _;
+        config
+    };
 
     if session_manager_lock.session().openvr_config != new_openvr_config {
         session_manager_lock.session_mut().openvr_config = new_openvr_config;

@@ -1550,7 +1550,7 @@ pub fn session_settings_default() -> SettingsDefault {
                             },
                         },
                     },
-                    variant: BitrateModeDefaultVariant::ConstantMbps,
+                    variant: BitrateModeDefaultVariant::Adaptive,
                 },
                 adapt_to_framerate: SwitchDefault {
                     enabled: false,

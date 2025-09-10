@@ -6,6 +6,8 @@ rust-version.workspace = true
 authors.workspace = true
 license.workspace = true
 
+build = "build.rs"
+
 [dependencies]
 anyhow = { version = "1", features = ["backtrace"] }
 backtrace = "0.3"
@@ -19,3 +21,6 @@ settings-schema = { git = "https://github.com/alvr-org/settings-schema-rs", rev 
 
 [target.'cfg(not(target_os = "android"))'.dependencies]
 rfd = "0.14"
+
+[build-dependencies]
+vergen-git2 = { version = "1.0.7", features = ["build"] }
