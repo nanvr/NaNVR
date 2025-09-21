@@ -3,12 +3,13 @@ mod vaapi;
 use std::path::Path;
 
 use shared::{NANVR_GH_REPO_PATH, NANVR_NAME, debug, error, info, warn};
+use wgpu::{Adapter, Backends, DeviceType, Instance, InstanceDescriptor};
 
 #[derive(PartialEq)]
 enum DeviceInfo {
     Nvidia,
-    Amd { device_type: wgpu::DeviceType },
-    Intel { device_type: wgpu::DeviceType },
+    Amd { device_type: DeviceType },
+    Intel { device_type: DeviceType },
     Unknown,
 }
 
@@ -18,16 +19,16 @@ pub fn audio_check() {
 }
 
 pub fn hardware_checks() {
-    let wgpu_adapters = wgpu::Instance::new(&wgpu::InstanceDescriptor {
-        backends: wgpu::Backends::VULKAN,
+    let wgpu_adapters = Instance::new(&InstanceDescriptor {
+        backends: Backends::VULKAN,
         ..Default::default()
     })
-    .enumerate_adapters(wgpu::Backends::VULKAN);
+    .enumerate_adapters(Backends::VULKAN);
     let device_infos = wgpu_adapters
         .iter()
         .filter(|adapter| {
-            adapter.get_info().device_type == wgpu::DeviceType::DiscreteGpu
-                || adapter.get_info().device_type == wgpu::DeviceType::IntegratedGpu
+            adapter.get_info().device_type == DeviceType::DiscreteGpu
+                || adapter.get_info().device_type == DeviceType::IntegratedGpu
         })
         .map(|adapter| {
             let vendor = match adapter.get_info().vendor {
@@ -49,18 +50,18 @@ pub fn hardware_checks() {
     encoder_checks(&device_infos);
 }
 
-fn gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
+fn gpu_checks(device_infos: &[(&Adapter, DeviceInfo)]) {
     let have_intel_igpu = device_infos.iter().any(|gpu| {
         gpu.1
             == DeviceInfo::Intel {
-                device_type: wgpu::DeviceType::IntegratedGpu,
+                device_type: DeviceType::IntegratedGpu,
             }
     });
     debug!("have_intel_igpu: {}", have_intel_igpu);
     let have_amd_igpu = device_infos.iter().any(|gpu| {
         gpu.1
             == DeviceInfo::Amd {
-                device_type: wgpu::DeviceType::IntegratedGpu,
+                device_type: DeviceType::IntegratedGpu,
             }
     });
     debug!("have_amd_igpu: {}", have_amd_igpu);
@@ -74,7 +75,7 @@ fn gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
     let have_amd_dgpu = device_infos.iter().any(|gpu| {
         gpu.1
             == DeviceInfo::Amd {
-                device_type: wgpu::DeviceType::DiscreteGpu,
+                device_type: DeviceType::DiscreteGpu,
             }
     });
     debug!("have_amd_dgpu: {}", have_amd_dgpu);
@@ -100,7 +101,7 @@ fn gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
     let have_intel_dgpu = device_infos.iter().any(|gpu| {
         gpu.1
             == DeviceInfo::Intel {
-                device_type: wgpu::DeviceType::DiscreteGpu,
+                device_type: DeviceType::DiscreteGpu,
             }
     });
     debug!("have_intel_dgpu: {}", have_intel_dgpu);
@@ -168,7 +169,7 @@ fn gpu_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
     }
 }
 
-fn encoder_checks(device_infos: &[(&wgpu::Adapter, DeviceInfo)]) {
+fn encoder_checks(device_infos: &[(&Adapter, DeviceInfo)]) {
     for device_info in device_infos {
         match device_info.1 {
             DeviceInfo::Nvidia => nvenc::encoder_check(),
