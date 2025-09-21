@@ -1,3 +1,7 @@
 killing-other-dashboard = Killing other dashboard process with path {path}
 fail-to-unblock-driver = Failed to unblock NaNVR driver
 steamvr-is-dead-launch = SteamVR is dead. Launching...
+couldnt-find-encoder = {profile_name} encoder is not supported on your system.
+no-encoding-with-encoder = Could not find encoding capabilities for {profile_name} encoder
+no-vaapi-runtime = Couldn't find encoder (VA-API) runtime on system{newline}Please install encoder runtime on your distribution in order for hardware encoding to work.
+dashboard-encoder-notice = System (Dashboard) GPU Encoder: {vendor_string}{newline}Note that, this GPU Encoder may differ from the one used by SteamVR

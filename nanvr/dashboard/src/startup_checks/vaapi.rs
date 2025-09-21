@@ -1,11 +1,14 @@
+use egui_i18n::tr;
 use libva::{VAEntrypoint, VAProfile};
 use shared::{error, info};
 
 pub fn encoder_check() {
     if let Some(libva_display) = libva::Display::open() {
         if let Ok(vendor_string) = libva_display.query_vendor_string() {
-            info!("Dashboard (System) GPU Encoder: {}", vendor_string);
-            info!("Note that, this GPU Encoder may differ from the one used by SteamVR");
+            info!(
+                "{}",
+                tr!("dashboard-encoder-notice", {vendor_string: vendor_string, newline: "\n"})
+            );
         }
         probe_libva_encoder_profile(&libva_display, VAProfile::VAProfileH264Main, "H264", true);
         probe_libva_encoder_profile(&libva_display, VAProfile::VAProfileHEVCMain, "HEVC", true);
@@ -16,10 +19,7 @@ pub fn encoder_check() {
             false,
         );
     } else {
-        shared::show_e(
-            "Couldn't find encoder (VA-API) runtime on system. \
-Please install encoder (VA-API) runtime for your distribution in order for hardware encoding to work.",
-        );
+        shared::show_e(tr!("no-vaapi-runtime", {newline: "\n"}));
     }
 }
 
@@ -30,26 +30,22 @@ fn probe_libva_encoder_profile(
     is_critical: bool,
 ) {
     let profile_probe = libva_display.query_config_entrypoints(profile_type);
-    let mut message = String::new();
-    if profile_probe.is_err() {
-        message = format!("Couldn't find {profile_name} encoder.");
-    } else if let Ok(profile) = profile_probe {
-        if profile.is_empty() {
-            message = format!("{profile_name} profile entrypoint is empty.");
-        } else if !profile.contains(&VAEntrypoint::VAEntrypointEncSlice) {
-            message = format!("{profile_name} profile does not contain encoding entrypoint.");
+
+    let message = match profile_probe {
+        Ok(profile) => {
+            if !profile.contains(&VAEntrypoint::VAEntrypointEncSlice) {
+                Some(tr!("no-encoding-with-encoder", {profile_name: profile_name}))
+            } else {
+                None
+            }
         }
-    }
-    if !message.is_empty() {
+        Err(_) => Some(tr!("couldnt-find-encoder", {profile_name: profile_name})),
+    };
+    if let Some(message) = message {
         if is_critical {
-            error!("{} Your gpu does not suport encoding with this.", message);
+            error!("{}", message);
         } else {
-            info!(
-                "{}
-                Your gpu does not suport encoding with this. \
-            If you're not using this encoder, ignore this message.",
-                message
-            );
+            info!("{}", message);
         }
     }
 }

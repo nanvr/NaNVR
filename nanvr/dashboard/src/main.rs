@@ -33,6 +33,7 @@ fn main() {
 
     let (server_events_sender, server_events_receiver) = mpsc::channel();
     logging_backend::init_logging(server_events_sender.clone());
+    init_i18n();
 
     // Kill any other dashboard instance
     let self_path = std::env::current_exe().unwrap();
@@ -73,8 +74,6 @@ fn main() {
     {
         unsafe { env::set_var("WINIT_X11_SCALE_FACTOR", "1") };
     }
-
-    init_i18n();
 
     eframe::run_native(
         &format!(
