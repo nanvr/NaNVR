@@ -25,7 +25,6 @@ pub use logging::*;
 pub use primitives::*;
 pub use version::*;
 
-// todo: temp progress, rename later
 pub const NANVR_NAME: &str = "NaNVR";
 pub const NANVR_HIGH_NAME: &str = "NANVR";
 pub const NANVR_LOW_NAME: &str = "nanvr";

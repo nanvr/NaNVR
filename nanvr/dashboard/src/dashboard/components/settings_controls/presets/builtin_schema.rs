@@ -96,7 +96,7 @@ pub fn framerate_schema() -> PresetSchemaNode {
         options: [60, 72, 80, 90, 120]
             .into_iter()
             .map(|framerate| HigherOrderChoiceOption {
-                display_name: format!("{framerate}Hz"),
+                display_name: format!("{framerate} Hz"),
                 modifiers: [num_modifier(
                     "session_settings.video.preferred_fps",
                     &format!("{:?}", framerate as f32),
@@ -106,8 +106,8 @@ pub fn framerate_schema() -> PresetSchemaNode {
                 content: None,
             })
             .collect(),
-        default_option_display_name: "72Hz".into(),
-        gui: ChoiceControlType::ButtonGroup,
+        default_option_display_name: "72 Hz".into(),
+        gui: ChoiceControlType::Dropdown,
     })
 }
 
@@ -123,17 +123,34 @@ and on headsets that have XR2 Gen 2 onboard (Quest 3, Pico 4 Ultra)"
         .into_iter()
         .collect(),
         flags: ["steamvr-restart".into()].into_iter().collect(),
-        options: [("H264", "H264"), ("HEVC", "Hevc"), ("AV1", "AV1")]
+        options: [("H264", "H264"), ("HEVC", "Hevc"), ("AV1", "AV1"), ("Software X264", "X264")]
             .into_iter()
-            .map(|(key, val_codec)| HigherOrderChoiceOption {
-                display_name: key.into(),
-                modifiers: [string_modifier(
-                    "session_settings.video.preferred_codec.variant",
-                    val_codec,
-                )]
-                .into_iter()
-                .collect(),
-                content: None,
+            .map(|(key, val_codec)| {
+                if val_codec == "X264" {
+                    return HigherOrderChoiceOption {
+                            display_name: key.into(),
+                            modifiers: [bool_modifier(
+                                "session_settings.video.encoder_config.software.force_software_encoding",
+                                true,
+                            )]
+                            .into_iter()
+                            .collect(),
+                            content: None,
+                        };
+                }
+                HigherOrderChoiceOption {
+                            display_name: key.into(),
+                            modifiers: [string_modifier(
+                                "session_settings.video.preferred_codec.variant",
+                                val_codec,
+                            ), bool_modifier(
+                                "session_settings.video.encoder_config.software.force_software_encoding",
+                                false,
+                            )]
+                            .into_iter()
+                            .collect(),
+                            content: None,
+                        }
             })
             .collect(),
         default_option_display_name: "H264".into(),
