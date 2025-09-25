@@ -2,12 +2,14 @@ NaNVR can be built only on Linux.
 
 # Common Prerequisites
 
-Preferred IDE (optional): Visual Studio Code with rust-analyzer extension
+Preferred IDE (optional): Visual Studio Code with `rust-analyzer` and `clangd` extension
 
 You need to install [rustup](https://www.rust-lang.org/tools/install).
 
 To clone the repository use `git clone --recurse-submodules https://github.com/nanvr/NaNVR.git`.
 If you previously cloned the repo without submodules, simply run `git submodule update --init --checkout --recursive` in it.
+
+Adjust path in `.clangd` to absolute path for clangd to have proper intellisense over openvr files
 
 # Streamer Building
 
