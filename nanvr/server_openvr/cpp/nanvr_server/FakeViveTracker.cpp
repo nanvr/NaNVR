@@ -2,7 +2,6 @@
 
 #include "Logger.h"
 #include "Paths.h"
-#include "Settings.h"
 #include "Utils.h"
 #include "bindings.h"
 #include <cassert>
@@ -199,7 +198,7 @@ bool FakeViveTracker::activate() {
     return true;
 }
 
-void FakeViveTracker::OnPoseUpdated(uint64_t targetTimestampNs, const FfiDeviceMotion* motion) {
+void FakeViveTracker::OnPoseUpdated(uint64_t, const FfiDeviceMotion* motion) {
     if (this->object_id == vr::k_unTrackedDeviceIndexInvalid) {
         return;
     }

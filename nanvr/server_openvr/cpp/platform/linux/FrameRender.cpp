@@ -1,7 +1,7 @@
 #include "FrameRender.h"
-#include "nanvr_server/Logger.h"
-#include "nanvr_server/Settings.h"
-#include "nanvr_server/bindings.h"
+#include "../../nanvr_server/Logger.h"
+#include "../../nanvr_server/Settings.h"
+#include "../../nanvr_server/bindings.h"
 
 #include <filesystem>
 #include <fstream>

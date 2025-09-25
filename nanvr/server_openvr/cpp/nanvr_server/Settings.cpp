@@ -1,10 +1,7 @@
 #include "Settings.h"
 #include "Logger.h"
 #include "bindings.h"
-#include <cstdlib>
-#include <filesystem>
 #include <fstream>
-#include <streambuf>
 #include <string>
 
 #define PICOJSON_USE_INT64

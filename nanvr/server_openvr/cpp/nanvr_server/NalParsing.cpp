@@ -1,9 +1,7 @@
 
-#include "Logger.h"
-#include "Settings.h"
-#include "Utils.h"
+#include "../common/packet_types.h"
 #include "bindings.h"
-#include <mutex>
+#include <cstdint>
 #include <string.h>
 
 static const char NAL_PREFIX_3B[] = { 0x00, 0x00, 0x01 };

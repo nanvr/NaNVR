@@ -3,11 +3,9 @@
 #include <chrono>
 #include <exception>
 #include <fstream>
-#include <iostream>
 #include <memory>
 #include <poll.h>
 #include <sstream>
-#include <stdexcept>
 #include <stdlib.h>
 #include <string>
 #include <sys/mman.h>
@@ -16,13 +14,12 @@
 #include <sys/un.h>
 #include <unistd.h>
 
+#include "../../nanvr_server/Logger.h"
+#include "../../nanvr_server/PoseHistory.h"
+#include "../../nanvr_server/Settings.h"
 #include "EncodePipeline.h"
 #include "FrameRender.h"
-#include "common/packet_types.h"
 #include "ffmpeg_helper.h"
-#include "nanvr_server/Logger.h"
-#include "nanvr_server/PoseHistory.h"
-#include "nanvr_server/Settings.h"
 #include "protocol.h"
 
 extern "C" {

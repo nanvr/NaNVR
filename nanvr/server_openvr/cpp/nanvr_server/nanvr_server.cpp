@@ -1,21 +1,17 @@
 
+#include "../platform/linux/CEncoder.h" // IWYU pragma: keep
 #include "Controller.h"
 #include "FakeViveTracker.h"
 #include "HMD.h"
 #include "Logger.h"
 #include "Paths.h"
-#include "PoseHistory.h"
+#include "PoseHistory.h" // IWYU pragma: keep
 #include "Settings.h"
 #include "TrackedDevice.h"
 #include "bindings.h"
 #include "driverlog.h"
 #include "openvr_driver_wrap.h"
-#include "platform/linux/CEncoder.h"
-#include <algorithm>
-#include <cmath>
-#include <cstring>
 #include <map>
-#include <optional>
 
 #include "include/openvr_math.h"
 std::unique_ptr<vr::HmdMatrix34_t> GetInvZeroPose();

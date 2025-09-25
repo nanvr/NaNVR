@@ -2,7 +2,6 @@
 #include "Logger.h"
 #include "Utils.h"
 #include <chrono>
-#include <thread>
 
 TrackedDevice::TrackedDevice(uint64_t device_id, vr::ETrackedDeviceClass device_class)
     : device_id(device_id)

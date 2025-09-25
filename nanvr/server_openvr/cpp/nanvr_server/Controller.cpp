@@ -3,10 +3,6 @@
 #include "Paths.h"
 #include "Settings.h"
 #include "Utils.h"
-#include "include/openvr_math.h"
-#include <algorithm>
-#include <cstring>
-#include <string_view>
 
 Controller::Controller(uint64_t deviceID, vr::EVRSkeletalTrackingLevel skeletonLevel)
     : TrackedDevice(

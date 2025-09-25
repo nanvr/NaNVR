@@ -1,7 +1,5 @@
 #include "exception.h"
-#include "common-utils.h"
 #include <stdarg.h>
-#include <wchar.h>
 
 Exception FormatExceptionV(const char* format, va_list args) {
     char buf[1024];

@@ -1,5 +1,5 @@
 #include "FormatConverter.h"
-#include "nanvr_server/bindings.h"
+#include "../../nanvr_server/bindings.h"
 
 FormatConverter::FormatConverter(Renderer* render)
     : r(render) { }

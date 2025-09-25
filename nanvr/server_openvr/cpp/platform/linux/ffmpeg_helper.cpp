@@ -1,13 +1,11 @@
 #include "ffmpeg_helper.h"
 
+#include "../../nanvr_server/Logger.h"
 #include <chrono>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/sysmacros.h>
 #include <unistd.h>
-
-#include "nanvr_server/Logger.h"
-#include "nanvr_server/bindings.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>

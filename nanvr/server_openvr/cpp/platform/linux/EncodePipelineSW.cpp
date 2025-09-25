@@ -2,9 +2,10 @@
 
 #include <chrono>
 
+#include "../../common/packet_types.h"
+#include "../../nanvr_server/Logger.h"
+#include "../../nanvr_server/Settings.h"
 #include "FormatConverter.h"
-#include "nanvr_server/Logger.h"
-#include "nanvr_server/Settings.h"
 
 namespace {
 
@@ -131,9 +132,9 @@ void nanvr::EncodePipelineSW::SetParams(FfiDynamicEncoderParams params) {
     // x264 doesn't work well with adaptive bitrate/fps
     param.i_fps_num = Settings::Instance().m_refreshRate;
     param.i_fps_den = 1;
-    param.rc.i_bitrate = params.bitrate_bps / 1'000 * 1.4; // needs higher value to hit target
+    param.rc.i_bitrate = 1.4 * params.bitrate_bps / 1'000; // needs higher value to hit target
                                                            // bitrate
-    param.rc.i_vbv_buffer_size = param.rc.i_bitrate / param.i_fps_num * 1.1;
+    param.rc.i_vbv_buffer_size = 1.1 * param.rc.i_bitrate / param.i_fps_num;
     param.rc.i_vbv_max_bitrate = param.rc.i_bitrate;
     param.rc.f_vbv_buffer_init = 0.75;
     if (enc) {

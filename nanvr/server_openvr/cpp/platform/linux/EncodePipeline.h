@@ -1,5 +1,5 @@
 #pragma once
-#include "nanvr_server/bindings.h"
+#include "../../nanvr_server/bindings.h"
 #include <cstdint>
 #include <memory>
 #include <vector>

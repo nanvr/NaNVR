@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/packet_types.h"
+#include <cstdint>
 #include <string>
 
 class Settings {

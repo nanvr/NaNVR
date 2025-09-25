@@ -1,7 +1,7 @@
 #pragma once
 
-#include "nanvr_server/IDRScheduler.h"
-#include "shared/threadtools.h"
+#include "../../nanvr_server/IDRScheduler.h"
+#include "../../shared/threadtools.h"
 #include <atomic>
 #include <memory>
 #include <poll.h>

@@ -1,11 +1,11 @@
 #include "EncodePipeline.h"
 
+#include "../../nanvr_server/Logger.h"
+#include "../../nanvr_server/Settings.h"
 #include "EncodePipelineNvEnc.h"
 #include "EncodePipelineSW.h"
 #include "EncodePipelineVAAPI.h"
 #include "ffmpeg_helper.h"
-#include "nanvr_server/Logger.h"
-#include "nanvr_server/Settings.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>

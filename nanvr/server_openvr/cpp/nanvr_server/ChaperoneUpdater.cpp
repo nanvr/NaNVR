@@ -1,14 +1,8 @@
 #include "Logger.h"
 #include "bindings.h"
-#include "common/packet_types.h"
 #include <memory>
 #include <mutex>
-
-// Workaround symbol clash in openvr.h / openvr_driver.h
-namespace nanvr_chaperone {
 #include <openvr.h>
-}
-using namespace nanvr_chaperone;
 
 std::mutex chaperone_mutex;
 

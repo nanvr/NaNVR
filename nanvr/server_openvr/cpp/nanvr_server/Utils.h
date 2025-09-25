@@ -7,7 +7,7 @@
 
 #include <math.h>
 
-#include "common/packet_types.h"
+#include "../common/packet_types.h"
 #include "openvr_driver_wrap.h"
 
 const float DEG_TO_RAD = (float)(M_PI / 180.);

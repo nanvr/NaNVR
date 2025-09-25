@@ -1,6 +1,6 @@
 #include "HMD.h"
 
-#include "Controller.h"
+#include "../platform/linux/CEncoder.h"
 #include "Logger.h"
 #include "Paths.h"
 #include "PoseHistory.h"
@@ -8,7 +8,6 @@
 #include "Utils.h"
 #include "ViveTrackerProxy.h"
 #include "bindings.h"
-#include "platform/linux/CEncoder.h"
 
 Hmd::Hmd()
     : TrackedDevice(

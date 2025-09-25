@@ -1,9 +1,7 @@
 #include "EncodePipelineNvEnc.h"
-#include "common/packet_types.h"
+#include "../../common/packet_types.h"
+#include "../../nanvr_server/Settings.h"
 #include "ffmpeg_helper.h"
-#include "nanvr_server/Logger.h"
-#include "nanvr_server/Settings.h"
-#include <chrono>
 #include <memory>
 
 extern "C" {
