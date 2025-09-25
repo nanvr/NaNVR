@@ -9,6 +9,7 @@ pub fn clean_and_build_server_deps(enable_nvenc: bool) {
 
 fn clean_deps() {
     let sh = Shell::new().unwrap();
+    sh.change_dir(filepaths::workspace_dir());
 
     // Clean submodule folders from previous build directories and patches
     let ffmpeg_command = "for p in thirdparty/*; do (cd $p; git reset --hard; git clean -df); done";
