@@ -42,6 +42,8 @@ fn main() {
     build
         .cpp(true)
         .std("c++20")
+        .flag("-Wall")
+        .flag("-Wextra")
         .flag_if_supported("-fdiagnostics-color=always")
         .files(source_files_paths)
         .include(filepaths::workspace_dir().join("thirdparty/openvr/headers"))
