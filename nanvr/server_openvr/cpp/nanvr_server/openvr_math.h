@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../openvr_driver_wrap.h"
+#include "openvr_driver_wrap.h"
 #include <cmath>
 #include <memory>
 

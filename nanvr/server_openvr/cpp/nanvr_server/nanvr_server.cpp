@@ -11,9 +11,9 @@
 #include "bindings.h"
 #include "driverlog.h"
 #include "openvr_driver_wrap.h"
+#include "openvr_math.h"
 #include <map>
 
-#include "include/openvr_math.h"
 std::unique_ptr<vr::HmdMatrix34_t> GetInvZeroPose();
 
 std::unique_ptr<vr::HmdMatrix34_t> GetRawZeroPose() {
