@@ -192,7 +192,6 @@ pub extern "C" fn get_serial_number(device_id: u64, out_str: *mut c_char) -> u64
 
 #[unsafe(no_mangle)]
 pub extern "C" fn set_device_openvr_props(instance_ptr: *mut c_void, device_id: u64) {
-    #[expect(clippy::enum_glob_use)]
     use OpenvrPropKey::*;
 
     let settings = server_core::settings();
