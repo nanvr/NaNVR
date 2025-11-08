@@ -77,8 +77,6 @@ pub fn dashboard_fname() -> &'static str {
 pub struct Layout {
     // directory containing the dashboard executable
     pub executables_dir: PathBuf,
-    // (linux only) directory where libvulkan_layer.so is saved
-    pub libraries_dir: PathBuf,
     // parent directory of resources like the dashboard and presets folders
     pub static_resources_dir: PathBuf,
     // directory for storing configuration files (session.json)
@@ -87,16 +85,12 @@ pub struct Layout {
     pub log_dir: PathBuf,
     // directory to register in openVR driver path
     pub openvr_driver_root_dir: PathBuf,
-    // (linux only) parent directory of the executable to wrap vrcompositor
-    pub vrcompositor_wrapper_dir: PathBuf,
-    // (linux only) parent directory of the firewall script
+    // parent directory of the firewall script
     pub firewall_script_dir: PathBuf,
-    // (linux only) parent directory of the firewalld config
+    // parent directory of the firewalld config
     pub firewalld_config_dir: PathBuf,
-    // (linux only) parent directory of the ufw config
+    // parent directory of the ufw config
     pub ufw_config_dir: PathBuf,
-    // (linux only) directory where the vulkan layer manifest is saved
-    pub vulkan_layer_manifest_dir: PathBuf,
     pub launcher_root: Option<PathBuf>,
 }
 
@@ -106,7 +100,6 @@ impl Layout {
 
         // Get paths from environment or use FHS compliant paths
         let executables_dir = or_path(option_env!("BUILD_EXECUTABLES_DIR"), "bin");
-        let libraries_dir = or_path(option_env!("BUILD_LIBRARIES_DIR"), "lib64");
         let static_resources_dir = or_path(
             option_env!("BUILD_STATIC_RESOURCES_DIR"),
             formatcp!("share/{NANVR_LOW_NAME}"),
@@ -114,10 +107,6 @@ impl Layout {
         let openvr_driver_root_dir = or_path(
             option_env!("BUILD_OPENVR_DRIVER_ROOT_DIR"),
             formatcp!("lib64/{NANVR_LOW_NAME}"),
-        );
-        let vrcompositor_wrapper_dir = or_path(
-            option_env!("BUILD_VRCOMPOSITOR_WRAPPER_DIR"),
-            formatcp!("libexec/{NANVR_LOW_NAME}"),
         );
         let firewall_script_dir = or_path(
             option_env!("BUILD_FIREWALL_SCRIPT_DIR"),
@@ -131,10 +120,6 @@ impl Layout {
             option_env!("BUILD_UFW_CONFIG_DIR"),
             formatcp!("libexec/{NANVR_LOW_NAME}"),
         );
-        let vulkan_layer_manifest_dir = or_path(
-            option_env!("BUILD_VULKAN_LAYER_MANIFEST_DIR"),
-            "share/vulkan/explicit_layer.d",
-        );
 
         let config_dir = option_env!("BUILD_CONFIG_DIR").map_or_else(
             || dirs::config_dir().unwrap().join(NANVR_LOW_NAME),
@@ -145,16 +130,13 @@ impl Layout {
 
         Self {
             executables_dir,
-            libraries_dir,
             static_resources_dir,
             config_dir,
             log_dir,
             openvr_driver_root_dir,
-            vrcompositor_wrapper_dir,
             firewall_script_dir,
             firewalld_config_dir,
             ufw_config_dir,
-            vulkan_layer_manifest_dir,
             launcher_root: root
                 .parent()
                 .and_then(|p| p.parent())
@@ -221,19 +203,6 @@ impl Layout {
         self.openvr_driver_root_dir.join("driver.vrdrivermanifest")
     }
 
-    pub fn vrcompositor_wrapper(&self) -> PathBuf {
-        self.vrcompositor_wrapper_dir.join("vrcompositor-wrapper")
-    }
-
-    pub fn drm_lease_shim(&self) -> PathBuf {
-        self.vrcompositor_wrapper_dir
-            .join(format!("{NANVR_LOW_NAME}_drm_lease_shim.so"))
-    }
-
-    pub fn vulkan_layer(&self) -> PathBuf {
-        self.libraries_dir.join(dynlib_fname("vulkan_layer"))
-    }
-
     pub fn firewall_script(&self) -> PathBuf {
         self.firewall_script_dir
             .join(format!("{NANVR_LOW_NAME}_fw_config.sh"))
@@ -246,11 +215,6 @@ impl Layout {
 
     pub fn ufw_config(&self) -> PathBuf {
         self.ufw_config_dir.join(format!("ufw-{NANVR_LOW_NAME}"))
-    }
-
-    pub fn vulkan_layer_manifest(&self) -> PathBuf {
-        self.vulkan_layer_manifest_dir
-            .join(format!("{NANVR_LOW_NAME}_x86_64.json"))
     }
 
     pub fn launcher_exe(&self) -> Option<PathBuf> {
