@@ -1,5 +1,4 @@
 
-#include "../platform/linux/CEncoder.h" // IWYU pragma: keep
 #include "Controller.h"
 #include "FakeViveTracker.h"
 #include "HMD.h"
@@ -335,8 +334,8 @@ void DeinitializeStreaming() {
 void SendVSync() { vr::VRServerDriverHost()->VsyncEvent(0.0); }
 
 void RequestIDR() {
-    if (g_driver_provider.hmd && g_driver_provider.hmd->m_encoder) {
-        g_driver_provider.hmd->m_encoder->InsertIDR();
+    if (g_driver_provider.hmd && g_driver_provider.hmd->m_directModeComponent) {
+        g_driver_provider.hmd->m_directModeComponent->RequestIdr();
     }
 }
 
@@ -472,9 +471,10 @@ void SetChaperoneArea(float areaWidth, float areaHeight) {
 }
 
 void CaptureFrame() {
-#ifndef __APPLE__
-    if (g_driver_provider.hmd && g_driver_provider.hmd->m_encoder) {
-        g_driver_provider.hmd->m_encoder->CaptureFrame();
-    }
-#endif
+// #ifndef __APPLE__
+//     if (g_driver_provider.hmd && g_driver_provider.hmd->m_encoder) {
+//         g_driver_provider.hmd->m_encoder->CaptureFrame();
+//     }
+// #endif
+// todo: frame capture doesnt work
 }
