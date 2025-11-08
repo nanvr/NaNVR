@@ -3,6 +3,7 @@
 #include "../../common/packet_types.h"
 #include "../../nanvr_server/Logger.h"
 #include "../../nanvr_server/Settings.h"
+#include "VkContext.hpp"
 #include "ffmpeg_helper.h"
 #include <chrono>
 
@@ -14,6 +15,8 @@ extern "C" {
 #include <libavutil/hwcontext.h>
 #include <libavutil/opt.h>
 }
+
+using nanvr::Vendor;
 
 namespace {
 
@@ -99,7 +102,7 @@ map_frame(AVBufferRef* hw_frames_ref, AVBufferRef* drm_device_ctx, nanvr::VkFram
 }
 
 // Import VA surface
-AVFrame* import_frame(AVBufferRef* hw_frames_ref, DrmImage& drm) {
+AVFrame* import_frame(AVBufferRef* hw_frames_ref, nanvr::DrmImage& drm) {
     AVFrame* va_frame = av_frame_alloc();
     int err = av_hwframe_get_buffer(hw_frames_ref, va_frame, 0);
     if (err < 0) {
@@ -129,7 +132,12 @@ AVFrame* import_frame(AVBufferRef* hw_frames_ref, DrmImage& drm) {
 }
 
 nanvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
-    Renderer* render, VkContext& vk_ctx, VkFrame& input_frame, uint32_t width, uint32_t height
+    nanvr::HWContext& vk_ctx,
+    std::string devicePath,
+    nanvr::Vendor vendor,
+    VkFrame& input_frame,
+    uint32_t width,
+    uint32_t height
 )
     : r(render) {
     /* VAAPI Encoding pipeline
@@ -142,9 +150,7 @@ nanvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
      * The pipeline is simply made of a scale_vaapi object, that does the conversion between formats
      * and the encoder that takes the converted frame and produces packets.
      */
-    int err = av_hwdevice_ctx_create(
-        &hw_ctx, AV_HWDEVICE_TYPE_VAAPI, vk_ctx.devicePath.c_str(), NULL, 0
-    );
+    int err = av_hwdevice_ctx_create(&hw_ctx, AV_HWDEVICE_TYPE_VAAPI, devicePath.c_str(), NULL, 0);
     if (err < 0) {
         throw nanvr::AvException("Failed to create a VAAPI device:", err);
     }
@@ -242,30 +248,30 @@ nanvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
                                                            // areas
     switch (settings.m_encoderQualityPreset) {
     case NANVR_QUALITY:
-        if (vk_ctx.amd) {
+        if (vendor == Vendor::Amd) {
             quality.preset_mode = PRESET_MODE_QUALITY;
             encoder_ctx->compression_level = quality.quality; // (QUALITY preset, no pre-encoding,
                                                               // vbaq)
-        } else if (vk_ctx.intel) {
+        } else if (vendor == Vendor::Intel) {
             encoder_ctx->compression_level = 1;
         }
         break;
     case NANVR_BALANCED:
-        if (vk_ctx.amd) {
+        if (vendor == Vendor::Amd) {
             quality.preset_mode = PRESET_MODE_BALANCE;
             encoder_ctx->compression_level = quality.quality; // (BALANCE preset, no pre-encoding,
                                                               // vbaq)
-        } else if (vk_ctx.intel) {
+        } else if (vendor == Vendor::Intel) {
             encoder_ctx->compression_level = 4;
         }
         break;
     case NANVR_SPEED:
     default:
-        if (vk_ctx.amd) {
+        if (vendor == Vendor::Amd) {
             quality.preset_mode = PRESET_MODE_SPEED;
             encoder_ctx->compression_level = quality.quality; // (speed preset, no pre-encoding,
                                                               // vbaq)
-        } else if (vk_ctx.intel) {
+        } else if (vendor == Vendor::Intel) {
             encoder_ctx->compression_level = 7;
         }
         break;
@@ -296,13 +302,14 @@ nanvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     }
 
     encoder_frame = av_frame_alloc();
-    if (vk_ctx.intel || getenv("NANVR_VAAPI_IMPORT_SURFACE")) {
+    if (vendor == Vendor::Intel || getenv("NANVR_VAAPI_IMPORT_SURFACE")) {
         Info("Importing VA surface");
         DrmImage drm;
         mapped_frame = import_frame(hw_frames_ref, drm);
-        r->ImportOutput(drm);
+        // r->ImportOutput(drm);
     } else {
         mapped_frame = map_frame(hw_frames_ref, drm_ctx, input_frame);
+        // std::cout << "mapped frame" << std::endl;
     }
 
     filter_graph = avfilter_graph_alloc();
@@ -310,6 +317,7 @@ nanvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     AVFilterInOut* outputs = avfilter_inout_alloc();
     AVFilterInOut* inputs = avfilter_inout_alloc();
 
+    // TODO: Respect colorspace
     std::stringstream buffer_filter_args;
     buffer_filter_args << "video_size=" << mapped_frame->width << "x" << mapped_frame->height;
     buffer_filter_args << ":pix_fmt=" << mapped_frame->format;
@@ -384,7 +392,6 @@ nanvr::EncodePipelineVAAPI::~EncodePipelineVAAPI() {
 }
 
 void nanvr::EncodePipelineVAAPI::PushFrame(uint64_t targetTimestampNs, bool idr) {
-    r->Sync();
     timestamp.cpu = std::chrono::duration_cast<std::chrono::nanoseconds>(
                         std::chrono::steady_clock::now().time_since_epoch()
     )
