@@ -2,6 +2,7 @@
 
 #include "TrackedDevice.h"
 #include "openvr_driver_wrap.h"
+#include "platform/linux/OvrDirectModeComponent.h"
 #include <memory>
 
 class Controller;
@@ -9,12 +10,13 @@ class Controller;
 class ViveTrackerProxy;
 
 class CEncoder;
+class Renderer;
 class PoseHistory;
 
 class Hmd : public TrackedDevice, vr::IVRDisplayComponent {
 public:
     std::shared_ptr<PoseHistory> m_poseHistory;
-    std::shared_ptr<CEncoder> m_encoder;
+    // std::shared_ptr<CEncoder> m_encoder;
 
     Hmd();
     virtual ~Hmd();
@@ -38,6 +40,9 @@ private:
 
     std::wstring m_adapterName;
 
+    std::shared_ptr<OvrDirectModeComponent> m_directModeComponent;
+
+private:
     std::shared_ptr<ViveTrackerProxy> m_viveTrackerProxy;
 
     bool m_refreshRateSet = false;
