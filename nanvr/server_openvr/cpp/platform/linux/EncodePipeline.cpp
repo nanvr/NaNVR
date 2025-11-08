@@ -3,7 +3,7 @@
 #include "../../nanvr_server/Logger.h"
 #include "../../nanvr_server/Settings.h"
 #include "EncodePipelineNvEnc.h"
-#include "EncodePipelineSW.h"
+// #include "EncodePipelineSW.h"
 #include "EncodePipelineVAAPI.h"
 #include "ffmpeg_helper.h"
 
@@ -11,6 +11,7 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 }
 
+// TODO: Uninheritance this
 void nanvr::EncodePipeline::SetParams(FfiDynamicEncoderParams params) {
     if (params.updated) {
         encoder_ctx->bit_rate = params.bitrate_bps / params.framerate * 60.0;
@@ -22,32 +23,31 @@ void nanvr::EncodePipeline::SetParams(FfiDynamicEncoderParams params) {
 }
 
 std::unique_ptr<nanvr::EncodePipeline> nanvr::EncodePipeline::Create(
-    Renderer* render,
-    VkContext& vk_ctx,
+    nanvr::VkContext& vk_ctx,
+    std::string devicePath,
     VkFrame& input_frame,
-    VkImageCreateInfo& image_create_info,
     uint32_t width,
     uint32_t height
 ) {
+    using nanvr::Vendor;
     if (Settings::Instance().m_force_sw_encoding == false) {
-        if (vk_ctx.nvidia) {
-            try {
-                auto nvenc = std::make_unique<nanvr::EncodePipelineNvEnc>(
-                    render, vk_ctx, input_frame, image_create_info, width, height
-                );
-                Info("Using NvEnc encoder");
-                return nvenc;
-            } catch (std::exception& e) {
-                Error(
-                    "Failed to create NvEnc encoder: %s\nPlease make sure you have installed CUDA "
-                    "runtime.",
-                    e.what()
-                );
-            }
+        nanvr::HWContext hwCtx(vk_ctx);
+        if (vk_ctx.meta.vendor == Vendor::Nvidia) {
+            // try {
+            //     auto nvenc = std::make_unique<alvr::EncodePipelineNvEnc>(
+            //         render, vk_ctx, input_frame, image_create_info, width, height
+            //     );
+            //     Info("Using NvEnc encoder");
+            //     return nvenc;
+            // } catch (std::exception& e) {
+            //     Error(
+            //         "Failed to create NvEnc encoder: %s\nPlease make sure you have installed CUDA
+            //         " "runtime.", e.what()
+            //     );
         } else {
             try {
                 auto vaapi = std::make_unique<nanvr::EncodePipelineVAAPI>(
-                    render, vk_ctx, input_frame, width, height
+                    hwCtx, devicePath, vk_ctx.meta.vendor, input_frame, width, height
                 );
                 Info("Using VAAPI encoder");
                 return vaapi;
@@ -60,9 +60,9 @@ std::unique_ptr<nanvr::EncodePipeline> nanvr::EncodePipeline::Create(
             }
         }
     }
-    auto sw = std::make_unique<nanvr::EncodePipelineSW>(render, width, height);
-    Info("Using SW encoder");
-    return sw;
+    // auto sw = std::make_unique<nanvr::EncodePipelineSW>(render, width, height);
+    // Info("Using SW encoder");
+    return nullptr;
 }
 
 nanvr::EncodePipeline::~EncodePipeline() { avcodec_free_context(&encoder_ctx); }
