@@ -23,7 +23,7 @@ eframe = { version = "0.31", default-features = false, features = [
 ] }
 flate2 = "1.0.18"
 futures-util = "0.3.28"
-ico = "0.4"
+ico = "0.5"
 open = "5"
 reqwest = { version = "0.12", default-features = false, features = [
     "rustls-tls",
