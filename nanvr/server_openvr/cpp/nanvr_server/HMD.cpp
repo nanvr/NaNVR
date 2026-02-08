@@ -69,11 +69,13 @@ bool Hmd::activate() {
     if (!m_baseComponentsInitialized) {
         m_baseComponentsInitialized = true;
 
+        if (this->device_class == vr::TrackedDeviceClass_HMD) {
+            m_directModeComponent = std::make_shared<OvrDirectModeComponent>(m_poseHistory);
+        }
         DriverReadyIdle(this->device_class == vr::TrackedDeviceClass_HMD);
     }
 
     if (this->device_class == vr::TrackedDeviceClass_HMD) {
-        m_directModeComponent = std::make_shared<OvrDirectModeComponent>(m_poseHistory);
         vr::VREvent_Data_t eventData;
         eventData.ipd = { 0.063 };
         vr::VRServerDriverHost()->VendorSpecificEvent(
