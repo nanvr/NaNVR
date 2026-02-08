@@ -60,9 +60,14 @@ bool Hmd::activate() {
 
     vr::VRDriverInput()->CreateBooleanComponent(this->prop_container, "/proximity", &m_proximity);
 
-    float originalIPD
-        = vr::VRSettings()->GetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float);
-    vr::VRSettings()->SetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float, 0.063);
+    // TODO: this causes crash for some reason
+    // float originalIPD
+    //     = vr::VRSettings()->GetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float);
+    Warn("vr::VRSettings()->SetFloat(vr::k_pch_SteamVR_Section");
+
+    // TODO: this causes crash for some reason
+    // vr::VRSettings()->SetFloat(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_IPD_Float, 0.063);
+    Warn("HmdMatrix_SetIdentity");
     HmdMatrix_SetIdentity(&m_eyeToHeadLeft);
     HmdMatrix_SetIdentity(&m_eyeToHeadRight);
 
