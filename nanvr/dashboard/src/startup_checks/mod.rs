@@ -130,7 +130,7 @@ fn gpu_checks(device_infos: &[(&Adapter, DeviceInfo)]) {
     let steamvr_opts = "For functioning VR you need to put the following line into SteamVR's launch options and restart it:";
     let game_opts = "And this similar line to the launch options of ALL games that you're trying to launch from steam:";
 
-    let vrmonitor_path_written = if have_igpu {
+    if have_igpu {
         if have_nvidia_dgpu {
             let base_path = "/usr/share/vulkan/icd.d/nvidia_icd";
             let nvidia_vk_override_path = if Path::new(&format!("{base_path}.json")).exists() {
@@ -144,34 +144,19 @@ fn gpu_checks(device_infos: &[(&Adapter, DeviceInfo)]) {
                 "__GLX_VENDOR_LIBRARY_NAME=nvidia __NV_PRIME_RENDER_OFFLOAD=1 {nvidia_vk_override_path}"
             );
 
-            warn!("{steamvr_opts}\n{nv_options} {vrmonitor_path_string} %command%");
+            warn!("{steamvr_opts}\n{nv_options} %command%");
             warn!("{game_opts}\n{nv_options} %command%");
-
-            true
         } else if have_intel_dgpu || have_amd_dgpu {
-            warn!("{steamvr_opts}\nDRI_PRIME=1 {vrmonitor_path_string} %command%");
+            warn!("{steamvr_opts}\nDRI_PRIME=1 %command%");
             warn!("{game_opts}\nDRI_PRIME=1 %command%");
-
-            true
         } else {
             warn!(
-                "Beware, using just integrated graphics might lead to very poor performance in SteamVR and VR games."
+                "Beware, using only integrated graphics (currently what will be used) might lead to very poor performance in SteamVR and VR games."
             );
             warn!(
                 "For more information, please refer to the wiki: https://github.com/{NANVR_GH_REPO_PATH}/wiki/Linux-Troubleshooting"
             );
-
-            false
         }
-    } else {
-        false
-    };
-
-    if !vrmonitor_path_written {
-        warn!(
-            "Make sure you have put the following line in your SteamVR launch options and restart it:\n\
-            {vrmonitor_path_string} %command%"
-        )
     }
 }
 
