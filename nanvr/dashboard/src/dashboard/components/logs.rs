@@ -45,6 +45,8 @@ impl LogsTab {
                 LogSeverity::Info => log_colors::INFO_LIGHT,
                 LogSeverity::Debug => log_colors::DEBUG_LIGHT,
             })
+        } else if let EventType::DebugGroup { group: _, message: _ } = &event.event_type {
+            Some(log_colors::DEBUG_LIGHT)
         } else if let Switch::Enabled(config) = &self.raw_events_config {
             (!config.hide_spammy_events
                 || !matches!(
