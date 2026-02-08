@@ -183,6 +183,7 @@ void CppInit(bool earlyHmdInitialization) {
 }
 
 void* CppOpenvrEntryPoint(const char* interface_name, int* return_code) {
+    Warn("[AMONGUS] CppOpenvrEntryPoint\n");
     if (std::string(interface_name) == vr::IServerTrackedDeviceProvider_Version) {
         *return_code = vr::VRInitError_None;
         return &g_driver_provider;
@@ -193,6 +194,8 @@ void* CppOpenvrEntryPoint(const char* interface_name, int* return_code) {
 }
 
 bool InitializeStreaming() {
+    Warn("[AMONGUS] InitializeStreaming\n");
+
     Settings::Instance().Load();
 
     if (!g_driver_provider.devices_initialized) {
@@ -205,6 +208,7 @@ bool InitializeStreaming() {
             g_driver_provider.hmd = std::unique_ptr<Hmd>(hmd);
             g_driver_provider.tracked_devices.insert({ HEAD_ID, g_driver_provider.hmd.get() });
         }
+        Warn("[AMONGUS] Settings::Instance().m_enableControllers\n");
 
         // Note: for controllers, hands and trackers don't bail out if registration fails
         if (Settings::Instance().m_enableControllers) {
@@ -213,7 +217,10 @@ bool InitializeStreaming() {
                 : vr::VRSkeletalTracking_Partial;
 
             auto left_controller = new Controller(HAND_LEFT_ID, controllerSkeletonLevel);
+            Warn("[AMONGUS] left_controller->register_device(true)\n");
+
             if (left_controller->register_device(true)) {
+                Warn("[AMONGUS] g_driver_provider.left_controller = std::unique_ptr<Controller>(left_controller)\n");
                 g_driver_provider.left_controller = std::unique_ptr<Controller>(left_controller);
                 g_driver_provider.tracked_devices.insert(
                     { HAND_LEFT_ID, g_driver_provider.left_controller.get() }
@@ -221,12 +228,14 @@ bool InitializeStreaming() {
             }
 
             auto right_controller = new Controller(HAND_RIGHT_ID, controllerSkeletonLevel);
+            Warn("[AMONGUS] right_controller->register_device(true)\n");
             if (right_controller->register_device(true)) {
                 g_driver_provider.right_controller = std::unique_ptr<Controller>(right_controller);
                 g_driver_provider.tracked_devices.insert(
                     { HAND_RIGHT_ID, g_driver_provider.right_controller.get() }
                 );
             }
+            Warn("[AMONGUS] Settings::Instance().m_useSeparateHandTrackers\n");
 
             if (Settings::Instance().m_useSeparateHandTrackers) {
                 auto left_hand_tracker
@@ -250,6 +259,7 @@ bool InitializeStreaming() {
                 }
             }
         }
+        Warn("[AMONGUS] Settings::Instance().m_enableBodyTrackingFakeVive\n");
 
         if (Settings::Instance().m_enableBodyTrackingFakeVive) {
             auto chestTracker = std::make_unique<FakeViveTracker>(BODY_CHEST_ID);
@@ -315,10 +325,13 @@ bool InitializeStreaming() {
             }
         }
 
+        Warn("[AMONGUS] g_driver_provider.devices_initialized = true\n");
         g_driver_provider.devices_initialized = true;
     }
 
     if (g_driver_provider.hmd) {
+        Warn("[AMONGUS] g_driver_provider.hmd\n");
+
         g_driver_provider.hmd->StartStreaming();
     }
 
@@ -334,6 +347,7 @@ void DeinitializeStreaming() {
 void SendVSync() { vr::VRServerDriverHost()->VsyncEvent(0.0); }
 
 void RequestIDR() {
+    Error("[AMONGUS] RequestIDR\n");
     if (g_driver_provider.hmd && g_driver_provider.hmd->m_directModeComponent) {
         g_driver_provider.hmd->m_directModeComponent->RequestIdr();
     }
@@ -404,6 +418,7 @@ void RequestDriverResync() {
 }
 
 void ShutdownSteamvr() {
+    Warn("[AMONGUS] ShutdownSteamvr\n");
     if (g_driver_provider.hmd) {
         vr::VRServerDriverHost()->VendorSpecificEvent(
             g_driver_provider.hmd->object_id, vr::VREvent_DriverRequestedQuit, {}, 0
@@ -471,10 +486,10 @@ void SetChaperoneArea(float areaWidth, float areaHeight) {
 }
 
 void CaptureFrame() {
-// #ifndef __APPLE__
-//     if (g_driver_provider.hmd && g_driver_provider.hmd->m_encoder) {
-//         g_driver_provider.hmd->m_encoder->CaptureFrame();
-//     }
-// #endif
-// todo: frame capture doesnt work
+    // #ifndef __APPLE__
+    //     if (g_driver_provider.hmd && g_driver_provider.hmd->m_encoder) {
+    //         g_driver_provider.hmd->m_encoder->CaptureFrame();
+    //     }
+    // #endif
+    // todo: frame capture doesnt work
 }

@@ -227,8 +227,8 @@ void OvrDirectModeComponent::Present(vr::SharedTextureHandle_t syncTexture) {
                 .height = desc.nHeight,
             },
             .outputExtent {
-                .width = settings.m_recommendedTargetWidth,
-                .height = settings.m_recommendedTargetHeight,
+                .width = static_cast<uint32_t>(settings.m_recommendedTargetWidth),
+                .height = static_cast<uint32_t>(settings.m_recommendedTargetHeight),
             },
             .inputImgFds = fds,
         };

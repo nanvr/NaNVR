@@ -1,4 +1,8 @@
 #include "Renderer.hpp"
+#include "nanvr_server/Logger.h"
+#include "openvr.h"
+#include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <vulkan/vulkan_structs.hpp>
 
@@ -144,6 +148,8 @@ u32 memoryTypeIndex(VkContext const& ctx, vk::MemoryPropertyFlags properties, u3
 inline Image createImage(
     VkContext const& ctx, vk::ImageCreateInfo imageCI, std::optional<int> fd = std::nullopt
 ) {
+
+    Error("[AMONGUS] createImage\n");
     vk::ExternalMemoryImageCreateInfo extMemImgCI {
         .handleTypes = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueFd,
     };
@@ -216,6 +222,7 @@ inline Image createImage(
 Output createOutputImage(
     VkContext const& ctx, vk::Extent2D extent, vk::Format format, HandleType handleType
 ) {
+    Error("[AMONGUS] createOutputImage\n");
     Image img;
     Output out;
 
@@ -243,7 +250,21 @@ Output createOutputImage(
     std::vector<uint64_t> imageModifiers;
 
     // TODO: Actually import this
-    bool haveDmaBuf = true;
+    uint32_t dmabufFormatCount;
+    uint32_t* dmabufFormats = nullptr;
+    bool haveDmaBuf
+        = vr::VRIPCResourceManager()->GetDmabufFormats(&dmabufFormatCount, dmabufFormats);
+    if (dmabufFormatCount == 0) {
+        haveDmaBuf = false;
+        Error("[AMONGUS] NO DMABUF FORMATS AVAILABLE\n");
+    } else {
+        Error("[AMONGUS] DMABUF FORMATS AVAILABLE: %d\n", dmabufFormatCount);
+        std::span<uint32_t> data_span(dmabufFormats, dmabufFormatCount);
+        for (uint32_t& format : data_span) {
+            Error("[AMONGUS] DMABUF FORMAT %d", format);
+        }
+    }
+
     bool haveDrmModifiers = true;
     std::vector<vk::DrmFormatModifierPropertiesEXT> modProps;
 

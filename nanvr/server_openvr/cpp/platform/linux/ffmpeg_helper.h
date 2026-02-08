@@ -43,6 +43,7 @@ struct DrmImage {
 };
 
 class HWContext {
+public:
     AVBufferRef* avCtx;
 
     HWContext(VkContext const& vkCtx) {

@@ -39,7 +39,7 @@ private:
     vr::HmdRect2_t m_eyeFoVRight;
 
     std::wstring m_adapterName;
-
+public:
     std::shared_ptr<OvrDirectModeComponent> m_directModeComponent;
 
 private:

@@ -18,6 +18,8 @@ public:
 
     void RequestIdr() { enc.requestIdr(); }
 
+    // void GetDmabufFormats();
+
     /** Specific to Oculus compositor support, textures supplied must be created using this method.
      */
     virtual void CreateSwapTextureSet(

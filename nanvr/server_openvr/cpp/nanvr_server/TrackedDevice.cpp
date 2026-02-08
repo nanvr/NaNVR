@@ -83,6 +83,8 @@ void TrackedDevice::submit_pose(vr::DriverPose_t pose) {
 }
 
 bool TrackedDevice::register_device(bool await_activation) {
+    Warn("[AMONGUS] if (!vr::VRServerDriverHost()->TrackedDeviceAdded(\n");
+
     if (!vr::VRServerDriverHost()->TrackedDeviceAdded(
             this->get_serial_number().c_str(),
             this->device_class,
@@ -94,10 +96,14 @@ bool TrackedDevice::register_device(bool await_activation) {
     }
 
     if (await_activation) {
+        Warn("[AMONGUS] auto lock = std::unique_lock<std::mutex>(this->activation_mutex);\n");
         auto lock = std::unique_lock<std::mutex>(this->activation_mutex);
-        this->activation_condvar.wait_for(lock, std::chrono::seconds(1), [this] {
+        this->activation_condvar.wait_for(lock, std::chrono::seconds(3), [this] {
+            Warn("[AMONGUS] this->activation_state != ActivationState::Pending\n");
+
             return this->activation_state != ActivationState::Pending;
         });
+        Warn("[AMONGUS] this->activation_state == ActivationState::Success\n");
 
         return this->activation_state == ActivationState::Success;
     } else {

@@ -138,8 +138,7 @@ nanvr::EncodePipelineVAAPI::EncodePipelineVAAPI(
     VkFrame& input_frame,
     uint32_t width,
     uint32_t height
-)
-    : r(render) {
+) {
     /* VAAPI Encoding pipeline
      * The encoding pipeline has 3 frame types:
      * - input vulkan frames, only used to initialize the mapped frames

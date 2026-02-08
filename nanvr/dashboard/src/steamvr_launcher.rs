@@ -5,9 +5,8 @@ use egui_i18n::tr;
 use serde_json::{self, json};
 use shared::{
     NANVR_LOW_NAME, NANVR_NAME,
-    anyhow::{Context, Result, bail},
+    anyhow::{Context, Result},
     debug,
-    glam::bool,
     parking_lot::Mutex,
     warn,
 };

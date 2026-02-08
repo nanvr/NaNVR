@@ -159,41 +159,6 @@ pub fn build_streamer(
         .unwrap();
     }
 
-    // build compositor wrapper
-    let _push_guard = sh.push_dir(filepaths::crate_dir("vrcompositor_wrapper"));
-    cmd!(sh, "cargo build {common_flags_ref...}").run().unwrap();
-    sh.create_dir(&build_layout.vrcompositor_wrapper_dir)
-        .unwrap();
-    sh.copy_file(
-        artifacts_dir.join("vrcompositor_wrapper"),
-        build_layout.vrcompositor_wrapper(),
-    )
-    .unwrap();
-    sh.copy_file(
-        artifacts_dir.join(format!("{NANVR_LOW_NAME}_drm_lease_shim.so")),
-        build_layout.drm_lease_shim(),
-    )
-    .unwrap();
-
-    // build vulkan layer
-    let _push_guard = sh.push_dir(filepaths::crate_dir("vulkan_layer"));
-    cmd!(sh, "cargo build {common_flags_ref...}").run().unwrap();
-    sh.create_dir(&build_layout.libraries_dir).unwrap();
-    sh.copy_file(
-        artifacts_dir.join(filepaths::dynlib_fname("vulkan_layer")),
-        build_layout.vulkan_layer(),
-    )
-    .unwrap();
-
-    // copy vulkan layer manifest
-    sh.create_dir(&build_layout.vulkan_layer_manifest_dir)
-        .unwrap();
-    sh.copy_file(
-        filepaths::crate_dir("vulkan_layer").join(format!("layer/{NANVR_LOW_NAME}_x86_64.json")),
-        build_layout.vulkan_layer_manifest(),
-    )
-    .unwrap();
-
     sh.copy_file(
         filepaths::workspace_dir().join("thirdparty/openvr/bin/linux64/libopenvr_api.so"),
         build_layout.openvr_driver_lib_dir(),
@@ -207,6 +172,7 @@ pub fn build_streamer(
     let ufw = filepaths::crate_dir("xtask").join(format!("firewall/ufw-{NANVR_LOW_NAME}"));
 
     // copy linux specific firewalls
+    sh.create_dir(build_layout.firewall_script()).unwrap();
     sh.copy_file(firewall_script, build_layout.firewall_script())
         .unwrap();
     sh.copy_file(firewalld, build_layout.firewalld_config())

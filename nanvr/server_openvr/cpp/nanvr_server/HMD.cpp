@@ -147,6 +147,7 @@ void Hmd::OnPoseUpdated(uint64_t targetTimestampNs, FfiDeviceMotion motion) {
 
 void Hmd::StartStreaming() {
     Debug("Hmd::StartStreaming");
+    Warn("[AMONGUS] Hmd::StartStreaming\n");
 
     vr::VRDriverInput()->UpdateBooleanComponent(m_proximity, true, 0.0);
 
