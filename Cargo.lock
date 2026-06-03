@@ -1672,8 +1672,8 @@ dependencies = [
 
 [[package]]
 name = "egui-i18n"
-version = "0.1.2"
-source = "git+https://github.com/fewensa/egui-i18n#73e967fa2fbd3af7d96bb2dd776253df0426c08b"
+version = "0.2.0"
+source = "git+https://github.com/fewensa/egui-i18n#472a519c251005710f4f9d12ea4cd5877a6fdfd1"
 dependencies = [
  "log",
  "once_cell",
