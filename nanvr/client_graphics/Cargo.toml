@@ -15,4 +15,4 @@ glyph_brush_layout = "0.2"
 khronos-egl = { version = "6", features = ["dynamic"] }
 pollster = "0.4"
 wgpu = "26"
-wgpu-core = { version = "26", features = ["gles"] }
+wgpu-core = { version = "28", features = ["gles"] }
